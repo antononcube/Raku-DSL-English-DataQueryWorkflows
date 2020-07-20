@@ -1,0 +1,32 @@
+{
+    "perl" : "6.d",
+    "name" : "DSL::English::DataQueryWorkflows",
+    "api"  : "1",
+    "auth" : "github:antononcube",
+    "version" : "0.5.0",
+    "description" : "Data query workflows building by natural language commands.",
+    "authors" : [ "Anton Antonov" ],
+    "license" : "GPL-3.0-or-later",
+    "provides" : {
+        "DSL::English::DataQueryWorkflows" : "lib/DSL/English/DataQueryWorkflows.rakumod",
+        "DSL::English::DataQueryWorkflows::Grammar" : "lib/DSL/English/DataQueryWorkflows/Grammar.rakumod",
+        "DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases" : "lib/DSL/English/DataQueryWorkflows/Grammar/DataQueryPhrases.rakumod",
+        "DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames" : "lib/DSL/English/DataQueryWorkflows/Actions/Julia/DataFrames.rakumod",
+        "DSL::English::DataQueryWorkflows::Actions::Julia::Predicate" : "lib/DSL/English/DataQueryWorkflows/Actions/Julia/Predicate.rakumod",
+        "DSL::English::DataQueryWorkflows::Actions::Python::pandas" : "lib/DSL/English/DataQueryWorkflows/Actions/Python/pandas.rakumod",
+        "DSL::English::DataQueryWorkflows::Actions::SQL::SQL" : "lib/DSL/English/DataQueryWorkflows/Actions/SQL/SQL.rakumod",
+        "DSL::English::DataQueryWorkflows::Actions::R::Predicate" : "lib/DSL/English/DataQueryWorkflows/Actions/R/Predicate.rakumod",
+        "DSL::English::DataQueryWorkflows::Actions::R::base" : "lib/DSL/English/DataQueryWorkflows/Actions/R/base.rakumod",
+        "DSL::English::DataQueryWorkflows::Actions::R::dplyr" : "lib/DSL/English/DataQueryWorkflows/Actions/R/dplyr.rakumod",
+        "DSL::English::DataQueryWorkflows::Actions::WL::Predicate" : "lib/DSL/English/DataQueryWorkflows/Actions/WL/Predicate.rakumod",
+        "DSL::English::DataQueryWorkflows::Actions::WL::System" : "lib/DSL/English/DataQueryWorkflows/Actions/WL/System.rakumod"
+    },
+    "depends" : [ "DSL::Shared" ],
+    "build-depends" : [ ],
+    "test-depends" : [ ],
+    "resources" : [ ],
+    "tags": [
+      "data query", "data", "dplyr", "sql", "pandas", "dataset", "query", "parser", "interpreter", "monad", "workflow", "pipeline"
+    ],
+    "source-url" : "https://github.com/antononcube/DSL-English-DataQueryWorkflows.git"
+}
