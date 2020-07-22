@@ -60,11 +60,11 @@ my $commands5 = '
 
 say "\n", '-' x 3, 'R-base:';
 
-say ToDataQueryWorkflowCode( $commands2, 'R-base' );
+say ToDataQueryWorkflowCode($commands5, 'R-base');
 
 say "\n", '-' x 3, 'R-dplyr:';
 
-say ToDataQueryWorkflowCode( $commands2, 'R-dplyr' );
+say ToDataQueryWorkflowCode($commands5, 'R-dplyr');
 #
 #say "\n", '-' x 3, 'Julia-DataFrames:';
 #
