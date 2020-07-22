@@ -15,10 +15,22 @@ programming languages: Python, SQL, R, WL, or others.
 
 ## Installation
 
-In the (terminal) command line execute:
+**1.** Install Raku (Perl 6) : https://raku.org/downloads . 
 
-    zef install https://github.com/antononcube/Raku-DSL-English-DataQueryWorkflows.git
-   
+**2.** Make sure you have Zef Module Installer. 
+ 
+   - Type in `zef` in the command line.
+   - You can install the Zef Module Installer from : https://github.com/ugexe/zef .
+
+**3.** Open a command line program. (E.g. Terminal on Mac OS X.)
+
+**4.** Run the commands:
+
+```
+zef install https://github.com/antononcube/Raku-DSL-Shared.git
+zef install https://github.com/antononcube/Raku-DSL-English-DataQueryWorkflows.git
+```
+
 ## Examples
 
 Here is example code:
