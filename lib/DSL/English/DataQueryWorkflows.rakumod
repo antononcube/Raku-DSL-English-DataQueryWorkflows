@@ -16,12 +16,15 @@ Standard Query Language (SQL) or RStudio's library dplyr.
 unit module DSL::English::DataQueryWorkflows;
 
 use DSL::English::DataQueryWorkflows::Grammar;
-use DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard;
+
 use DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames;
 use DSL::English::DataQueryWorkflows::Actions::Python::pandas;
 use DSL::English::DataQueryWorkflows::Actions::R::base;
 use DSL::English::DataQueryWorkflows::Actions::R::dplyr;
 use DSL::English::DataQueryWorkflows::Actions::WL::System;
+
+use DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard;
+use DSL::English::DataQueryWorkflows::Actions::Spanish::Standard;
 
 #-----------------------------------------------------------
 
@@ -37,7 +40,6 @@ use DSL::English::DataQueryWorkflows::Actions::WL::System;
 #};
 
 my %targetToAction =
-    "Bulgarian"        => DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard,
     "Julia"            => DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames,
     "Julia-DataFrames" => DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames,
     "R"                => DSL::English::DataQueryWorkflows::Actions::R::base,
@@ -48,10 +50,11 @@ my %targetToAction =
     "pandas"           => DSL::English::DataQueryWorkflows::Actions::Python::pandas,
     "Mathematica"      => DSL::English::DataQueryWorkflows::Actions::WL::System,
     "WL"               => DSL::English::DataQueryWorkflows::Actions::WL::System,
-    "WL-System"        => DSL::English::DataQueryWorkflows::Actions::WL::System;
+    "WL-System"        => DSL::English::DataQueryWorkflows::Actions::WL::System,
+    "Bulgarian"        => DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard,
+    "Spanish"          => DSL::English::DataQueryWorkflows::Actions::Spanish::Standard;
 
 my %targetToSeparator{Str} =
-    "Bulgarian"        => "\n",
     "Julia"            => "\n",
     "Julia-DataFrames" => "\n",
     "R"                => "\n",
@@ -62,7 +65,9 @@ my %targetToSeparator{Str} =
     "Python-pandas"    => ".\n",
     "pandas"           => ".\n",
     "WL"               => ";\n",
-    "WL-System"        => ";\n";
+    "WL-System"        => ";\n",
+    "Bulgarian"        => "\n",
+    "Spanish"          => "\n";
 
 
 #-----------------------------------------------------------

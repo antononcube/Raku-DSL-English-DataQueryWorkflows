@@ -19,6 +19,8 @@
         "DSL::English::DataQueryWorkflows::Actions::R::Predicate" : "lib/DSL/English/DataQueryWorkflows/Actions/R/Predicate.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::R::base" : "lib/DSL/English/DataQueryWorkflows/Actions/R/base.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::R::dplyr" : "lib/DSL/English/DataQueryWorkflows/Actions/R/dplyr.rakumod",
+        "DSL::English::DataQueryWorkflows::Actions::Spanish::Predicate" : "lib/DSL/English/DataQueryWorkflows/Actions/Spanish/Predicate.rakumod",
+        "DSL::English::DataQueryWorkflows::Actions::Spanish::Standard" : "lib/DSL/English/DataQueryWorkflows/Actions/Spanish/Standard.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::SQL::SQL" : "lib/DSL/English/DataQueryWorkflows/Actions/SQL/SQL.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::WL::Predicate" : "lib/DSL/English/DataQueryWorkflows/Actions/WL/Predicate.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::WL::System" : "lib/DSL/English/DataQueryWorkflows/Actions/WL/System.rakumod"
