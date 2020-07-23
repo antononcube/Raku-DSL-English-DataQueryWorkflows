@@ -37,137 +37,148 @@ unit module DSL::English::DataQueryWorkflows::Actions::R::base;
 class DSL::English::DataQueryWorkflows::Actions::R::base
         is DSL::English::DataQueryWorkflows::Actions::R::Predicate {
 
-  method TOP($/) { make $/.values[0].made; }
+	method TOP($/) { make $/.values[0].made; }
+	
+	# Overriding Predicate::predicate-simple -- prefixing the lhs variable specs with 'obj$'.
+	method predicate-simple($/) {
+		if $<predicate-relation>.made eq '%!in%' {
+			make '!( obj$' ~ $<lhs>.made ~ ' %in% ' ~ $<rhs>.made ~ ')';
+		} elsif $<predicate-relation>.made eq 'like' {
+			make 'grepl( pattern = ' ~ $<rhs>.made ~ ', x = obj$' ~ $<lhs>.made ~ ')';
+		} else {
+			make 'obj$' ~ $<lhs>.made ~ ' ' ~ $<predicate-relation>.made ~ ' ' ~ $<rhs>.made;
+		}
+	}
+	
+	# General
+	method dataset-name($/) { make $/.Str; }
+	method variable-name($/) { make $/.Str; }
+	method list-separator($/) { make ','; }
+	method variable-names-list($/) { make $<variable-name>>>.made; }
+	method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made.join(', '); }
+	method integer-value($/) { make $/.Str; }
+	method number-value($/) { make $/.Str; }
+	method wl-expr($/) { make $/.Str; }
+	method quoted-variable-name($/) {  make $/.values[0].made; }
+	method single-quoted-variable-name($/) {  make '\"' ~ $<variable-name>.made ~ '\"'; }
+	method double-quoted-variable-name($/) {  make '\"' ~ $<variable-name>.made ~ '\"'; }
+	
+	# Trivial
+	method trivial-parameter($/) { make $/.values[0].made; }
+	method trivial-parameter-none($/) { make 'NA'; }
+	method trivial-parameter-empty($/) { make 'c()'; }
+	method trivial-parameter-automatic($/) { make 'NULL'; }
+	method trivial-parameter-false($/) { make 'FALSE'; }
+	method trivial-parameter-true($/) { make 'TRUE'; }
+	
+	# Load data
+	method data-load-command($/) { make $/.values[0].made; }
+	method load-data-table($/) { make '{ data(' ~ $<data-location-spec>.made ~ '); obj =' ~ $<data-location-spec>.made ~ ' }'; }
+	method data-location-spec($/) { make '\'' ~ $/.Str ~ '\''; }
+	method use-data-table($/) { make 'obj <- ' ~ $<variable-name>.made; }
+	
+    # Select command
+	method select-command($/) { make 'obj <- obj[, ' ~ 'c(' ~ map( { '\"' ~ $_ ~ '\"' }, $<variable-names-list>.made ).join(', ') ~ ') ]'; }
 
-  # Overriding Predicate::predicate-simple -- prefixing the lhs variable specs with 'obj$'.
-  method predicate-simple($/) {
-    if $<predicate-relation>.made eq '%!in%' {
-      make '!( obj$' ~ $<lhs>.made ~ ' %in% ' ~ $<rhs>.made ~ ')';
-    } elsif $<predicate-relation>.made eq 'like' {
-      make 'grepl( pattern = ' ~ $<rhs>.made ~ ', x = obj$' ~ $<lhs>.made ~ ')';
-    } else {
-      make 'obj$' ~ $<lhs>.made ~ ' ' ~ $<predicate-relation>.made ~ ' ' ~ $<rhs>.made;
-    }
-  }
+    # Filter commands
+	method filter-command($/) { make 'obj <- obj[' ~ $<filter-spec>.made ~ ', ]'; }
+	method filter-spec($/) { make $<predicates-list>.made; }
 
-  # General
-  method dataset-name($/) { make $/.Str; }
-  method variable-name($/) { make $/.Str; }
-  method list-separator($/) { make ','; }
-  method variable-names-list($/) { make $<variable-name>>>.made; }
-  method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made.join(', '); }
-  method integer-value($/) { make $/.Str; }
-  method number-value($/) { make $/.Str; }
-  method wl-expr($/) { make $/.Str; }
-  method quoted-variable-name($/) {  make $/.values[0].made; }
-  method single-quoted-variable-name($/) {  make '\"' ~ $<variable-name>.made ~ '\"'; }
-  method double-quoted-variable-name($/) {  make '\"' ~ $<variable-name>.made ~ '\"'; }
+    # Mutate command
+	method mutate-command($/) { make $<assign-pairs-list>.made; }
+	method assign-pairs-list($/) { make '{' ~ $<assign-pair>>>.made.join('; ') ~ '}'; }
+	method assign-pair($/) { make 'obj$' ~ $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+	method assign-pair-lhs($/) { make $/.values[0].made; }
+	method assign-pair-rhs($/) { make $/.values[0].made; }
+	
+    # Group command
+	method group-command($/) { make 'obj <- by( data = obj, ' ~ $<variable-names-list>.made ~ ')'; }
 
-  # Trivial
-  method trivial-parameter($/) { make $/.values[0].made; }
-  method trivial-parameter-none($/) { make 'NA'; }
-  method trivial-parameter-empty($/) { make 'c()'; }
-  method trivial-parameter-automatic($/) { make 'NULL'; }
-  method trivial-parameter-false($/) { make 'FALSE'; }
-  method trivial-parameter-true($/) { make 'TRUE'; }
+    # Ungroup command
+	method ungroup-command($/) { make $/.values[0].made; }
+	method ungroup-simple-command($/) { make 'obj <- as.data.frame(ungroup(obj), stringsAsFactors=FALSE)'; }
 
-  # Load data
-  method data-load-command($/) { make $/.values[0].made; }
-  method load-data-table($/) { make '{ data(' ~ $<data-location-spec>.made ~ '); obj =' ~ $<data-location-spec>.made ~ ' }'; }
-  method data-location-spec($/) { make '\'' ~ $/.Str ~ '\''; }
-  method use-data-table($/) { make 'obj <- ' ~ $<variable-name>.made; }
+    # Arrange command
+	method arrange-command($/) { make $/.values[0].made; }
+	method arrange-simple-spec($/) { make map( { 'obj$' ~ $_ }, $<variable-names-list>.made ).join(', '); }
+	method arrange-command-ascending($/) { make 'obj <- obj[ order(obj[,' ~ $<arrange-simple-spec>.made ~ ']), ]'; }
+	method arrange-command-descending($/) { make 'obj <- obj[ rev(order(' ~ $<arrange-simple-spec>.made ~ ')), ]'; }
 
-  # Select command
-  method select-command($/) { make 'obj <- obj[, ' ~ 'c(' ~ map( { '\"' ~ $_ ~ '\"' }, $<variable-names-list>.made ).join(', ') ~ ') ]'; }
+    # Statistics command
+	method statistics-command($/) { make $/.values[0].made; }
+	method count-command($/) { make 'dplyr::count()'; }
+	method summarize-data($/) { make 'print(summary(obj))'; }
+	method glimpse-data($/) { make 'head(obj)'; }
+	method summarize-all-command($/) { make 'summary(obj)'; }
 
-  # Filter commands
-  method filter-command($/) { make 'obj <- obj[' ~ $<filter-spec>.made ~ ', ]'; }
-  method filter-spec($/) { make $<predicates-list>.made; }
+    # Join command
+	method join-command($/) { make $/.values[0].made; }
 
-  # Mutate command
-  method mutate-command($/) { make $<assign-pairs-list>.made; }
-  method assign-pairs-list($/) { make '{' ~ $<assign-pair>>>.made.join('; ') ~ '}'; }
-  method assign-pair($/) { make 'obj$' ~ $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
-  method assign-pair-lhs($/) { make $/.values[0].made; }
-  method assign-pair-rhs($/) { make $/.values[0].made; }
+	method join-by-spec($/) { make 'c(' ~ $/.values[0].made ~ ')'; }
 
-  # Group command
-  method group-command($/) { make 'obj <- by( data = obj, ' ~ $<variable-names-list>.made ~ ')'; }
+	method full-join-spec($/)  {
+		if $<join-by-spec> {
+			make 'full_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
+		} else {
+			make 'full_join(' ~ $<dataset-name>.made ~ ')';
+		}
+	}
+	
+	method inner-join-spec($/)  { 
+		if $<join-by-spec> {
+			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
+		} else {
+			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ')';
+		}
+	}
+	
+	method left-join-spec($/)  {
+		if $<join-by-spec> {
+			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ', all.x = TRUE )';
+		} else {
+			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', , all.x = TRUE )';
+		}
+	}
+	
+	method right-join-spec($/)  {
+		if $<join-by-spec> {
+			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ', all.y = TRUE )';
+		} else {
+			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', , all.y = TRUE )';
+		}
+	}
 
-  # Ungroup command
-  method ungroup-command($/) { make $/.values[0].made; }
-  method ungroup-simple-command($/) { make 'obj <- as.data.frame(ungroup(obj), stringsAsFactors=FALSE)'; }
+	method semi-join-spec($/)  {
+		if $<join-by-spec> {
+			make 'semi_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
+		} else {
+			make 'semi_join(' ~ $<dataset-name>.made ~ ')';
+		}
+	}
 
-  # Arrange command
-  method arrange-command($/) { make $/.values[0].made; }
-  method arrange-simple-spec($/) { make map( { 'obj$' ~ $_ }, $<variable-names-list>.made ).join(', '); }
-  method arrange-command-ascending($/) { make 'obj <- obj[ order(obj[,' ~ $<arrange-simple-spec>.made ~ ']), ]'; }
-  method arrange-command-descending($/) { make 'obj <- obj[ rev(order(' ~ $<arrange-simple-spec>.made ~ ')), ]'; }
+    # Cross tabulate command
+	method cross-tabulation-command($/) { make $/.values[0].made; }
+	method cross-tabulate-command($/) { $<cross-tabulation-formula>.made }
+	method contingency-matrix-command($/) { $<cross-tabulation-formula>.made }
+	method cross-tabulation-formula($/) {
+		if $<values-variable-name> {
+			make 'obj <- xtabs( formula = ' ~ $<values-variable-name>.made ~ ' ~ ' ~ $<rows-variable-name>.made ~ ' + ' ~ $<columns-variable-name>.made ~ ', data = x )';
+		} else {
+			make 'obj <- xtabs( formula = ~ ' ~ $<rows-variable-name>.made ~ ' + ' ~ $<columns-variable-name>.made ~ ', data = x )';
+		}
+	}
+	method rows-variable-name($/) { make $<variable-name>.made; }
+	method columns-variable-name($/) { make $<variable-name>.made; }
+	method values-variable-name($/) { make $<variable-name>.made; }
 
-  # Statistics command
-  method statistics-command($/) { make $/.values[0].made; }
-  method count-command($/) { make 'dplyr::count()'; }
-  method summarize-data($/) { make 'print(summary(obj))'; }
-  method glimpse-data($/) { make 'head(obj)'; }
-  method summarize-all-command($/) { make 'summary(obj)'; }
+    # Pipeline command
+    method pipeline-command($/) { make $/.values[0].made; }
+    method take-pipeline-value($/) { make 'obj'; }
+    method echo-pipeline-value($/) { make 'print(obj)'; }
 
-  # Join command
-  method join-command($/) { make $/.values[0].made; }
-
-  method join-by-spec($/) { make 'c(' ~ $/.values[0].made ~ ')'; }
-
-  method full-join-spec($/)  {
-    if $<join-by-spec> {
-      make 'full_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
-    } else {
-      make 'full_join(' ~ $<dataset-name>.made ~ ')';
-    }
-  }
-
-  method inner-join-spec($/)  { 
-    if $<join-by-spec> {
-      make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
-    } else {
-      make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ')';
-    }
-  }
-
-  method left-join-spec($/)  {
-    if $<join-by-spec> {
-      make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ', all.x = TRUE )';
-    } else {
-      make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', , all.x = TRUE )';
-    }
-  }
-
-  method right-join-spec($/)  {
-    if $<join-by-spec> {
-      make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ', all.y = TRUE )';
-    } else {
-      make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', , all.y = TRUE )';
-    }
-  }
-
-  method semi-join-spec($/)  {
-    if $<join-by-spec> {
-      make 'semi_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
-    } else {
-      make 'semi_join(' ~ $<dataset-name>.made ~ ')';
-    }
-  }
-
-  # Cross tabulate command
-  method cross-tabulation-command($/) { make $/.values[0].made; }
-  method cross-tabulate-command($/) { $<cross-tabulation-formula>.made }
-  method contingency-matrix-command($/) { $<cross-tabulation-formula>.made }
-  method cross-tabulation-formula($/) {
-    if $<values-variable-name> {
-      make 'obj <- xtabs( formula = ' ~ $<values-variable-name>.made ~ ' ~ ' ~ $<rows-variable-name>.made ~ ' + ' ~ $<columns-variable-name>.made ~ ', data = x )';
-    } else {
-      make 'obj <- xtabs( formula = ~ ' ~ $<rows-variable-name>.made ~ ' + ' ~ $<columns-variable-name>.made ~ ', data = x )';
-    }
-  }
-  method rows-variable-name($/) { make $<variable-name>.made; }
-  method columns-variable-name($/) { make $<variable-name>.made; }
-  method values-variable-name($/) { make $<variable-name>.made; }
+    method echo-command($/) { make 'print( ' ~ $<echo-message-spec>.made ~ ' )'; }
+    method echo-message-spec($/) { make $/.values[0].made; }
+    method echo-words-list($/) { make '"' ~ $<variable-name>>>.made.join(' ') ~ '"'; }
+    method echo-variable($/) { make $/.Str; }
+    method echo-text($/) { make $/.Str; }
 }

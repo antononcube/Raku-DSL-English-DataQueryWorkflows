@@ -37,127 +37,138 @@ unit module DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames;
 class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
         is DSL::English::DataQueryWorkflows::Actions::Julia::Predicate {
 
-  method TOP($/) { make $/.values[0].made; }
+    method TOP($/) { make $/.values[0].made; }
 
-  # General
-  method dataset-name($/) { make $/.Str; }
-  method variable-name($/) { make $/.Str; }
-  method list-separator($/) { make ','; }
-  # method variable-names-list($/) { make $<variable-name>>>.made.join(', '); }
-  method variable-names-list($/) { make map( {':' ~ $_ }, $<variable-name>>>.made ).join(', '); }
-  method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made.join(', '); }
-  method integer-value($/) { make $/.Str; }
-  method number-value($/) { make $/.Str; }
-  method wl-expr($/) { make $/.Str; }
-  method quoted-variable-name($/) {  make $/.values[0].made; }
-  method single-quoted-variable-name($/) { make '\"' ~ $<variable-name>.made ~ '\"'; }
-  method double-quoted-variable-name($/) { make '\"' ~ $<variable-name>.made ~ '\"'; }
+	# General
+	method dataset-name($/) { make $/.Str; }
+	method variable-name($/) { make $/.Str; }
+	method list-separator($/) { make ','; }
+	# method variable-names-list($/) { make $<variable-name>>>.made.join(', '); }
+	method variable-names-list($/) { make map( {':' ~ $_ }, $<variable-name>>>.made ).join(', '); }
+	method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made.join(', '); }
+	method integer-value($/) { make $/.Str; }
+	method number-value($/) { make $/.Str; }
+	method wl-expr($/) { make $/.Str; }
+	method quoted-variable-name($/) {  make $/.values[0].made; }
+	method single-quoted-variable-name($/) { make '\"' ~ $<variable-name>.made ~ '\"'; }
+	method double-quoted-variable-name($/) { make '\"' ~ $<variable-name>.made ~ '\"'; }
+	
+	# Trivial
+	method trivial-parameter($/) { make $/.values[0].made; }
+	method trivial-parameter-none($/) { make 'missing'; }
+	method trivial-parameter-empty($/) { make '[]'; }
+	method trivial-parameter-automatic($/) { make 'Null'; }
+	method trivial-parameter-false($/) { make 'false'; }
+	method trivial-parameter-true($/) { make 'true'; }
+	
+	# Load data
+	method data-load-command($/) { make $/.values[0].made; }
+	method load-data-table($/) { make 'obj = ' ~ $<data-location-spec>.made; }
+	method data-location-spec($/) { make '\"' ~ $/.Str ~ '\"'; }
+	method use-data-table($/) { make 'obj = ' ~ $<variable-name>.made; }
+	
+	# Select command
+	method select-command($/) { make 'select!( obj, ' ~ $<variable-names-list>.made ~ ')'; }
+  
+	# Filter commands
+	method filter-command($/) { make 'obj = obj[ ' ~ $<filter-spec>.made ~ ', :]'; }
+	method filter-spec($/) { make $<predicates-list>.made; }
 
-  # Trivial
-  method trivial-parameter($/) { make $/.values[0].made; }
-  method trivial-parameter-none($/) { make 'missing'; }
-  method trivial-parameter-empty($/) { make '[]'; }
-  method trivial-parameter-automatic($/) { make 'Null'; }
-  method trivial-parameter-false($/) { make 'false'; }
-  method trivial-parameter-true($/) { make 'true'; }
+	# Mutate command
+	method mutate-command($/) { make 'transform!( ' ~ $<assign-pairs-list>.made ~ ' )'; }
+	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
+	method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+	method assign-pair-lhs($/) { make $/.values[0].made; }
+	method assign-pair-rhs($/) { make $/.values[0].made; }
 
-  # Load data
-  method data-load-command($/) { make $/.values[0].made; }
-  method load-data-table($/) { make 'obj = ' ~ $<data-location-spec>.made; }
-  method data-location-spec($/) { make '\"' ~ $/.Str ~ '\"'; }
-  method use-data-table($/) { make 'obj = ' ~ $<variable-name>.made; }
+	# Group command
+	method group-command($/) { make 'obj = groupby( obj, [' ~ $<variable-names-list>.made ~ '] )'; }
 
-  # Select command
-  method select-command($/) { make 'select!( obj, ' ~ $<variable-names-list>.made ~ ')'; }
+	# Ungroup command
+	method ungroup-command($/) { make $/.values[0].made; }
+	method ungroup-simple-command($/) { make 'obj = combine(obj)'; }
 
-  # Filter commands
-  method filter-command($/) { make 'obj = obj[ ' ~ $<filter-spec>.made ~ ', :]'; }
-  method filter-spec($/) { make $<predicates-list>.made; }
+	# Arrange command
+	method arrange-command($/) { make $/.values[0].made; }
+	method arrange-simple-spec($/) { make $<variable-names-list>.made; }
+	method arrange-command-ascending($/) { make 'sort!( obj, [' ~ $<arrange-simple-spec>.made ~ '] )'; }
+	method arrange-command-descending($/) { make 'sort!( obj, [' ~ $<arrange-simple-spec>.made ~ '], rev=true ))'; }
+	
+	# Statistics command
+	method statistics-command($/) { make $/.values[0].made; }
+	method count-command($/) { make 'obj = combine(obj, nrow)'; }
+	method summarize-data($/) { make 'describe(obj)'; }
+	method glimpse-data($/) { make 'first(obj, 6)'; }
+	method summarize-all-command($/) { make 'combine(df, names(df) .=> mean )'; }
 
-  # Mutate command
-  method mutate-command($/) { make 'transform!( ' ~ $<assign-pairs-list>.made ~ ' )'; }
-  method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
-  method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
-  method assign-pair-lhs($/) { make $/.values[0].made; }
-  method assign-pair-rhs($/) { make $/.values[0].made; }
+	# Join command
+	method join-command($/) { make $/.values[0].made; }
+	
+	method join-by-spec($/) { make 'c(' ~ $/.values[0].made ~ ')'; }
+	
+	method full-join-spec($/)  {
+		if $<join-by-spec> {
+			make 'obj = outerjoin( obj, ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ')';
+		} else {
+			make 'obj = outerjoin( obj, ' ~ $<dataset-name>.made ~ ')';
+		}
+	}
 
-  # Group command
-  method group-command($/) { make 'obj = groupby( obj, [' ~ $<variable-names-list>.made ~ '] )'; }
+	method inner-join-spec($/)  { 
+		if $<join-by-spec> {
+			make 'obj = innerjoin( obj, ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ')';
+		} else {
+			make 'obj = innerjoin( obj, ' ~ $<dataset-name>.made ~ ')';
+		}
+	}
 
-  # Ungroup command
-  method ungroup-command($/) { make $/.values[0].made; }
-  method ungroup-simple-command($/) { make 'obj = combine(obj)'; }
+	method left-join-spec($/)  {
+		if $<join-by-spec> {
+			make 'obj = leftjoin( obj, ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ')';
+		} else {
+			make 'obj = leftjoin( obj, ' ~ $<dataset-name>.made ~ ')';
+		}
+	}
+	
+	method right-join-spec($/)  {
+		if $<join-by-spec> {
+			make 'obj = rightjoin( obj, ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ')';
+		} else {
+			make 'obj = rightjoin( obj, ' ~ $<dataset-name>.made ~ ')';
+		}
+	}
+	
+	method semi-join-spec($/)  {
+		if $<join-by-spec> {
+			make 'obj = semijoin( obj, ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ')';
+		} else {
+			make 'obj = semijoin( obj, ' ~ $<dataset-name>.made ~ ')';
+		}
+	}
 
-  # Arrange command
-  method arrange-command($/) { make $/.values[0].made; }
-  method arrange-simple-spec($/) { make $<variable-names-list>.made; }
-  method arrange-command-ascending($/) { make 'sort!( obj, [' ~ $<arrange-simple-spec>.made ~ '] )'; }
-  method arrange-command-descending($/) { make 'sort!( obj, [' ~ $<arrange-simple-spec>.made ~ '], rev=true ))'; }
+	# Cross tabulate command
+	method cross-tabulation-command($/) { make $/.values[0].made; }
+	method cross-tabulate-command($/) { $<cross-tabulation-formula>.made }
+	method contingency-matrix-command($/) { $<cross-tabulation-formula>.made }
+	method cross-tabulation-formula($/) {
+		if $<values-variable-name> {
+			make 'obj = combine( x -> sum(x[:, :;' ~ $<values-variable-name> ~ ']), groupby( obj, [ :' ~ $<rows-variable-name>.made ~ ', :' ~ $<columns-variable-name>.made ~ '] ))';
+		} else {
+			make 'obj = combine( nrow, groupby( obj, [ :' ~ $<rows-variable-name>.made ~ ', :' ~ $<columns-variable-name>.made ~ '] ))';
+		}
+	}
+	method rows-variable-name($/) { make $<variable-name>.made; }
+	method columns-variable-name($/) { make $<variable-name>.made; }
+	method values-variable-name($/) { make $<variable-name>.made; }
 
-  # Statistics command
-  method statistics-command($/) { make $/.values[0].made; }
-  method count-command($/) { make 'obj = combine(obj, nrow)'; }
-  method summarize-data($/) { make 'describe(obj)'; }
-  method glimpse-data($/) { make 'first(obj, 6)'; }
-  method summarize-all-command($/) { make 'combine(df, names(df) .=> mean )'; }
+    # Pipeline command
+    method pipeline-command($/) { make $/.values[0].made; }
+    method take-pipeline-value($/) { make 'obj'; }
+    method echo-pipeline-value($/) { make 'println(obj)'; }
 
-  # Join command
-  method join-command($/) { make $/.values[0].made; }
-
-  method join-by-spec($/) { make 'c(' ~ $/.values[0].made ~ ')'; }
-
-  method full-join-spec($/)  {
-    if $<join-by-spec> {
-      make 'obj = outerjoin( obj, ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ')';
-    } else {
-      make 'obj = outerjoin( obj, ' ~ $<dataset-name>.made ~ ')';
-    }
-  }
-
-  method inner-join-spec($/)  { 
-    if $<join-by-spec> {
-      make 'obj = innerjoin( obj, ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ')';
-    } else {
-      make 'obj = innerjoin( obj, ' ~ $<dataset-name>.made ~ ')';
-    }
-  }
-
-  method left-join-spec($/)  {
-    if $<join-by-spec> {
-      make 'obj = leftjoin( obj, ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ')';
-    } else {
-      make 'obj = leftjoin( obj, ' ~ $<dataset-name>.made ~ ')';
-    }
-  }
-
-  method right-join-spec($/)  {
-    if $<join-by-spec> {
-      make 'obj = rightjoin( obj, ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ')';
-    } else {
-      make 'obj = rightjoin( obj, ' ~ $<dataset-name>.made ~ ')';
-    }
-  }
-
-  method semi-join-spec($/)  {
-    if $<join-by-spec> {
-      make 'obj = semijoin( obj, ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ')';
-    } else {
-      make 'obj = semijoin( obj, ' ~ $<dataset-name>.made ~ ')';
-    }
-  }
-
-  # Cross tabulate command
-  method cross-tabulation-command($/) { make $/.values[0].made; }
-  method cross-tabulate-command($/) { $<cross-tabulation-formula>.made }
-  method contingency-matrix-command($/) { $<cross-tabulation-formula>.made }
-  method cross-tabulation-formula($/) {
-    if $<values-variable-name> {
-      make 'obj = combine( x -> sum(x[:, :;' ~ $<values-variable-name> ~ ']), groupby( obj, [ :' ~ $<rows-variable-name>.made ~ ', :' ~ $<columns-variable-name>.made ~ '] ))';
-    } else {
-      make 'obj = combine( nrow, groupby( obj, [ :' ~ $<rows-variable-name>.made ~ ', :' ~ $<columns-variable-name>.made ~ '] ))';
-    }
-  }
-  method rows-variable-name($/) { make $<variable-name>.made; }
-  method columns-variable-name($/) { make $<variable-name>.made; }
-  method values-variable-name($/) { make $<variable-name>.made; }
+    method echo-command($/) { make 'println( ' ~ $<echo-message-spec>.made ~ ' );'; }
+    method echo-message-spec($/) { make $/.values[0].made; }
+    method echo-words-list($/) { make '"' ~ $<variable-name>>>.made.join(' ') ~ '"'; }
+    method echo-variable($/) { make $/.Str; }
+    method echo-text($/) { make $/.Str; }
 }
