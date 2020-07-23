@@ -82,11 +82,11 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	method assign-pair-rhs($/) { make $/.values[0].made; }
 
 	# Group command
-	method group-command($/) { make 'grupo con columnas: ' ~ $<variable-names-list>.made; }
+	method group-command($/) { make 'agrupar con columnas: ' ~ $<variable-names-list>.made; }
 
 	# Ungroup command
 	method ungroup-command($/) { make $/.values[0].made; }
-	method ungroup-simple-command($/) { make 'grupo de una vez'; }
+	method ungroup-simple-command($/) { make 'desagrupar'; }
 
 	# Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
