@@ -10,14 +10,15 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token arrange-verb { 'arrange' }
     token ascending-adjective { 'ascending' }
     token combine-verb { 'combine' }
+    token cross-verb { 'cross' }
     token descending-adjective { 'descending' }
     token filter-verb { 'filter' }
     token formula-noun { 'formula' }
     token full-adjective { 'full' }
     token glimpse-verb { 'glimpse' }
     token group-verb { 'group' }
-    token join-noun { 'join' }
     token inner-adjective { 'inner' }
+    token join-noun { 'join' }
     token left-adjective { 'left' }
     token mutate-verb { 'mutate' }
     token order-verb { 'order' }
@@ -27,10 +28,11 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token sort-verb { 'sort' }
     token summarise-verb { 'summarise' }
     token summarize-verb { 'summarize' }
+    token tabulate-verb { 'tabulate' }
     token ungroup-verb { 'ungroup' }
 
-    rule for-which-phrase { <for-preposition> 'which' | <that-pronoun> 'adhere' <to-preposition> }
-    rule cross-tabulate-phrase { 'cross' 'tabulate' }
+    rule for-which-phrase { <for-preposition> <which-determiner> | <that-pronoun> <adhere-verb> <to-preposition> }
+    rule cross-tabulate-phrase { <cross-verb> <tabulate-verb> }
     rule contingency-matrix-phrase { <contingency-noun> [ <matrix-noun> | <table-noun> ] }
     rule with-formula-phrase { <with-preposition> <the-determiner>? <formula-noun> }
 

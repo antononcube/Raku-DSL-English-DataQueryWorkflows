@@ -10,6 +10,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token arrange-verb { 'arrange' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'arrange') }> }
     token ascending-adjective { 'ascending' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'ascending') }> }
     token combine-verb { 'combine' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'combine') }> }
+    token cross-verb { 'cross' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cross') }> }
     token descending-adjective { 'descending' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'descending') }> }
     token filter-verb { 'filter' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'filter') }> }
     token formula-noun { 'formula' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'formula') }> }
@@ -27,10 +28,11 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token sort-verb { 'sort' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'sort') }> }
     token summarise-verb { 'summarise' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'summarise') }> }
     token summarize-verb { 'summarize' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'summarize') }> }
+    token tabulate-verb { 'tabulate' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'tabulate') }> }
     token ungroup-verb { 'ungroup' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'ungroup') }> }
 
-    rule for-which-phrase { <for-preposition> 'which' | <that-pronoun> 'adhere' <to-preposition> }
-    rule cross-tabulate-phrase { 'cross' 'tabulate' }
+    rule for-which-phrase { <for-preposition> <which-determiner> | <that-pronoun> <adhere-verb> <to-preposition> }
+    rule cross-tabulate-phrase { <cross-verb> <tabulate-verb> }
     rule contingency-matrix-phrase { <contingency-noun> [ <matrix-noun> | <table-noun> ] }
     rule with-formula-phrase { <with-preposition> <the-determiner>? <formula-noun> }
 
