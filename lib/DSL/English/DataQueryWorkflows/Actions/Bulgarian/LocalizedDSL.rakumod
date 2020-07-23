@@ -91,8 +91,8 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::LocalizedDSL
 	# Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
 	method arrange-simple-spec($/) { make $<variable-names-list>.made; }
-	method arrange-command-ascending($/) { make 'сортирай: ' ~ $<arrange-simple-spec>.made; }
-	method arrange-command-descending($/) { make 'сортирай я низходящ ред: ' ~ $<arrange-simple-spec>.made; }
+	method arrange-command-ascending($/) { make 'сортирай с колоните: ' ~ $<arrange-simple-spec>.made; }
+	method arrange-command-descending($/) { make 'сортирай в низходящ ред с колоните: ' ~ $<arrange-simple-spec>.made; }
 
 	# Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
@@ -108,41 +108,41 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::LocalizedDSL
 
 	method full-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'obj = outerjoin( obj, ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ')';
+			make 'външно съединение с ' ~ $<dataset-name>.made ~ ' според ' ~ $<join-by-spec>.made ~ ')';
 		} else {
-			make 'obj = outerjoin( obj, ' ~ $<dataset-name>.made ~ ')';
+			make 'външно съединение с ' ~ $<dataset-name>.made ~ ')';
 		}
 	}
 
 	method inner-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'obj = innerjoin( obj, ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ')';
+			make 'вътрешно съединение с ' ~ $<dataset-name>.made ~ ' според ' ~ $<join-by-spec>.made ~ ')';
 		} else {
-			make 'obj = innerjoin( obj, ' ~ $<dataset-name>.made ~ ')';
+			make 'вътрешно съединение с ' ~ $<dataset-name>.made ~ ')';
 		}
 	}
 
 	method left-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'obj = leftjoin( obj, ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ')';
+			make 'ляво съединение с ' ~ $<dataset-name>.made ~ ' според ' ~ $<join-by-spec>.made ~ ')';
 		} else {
-			make 'obj = leftjoin( obj, ' ~ $<dataset-name>.made ~ ')';
+			make 'ляво съединение с ' ~ $<dataset-name>.made ~ ')';
 		}
 	}
 
 	method right-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'obj = rightjoin( obj, ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ')';
+			make 'дясно съединение с ' ~ $<dataset-name>.made ~ ' според ' ~ $<join-by-spec>.made ~ ')';
 		} else {
-			make 'obj = rightjoin( obj, ' ~ $<dataset-name>.made ~ ')';
+			make 'дясно съединение с ' ~ $<dataset-name>.made ~ ')';
 		}
 	}
 
 	method semi-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'obj = semijoin( obj, ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ')';
+			make 'полу-съединение с ' ~ $<dataset-name>.made ~ ' според ' ~ $<join-by-spec>.made ~ ')';
 		} else {
-			make 'obj = semijoin( obj, ' ~ $<dataset-name>.made ~ ')';
+			make 'полу-съединение с ' ~ $<dataset-name>.made ~ ')';
 		}
 	}
 
@@ -152,9 +152,9 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::LocalizedDSL
 	method contingency-matrix-command($/) { $<cross-tabulation-formula>.made }
 	method cross-tabulation-formula($/) {
 		if $<values-variable-name> {
-			make 'направи кръстосана таблица с редове ' ~ $<rows-variable-name>.made ~ ', колони ' ~ $<columns-variable-name>.made ~ ' и стойности ' ~ $<values-variable-name>;
+			make 'направи кръстосана таблица с редове от ' ~ $<rows-variable-name>.made ~ ', колони от ' ~ $<columns-variable-name>.made ~ ' и стойности от ' ~ $<values-variable-name>;
 		} else {
-			make 'направи кръстосана таблица с редове ' ~ $<rows-variable-name>.made ~ ', колони' ~ $<columns-variable-name>.made;
+			make 'направи кръстосана таблица с редове от ' ~ $<rows-variable-name>.made ~ ', колони от ' ~ $<columns-variable-name>.made;
 		}
 	}
 	method rows-variable-name($/) { make $<variable-name>.made; }
