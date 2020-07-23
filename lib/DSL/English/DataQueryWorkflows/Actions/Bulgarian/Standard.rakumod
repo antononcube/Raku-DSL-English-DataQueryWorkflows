@@ -71,7 +71,7 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	method select-command($/) { make 'избери колоните: ' ~ $<variable-names-list>.made; }
 
 	# Filter commands
-	method filter-command($/) { make 'филтрирай със специфицияте: ' ~ $<filter-spec>.made; }
+	method filter-command($/) { make 'филтрирай с предиката: ' ~ $<filter-spec>.made; }
 	method filter-spec($/) { make $<predicates-list>.made; }
 
 	# Mutate command
