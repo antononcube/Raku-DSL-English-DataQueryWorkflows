@@ -63,7 +63,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar::WorkflowCommad
     rule use-data-table { [ <.use-verb> | <.using-preposition> ] <.the-determiner>? <.data>? <variable-name> }
 
     # Select command
-    rule select-command { <select> <.the-determiner>? [ <.variables-noun> | <.variable-noun> ]? <variable-names-list> }
+    rule select-command { <select> <.the-determiner>? [ <.variables-noun> | <.variable-noun> | <.columns> ]? <variable-names-list> }
 
     # Filter command
     rule filter-command { <filter> <.the-determiner>? <.rows>? [ <.for-which-phrase>? | <.by-preposition> ] <filter-spec> }
