@@ -42,7 +42,7 @@ my $commands4 = '
 use dfTitanic;
 filter with passengerSex is "male" and passengerSurvival equals "died" or passengerSurvival is "survived" ;
 filter by passengerClass is like "1.";
-cross tablate passengerClass, passengerSurvival over passengerAge;
+cross tabulate passengerClass, passengerSurvival over passengerAge;
 ';
 
 my $commands5 = '
@@ -51,6 +51,21 @@ my $commands5 = '
       select the columns mass & height;
       mutate bmi = mass/height^2;
       arrange by the variable bmi, mass, height descending;';
+
+say "\n", '=' x 30;
+say '-' x 3, 'Spanish:';
+say '=' x 30;
+
+say ToDataQueryWorkflowCode($commands, 'Spanish');
+
+say '-' x 20;
+say ToDataQueryWorkflowCode($commands2, 'Spanish');
+
+say '-' x 20;
+say ToDataQueryWorkflowCode($commands3, 'Spanish');
+
+say '-' x 20;
+say ToDataQueryWorkflowCode($commands4, 'Spanish');
 
 say "\n", '=' x 30;
 say '-' x 3, 'Bulgarian:';
