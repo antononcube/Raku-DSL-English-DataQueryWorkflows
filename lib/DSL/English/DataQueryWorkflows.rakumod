@@ -16,6 +16,7 @@ Standard Query Language (SQL) or RStudio's library dplyr.
 unit module DSL::English::DataQueryWorkflows;
 
 use DSL::English::DataQueryWorkflows::Grammar;
+use DSL::English::DataQueryWorkflows::Actions::Bulgarian::LocalizedDSL;
 use DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames;
 use DSL::English::DataQueryWorkflows::Actions::Python::pandas;
 use DSL::English::DataQueryWorkflows::Actions::R::base;
@@ -36,6 +37,7 @@ use DSL::English::DataQueryWorkflows::Actions::WL::System;
 #};
 
 my %targetToAction =
+    "Bulgarian"        => DSL::English::DataQueryWorkflows::Actions::Bulgarian::LocalizedDSL,
     "Julia"            => DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames,
     "Julia-DataFrames" => DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames,
     "R"                => DSL::English::DataQueryWorkflows::Actions::R::base,
@@ -49,6 +51,7 @@ my %targetToAction =
     "WL-System"        => DSL::English::DataQueryWorkflows::Actions::WL::System;
 
 my %targetToSeparator{Str} =
+    "Bulgarian"        => "\n",
     "Julia"            => "\n",
     "Julia-DataFrames" => "\n",
     "R"                => "\n",

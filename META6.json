@@ -11,6 +11,7 @@
         "DSL::English::DataQueryWorkflows" : "lib/DSL/English/DataQueryWorkflows.rakumod",
         "DSL::English::DataQueryWorkflows::Grammar" : "lib/DSL/English/DataQueryWorkflows/Grammar.rakumod",
         "DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases" : "lib/DSL/English/DataQueryWorkflows/Grammar/DataQueryPhrases.rakumod",
+        "DSL::English::DataQueryWorkflows::Actions::Bulgarian::LocalizedDSL" : "lib/DSL/English/DataQueryWorkflows/Actions/Bulgarian/LocalizedDSL.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames" : "lib/DSL/English/DataQueryWorkflows/Actions/Julia/DataFrames.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::Julia::Predicate" : "lib/DSL/English/DataQueryWorkflows/Actions/Julia/Predicate.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::Python::pandas" : "lib/DSL/English/DataQueryWorkflows/Actions/Python/pandas.rakumod",
