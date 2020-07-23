@@ -63,15 +63,15 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 
 	# Load data
 	method data-load-command($/) { make $/.values[0].made; }
-	method load-data-table($/) { make 'зареди la mesa: ' ~ $<data-location-spec>.made; }
+	method load-data-table($/) { make 'cargar la tabla: ' ~ $<data-location-spec>.made; }
 	method data-location-spec($/) { make '\"' ~ $/.Str ~ '\"'; }
-	method use-data-table($/) { make 'utilizar la mesa: ' ~ $<variable-name>.made; }
+	method use-data-table($/) { make 'utilizar la tabla: ' ~ $<variable-name>.made; }
 
 	# Select command
 	method select-command($/) { make 'escoger columnas: ' ~ $<variable-names-list>.made; }
 
 	# Filter commands
-	method filter-command($/) { make 'filtrar con el predicado: ' ~ $<filter-spec>.made; }
+	method filter-command($/) { make 'filtrar con la condicion: ' ~ $<filter-spec>.made; }
 	method filter-spec($/) { make $<predicates-list>.made; }
 
 	# Mutate command
@@ -152,9 +152,9 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	method contingency-matrix-command($/) { $<cross-tabulation-formula>.made }
 	method cross-tabulation-formula($/) {
 		if $<values-variable-name> {
-			make 'hacer una tabla cruzada con filas de ' ~ $<rows-variable-name>.made ~ ', колони от ' ~ $<columns-variable-name>.made ~ ' и стойности от ' ~ $<values-variable-name>;
+			make 'hacer una tabla cruzada con filas de ' ~ $<rows-variable-name>.made ~ ', columnas de ' ~ $<columns-variable-name>.made ~ ' y valores de ' ~ $<values-variable-name>;
 		} else {
-			make 'hacer una tabla cruzada con filas de  ' ~ $<rows-variable-name>.made ~ ', колони от ' ~ $<columns-variable-name>.made;
+			make 'hacer una tabla cruzada con filas de  ' ~ $<rows-variable-name>.made ~ ', columnas de ' ~ $<columns-variable-name>.made;
 		}
 	}
 	method rows-variable-name($/) { make $<variable-name>.made; }
