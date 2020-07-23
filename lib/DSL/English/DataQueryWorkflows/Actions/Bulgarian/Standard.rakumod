@@ -99,7 +99,7 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	method count-command($/) { make 'намери размера на под-групите'; }
 	method summarize-data($/) { make 'опиши обекта'; }
 	method glimpse-data($/) { make 'покажи визия на обекта'; }
-	method summarize-all-command($/) { make 'немери средните стойности на всички колони'; }
+	method summarize-all-command($/) { make 'намери средните стойности на всички колони'; }
 
 	# Join command
 	method join-command($/) { make $/.values[0].made; }
