@@ -24,17 +24,11 @@ use DSL::English::DataQueryWorkflows;
 
 say "=" x 10;
 
-my $commands = '
-use dfTitanic;
-filter by passengerSex == "male";
-group by passengerClass, passengerSurvival;
-count;
-ungroup;
-';
+my $commands = 'use dfTitanic;filter by passengerSex == "male";echo text grouping by variables;group by passengerClass, passengerSurvival;count;ungroup;';
 
 my $commands2 = "use starwars;
 inner join with starwars_films by 'name';
-sorte by name, film desc;
+sort by name, film desc;
 echo data summary";
 
 my $commands3 = 'use iris;
@@ -48,23 +42,42 @@ my $commands4 = '
 use dfTitanic;
 filter with passengerSex is "male" and passengerSurvival equals "died" or passengerSurvival is "survived" ;
 filter by passengerClass is like "1.";
-cross tabulate passengerClass, passengerSurvival over passengerAge;
+cross tablate passengerClass, passengerSurvival over passengerAge;
 ';
 
 my $commands5 = '
       use starwars;
       filter with gender is "female";
-      select mass & height;
+      select the columns mass & height;
       mutate bmi = mass/height^2;
       arrange by the variable bmi, mass, height descending;';
 
-say "\n", '-' x 3, 'R-base:';
+say "\n", '=' x 30;
+say '-' x 3, 'Bulgarian:';
+say '=' x 30;
 
-say ToDataQueryWorkflowCode($commands5, 'R-base');
+say ToDataQueryWorkflowCode($commands, 'Bulgarian');
 
-say "\n", '-' x 3, 'R-dplyr:';
+say '-' x 20;
+say ToDataQueryWorkflowCode($commands2, 'Bulgarian');
 
-say ToDataQueryWorkflowCode($commands5, 'R-dplyr');
+say '-' x 20;
+say ToDataQueryWorkflowCode($commands3, 'Bulgarian');
+
+say '-' x 20;
+say ToDataQueryWorkflowCode($commands4, 'Bulgarian');
+
+say "\n", '=' x 30;
+say '-' x 3, 'R-base:';
+say '=' x 30;
+
+say ToDataQueryWorkflowCode($commands2, 'WL');
+
+say "\n", '=' x 30;
+say '-' x 3, 'R-dplyr:';
+say '=' x 30;
+
+say ToDataQueryWorkflowCode($commands2, 'R-dplyr');
 #
 #say "\n", '-' x 3, 'Julia-DataFrames:';
 #
