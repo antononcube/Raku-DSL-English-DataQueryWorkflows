@@ -32,9 +32,9 @@ use v6;
 use DSL::English::DataQueryWorkflows::Grammar;
 use DSL::English::DataQueryWorkflows::Actions::Bulgarian::Predicate;
 
-unit module DSL::English::DataQueryWorkflows::Actions::Bulgarian::LocalizedDSL;
+unit module DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard;
 
-class DSL::English::DataQueryWorkflows::Actions::Bulgarian::LocalizedDSL
+class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
         is DSL::English::DataQueryWorkflows::Actions::Bulgarian::Predicate {
 
     method TOP($/) { make $/.values[0].made; }
