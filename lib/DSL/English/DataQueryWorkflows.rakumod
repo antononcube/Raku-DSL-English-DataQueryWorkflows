@@ -58,8 +58,8 @@ my %targetToSeparator{Str} =
     "Mathematica"      => "\n",
     "Python-pandas"    => ".\n",
     "pandas"           => ".\n",
-    "WL"               => "\n",
-    "WL-System"        => "\n";
+    "WL"               => ";\n",
+    "WL-System"        => ";\n";
 
 
 #-----------------------------------------------------------
