@@ -68,14 +68,14 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::LocalizedDSL
 	method use-data-table($/) { make 'използвай таблицата: ' ~ $<variable-name>.made; }
 
 	# Select command
-	method select-command($/) { make 'избери колоните: ' ~ $<variable-names-list>.made ~ ')'; }
+	method select-command($/) { make 'избери колоните: ' ~ $<variable-names-list>.made; }
 
 	# Filter commands
 	method filter-command($/) { make 'филтрирай със специфицияте: ' ~ $<filter-spec>.made; }
 	method filter-spec($/) { make $<predicates-list>.made; }
 
 	# Mutate command
-	method mutate-command($/) { make 'присвои: ' ~ $<assign-pairs-list>.made ~ ' )'; }
+	method mutate-command($/) { make 'присвои: ' ~ $<assign-pairs-list>.made; }
 	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
 	method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
 	method assign-pair-lhs($/) { make $/.values[0].made; }
