@@ -50,8 +50,8 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	method number-value($/) { make $/.Str; }
 	method wl-expr($/) { make $/.Str; }
 	method quoted-variable-name($/) {  make $/.values[0].made; }
-	method single-quoted-variable-name($/) { make '\"' ~ $<variable-name>.made ~ '\"'; }
-	method double-quoted-variable-name($/) { make '\"' ~ $<variable-name>.made ~ '\"'; }
+	method single-quoted-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
+	method double-quoted-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
 	
 	# Trivial
 	method trivial-parameter($/) { make $/.values[0].made; }
@@ -93,7 +93,24 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	method arrange-simple-spec($/) { make $<variable-names-list>.made; }
 	method arrange-command-ascending($/) { make 'sort!( obj, [' ~ $<arrange-simple-spec>.made ~ '] )'; }
 	method arrange-command-descending($/) { make 'sort!( obj, [' ~ $<arrange-simple-spec>.made ~ '], rev=true ))'; }
-	
+
+    # Rename columns command
+    method rename-columns-command($/) { make $/.values[0].made; }
+    method rename-columns-simple($/) {
+        # I am not very comfortable with splitting the made string here, but it works.
+        # Maybe it is better to no not join the elements in <variable-names-list>.
+        my @currentNames = $<current>.made.split(', ');
+        my @newNames = $<new>.made.split(', ');
+
+        if @currentNames.elems != @newNames.elems {
+            note 'Same number of current and new column names are expected for column renaming.';
+            make 'obj';
+        } else {
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $c ~ ' => ' ~ $n };
+            make 'rename!( obj, ' ~ $pairs.join(', ') ~ ' )';
+        }
+    }
+
 	# Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
 	method count-command($/) { make 'obj = combine(obj, nrow)'; }

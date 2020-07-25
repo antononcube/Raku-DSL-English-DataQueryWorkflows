@@ -106,6 +106,8 @@ class DSL::English::DataQueryWorkflows::Actions::R::dplyr
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
     method rename-columns-simple($/) {
+        # I am not very comfortable with splitting the made string here, but it works.
+        # Maybe it is better to no not join the elements in <variable-names-list>.
         my @currentNames = $<current>.made.split(', ');
         my @newNames = $<new>.made.split(', ');
 

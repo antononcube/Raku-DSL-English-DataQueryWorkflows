@@ -49,8 +49,8 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method number-value($/) { make $/.Str; }
     method wl-expr($/) { make $/.Str; }
     method quoted-variable-name($/) {  make $/.values[0].made; }
-    method single-quoted-variable-name($/) { make '\"' ~ $<variable-name>.made ~ '\"'; }
-    method double-quoted-variable-name($/) { make '\"' ~ $<variable-name>.made ~ '\"'; }
+    method single-quoted-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
+    method double-quoted-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
 
     # Trivial
     method trivial-parameter($/) { make $/.values[0].made; }
@@ -107,8 +107,8 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
             note 'Same number of current and new column names are expected for column renaming.';
             make 'obj';
         } else {
-            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { '"' ~ $n ~ '" -> #["' ~ $c ~ '"]' };
-            my $current = map( { '"' ~ $_ ~ '"' }, @currentNames ).join(', ');
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $n ~ ' -> #[' ~ $c ~ ']' };
+            my $current = @currentNames.join(', ');
             make 'obj = Map[ Join[ KeyDrop[ #, {' ~ $current ~ '} ], <| ' ~ $pairs.join(', ') ~ '|> ]&, obj]';
         }
     }

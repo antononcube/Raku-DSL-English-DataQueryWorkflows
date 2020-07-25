@@ -114,7 +114,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
             note 'Same number of current and new column names are expected for column renaming.';
             make 'obj';
         } else {
-            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { 'colnames(obj) <- gsub( "' ~ $c ~ '", "' ~ $n ~ '", colnames(obj) );' };
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { 'colnames(obj) <- gsub( ' ~ $c ~ ', ' ~ $n ~ ', colnames(obj) );' };
             make $pairs.join("\n");
         }
     }
