@@ -94,6 +94,12 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	method arrange-command-ascending($/) { make 'сортирай с колоните: ' ~ $<arrange-simple-spec>.made; }
 	method arrange-command-descending($/) { make 'сортирай в низходящ ред с колоните: ' ~ $<arrange-simple-spec>.made; }
 
+    # Rename columns command
+    method rename-columns-command($/) { make $/.values[0].made; }
+    method rename-columns-simple($/) {
+        make 'преименувай колоните ' ~ $<current>.made ~ ' като ' ~ $<new>.made;
+    }
+
 	# Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
 	method count-command($/) { make 'намери размера на под-групите'; }

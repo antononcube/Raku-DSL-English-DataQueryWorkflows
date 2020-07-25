@@ -59,8 +59,8 @@ class DSL::English::DataQueryWorkflows::Actions::R::dplyr
 	method number-value($/) { make $/.Str; }
 	method wl-expr($/) { make $/.Str; }
 	method quoted-variable-name($/) {  make $/.values[0].made; }
-	method single-quoted-variable-name($/) { make '\"' ~ $<variable-name>.made ~ '\"'; }
-	method double-quoted-variable-name($/) { make '\"' ~ $<variable-name>.made ~ '\"'; }
+	method single-quoted-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
+	method double-quoted-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
 	
 	# Trivial
 	method trivial-parameter($/) { make $/.values[0].made; }
@@ -102,7 +102,22 @@ class DSL::English::DataQueryWorkflows::Actions::R::dplyr
 	method arrange-simple-spec($/) { make $<variable-names-list>.made; }
 	method arrange-command-ascending($/) { make 'dplyr::arrange(' ~ $<arrange-simple-spec>.made ~ ')'; }
 	method arrange-command-descending($/) { make 'dplyr::arrange(desc(' ~ $<arrange-simple-spec>.made ~ '))'; }
-	
+
+    # Rename columns command
+    method rename-columns-command($/) { make $/.values[0].made; }
+    method rename-columns-simple($/) {
+        my @currentNames = $<current>.made.split(', ');
+        my @newNames = $<new>.made.split(', ');
+
+        if @currentNames.elems != @newNames.elems {
+            note 'Same number of current and new column names are expected for column renaming.';
+            make 'dplyr::mutate()';
+        } else {
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $n ~ ' = ' ~ $c };
+            make 'dplyr::mutate( ' ~ $pairs.join(', ') ~ ', .keep = "unused" )';
+        }
+    }
+
 	# Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
 	method count-command($/) { make 'dplyr::count()'; }

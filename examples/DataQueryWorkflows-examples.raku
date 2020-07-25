@@ -52,47 +52,26 @@ my $commands5 = '
       mutate bmi = mass/height^2;
       arrange by the variable bmi, mass, height descending;';
 
-say "\n", '=' x 30;
-say '-' x 3, 'Spanish:';
-say '=' x 30;
-
-say ToDataQueryWorkflowCode($commands, 'Spanish');
-
-say '-' x 20;
-say ToDataQueryWorkflowCode($commands2, 'Spanish');
-
-say '-' x 20;
-say ToDataQueryWorkflowCode($commands3, 'Spanish');
-
-say '-' x 20;
-say ToDataQueryWorkflowCode($commands4, 'Spanish');
-
-say "\n", '=' x 30;
-say '-' x 3, 'Bulgarian:';
-say '=' x 30;
-
-say ToDataQueryWorkflowCode($commands, 'Bulgarian');
-
-say '-' x 20;
-say ToDataQueryWorkflowCode($commands2, 'Bulgarian');
-
-say '-' x 20;
-say ToDataQueryWorkflowCode($commands3, 'Bulgarian');
-
-say '-' x 20;
-say ToDataQueryWorkflowCode($commands4, 'Bulgarian');
-
-say "\n", '=' x 30;
-say '-' x 3, 'R-base:';
-say '=' x 30;
-
-say ToDataQueryWorkflowCode($commands2, 'WL');
+my $commands6 = 'use dfTitanic; rename columns passengerSex and passengerAge as sex and age';
 
 say "\n", '=' x 30;
 say '-' x 3, 'R-dplyr:';
 say '=' x 30;
 
-say ToDataQueryWorkflowCode($commands2, 'R-dplyr');
+say ToDataQueryWorkflowCode($commands6, 'R-dplyr');
+
+
+say "\n", '=' x 30;
+say '-' x 3, 'R-base:';
+say '=' x 30;
+
+say ToDataQueryWorkflowCode($commands6, 'WL');
+#
+#say "\n", '=' x 30;
+#say '-' x 3, 'R-dplyr:';
+#say '=' x 30;
+#
+#say ToDataQueryWorkflowCode($commands2, 'R-dplyr');
 #
 #say "\n", '-' x 3, 'Julia-DataFrames:';
 #

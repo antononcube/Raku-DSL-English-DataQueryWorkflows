@@ -52,6 +52,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar::WorkflowCommad
         <group-command> |
         <ungroup-command> |
         <arrange-command> |
+        <rename-columns-command> |
         <statistics-command> |
         <join-command> |
         <cross-tabulation-command> }
@@ -93,6 +94,13 @@ grammar DSL::English::DataQueryWorkflows::Grammar::WorkflowCommad
     rule arrange-command-descending {
         <.arrange> <.descending> <arrange-simple-spec> |
         <.arrange> <arrange-simple-spec> <.descending> }
+
+    # Rename columns
+    rule rename-columns-command { <rename-columns-simple> }
+    rule rename-columns-simple { <.rename-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]
+                                 <current=.quoted-variable-names-list>
+                                 [ <.to-preposition> | <.into-preposition> | <.as-preposition> ]
+                                 <new=.quoted-variable-names-list> }
 
     # Statistics command
     rule statistics-command { <count-command> | <glimpse-data> | <summarize-data> | <summarize-all-command> }
