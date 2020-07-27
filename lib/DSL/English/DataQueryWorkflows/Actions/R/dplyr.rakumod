@@ -108,8 +108,8 @@ class DSL::English::DataQueryWorkflows::Actions::R::dplyr
     method rename-columns-simple($/) {
         # I am not very comfortable with splitting the made string here, but it works.
         # Maybe it is better to no not join the elements in <variable-names-list>.
-        my @currentNames = $<current>.made.split(', ');
-        my @newNames = $<new>.made.split(', ');
+        my @currentNames = $<current>.made.subst(:g, '"', '').split(', ');
+        my @newNames = $<new>.made.subst(:g, '"', '').split(', ');
 
         if @currentNames.elems != @newNames.elems {
             note 'Same number of current and new column names are expected for column renaming.';
@@ -123,7 +123,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::dplyr
     # Drop columns command
     method drop-columns-command($/) { make $/.values[0].made; }
     method drop-columns-simple($/) {
-        my @todrop = $<todrop>.made.split(', ');
+        my @todrop = $<todrop>.made.subst(:g, '"', '').split(', ');
         make 'dplyr::mutate( ' ~ map( { $_ ~ '= NULL' }, @todrop ).join(', ') ~ ' )';
     }
 

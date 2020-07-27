@@ -114,7 +114,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
     # Drop columns command
     method drop-columns-command($/) { make $/.values[0].made; }
     method drop-columns-simple($/) {
-        my @todrop = $<todrop>.made.split(', ');
+        my @todrop = $<todrop>.made.subst(:g, '"', '').split(', ');
         make 'select!( ' ~ map( { 'Not[:' ~ $_ ~ ']' }, @todrop ).join(', ') ~ ' )';
     }
 
