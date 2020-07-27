@@ -108,6 +108,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::dplyr
     method rename-columns-simple($/) {
         # I am not very comfortable with splitting the made string here, but it works.
         # Maybe it is better to no not join the elements in <variable-names-list>.
+        # Note that here with subst we assume no single quotes are in <quoted-variable-names-list>.made .
         my @currentNames = $<current>.made.subst(:g, '"', '').split(', ');
         my @newNames = $<new>.made.subst(:g, '"', '').split(', ');
 
@@ -123,6 +124,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::dplyr
     # Drop columns command
     method drop-columns-command($/) { make $/.values[0].made; }
     method drop-columns-simple($/) {
+        # Note that here we assume no single quotes are in <quoted-variable-names-list>.made .
         my @todrop = $<todrop>.made.subst(:g, '"', '').split(', ');
         make 'dplyr::mutate( ' ~ map( { $_ ~ '= NULL' }, @todrop ).join(', ') ~ ' )';
     }
