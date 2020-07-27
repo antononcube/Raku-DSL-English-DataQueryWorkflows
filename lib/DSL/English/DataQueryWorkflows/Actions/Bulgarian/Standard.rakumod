@@ -100,6 +100,12 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
         make 'преименувай колоните ' ~ $<current>.made ~ ' като ' ~ $<new>.made;
     }
 
+    # Drop columns command
+    method drop-columns-command($/) { make $/.values[0].made; }
+    method drop-columns-simple($/) {
+        make 'премахни колоните ' ~ $<todrop>.made;
+    }
+
 	# Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
 	method count-command($/) { make 'намери размера на под-групите'; }

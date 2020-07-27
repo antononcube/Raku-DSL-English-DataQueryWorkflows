@@ -111,6 +111,13 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
         }
     }
 
+    # Drop columns command
+    method drop-columns-command($/) { make $/.values[0].made; }
+    method drop-columns-simple($/) {
+        my @todrop = $<todrop>.made.split(', ');
+        make 'select!( ' ~ map( { 'Not[:' ~ $_ ~ ']' }, @todrop ).join(', ') ~ ' )';
+    }
+
 	# Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
 	method count-command($/) { make 'obj = combine(obj, nrow)'; }

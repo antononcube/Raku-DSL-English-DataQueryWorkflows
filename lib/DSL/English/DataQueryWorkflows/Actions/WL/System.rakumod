@@ -113,6 +113,11 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
         }
     }
 
+    # Drop columns command
+    method drop-columns-command($/) { make $/.values[0].made; }
+    method drop-columns-simple($/) {
+        make 'obj = Map[ KeyDrop[ #, {' ~ $<todrop>.made ~ '} ]&, obj]';
+    }
 
     # Statistics command
     method statistics-command($/) { make $/.values[0].made; }

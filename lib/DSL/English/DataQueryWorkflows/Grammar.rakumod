@@ -53,6 +53,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar::WorkflowCommad
         <ungroup-command> |
         <arrange-command> |
         <rename-columns-command> |
+        <drop-columns-command> |
         <statistics-command> |
         <join-command> |
         <cross-tabulation-command> }
@@ -101,6 +102,10 @@ grammar DSL::English::DataQueryWorkflows::Grammar::WorkflowCommad
                                  <current=.quoted-variable-names-list>
                                  [ <.to-preposition> | <.into-preposition> | <.as-preposition> ]
                                  <new=.quoted-variable-names-list> }
+
+    # Drop columns
+    rule drop-columns-command { <drop-columns-simple> }
+    rule drop-columns-simple { <.delete-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ] <todrop=.quoted-variable-names-list> }
 
     # Statistics command
     rule statistics-command { <count-command> | <glimpse-data> | <summarize-data> | <summarize-all-command> }

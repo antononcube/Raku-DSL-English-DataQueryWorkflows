@@ -60,8 +60,8 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method number-value($/) { make $/.Str; }
 	method wl-expr($/) { make $/.Str; }
 	method quoted-variable-name($/) {  make $/.values[0].made; }
-	method single-quoted-variable-name($/) {  make '\"' ~ $<variable-name>.made ~ '\"'; }
-	method double-quoted-variable-name($/) {  make '\"' ~ $<variable-name>.made ~ '\"'; }
+	method single-quoted-variable-name($/) {  make '"' ~ $<variable-name>.made ~ '"'; }
+	method double-quoted-variable-name($/) {  make '"' ~ $<variable-name>.made ~ '"'; }
 	
 	# Trivial
 	method trivial-parameter($/) { make $/.values[0].made; }
@@ -107,8 +107,8 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
     method rename-columns-simple($/) {
-        my @currentNames = $<current>.made.split(', ');
-        my @newNames = $<new>.made.split(', ');
+        my @currentNames = $<current>.made;
+        my @newNames = $<new>.made;
 
         if @currentNames.elems != @newNames.elems {
             note 'Same number of current and new column names are expected for column renaming.';
@@ -117,6 +117,13 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
             my $pairs = do for @currentNames Z @newNames -> ($c, $n) { 'colnames(obj) <- gsub( ' ~ $c ~ ', ' ~ $n ~ ', colnames(obj) );' };
             make $pairs.join("\n");
         }
+    }
+
+    # Drop columns command
+    method drop-columns-command($/) { make $/.values[0].made; }
+    method drop-columns-simple($/) {
+        my @todrop = $<todrop>.made.split(', ');
+        make 'obj <- obj[, setdiff( colnames(obj), c(' ~$<todrop>.made ~ ') )]';
     }
 
     # Statistics command

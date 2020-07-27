@@ -116,8 +116,15 @@ class DSL::English::DataQueryWorkflows::Actions::R::dplyr
             make 'dplyr::mutate()';
         } else {
             my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $n ~ ' = ' ~ $c };
-            make 'dplyr::mutate( ' ~ $pairs.join(', ') ~ ', .keep = "unused" )';
+            make 'dplyr::rename( ' ~ $pairs.join(', ') ~ ' )';
         }
+    }
+
+    # Drop columns command
+    method drop-columns-command($/) { make $/.values[0].made; }
+    method drop-columns-simple($/) {
+        my @todrop = $<todrop>.made.split(', ');
+        make 'dplyr::mutate( ' ~ map( { $_ ~ '= NULL' }, @todrop ).join(', ') ~ ' )';
     }
 
 	# Statistics command
