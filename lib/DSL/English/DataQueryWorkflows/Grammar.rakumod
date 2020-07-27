@@ -37,7 +37,7 @@ use DSL::Shared::Roles::ErrorHandling;
 
 use DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases;
 
-grammar DSL::English::DataQueryWorkflows::Grammar::WorkflowCommad
+grammar DSL::English::DataQueryWorkflows::Grammar
         does DSL::Shared::Roles::ErrorHandling
         does DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
         does DSL::Shared::Roles::PredicateSpecification
@@ -72,7 +72,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar::WorkflowCommad
     rule filter-spec { <predicates-list> }
 
     # Mutate command
-    rule mutate-command { ( <mutate> | <assign> ) <.by-preposition>? <assign-pairs-list> }
+    rule mutate-command { [ <mutate> | <assign> | <transform-verb> ] <.by-preposition>? <assign-pairs-list> }
     rule assign-pair { <assign-pair-lhs> <.assign-to-symbol> <assign-pair-rhs> }
     rule assign-pair-lhs { <quoted-variable-name> }
     rule assign-pair-rhs { <quoted-variable-name> | <wl-expr> }
@@ -98,14 +98,14 @@ grammar DSL::English::DataQueryWorkflows::Grammar::WorkflowCommad
 
     # Rename columns
     rule rename-columns-command { <rename-columns-simple> }
-    rule rename-columns-simple { <.rename-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]
+    rule rename-columns-simple { <.rename-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]?
                                  <current=.quoted-variable-names-list>
                                  [ <.to-preposition> | <.into-preposition> | <.as-preposition> ]
                                  <new=.quoted-variable-names-list> }
 
     # Drop columns
     rule drop-columns-command { <drop-columns-simple> }
-    rule drop-columns-simple { <.delete-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ] <todrop=.quoted-variable-names-list> }
+    rule drop-columns-simple { <.delete-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]? <todrop=.quoted-variable-names-list> }
 
     # Statistics command
     rule statistics-command { <count-command> | <glimpse-data> | <summarize-data> | <summarize-all-command> }
