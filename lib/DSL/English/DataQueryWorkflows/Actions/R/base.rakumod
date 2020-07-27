@@ -58,7 +58,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made.join(', '); }
 	method integer-value($/) { make $/.Str; }
 	method number-value($/) { make $/.Str; }
-	method wl-expr($/) { make $/.Str; }
+	method wl-expr($/) { make $/.Str.substr(1,*-1); }
 	method quoted-variable-name($/) {  make $/.values[0].made; }
 	method single-quoted-variable-name($/) {  make '"' ~ $<variable-name>.made ~ '"'; }
 	method double-quoted-variable-name($/) {  make '"' ~ $<variable-name>.made ~ '"'; }
