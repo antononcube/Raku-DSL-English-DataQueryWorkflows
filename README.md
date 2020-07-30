@@ -1,6 +1,6 @@
 # Data Query Workflows 
 
-Possible alternative name: *"Spoken dplyr commands"*.  
+Possible alternative name: *"Spoken tidyverse commands"*.  
 
 ## In brief
 
@@ -8,7 +8,7 @@ This Raku (Perl 6) package has grammar and action classes for the parsing and
 interpretation of natural language commands that specify data queries in the style of
 Standard Query Language (SQL) or 
 [RStudio](https://rstudio.com)'s
-library [`dplyr`](https://dplyr.tidyverse.org).
+library [`tidyverse`](https://tidyverse.tidyverse.org).
 
 It is envisioned that the interpreters (actions) are going to target different
 programming languages: Python, SQL, R, WL, or others.
@@ -37,7 +37,7 @@ Here is example code:
 
     use DSL::English::DataQueryWorkflows;
 
-    say ToDataQueryWorkflowCode('select mass & height', 'R-dplyr');
+    say ToDataQueryWorkflowCode('select mass & height', 'R-tidyverse');
     
     # dplyr::select(mass, height) 
     
@@ -48,7 +48,7 @@ Here is example code:
       select mass & height; 
       mutate bmi = mass/height^2; 
       arrange by the variable bmi descending;
-    ', 'R-dplyr');
+    ', 'R-tidyverse');
 
     # starwars %>%
     # dplyr::select(mass, height) %>%

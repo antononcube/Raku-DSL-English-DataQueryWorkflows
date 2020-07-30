@@ -128,7 +128,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
     # Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
-	method count-command($/) { make 'dplyr::count()'; }
+	method count-command($/) { make 'tidyverse::count()'; }
 	method summarize-data($/) { make 'print(summary(obj))'; }
 	method glimpse-data($/) { make 'head(obj)'; }
 	method summarize-all-command($/) { make 'summary(obj)'; }

@@ -4,7 +4,7 @@
 
 C<DSL::English::DataQueryWorkflows> package has grammar and action classes for the parsing and
 interpretation of natural language commands that specify data queries in the style of
-Standard Query Language (SQL) or RStudio's library dplyr.
+Standard Query Language (SQL) or RStudio's library tidyverse.
 
 =head1 Synopsis
 
@@ -20,7 +20,7 @@ use DSL::English::DataQueryWorkflows::Grammar;
 use DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames;
 use DSL::English::DataQueryWorkflows::Actions::Python::pandas;
 use DSL::English::DataQueryWorkflows::Actions::R::base;
-use DSL::English::DataQueryWorkflows::Actions::R::dplyr;
+use DSL::English::DataQueryWorkflows::Actions::R::tidyverse;
 use DSL::English::DataQueryWorkflows::Actions::WL::System;
 
 use DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard;
@@ -29,8 +29,8 @@ use DSL::English::DataQueryWorkflows::Actions::Spanish::Standard;
 #-----------------------------------------------------------
 
 #my %targetToAction := {
-#    "dplyr"         => DSL::English::DataQueryWorkflows::Actions::R::dplyr,
-#    "R-dplyr"       => DSL::English::DataQueryWorkflows::Actions::R::dplyr,
+#    "tidyverse"         => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
+#    "R-tidyverse"       => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
 #    "R"             => DSL::English::DataQueryWorkflows::Actions::R::base,
 #    "R-base"        => DSL::English::DataQueryWorkflows::Actions::R::base,
 #    "pandas"        => DSL::English::DataQueryWorkflows::Actions::Python::pandas,
@@ -44,8 +44,8 @@ my %targetToAction =
     "Julia-DataFrames" => DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames,
     "R"                => DSL::English::DataQueryWorkflows::Actions::R::base,
     "R-base"           => DSL::English::DataQueryWorkflows::Actions::R::base,
-    "R-dplyr"          => DSL::English::DataQueryWorkflows::Actions::R::dplyr,
-    "dplyr"            => DSL::English::DataQueryWorkflows::Actions::R::dplyr,
+    "R-tidyverse"          => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
+    "tidyverse"            => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
     "Python-pandas"    => DSL::English::DataQueryWorkflows::Actions::Python::pandas,
     "pandas"           => DSL::English::DataQueryWorkflows::Actions::Python::pandas,
     "Mathematica"      => DSL::English::DataQueryWorkflows::Actions::WL::System,
@@ -59,8 +59,8 @@ my %targetToSeparator{Str} =
     "Julia-DataFrames" => "\n",
     "R"                => "\n",
     "R-base"           => "\n",
-    "R-dplyr"          => " %>%\n",
-    "dplyr"            => " %>%\n",
+    "R-tidyverse"          => " %>%\n",
+    "tidyverse"            => " %>%\n",
     "Mathematica"      => "\n",
     "Python-pandas"    => ".\n",
     "pandas"           => ".\n",
@@ -76,9 +76,9 @@ sub has-semicolon (Str $word) {
 }
 
 #-----------------------------------------------------------
-proto ToDataQueryWorkflowCode(Str $command, Str $target = "dplyr" ) is export {*}
+proto ToDataQueryWorkflowCode(Str $command, Str $target = "tidyverse" ) is export {*}
 
-multi ToDataQueryWorkflowCode ( Str $command where not has-semicolon($command), Str $target = "dplyr" ) {
+multi ToDataQueryWorkflowCode ( Str $command where not has-semicolon($command), Str $target = "tidyverse" ) {
 
     die 'Unknown target.' unless %targetToAction{$target}:exists;
 
@@ -87,7 +87,7 @@ multi ToDataQueryWorkflowCode ( Str $command where not has-semicolon($command), 
     return $match.made;
 }
 
-multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str $target = 'dplyr' ) {
+multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str $target = 'tidyverse' ) {
 
     die 'Unknown target.' unless %targetToAction{$target}:exists;
 
@@ -108,10 +108,10 @@ multi to_DataQuery_Julia ( Str $command ) {
 }
 
 #-----------------------------------------------------------
-proto to_DataQuery_dplyr($) is export {*}
+proto to_DataQuery_tidyverse($) is export {*}
 
-multi to_DataQuery_dplyr ( Str $command ) {
-    return ToDataQueryWorkflowCode( $command, 'R-dplyr' );
+multi to_DataQuery_tidyverse ( Str $command ) {
+    return ToDataQueryWorkflowCode( $command, 'R-tidyverse' );
 }
 
 #-----------------------------------------------------------

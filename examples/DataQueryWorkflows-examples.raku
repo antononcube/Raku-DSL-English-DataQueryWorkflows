@@ -8,11 +8,11 @@ use DSL::English::DataQueryWorkflows;
 
 #say "=" x 10;
 #
-#say to_DataQuery_dplyr('select mass & height');
+#say to_DataQuery_tidyverse('select mass & height');
 #
 #say "=" x 10;
 #
-#say to_DataQuery_dplyr('use the data frame df;
+#say to_DataQuery_tidyverse('use the data frame df;
 #select mass and height;
 #arrange by the variable mass & height desc');
 #
@@ -49,29 +49,31 @@ my $commands5 = '
       use starwars;
       filter with gender is "female";
       select the columns mass & height;
-      mutate bmi = mass/height^2;
+      mutate bmi = `mass/height^2`;
       arrange by the variable bmi, mass, height descending;';
 
-my $commands6 = 'use dfTitanic; rename columns passengerSex and passengerAge as sex and age';
+my $commands6 = 'use dfTitanic; rename columns "passengerSex" and "passengerAge" as "sex" and "age"; summarize data';
+
+my $commands7 = 'use dfTitanic; drop columns "passengerSex" and "passengerAge"; summarize data';
 
 say "\n", '=' x 30;
-say '-' x 3, 'R-dplyr:';
+say '-' x 3, 'R-tidyverse:';
 say '=' x 30;
 
-say ToDataQueryWorkflowCode($commands6, 'R-dplyr');
+say ToDataQueryWorkflowCode($commands5, 'R-tidyverse');
 
 
 say "\n", '=' x 30;
 say '-' x 3, 'R-base:';
 say '=' x 30;
 
-say ToDataQueryWorkflowCode($commands6, 'WL');
+say ToDataQueryWorkflowCode($commands5, 'R-base');
 #
 #say "\n", '=' x 30;
-#say '-' x 3, 'R-dplyr:';
+#say '-' x 3, 'R-tidyverse:';
 #say '=' x 30;
 #
-#say ToDataQueryWorkflowCode($commands2, 'R-dplyr');
+#say ToDataQueryWorkflowCode($commands2, 'R-tidyverse');
 #
 #say "\n", '-' x 3, 'Julia-DataFrames:';
 #

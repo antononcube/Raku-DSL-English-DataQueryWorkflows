@@ -1,7 +1,7 @@
 =begin comment
 #==============================================================================
 #
-#   Data Query Workflows R-dplyr actions in Raku (Perl 6)
+#   Data Query Workflows R-tidyverse actions in Raku (Perl 6)
 #   Copyright (C) 2018  Anton Antonov
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -42,9 +42,9 @@ use v6;
 use DSL::English::DataQueryWorkflows::Grammar;
 use DSL::English::DataQueryWorkflows::Actions::R::Predicate;
 
-unit module DSL::English::DataQueryWorkflows::Actions::R::dplyr;
+unit module DSL::English::DataQueryWorkflows::Actions::R::tidyverse;
 
-class DSL::English::DataQueryWorkflows::Actions::R::dplyr
+class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         is DSL::English::DataQueryWorkflows::Actions::R::Predicate {
 
 	method TOP($/) { make $/.values[0].made; }

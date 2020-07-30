@@ -18,7 +18,7 @@
         "DSL::English::DataQueryWorkflows::Actions::Python::pandas" : "lib/DSL/English/DataQueryWorkflows/Actions/Python/pandas.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::R::Predicate" : "lib/DSL/English/DataQueryWorkflows/Actions/R/Predicate.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::R::base" : "lib/DSL/English/DataQueryWorkflows/Actions/R/base.rakumod",
-        "DSL::English::DataQueryWorkflows::Actions::R::dplyr" : "lib/DSL/English/DataQueryWorkflows/Actions/R/dplyr.rakumod",
+        "DSL::English::DataQueryWorkflows::Actions::R::tidyverse" : "lib/DSL/English/DataQueryWorkflows/Actions/R/tidyverse.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::Spanish::Predicate" : "lib/DSL/English/DataQueryWorkflows/Actions/Spanish/Predicate.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::Spanish::Standard" : "lib/DSL/English/DataQueryWorkflows/Actions/Spanish/Standard.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::SQL::SQL" : "lib/DSL/English/DataQueryWorkflows/Actions/SQL/SQL.rakumod",
@@ -30,7 +30,7 @@
     "test-depends" : [ ],
     "resources" : [ ],
     "tags": [
-      "data query", "data", "dplyr", "sql", "pandas", "dataset", "query", "parser", "interpreter", "monad", "workflow", "pipeline"
+      "data query", "data", "tidyverse", "sql", "pandas", "dataset", "query", "parser", "interpreter", "monad", "workflow", "pipeline"
     ],
     "source-url" : "https://github.com/antononcube/DSL-English-DataQueryWorkflows.git"
 }
