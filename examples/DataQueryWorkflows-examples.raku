@@ -56,11 +56,17 @@ my $commands6 = 'use dfTitanic; rename columns "passengerSex" and "passengerAge"
 
 my $commands7 = 'use dfTitanic; drop columns "passengerSex" and "passengerAge"; summarize data';
 
+my $commands8 = 'use starwars;
+select the columns name, mass, height;
+convert to long form using the columns mass and height, with the variable column name "Var1" and values column name "VAL"';
+
 say "\n", '=' x 30;
 say '-' x 3, 'R-tidyverse:';
 say '=' x 30;
 
-say ToDataQueryWorkflowCode($commands5, 'R-tidyverse');
+#say DSL::English::DataQueryWorkflows::Grammar.subparse( 'convert to long form using the variable column name "Var1" and the values column name "VAL"' );
+
+say ToDataQueryWorkflowCode($commands8, 'R-base');
 
 
 say "\n", '=' x 30;

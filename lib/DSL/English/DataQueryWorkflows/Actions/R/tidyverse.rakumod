@@ -195,7 +195,24 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	method rows-variable-name($/) { make $<variable-name>.made; }
 	method columns-variable-name($/) { make $<variable-name>.made; }
 	method values-variable-name($/) { make $<variable-name>.made; }
-	
+
+    # Reshape command
+    method reshape-command($/) { make $/.values[0].made; }
+
+    # Pivot longer command
+    method pivot-longer-command($/) { make 'tidyr::pivot_longer(' ~ $<pivot-longer-arguments-list>.made ~ ' )'; }
+    method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
+    method pivot-longer-argument($/) { make $/.values[0].made; }
+
+    method pivot-longer-columns-spec($/) { make 'cols = c( ' ~ $<quoted-variable-names-list>.made ~ ' )'; }
+
+    method pivot-longer-variable-column-name-spec($/) { make 'names_to = ' ~ $<quoted-variable-name>.made; }
+
+    method pivot-longer-value-column-name-spec($/) { make 'values_to = ' ~ $<quoted-variable-name>.made; }
+
+    # Pivot wide command
+    method pivot-wider-command($/) { make 'not implemented yet'; }
+
     # Pipeline command
     method pipeline-command($/) { make $/.values[0].made; }
     method take-pipeline-value($/) { make 'as.data.frame()'; }

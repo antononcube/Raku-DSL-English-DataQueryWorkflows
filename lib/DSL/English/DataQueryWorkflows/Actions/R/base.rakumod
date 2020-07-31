@@ -38,7 +38,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
         is DSL::English::DataQueryWorkflows::Actions::R::Predicate {
 
 	method TOP($/) { make $/.values[0].made; }
-	
+
 	# Overriding Predicate::predicate-simple -- prefixing the lhs variable specs with 'obj$'.
 	method predicate-simple($/) {
 		if $<predicate-relation>.made eq '%!in%' {
@@ -49,7 +49,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 			make 'obj$' ~ $<lhs>.made ~ ' ' ~ $<predicate-relation>.made ~ ' ' ~ $<rhs>.made;
 		}
 	}
-	
+
 	# General
 	method dataset-name($/) { make $/.Str; }
 	method variable-name($/) { make $/.Str; }
@@ -62,7 +62,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method quoted-variable-name($/) {  make $/.values[0].made; }
 	method single-quoted-variable-name($/) {  make '"' ~ $<variable-name>.made ~ '"'; }
 	method double-quoted-variable-name($/) {  make '"' ~ $<variable-name>.made ~ '"'; }
-	
+
 	# Trivial
 	method trivial-parameter($/) { make $/.values[0].made; }
 	method trivial-parameter-none($/) { make 'NA'; }
@@ -70,13 +70,13 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method trivial-parameter-automatic($/) { make 'NULL'; }
 	method trivial-parameter-false($/) { make 'FALSE'; }
 	method trivial-parameter-true($/) { make 'TRUE'; }
-	
+
 	# Load data
 	method data-load-command($/) { make $/.values[0].made; }
 	method load-data-table($/) { make '{ data(' ~ $<data-location-spec>.made ~ '); obj =' ~ $<data-location-spec>.made ~ ' }'; }
 	method data-location-spec($/) { make '\'' ~ $/.Str ~ '\''; }
 	method use-data-table($/) { make 'obj <- ' ~ $<variable-name>.made; }
-	
+
     # Select command
 	method select-command($/) { make 'obj <- obj[, ' ~ 'c(' ~ map( { '\"' ~ $_ ~ '\"' }, $<variable-names-list>.made ).join(', ') ~ ') ]'; }
 
@@ -90,7 +90,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method assign-pair($/) { make 'obj$' ~ $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
 	method assign-pair-lhs($/) { make $/.values[0].made; }
 	method assign-pair-rhs($/) { make $/.values[0].made; }
-	
+
     # Group command
 	method group-command($/) { make 'obj <- by( data = obj, ' ~ $<variable-names-list>.made ~ ')'; }
 
@@ -145,15 +145,15 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 			make 'full_join(' ~ $<dataset-name>.made ~ ')';
 		}
 	}
-	
-	method inner-join-spec($/)  { 
+
+	method inner-join-spec($/)  {
 		if $<join-by-spec> {
 			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
 		} else {
 			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ')';
 		}
 	}
-	
+
 	method left-join-spec($/)  {
 		if $<join-by-spec> {
 			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ', all.x = TRUE )';
@@ -161,7 +161,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', , all.x = TRUE )';
 		}
 	}
-	
+
 	method right-join-spec($/)  {
 		if $<join-by-spec> {
 			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ', all.y = TRUE )';
@@ -192,6 +192,23 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method rows-variable-name($/) { make $<variable-name>.made; }
 	method columns-variable-name($/) { make $<variable-name>.made; }
 	method values-variable-name($/) { make $<variable-name>.made; }
+
+    # Reshape command
+    method reshape-command($/) { make $/.values[0].made; }
+
+    # Pivot longer command
+    method pivot-longer-command($/) { make 'obj <- reshape( data = obj, ' ~ $<pivot-longer-arguments-list>.made ~ ' )'; }
+    method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
+    method pivot-longer-argument($/) { make $/.values[0].made; }
+
+    method pivot-longer-columns-spec($/) { make 'varying = c( ' ~ $<quoted-variable-names-list>.made ~ ' )'; }
+
+    method pivot-longer-variable-column-name-spec($/) { make 'timevar = ' ~ $<quoted-variable-name>.made; }
+
+    method pivot-longer-value-column-name-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
+
+    # Pivot wide command
+    method pivot-wider-command($/) { make 'not implemented yet'; }
 
     # Pipeline command
     method pipeline-command($/) { make $/.values[0].made; }

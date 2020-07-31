@@ -13,6 +13,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token cross-verb { 'cross' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cross') }> }
     token descending-adjective { 'descending' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'descending') }> }
     token filter-verb { 'filter' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'filter') }> }
+    token format-noun { 'format' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'format') }> }
     token formula-noun { 'formula' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'formula') }> }
     token full-adjective { 'full' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'full') }> }
     token glimpse-verb { 'glimpse' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'glimpse') }> }
@@ -20,8 +21,10 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token join-noun { 'join' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'join') }> }
     token inner-adjective { 'inner' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'inner') }> }
     token left-adjective { 'left' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'left') }> }
+    token melt-verb { 'melt' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'melt') }> }
     token mutate-verb { 'mutate' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'mutate') }> }
     token order-verb { 'order' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'order') }> }
+    token pivot-verb { 'pivot' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'pivot') }> }
     token rename-verb { 'rename' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'rename') }> }
     token right-adjective { 'right' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'right') }> }
     token select-verb { 'select' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'select') }> }
@@ -48,6 +51,10 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     rule filter { <filter-verb> | <select-verb> }
     rule group-by { <group-verb> [ <by-preposition> | <using-preposition> ] }
     rule select { <select-verb> | 'keep' 'only'? }
+    rule pivot-columns-phrase { <pivot-verb>? <columns> }
     rule rename-directive { <rename-verb> }
+    rule to-long-form-phrase { <pivot-verb> 'longer' | <to-preposition> [ 'long' | 'narrow' ] [ 'form' | <format-noun> ] | <melt-verb>  }
+    rule variable-column-name-phrase { <variable-noun> <column-noun>? <name-noun> }
+    rule value-column-name-phrase { <value-noun> <column-noun>? <name-noun> }
 }
 

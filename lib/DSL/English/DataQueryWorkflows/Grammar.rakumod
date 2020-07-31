@@ -56,6 +56,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
         <drop-columns-command> |
         <statistics-command> |
         <join-command> |
+        <reshape-command> |
         <cross-tabulation-command> }
 
     # Load data
@@ -132,7 +133,22 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule columns-variable-name { <variable-name> }
     rule values-variable-name { <variable-name> }
 
-    # To wide form command
+    # Reshape command
+    rule reshape-command { <pivot-longer-command> | <pivot-wider-command> }
 
     # To long form command
+    rule pivot-longer-command { <.convert-verb>? <.to-long-form-phrase>  <pivot-longer-arguments-list> }
+    regex pivot-longer-arguments-list { <pivot-longer-argument>+ % [ <list-separator> | <ws> ] }
+    regex pivot-longer-argument { <pivot-longer-columns-spec> | <pivot-longer-variable-column-name-spec> | <pivot-longer-value-column-name-spec> }
+
+    rule filler-separator { <with-preposition> | <using-preposition> | <for-preposition> }
+
+    rule pivot-longer-columns-spec { <.filler-separator>? <.the-determiner>? <.pivot-columns-phrase> <quoted-variable-names-list> }
+
+    rule pivot-longer-variable-column-name-spec { <.filler-separator>? <.the-determiner>? <.variable-column-name-phrase> <quoted-variable-name> }
+
+    rule pivot-longer-value-column-name-spec { <.filler-separator>? <.the-determiner>? <.value-column-name-phrase> <quoted-variable-name> }
+
+    # To wide form command
+    rule pivot-wider-command { <?> }
 }

@@ -13,6 +13,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token cross-verb { 'cross' }
     token descending-adjective { 'descending' }
     token filter-verb { 'filter' }
+    token format-noun { 'format' }
     token formula-noun { 'formula' }
     token full-adjective { 'full' }
     token glimpse-verb { 'glimpse' }
@@ -20,8 +21,10 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token inner-adjective { 'inner' }
     token join-noun { 'join' }
     token left-adjective { 'left' }
+    token melt-verb { 'melt' }
     token mutate-verb { 'mutate' }
     token order-verb { 'order' }
+    token pivot-verb { 'pivot' }
     token rename-verb { 'rename' }
     token right-adjective { 'right' }
     token select-verb { 'select' }
@@ -48,5 +51,9 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     rule filter { <filter-verb> | <select-verb> }
     rule group-by { <group-verb> [ <by-preposition> | <using-preposition> ] }
     rule select { <select-verb> | 'keep' 'only'? }
+    rule pivot-columns-phrase { <pivot-verb>? <columns> }
     rule rename-directive { <rename-verb> }
+    rule to-long-form-phrase { <pivot-verb> 'longer' | <to-preposition> [ 'long' | 'narrow' ] [ 'form' | <format-noun> ] | <melt-verb>  }
+    rule variable-column-name-phrase { <variable-noun> <column>? <name-noun> }
+    rule value-column-name-phrase { <value-noun> <column>? <name-noun> }
 }
