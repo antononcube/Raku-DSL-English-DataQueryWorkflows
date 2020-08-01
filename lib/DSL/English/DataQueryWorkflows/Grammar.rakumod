@@ -137,18 +137,31 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule reshape-command { <pivot-longer-command> | <pivot-wider-command> }
 
     # To long form command
-    rule pivot-longer-command { <.convert-verb>? <.to-long-form-phrase>  <pivot-longer-arguments-list> }
-    regex pivot-longer-arguments-list { <pivot-longer-argument>+ % [ <list-separator> | <ws> ] }
-    regex pivot-longer-argument { <pivot-longer-columns-spec> | <pivot-longer-variable-column-name-spec> | <pivot-longer-value-column-name-spec> }
+    rule pivot-longer-command { <.convert-verb>? <.to-long-form-phrase> <.filler-separator> <pivot-longer-arguments-list> }
+    regex pivot-longer-arguments-list { <pivot-longer-argument>+ % [ [ <list-separator> | <ws> ] <filler-separator>? ] }
+    regex pivot-longer-argument { <pivot-longer-columns-spec> | <pivot-longer-variable-column-spec> | <pivot-longer-value-column-spec> }
 
     rule filler-separator { <with-preposition> | <using-preposition> | <for-preposition> }
 
-    rule pivot-longer-columns-spec { <.filler-separator>? <.the-determiner>? <.pivot-columns-phrase> <quoted-variable-names-list> }
+    rule pivot-longer-columns-spec { <.the-determiner>? <.pivot-columns-phrase> <quoted-variable-names-list> }
 
-    rule pivot-longer-variable-column-name-spec { <.filler-separator>? <.the-determiner>? <.variable-column-name-phrase> <quoted-variable-name> }
+    rule pivot-longer-variable-column-spec { <.the-determiner>? <.variable-column-name-phrase> <quoted-variable-name> }
 
-    rule pivot-longer-value-column-name-spec { <.filler-separator>? <.the-determiner>? <.value-column-name-phrase> <quoted-variable-name> }
+    rule pivot-longer-value-column-spec { <.the-determiner>? <.value-column-name-phrase> <quoted-variable-name> }
 
-    # To wide form command
-    rule pivot-wider-command { <?> }
+    # To wider form command
+    rule pivot-wider-command { <.convert-verb>? <.to-wide-form-phrase>  <.filler-separator> <pivot-wider-arguments-list> }
+    regex pivot-wider-arguments-list { <pivot-wider-argument>+ % [ [ <list-separator> | <ws> ] <filler-separator>? ] }
+    regex pivot-wider-argument { <pivot-wider-id-columns-spec> | <pivot-wider-variable-column-spec> | <pivot-wider-value-column-spec> }
+
+    # Same as <pivot-longer-columns-spec>
+    rule pivot-wider-id-columns-spec { <.the-determiner>? <.id-columns-phrase> <quoted-variable-names-list> }
+
+    # Same as <pivot-longer-variable-column-spec>
+    rule pivot-wider-variable-column-spec { <.the-determiner>? <.variable-column-phrase> <quoted-variable-name> }
+
+    # Same as <pivot-longer-value-column-spec>
+    rule pivot-wider-value-column-spec { <.the-determiner>? <.value-column-phrase> <quoted-variable-name> }
+
+
 }

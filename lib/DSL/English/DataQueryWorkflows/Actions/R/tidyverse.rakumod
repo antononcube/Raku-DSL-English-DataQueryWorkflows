@@ -206,12 +206,20 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 
     method pivot-longer-columns-spec($/) { make 'cols = c( ' ~ $<quoted-variable-names-list>.made ~ ' )'; }
 
-    method pivot-longer-variable-column-name-spec($/) { make 'names_to = ' ~ $<quoted-variable-name>.made; }
+    method pivot-longer-variable-column-spec($/) { make 'names_to = ' ~ $<quoted-variable-name>.made; }
 
-    method pivot-longer-value-column-name-spec($/) { make 'values_to = ' ~ $<quoted-variable-name>.made; }
+    method pivot-longer-value-column-spec($/) { make 'values_to = ' ~ $<quoted-variable-name>.made; }
 
-    # Pivot wide command
-    method pivot-wider-command($/) { make 'not implemented yet'; }
+    # Pivot wider command
+    method pivot-wider-command($/) { make 'tidyr::pivot_wider(' ~ $<pivot-wider-arguments-list>.made ~ ' )'; }
+    method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
+    method pivot-wider-argument($/) { make $/.values[0].made; }
+
+    method pivot-wider-id-columns-spec($/) { make 'id_cols = c( ' ~ $<quoted-variable-names-list>.made ~ ' )'; }
+
+    method pivot-wider-variable-column-spec($/) { make 'names_from = ' ~ $<quoted-variable-name>.made; }
+
+    method pivot-wider-value-column-spec($/) { make 'values_from = ' ~ $<quoted-variable-name>.made; }
 
     # Pipeline command
     method pipeline-command($/) { make $/.values[0].made; }

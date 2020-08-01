@@ -197,18 +197,26 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
     method reshape-command($/) { make $/.values[0].made; }
 
     # Pivot longer command
-    method pivot-longer-command($/) { make 'obj <- reshape( data = obj, ' ~ $<pivot-longer-arguments-list>.made ~ ' )'; }
+    method pivot-longer-command($/) { make 'obj <- reshape( data = obj, ' ~ $<pivot-longer-arguments-list>.made ~ ', direction = "long" )'; }
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
     method pivot-longer-argument($/) { make $/.values[0].made; }
 
     method pivot-longer-columns-spec($/) { make 'varying = c( ' ~ $<quoted-variable-names-list>.made ~ ' )'; }
 
-    method pivot-longer-variable-column-name-spec($/) { make 'timevar = ' ~ $<quoted-variable-name>.made; }
+    method pivot-longer-variable-column-spec($/) { make 'timevar = ' ~ $<quoted-variable-name>.made; }
 
-    method pivot-longer-value-column-name-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
+    method pivot-longer-value-column-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
 
     # Pivot wide command
-    method pivot-wider-command($/) { make 'not implemented yet'; }
+    method pivot-wider-command($/) { make 'obj <- reshape( data = obj, ' ~ $<pivot-wider-arguments-list>.made ~ ' , direction = "wide" )'; }
+    method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
+    method pivot-wider-argument($/) { make $/.values[0].made; }
+
+    method pivot-wider-id-columns-spec($/) { make 'idvar = c( ' ~ $<quoted-variable-names-list>.made ~ ' )'; }
+
+    method pivot-wider-variable-column-spec($/) { make 'timevar = ' ~ $<quoted-variable-name>.made; }
+
+    method pivot-wider-value-column-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
 
     # Pipeline command
     method pipeline-command($/) { make $/.values[0].made; }

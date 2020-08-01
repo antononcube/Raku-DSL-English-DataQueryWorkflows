@@ -9,10 +9,12 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     # Tokens
     token arrange-verb { 'arrange' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'arrange') }> }
     token ascending-adjective { 'ascending' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'ascending') }> }
+    token cast-verb { 'cast' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cast') }> }
     token combine-verb { 'combine' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'combine') }> }
     token cross-verb { 'cross' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cross') }> }
     token descending-adjective { 'descending' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'descending') }> }
     token filter-verb { 'filter' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'filter') }> }
+    token form-noun { 'form' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'form') }> }
     token format-noun { 'format' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'format') }> }
     token formula-noun { 'formula' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'formula') }> }
     token full-adjective { 'full' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'full') }> }
@@ -40,7 +42,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     rule contingency-matrix-phrase { <contingency-noun> [ <matrix-noun> | <table-noun> ] }
     rule with-formula-phrase { <with-preposition> <the-determiner>? <formula-noun> }
 
-    # True dplyr; see comments below.
+    # True dplyr/tidyverse commands
     token ascending { <ascending-adjective> | 'asc' }
     token descending { <descending-adjective> | 'desc' }
     token mutate { <mutate-verb> }
@@ -51,10 +53,15 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     rule filter { <filter-verb> | <select-verb> }
     rule group-by { <group-verb> [ <by-preposition> | <using-preposition> ] }
     rule select { <select-verb> | 'keep' 'only'? }
-    rule pivot-columns-phrase { <pivot-verb>? <columns> }
+    rule pivot-columns-phrase { <pivot-verb>? <the-determiner>? <columns> }
+    rule id-columns-phrase { [ <id-noun> | <identifier-noun> ] <columns> }
     rule rename-directive { <rename-verb> }
-    rule to-long-form-phrase { <pivot-verb> 'longer' | <to-preposition> [ 'long' | 'narrow' ] [ 'form' | <format-noun> ] | <melt-verb>  }
-    rule variable-column-name-phrase { <variable-noun> <column-noun>? <name-noun> }
-    rule value-column-name-phrase { <value-noun> <column-noun>? <name-noun> }
+    rule format-phrase { <form-noun> | <format-noun> }
+    rule to-long-form-phrase { <pivot-verb> <to-preposition>? 'longer' <format-phrase>? | <to-preposition> [ 'long' | 'narrow' ] <format-phrase> | <melt-verb>  }
+    rule to-wide-form-phrase { <pivot-verb> <to-preposition>? 'wider'  <format-phrase>? | <to-preposition> [ 'wide' | 'broad'  ] <format-noun>   | <cast-verb>  }
+    rule variable-column-phrase { <variable-noun> <column-noun>? }
+    rule variable-column-name-phrase { <variable-column-phrase> <name-noun> }
+    rule value-column-phrase { <value-noun> <column-noun>? }
+    rule value-column-name-phrase { <value-column-phrase> <name-noun> }
 }
 

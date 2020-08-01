@@ -13,6 +13,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token cross-verb { 'cross' }
     token descending-adjective { 'descending' }
     token filter-verb { 'filter' }
+    token form-noun { 'form' }
     token format-noun { 'format' }
     token formula-noun { 'formula' }
     token full-adjective { 'full' }
@@ -51,9 +52,14 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     rule filter { <filter-verb> | <select-verb> }
     rule group-by { <group-verb> [ <by-preposition> | <using-preposition> ] }
     rule select { <select-verb> | 'keep' 'only'? }
-    rule pivot-columns-phrase { <pivot-verb>? <columns> }
+    rule pivot-columns-phrase { <pivot-verb>? <the-determiner>? <columns> }
+    rule id-columns-phrase { [ <id-noun> | <identifier-noun> ] <columns> }
     rule rename-directive { <rename-verb> }
-    rule to-long-form-phrase { <pivot-verb> 'longer' | <to-preposition> [ 'long' | 'narrow' ] [ 'form' | <format-noun> ] | <melt-verb>  }
-    rule variable-column-name-phrase { <variable-noun> <column>? <name-noun> }
-    rule value-column-name-phrase { <value-noun> <column>? <name-noun> }
+    rule format-phrase { <form-noun> | <format-noun> }
+    rule to-long-form-phrase { <pivot-verb> <to-preposition>? 'longer' <format-phrase>? | <to-preposition> [ 'long' | 'narrow' ] <format-phrase> | <melt-verb>  }
+    rule to-wide-form-phrase { <pivot-verb> <to-preposition>? 'wider'  <format-phrase>? | <to-preposition> [ 'wide' | 'broad'  ] <format-noun>   | <cast-verb>  }
+    rule variable-column-phrase { <variable-noun> <column-noun>? }
+    rule variable-column-name-phrase { <variable-column-phrase> <name-noun> }
+    rule value-column-phrase { <value-noun> <column-noun>? }
+    rule value-column-name-phrase { <value-column-phrase> <name-noun> }
 }
