@@ -172,9 +172,9 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
 	method semi-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'semi_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
+			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ '[, ' ~ $<join-by-spec>.made ~ ' ], by = ' ~ $<join-by-spec>.made ~ ' )';
 		} else {
-			make 'semi_join(' ~ $<dataset-name>.made ~ ')';
+			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ '[, intersect( colnames(obj), colnames(' ~ $<dataset-name>.made ~ ') ) ] )';
 		}
 	}
 
