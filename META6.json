@@ -21,7 +21,7 @@
         "DSL::English::DataQueryWorkflows::Actions::R::tidyverse" : "lib/DSL/English/DataQueryWorkflows/Actions/R/tidyverse.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::Spanish::Predicate" : "lib/DSL/English/DataQueryWorkflows/Actions/Spanish/Predicate.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::Spanish::Standard" : "lib/DSL/English/DataQueryWorkflows/Actions/Spanish/Standard.rakumod",
-        "DSL::English::DataQueryWorkflows::Actions::SQL::SQL" : "lib/DSL/English/DataQueryWorkflows/Actions/SQL/SQL.rakumod",
+        "DSL::English::DataQueryWorkflows::Actions::SQL::Standard" : "lib/DSL/English/DataQueryWorkflows/Actions/SQL/Standard.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::WL::Predicate" : "lib/DSL/English/DataQueryWorkflows/Actions/WL/Predicate.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::WL::System" : "lib/DSL/English/DataQueryWorkflows/Actions/WL/System.rakumod"
     },
