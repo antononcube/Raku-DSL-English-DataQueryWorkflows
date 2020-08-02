@@ -21,6 +21,7 @@ use DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames;
 use DSL::English::DataQueryWorkflows::Actions::Python::pandas;
 use DSL::English::DataQueryWorkflows::Actions::R::base;
 use DSL::English::DataQueryWorkflows::Actions::R::tidyverse;
+use DSL::English::DataQueryWorkflows::Actions::SQL::Standard;
 use DSL::English::DataQueryWorkflows::Actions::WL::System;
 
 use DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard;
@@ -44,8 +45,9 @@ my %targetToAction =
     "Julia-DataFrames" => DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames,
     "R"                => DSL::English::DataQueryWorkflows::Actions::R::base,
     "R-base"           => DSL::English::DataQueryWorkflows::Actions::R::base,
-    "R-tidyverse"          => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
-    "tidyverse"            => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
+    "R-tidyverse"      => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
+    "tidyverse"        => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
+    "SQL"              => DSL::English::DataQueryWorkflows::Actions::SQL::Standard,
     "Python-pandas"    => DSL::English::DataQueryWorkflows::Actions::Python::pandas,
     "pandas"           => DSL::English::DataQueryWorkflows::Actions::Python::pandas,
     "Mathematica"      => DSL::English::DataQueryWorkflows::Actions::WL::System,
@@ -59,8 +61,9 @@ my %targetToSeparator{Str} =
     "Julia-DataFrames" => "\n",
     "R"                => "\n",
     "R-base"           => "\n",
-    "R-tidyverse"          => " %>%\n",
-    "tidyverse"            => " %>%\n",
+    "R-tidyverse"      => " %>%\n",
+    "tidyverse"        => " %>%\n",
+    "SQL"              => "\n",
     "Mathematica"      => "\n",
     "Python-pandas"    => ".\n",
     "pandas"           => ".\n",
@@ -96,6 +99,21 @@ multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str 
     @commandLines = grep { $_.Str.chars > 0 }, @commandLines;
 
     my @dqLines = map { ToDataQueryWorkflowCode($_, $target) }, @commandLines;
+
+    return @dqLines.join( %targetToSeparator{$target} ).trim;
+}
+
+multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str $target where $target eq 'SQL' ) {
+
+    die 'Unknown target.' unless %targetToAction{$target}:exists;
+
+    my @commandLines = $command.trim.split(/ ';' \s* /);
+
+    @commandLines = grep { $_.Str.chars > 0 }, @commandLines;
+
+    my @dqLines = map { ToDataQueryWorkflowCode($_, $target) }, @commandLines;
+
+    my %sqlLines = @dqLines;
 
     return @dqLines.join( %targetToSeparator{$target} ).trim;
 }
