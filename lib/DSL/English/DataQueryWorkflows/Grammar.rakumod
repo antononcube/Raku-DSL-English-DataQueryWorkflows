@@ -89,7 +89,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     # Arrange command
     rule arrange-command { <arrange-command-descending> | <arrange-command-ascending> }
     rule arrange-command-filler { <by-preposition> <the-determiner>? [ <variables-noun> | <variable-noun> ]? }
-    rule arrange-simple-spec { <.by-preposition>? <.the-determiner>? [ <.variables-noun> | <.variable-noun> ]? <variable-names-list> }
+    rule arrange-simple-spec { <.by-preposition>? <.the-determiner>? [ <.variables-noun> | <.variable-noun> ]? <quoted-variable-names-list> }
     rule arrange-command-ascending {
         <.arrange> <.ascending>? <arrange-simple-spec> |
         <.arrange>  <arrange-simple-spec> <.ascending> }

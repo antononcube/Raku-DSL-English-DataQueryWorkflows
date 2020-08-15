@@ -99,7 +99,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	
 	# Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
-	method arrange-simple-spec($/) { make $<variable-names-list>.made; }
+	method arrange-simple-spec($/) { make $<quoted-variable-names-list>.made; }
 	method arrange-command-ascending($/) { make 'dplyr::arrange(' ~ $<arrange-simple-spec>.made ~ ')'; }
 	method arrange-command-descending($/) { make 'dplyr::arrange(desc(' ~ $<arrange-simple-spec>.made ~ '))'; }
 

@@ -45,7 +45,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	method list-separator($/) { make ','; }
 	# method variable-names-list($/) { make $<variable-name>>>.made.join(', '); }
 	method variable-names-list($/) { make map( {':' ~ $_ }, $<variable-name>>>.made ).join(', '); }
-	method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made.join(', '); }
+	method quoted-variable-names-list($/) { make map( {':' ~ $_ }, $<quoted-variable-name>>>.made ).join(', '); }
 	method integer-value($/) { make $/.Str; }
 	method number-value($/) { make $/.Str; }
 	method wl-expr($/) { make $/.Str.substr(1,*-1); }
@@ -90,7 +90,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 
 	# Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
-	method arrange-simple-spec($/) { make $<variable-names-list>.made; }
+	method arrange-simple-spec($/) { make $<quoted-variable-names-list>.made; }
 	method arrange-command-ascending($/) { make 'sort!( obj, [' ~ $<arrange-simple-spec>.made ~ '] )'; }
 	method arrange-command-descending($/) { make 'sort!( obj, [' ~ $<arrange-simple-spec>.made ~ '], rev=true ))'; }
 
@@ -116,7 +116,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
     method drop-columns-simple($/) {
         # Note that here we assume no single quotes are in <quoted-variable-names-list>.made .
         my @todrop = $<todrop>.made.subst(:g, '"', '').split(', ');
-        make 'select!( ' ~ map( { 'Not[:' ~ $_ ~ ']' }, @todrop ).join(', ') ~ ' )';
+        make 'select!( ' ~ map( { 'Not[' ~ $_ ~ ']' }, @todrop ).join(', ') ~ ' )';
     }
 
 	# Statistics command
