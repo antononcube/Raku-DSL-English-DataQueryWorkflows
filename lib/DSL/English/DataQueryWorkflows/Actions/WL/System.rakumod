@@ -186,6 +186,37 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method columns-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
     method values-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
 
+    # Reshape command
+    method reshape-command($/) { make $/.values[0].made; }
+
+    # Pivot longer command
+    method pivot-longer-command($/) {
+        my $cols  = 'obj';
+        if $<pivot-longer-columns-spec> {
+            $cols = 'Map[KeyTake[#, ' ~ $<pivot-longer-columns-spec>.made ~ '] &, obj]'
+        }
+        make 'obj = Dataset[Apply[Join][Query[All, KeyValueMap[List /* Replace[{k_, v_} :> Association["Variable" -> k, "Value" -> v]]]] @ ' ~ $cols ~ ']]';
+    }
+    method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
+    method pivot-longer-argument($/) { make $/.values[0].made; }
+
+    method pivot-longer-columns-spec($/) { make '{' ~ $<quoted-variable-names-list>.made ~ '}'; }
+
+    method pivot-longer-variable-column-spec($/) { make 'names_to = ' ~ $<quoted-variable-name>.made; }
+
+    method pivot-longer-value-column-spec($/) { make 'values_to = ' ~ $<quoted-variable-name>.made; }
+
+    # Pivot wider command
+    method pivot-wider-command($/) { make 'tidyr::pivot_wider(' ~ $<pivot-wider-arguments-list>.made ~ ' )'; }
+    method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
+    method pivot-wider-argument($/) { make $/.values[0].made; }
+
+    method pivot-wider-id-columns-spec($/) { make 'id_cols = c( ' ~ $<quoted-variable-names-list>.made ~ ' )'; }
+
+    method pivot-wider-variable-column-spec($/) { make 'names_from = ' ~ $<quoted-variable-name>.made; }
+
+    method pivot-wider-value-column-spec($/) { make 'values_from = ' ~ $<quoted-variable-name>.made; }
+
     # Pipeline command
     method pipeline-command($/) { make $/.values[0].made; }
     method take-pipeline-value($/) { make 'obj'; }
