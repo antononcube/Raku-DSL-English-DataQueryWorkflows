@@ -107,15 +107,16 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
     method rename-columns-simple($/) {
-        my @currentNames = $<current>.made;
-        my @newNames = $<new>.made;
+		## See how the <quoted-variable-names-list> was made.
+        my @currentNames = $<current>.made.split( ', ' );
+        my @newNames = $<new>.made.split( ', ' );
 
         if @currentNames.elems != @newNames.elems {
             note 'Same number of current and new column names are expected for column renaming.';
             make 'obj';
         } else {
-            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { 'colnames(obj) <- gsub( ' ~ $c ~ ', ' ~ $n ~ ', colnames(obj) );' };
-            make $pairs.join("\n");
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { 'colnames(obj) <- gsub( ' ~ $c ~ ', ' ~ $n ~ ', colnames(obj) )' };
+            make $pairs.join(" ;\n");
         }
     }
 
