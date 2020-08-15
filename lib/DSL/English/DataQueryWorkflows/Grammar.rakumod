@@ -118,11 +118,11 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     # Join command
     rule join-command { <inner-join-spec> | <left-join-spec> | <right-join-spec> | <semi-join-spec> | <full-join-spec> }
     rule join-by-spec { <assign-pairs-list> | <quoted-variable-names-list> }
-    rule full-join-spec  { <.full-adjective>  <.join-noun> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> ] <join-by-spec> ]? }
-    rule inner-join-spec { <.inner-adjective> <.join-noun> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> ] <join-by-spec> ]? }
-    rule left-join-spec  { <.left-adjective>  <.join-noun> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> ] <join-by-spec> ]? }
-    rule right-join-spec { <.right-adjective> <.join-noun> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> ] <join-by-spec> ]? }
-    rule semi-join-spec  { <.semi-adjective>  <.join-noun> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> ] <join-by-spec> ]? }
+    rule full-join-spec  { <.full-adjective>  <.join-noun> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
+    rule inner-join-spec { <.inner-adjective> <.join-noun> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
+    rule left-join-spec  { <.left-adjective>  <.join-noun> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
+    rule right-join-spec { <.right-adjective> <.join-noun> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
+    rule semi-join-spec  { <.semi-adjective>  <.join-noun> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
 
     # Cross tabulate command
     rule cross-tabulate-command { <cross-tabulate-command> | <contingency-matrix-command> }
