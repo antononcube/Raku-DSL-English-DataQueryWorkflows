@@ -143,41 +143,41 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	
 	method full-join-spec($/)  {
       if $<join-by-spec> {
-		  make 'full_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
+		  make 'dplyr::full_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
       } else {
-		  make 'full_join(' ~ $<dataset-name>.made ~ ')';
+		  make 'dplyr::full_join(' ~ $<dataset-name>.made ~ ')';
       }
 	}
 	
 	method inner-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'inner_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
+			make 'dplyr::inner_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
 		} else {
-			make 'inner_join(' ~ $<dataset-name>.made ~ ')';
+			make 'dplyr::inner_join(' ~ $<dataset-name>.made ~ ')';
 		}
 	}
 	
 	method left-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'left_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
+			make 'dplyr::left_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
 		} else {
-			make 'left_join(' ~ $<dataset-name>.made ~ ')';
+			make 'dplyr::left_join(' ~ $<dataset-name>.made ~ ')';
 		}
 	}
 	
 	method right-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'right_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
+			make 'dplyr::right_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
 		} else {
-			make 'right_join(' ~ $<dataset-name>.made ~ ')';
+			make 'dplyr::right_join(' ~ $<dataset-name>.made ~ ')';
 		}
 	}
 	
 	method semi-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'semi_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
+			make 'dplyr::semi_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
 		} else {
-			make 'semi_join(' ~ $<dataset-name>.made ~ ')';
+			make 'dplyr::semi_join(' ~ $<dataset-name>.made ~ ')';
 		}
 	}
 	
