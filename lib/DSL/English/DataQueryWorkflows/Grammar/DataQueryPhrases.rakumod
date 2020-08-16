@@ -9,8 +9,10 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     # Tokens
     token arrange-verb { 'arrange' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'arrange') }> }
     token ascending-adjective { 'ascending' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'ascending') }> }
+    token cases-noun { 'cases' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cases') }> }
     token cast-verb { 'cast' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cast') }> }
     token combine-verb { 'combine' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'combine') }> }
+    token complete-adjective { 'complete' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'complete') }> }
     token cross-verb { 'cross' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cross') }> }
     token descending-adjective { 'descending' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'descending') }> }
     token distinct-adjective { 'distinct' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'distinct') }> }

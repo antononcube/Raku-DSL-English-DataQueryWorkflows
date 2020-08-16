@@ -9,7 +9,10 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     # Tokens
     token arrange-verb { 'arrange' }
     token ascending-adjective { 'ascending' }
+    token cases-noun { 'cases' }
+    token cast-verb { 'cast' }
     token combine-verb { 'combine' }
+    token complete-adjective { 'complete' }
     token cross-verb { 'cross' }
     token descending-adjective { 'descending' }
     token distinct-adjective { 'distinct' }
