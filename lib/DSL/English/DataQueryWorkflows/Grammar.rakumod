@@ -70,12 +70,12 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     # Distinct command
     rule distinct-command { <distinct-simple-command> }
     rule distinct-simple-command {
-        <keep-only-phrase>? [ <distinct-adjective> | <unique-adjective> ] <values-noun>? |
+        <keep-only-phrase>? [ <distinct-adjective> | <unique-adjective> ] <values-noun>? <only-adverb>? |
         <delete-directive>  [ <duplicate-adjective> | <duplicates-noun> ] <values-noun>? }
 
     # Missing treatment command
-    rule missing-treatment-command { <drop-incomplete-casses-command> | <replace-missing-command> }
-    rule drop-incomplete-casses-command {
+    rule missing-treatment-command { <drop-incomplete-cases-command> | <replace-missing-command> }
+    rule drop-incomplete-cases-command {
         <keep-only-phrase> <complete-cases-phrase> |
         <omit-directive> <missing-values-phrase>? |
         <delete-directive> <missing-values-phrase> }
