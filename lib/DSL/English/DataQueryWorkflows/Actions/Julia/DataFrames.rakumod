@@ -68,7 +68,16 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	method load-data-table($/) { make 'obj = ' ~ $<data-location-spec>.made; }
 	method data-location-spec($/) { make '\"' ~ $/.Str ~ '\"'; }
 	method use-data-table($/) { make 'obj = ' ~ $<variable-name>.made; }
-	
+
+	# Distinct command
+	method distinct-command($/) { make $/.values[0].made; }
+	method distinct-simple-command($/) { make 'obj = unique(obj)'; }
+
+	# Missing treatment command
+	method missing-treatment-command($/) { make $/.values[0].made; }
+	method drop-incomplete-cases-command($/) { make 'obj = obj[ completecases(obj), :]'; }
+	method replace-missing-command($/) { make 'obj = coalesce.( obj, ' ~ $<replace-missing-rhs>.made ~ ')'; }
+
 	# Select command
   	method select-command($/) { make $/.values[0].made; }
 	method select-plain-variables($/) { make 'select!( obj, ' ~ $<variable-names-list>.made ~ ')'; }
