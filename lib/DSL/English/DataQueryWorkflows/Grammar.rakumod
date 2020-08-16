@@ -66,7 +66,10 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule use-data-table { [ <.use-verb> | <.using-preposition> ] <.the-determiner>? <.data>? <variable-name> }
 
     # Select command
-    rule select-command { <select> <.the-determiner>? [ <.variables-noun> | <.variable-noun> | <.columns> ]? <variable-names-list> }
+    rule select-command { <select-plain-variables> | <select-mixed-quoted-variables> }
+    rule select-opening-phrase { <select> <the-determiner>? [ <variables-noun> | <variable-noun> | <columns> ]? }
+    rule select-plain-variables { <.select-opening-phrase> <variable-names-list> }
+    rule select-mixed-quoted-variables { <.select-opening-phrase> <mixed-quoted-variable-names-list> }
 
     # Filter command
     rule filter-command { <filter> <.the-determiner>? <.rows>? [ <.for-which-phrase>? | <.by-preposition> ] <filter-spec> }
@@ -75,8 +78,8 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     # Mutate command
     rule mutate-command { [ <mutate> | <assign> | <transform-verb> ] <.by-preposition>? <assign-pairs-list> }
     rule assign-pair { <assign-pair-lhs> <.assign-to-symbol> <assign-pair-rhs> }
-    rule assign-pair-lhs { <quoted-variable-name> }
-    rule assign-pair-rhs { <quoted-variable-name> | <wl-expr> }
+    rule assign-pair-lhs { <mixed-quoted-variable-name> }
+    rule assign-pair-rhs { <mixed-quoted-variable-name> | <wl-expr> }
     rule assign-pairs-list { <assign-pair>+ % <.list-separator> }
 
     # Group command
@@ -89,7 +92,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     # Arrange command
     rule arrange-command { <arrange-command-descending> | <arrange-command-ascending> }
     rule arrange-command-filler { <by-preposition> <the-determiner>? [ <variables-noun> | <variable-noun> ]? }
-    rule arrange-simple-spec { <.by-preposition>? <.the-determiner>? [ <.variables-noun> | <.variable-noun> ]? <quoted-variable-names-list> }
+    rule arrange-simple-spec { <.by-preposition>? <.the-determiner>? [ <.variables-noun> | <.variable-noun> ]? <mixed-quoted-variable-names-list> }
     rule arrange-command-ascending {
         <.arrange> <.ascending>? <arrange-simple-spec> |
         <.arrange>  <arrange-simple-spec> <.ascending> }
@@ -100,13 +103,13 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     # Rename columns
     rule rename-columns-command { <rename-columns-simple> }
     rule rename-columns-simple { <.rename-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]?
-                                 <current=.quoted-variable-names-list>
+                                 <current=.mixed-quoted-variable-names-list>
                                  [ <.to-preposition> | <.into-preposition> | <.as-preposition> ]
-                                 <new=.quoted-variable-names-list> }
+                                 <new=.mixed-quoted-variable-names-list> }
 
     # Drop columns
     rule drop-columns-command { <drop-columns-simple> }
-    rule drop-columns-simple { <.delete-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]? <todrop=.quoted-variable-names-list> }
+    rule drop-columns-simple { <.delete-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]? <todrop=.mixed-quoted-variable-names-list> }
 
     # Statistics command
     rule statistics-command { <count-command> | <glimpse-data> | <summarize-data> | <summarize-all-command> }
@@ -117,7 +120,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
 
     # Join command
     rule join-command { <inner-join-spec> | <left-join-spec> | <right-join-spec> | <semi-join-spec> | <full-join-spec> }
-    rule join-by-spec { <assign-pairs-list> | <quoted-variable-names-list> }
+    rule join-by-spec { <assign-pairs-list> | <mixed-quoted-variable-names-list> }
     rule full-join-spec  { <.full-adjective>  <.join-noun> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
     rule inner-join-spec { <.inner-adjective> <.join-noun> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
     rule left-join-spec  { <.left-adjective>  <.join-noun> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
@@ -143,11 +146,11 @@ grammar DSL::English::DataQueryWorkflows::Grammar
 
     rule filler-separator { <with-preposition> | <using-preposition> | <for-preposition> }
 
-    rule pivot-longer-columns-spec { <.the-determiner>? <.pivot-columns-phrase> <quoted-variable-names-list> }
+    rule pivot-longer-columns-spec { <.the-determiner>? <.pivot-columns-phrase> <mixed-quoted-variable-names-list> }
 
-    rule pivot-longer-variable-column-spec { <.the-determiner>? <.variable-column-name-phrase> <quoted-variable-name> }
+    rule pivot-longer-variable-column-spec { <.the-determiner>? <.variable-column-name-phrase> <mixed-quoted-variable-name> }
 
-    rule pivot-longer-value-column-spec { <.the-determiner>? <.value-column-name-phrase> <quoted-variable-name> }
+    rule pivot-longer-value-column-spec { <.the-determiner>? <.value-column-name-phrase> <mixed-quoted-variable-name> }
 
     # To wider form command
     rule pivot-wider-command { <.convert-verb>? <.to-wide-form-phrase>  <.filler-separator> <pivot-wider-arguments-list> }
@@ -155,13 +158,13 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     regex pivot-wider-argument { <pivot-wider-id-columns-spec> | <pivot-wider-variable-column-spec> | <pivot-wider-value-column-spec> }
 
     # Same as <pivot-longer-columns-spec>
-    rule pivot-wider-id-columns-spec { <.the-determiner>? <.id-columns-phrase> <quoted-variable-names-list> }
+    rule pivot-wider-id-columns-spec { <.the-determiner>? <.id-columns-phrase> <mixed-quoted-variable-names-list> }
 
     # Same as <pivot-longer-variable-column-spec>
-    rule pivot-wider-variable-column-spec { <.the-determiner>? <.variable-column-phrase> <quoted-variable-name> }
+    rule pivot-wider-variable-column-spec { <.the-determiner>? <.variable-column-phrase> <mixed-quoted-variable-name> }
 
     # Same as <pivot-longer-value-column-spec>
-    rule pivot-wider-value-column-spec { <.the-determiner>? <.value-column-phrase> <quoted-variable-name> }
+    rule pivot-wider-value-column-spec { <.the-determiner>? <.value-column-phrase> <mixed-quoted-variable-name> }
 
 
 }

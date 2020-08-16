@@ -51,7 +51,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     rule data-phrase { <.the-determiner>? <data> }
     rule filter { <filter-verb> | <select-verb> }
     rule group-by { <group-verb> [ <by-preposition> | <using-preposition> ] }
-    rule select { <select-verb> | 'keep' 'only'? }
+    rule select { <select-verb> | <take-verb> | 'keep' 'only'? }
     rule pivot-columns-phrase { <pivot-verb>? <the-determiner>? <columns> }
     rule id-columns-phrase { [ <id-noun> | <identifier-noun> ] <columns> }
     rule rename-directive { <rename-verb> }

@@ -55,10 +55,12 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	method list-separator($/) { make ','; }
 	method variable-names-list($/) { make $<variable-name>>>.made.join(', '); }
 	method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made.join(', '); }
+	method mixed-quoted-variable-names-list($/) { make $<mixed-quoted-variable-name>>>.made.join(', '); }
 	method integer-value($/) { make $/.Str; }
 	method number-value($/) { make $/.Str; }
 	method wl-expr($/) { make $/.Str.substr(1,*-1); }
-	method quoted-variable-name($/) {  make $/.values[0].made; }
+	method quoted-variable-name($/) { make $/.values[0].made; }
+	method mixed-quoted-variable-name($/) { make $/.values[0].made; }
 	method single-quoted-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
 	method double-quoted-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
 	
@@ -77,8 +79,10 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	method use-data-table($/) { make $<variable-name>.made; }
 	
 	# Select command
-	method select-command($/) { make 'dplyr::select(' ~ $<variable-names-list>.made ~ ')'; }
-	
+	method select-command($/) { make $/.values[0].made; }
+	method select-plain-variables($/) { make 'dplyr::select(' ~ $<variable-names-list>.made ~ ')'; }
+	method select-mixed-quoted-variables($/) { make 'dplyr::select_at( .vars = c(' ~ $<mixed-quoted-variable-names-list>.made ~ ') )'; }
+
 	# Filter commands
 	method filter-command($/) { make 'dplyr::filter(' ~ $<filter-spec>.made ~ ')'; }
 	method filter-spec($/) { make $<predicates-list>.made; }
@@ -99,7 +103,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	
 	# Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
-	method arrange-simple-spec($/) { make $<quoted-variable-names-list>.made; }
+	method arrange-simple-spec($/) { make $<mixed-quoted-variable-names-list>.made; }
 	method arrange-command-ascending($/) { make 'dplyr::arrange(' ~ $<arrange-simple-spec>.made ~ ')'; }
 	method arrange-command-descending($/) { make 'dplyr::arrange(desc(' ~ $<arrange-simple-spec>.made ~ '))'; }
 
@@ -108,7 +112,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
     method rename-columns-simple($/) {
         # I am not very comfortable with splitting the made string here, but it works.
         # Maybe it is better to no not join the elements in <variable-names-list>.
-        # Note that here with subst we assume no single quotes are in <quoted-variable-names-list>.made .
+        # Note that here with subst we assume no single quotes are in <mixed-quoted-variable-names-list>.made .
         my @currentNames = $<current>.made.subst(:g, '"', '').split(', ');
         my @newNames = $<new>.made.subst(:g, '"', '').split(', ');
 
@@ -124,7 +128,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
     # Drop columns command
     method drop-columns-command($/) { make $/.values[0].made; }
     method drop-columns-simple($/) {
-        # Note that here we assume no single quotes are in <quoted-variable-names-list>.made .
+        # Note that here we assume no single quotes are in <mixed-quoted-variable-names-list>.made .
         my @todrop = $<todrop>.made.subst(:g, '"', '').split(', ');
         make 'dplyr::mutate( ' ~ map( { $_ ~ '= NULL' }, @todrop ).join(', ') ~ ' )';
     }
@@ -204,7 +208,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
     method pivot-longer-argument($/) { make $/.values[0].made; }
 
-    method pivot-longer-columns-spec($/) { make 'cols = c( ' ~ $<quoted-variable-names-list>.made ~ ' )'; }
+    method pivot-longer-columns-spec($/) { make 'cols = c( ' ~ $<mixed-quoted-variable-names-list>.made ~ ' )'; }
 
     method pivot-longer-variable-column-spec($/) { make 'names_to = ' ~ $<quoted-variable-name>.made; }
 
@@ -215,7 +219,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
     method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
     method pivot-wider-argument($/) { make $/.values[0].made; }
 
-    method pivot-wider-id-columns-spec($/) { make 'id_cols = c( ' ~ $<quoted-variable-names-list>.made ~ ' )'; }
+    method pivot-wider-id-columns-spec($/) { make 'id_cols = c( ' ~ $<mixed-quoted-variable-names-list>.made ~ ' )'; }
 
     method pivot-wider-variable-column-spec($/) { make 'names_from = ' ~ $<quoted-variable-name>.made; }
 

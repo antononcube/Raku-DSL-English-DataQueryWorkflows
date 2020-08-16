@@ -56,10 +56,12 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method list-separator($/) { make ','; }
 	method variable-names-list($/) { make $<variable-name>>>.made; }
 	method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made; }
+	method mixed-quoted-variable-names-list($/) { make $<mixed-quoted-variable-name>>>.made; }
 	method integer-value($/) { make $/.Str; }
 	method number-value($/) { make $/.Str; }
 	method wl-expr($/) { make $/.Str.substr(1,*-1); }
-	method quoted-variable-name($/) {  make $/.values[0].made; }
+	method quoted-variable-name($/) { make $/.values[0].made; }
+	method mixed-quoted-variable-name($/) { make $/.values[0].made; }
 	method single-quoted-variable-name($/) {  make '"' ~ $<variable-name>.made ~ '"'; }
 	method double-quoted-variable-name($/) {  make '"' ~ $<variable-name>.made ~ '"'; }
 
@@ -78,7 +80,9 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method use-data-table($/) { make 'obj <- ' ~ $<variable-name>.made; }
 
     # Select command
-	method select-command($/) { make 'obj <- obj[, ' ~ 'c(' ~ map( { '\"' ~ $_ ~ '\"' }, $<variable-names-list>.made ).join(', ') ~ ') ]'; }
+	method select-command($/) { make $/.values[0].made; }
+	method select-plain-variables($/) { make 'obj <- obj[ , c(' ~ map( {'"' ~ $_ ~ '"' }, $<variable-names-list>.made ).join(', ') ~ ') ]'; }
+	method select-mixed-quoted-variables($/) { make 'obj <- obj[ , c(' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ') ]'; }
 
     # Filter commands
 	method filter-command($/) { make 'obj <- obj[' ~ $<filter-spec>.made ~ ', ]'; }
@@ -100,14 +104,14 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
     # Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
-	method arrange-simple-spec($/) { make 'c(' ~ $<quoted-variable-names-list>.made.join(', ') ~ ')'; }
+	method arrange-simple-spec($/) { make 'c(' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ')'; }
 	method arrange-command-ascending($/) { make 'obj <- obj[ order(obj[ ,' ~ $<arrange-simple-spec>.made ~ ']), ]'; }
 	method arrange-command-descending($/) { make 'obj <- obj[ rev(order(obj[ ,' ~ $<arrange-simple-spec>.made ~ '])), ]'; }
 
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
     method rename-columns-simple($/) {
-		## See how the <quoted-variable-names-list> was made.
+		## See how the <mixed-quoted-variable-names-list> was made.
         my @currentNames = $<current>.made;
         my @newNames = $<new>.made;
 
@@ -202,7 +206,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
     method pivot-longer-argument($/) { make $/.values[0].made; }
 
-    method pivot-longer-columns-spec($/) { make 'varying = c( ' ~ $<quoted-variable-names-list>.made.join(', ') ~ ' )'; }
+    method pivot-longer-columns-spec($/) { make 'varying = c( ' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ' )'; }
 
     method pivot-longer-variable-column-spec($/) { make 'timevar = ' ~ $<quoted-variable-name>.made; }
 
@@ -213,7 +217,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
     method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
     method pivot-wider-argument($/) { make $/.values[0].made; }
 
-    method pivot-wider-id-columns-spec($/) { make 'idvar = c( ' ~ $<quoted-variable-names-list>.made.join(', ') ~ ' )'; }
+    method pivot-wider-id-columns-spec($/) { make 'idvar = c( ' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ' )'; }
 
     method pivot-wider-variable-column-spec($/) { make 'timevar = ' ~ $<quoted-variable-name>.made; }
 

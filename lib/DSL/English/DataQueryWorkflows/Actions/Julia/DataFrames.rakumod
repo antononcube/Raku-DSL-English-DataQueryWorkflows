@@ -46,10 +46,12 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	# method variable-names-list($/) { make $<variable-name>>>.made.join(', '); }
 	method variable-names-list($/) { make map( {':' ~ $_ }, $<variable-name>>>.made ).join(', '); }
 	method quoted-variable-names-list($/) { make map( {':' ~ $_ }, $<quoted-variable-name>>>.made ).join(', '); }
+	method mixed-quoted-variable-names-list($/) { make map( {':' ~ $_ }, $<mixed-quoted-variable-name>>>.made ).join(', '); }
 	method integer-value($/) { make $/.Str; }
 	method number-value($/) { make $/.Str; }
 	method wl-expr($/) { make $/.Str.substr(1,*-1); }
-	method quoted-variable-name($/) {  make $/.values[0].made; }
+	method quoted-variable-name($/) { make $/.values[0].made; }
+	method mixed-quoted-variable-name($/) { make $/.values[0].made; }
 	method single-quoted-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
 	method double-quoted-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
 	
@@ -68,8 +70,10 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	method use-data-table($/) { make 'obj = ' ~ $<variable-name>.made; }
 	
 	# Select command
-	method select-command($/) { make 'select!( obj, ' ~ $<variable-names-list>.made ~ ')'; }
-  
+  	method select-command($/) { make $/.values[0].made; }
+	method select-plain-variables($/) { make 'select!( obj, ' ~ $<variable-names-list>.made ~ ')'; }
+	method select-mixed-quoted-variables($/) { make 'select!( obj, ' ~ $<mixed-quoted-variable-names-list>.made ~ ')'; }
+
 	# Filter commands
 	method filter-command($/) { make 'obj = obj[ ' ~ $<filter-spec>.made ~ ', :]'; }
 	method filter-spec($/) { make $<predicates-list>.made; }
@@ -90,7 +94,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 
 	# Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
-	method arrange-simple-spec($/) { make $<quoted-variable-names-list>.made; }
+	method arrange-simple-spec($/) { make $<mixed-quoted-variable-names-list>.made; }
 	method arrange-command-ascending($/) { make 'sort!( obj, [' ~ $<arrange-simple-spec>.made ~ '] )'; }
 	method arrange-command-descending($/) { make 'sort!( obj, [' ~ $<arrange-simple-spec>.made ~ '], rev=true ))'; }
 
@@ -114,7 +118,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
     # Drop columns command
     method drop-columns-command($/) { make $/.values[0].made; }
     method drop-columns-simple($/) {
-        # Note that here we assume no single quotes are in <quoted-variable-names-list>.made .
+        # Note that here we assume no single quotes are in <mixed-quoted-variable-names-list>.made .
         my @todrop = $<todrop>.made.subst(:g, '"', '').split(', ');
         make 'select!( ' ~ map( { 'Not[' ~ $_ ~ ']' }, @todrop ).join(', ') ~ ' )';
     }
