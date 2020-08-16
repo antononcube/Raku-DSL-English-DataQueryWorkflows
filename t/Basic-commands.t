@@ -3,7 +3,7 @@ use lib 'lib';
 use DSL::English::DataQueryWorkflows::Grammar;
 use Test;
 
-plan 12;
+plan 16;
 
 # Shortcut
 my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
@@ -14,6 +14,18 @@ my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
 
 ok $pCOMMAND.parse('use data frame dfTitanic'),
         'use data frame dfTitanic';
+
+ok $pCOMMAND.parse('keep only distinct values'),
+        'keep only distinct values';
+
+ok $pCOMMAND.parse('remove duplicates'),
+        'remove duplicates';
+
+ok $pCOMMAND.parse('exclude missing values'),
+        'exclude missing values';
+
+ok $pCOMMAND.parse('keep only complete cases'),
+        'keep only complete cases';
 
 ok $pCOMMAND.parse('select passengerAge'),
         'select passengerAge';
