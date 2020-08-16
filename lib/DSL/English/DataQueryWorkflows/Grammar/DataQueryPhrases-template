@@ -27,10 +27,12 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token group-verb { 'group' }
     token inner-adjective { 'inner' }
     token join-noun { 'join' }
+    token keep-verb { 'keep' }
     token left-adjective { 'left' }
     token melt-verb { 'melt' }
     token mutate-verb { 'mutate' }
     token omit-directive { 'omit' | 'exclude' }
+    token only-adverb { 'only' }
     token order-verb { 'order' }
     token pivot-verb { 'pivot' }
     token rename-verb { 'rename' }
@@ -49,7 +51,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     rule complete-cases-phrase { <complete-adjective> <cases-noun> }
     rule contingency-matrix-phrase { <contingency-noun> [ <matrix-noun> | <table-noun> ] }
     rule cross-tabulate-phrase { <cross-verb> <tabulate-verb> }
-    rule keep-only-phrase { 'keep' 'only'? }
+    rule keep-only-phrase { <keep-verb> <only-adverb>? }
     rule with-formula-phrase { <with-preposition> <the-determiner>? <formula-noun> }
 
     # True dplyr; see comments below.
