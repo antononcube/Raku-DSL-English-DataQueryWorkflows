@@ -77,7 +77,16 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	method load-data-table($/) { make '{ data(' ~ $<data-location-spec>.made ~ '); ' ~ $<data-location-spec>.made ~ ' }'; }
 	method data-location-spec($/) { make '\'' ~ $/.Str ~ '\''; }
 	method use-data-table($/) { make $<variable-name>.made; }
-	
+
+	# Distinct command
+	method dictinct-command($/) { make $/.values[0].made; }
+	method dictinct-simple-command($/) { make 'dplyr::distinct()'; }
+
+	# Missing treatment command
+	method missing-treatment-command($/) { make $/.values[0].made; }
+	method drop-incomplete-casses-command($/) { make 'na.omit()'; }
+	method replace-missing-command($/) { make 'tidyr::replace_na( ' ~ $<replace-missing-rhs>.made ~ ' )'; }
+
 	# Select command
 	method select-command($/) { make $/.values[0].made; }
 	method select-plain-variables($/) { make 'dplyr::select(' ~ $<variable-names-list>.made ~ ')'; }

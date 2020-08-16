@@ -79,6 +79,15 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method data-location-spec($/) { make '\'' ~ $/.Str ~ '\''; }
 	method use-data-table($/) { make 'obj <- ' ~ $<variable-name>.made; }
 
+	# Distinct command
+	method dictinct-command($/) { make $/.values[0].made; }
+	method dictinct-simple-command($/) { make 'obj <- unique(obj)'; }
+
+	# Missing treatment command
+	method missing-treatment-command($/) { make $/.values[0].made; }
+	method drop-incomplete-casses-command($/) { make 'obj <- na.omit(obj)'; }
+	method replace-missing-command($/) { make 'obj[ is.na(obj) ] <- ' ~ $<replace-missing-rhs>.made ; }
+
     # Select command
 	method select-command($/) { make $/.values[0].made; }
 	method select-plain-variables($/) { make 'obj <- obj[ , c(' ~ map( {'"' ~ $_ ~ '"' }, $<variable-names-list>.made ).join(', ') ~ ') ]'; }

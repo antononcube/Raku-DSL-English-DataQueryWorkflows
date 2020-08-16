@@ -46,6 +46,8 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule TOP {
         <pipeline-command> |
         <data-load-command> |
+        <distinct-command> |
+        <missing-treatment-command> |
         <select-command> |
         <filter-command> |
         <mutate-command> |
@@ -64,6 +66,21 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule data-location-spec { <dataset-name> }
     rule load-data-table { <.load-data-directive> <data-location-spec> }
     rule use-data-table { [ <.use-verb> | <.using-preposition> ] <.the-determiner>? <.data>? <variable-name> }
+
+    # Distinct command
+    rule distinct-command { <distinct-simple-command> }
+    rule distinct-simple-command {
+        <keep-only-phrase>? [ <distinct-adjective> | <unique-adjective> ] <values-noun>? |
+        <delete-directive>  [ <duplicate-adjective> | <duplicates-noun> ] <values-noun>? }
+
+    # Missing treatment command
+    rule missing-treatment-command { <drop-incomplete-casses-command> | <replace-missing-command> }
+    rule drop-incomplete-casses-command {
+        <keep-only-phrase> <complete-cases-phrase> |
+        <omit-directive> <missing-values-phrase>? |
+        <delete-directive> <missing-values-phrase> }
+    rule replace-missing-command { <.replace-verb> <.missing-values-phrase> <.with-preposition> <replace-missing-rhs> }
+    rule replace-missing-rhs { <number-value> | <mixed-quoted-variable-name> | <wl-expr> }
 
     # Select command
     rule select-command { <select-plain-variables> | <select-mixed-quoted-variables> }

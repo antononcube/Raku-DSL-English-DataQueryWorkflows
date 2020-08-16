@@ -13,6 +13,9 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token combine-verb { 'combine' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'combine') }> }
     token cross-verb { 'cross' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cross') }> }
     token descending-adjective { 'descending' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'descending') }> }
+    token distinct-adjective { 'distinct' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'distinct') }> }
+    token duplicate-adjective { 'duplicate' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'duplicate') }> }
+    token duplicates-noun { 'duplicates' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'duplicates') }> }
     token filter-verb { 'filter' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'filter') }> }
     token form-noun { 'form' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'form') }> }
     token format-noun { 'format' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'format') }> }
@@ -25,9 +28,11 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token left-adjective { 'left' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'left') }> }
     token melt-verb { 'melt' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'melt') }> }
     token mutate-verb { 'mutate' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'mutate') }> }
+    token omit-directive { 'omit' | 'exclude' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'exclude') }> }
     token order-verb { 'order' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'order') }> }
     token pivot-verb { 'pivot' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'pivot') }> }
     token rename-verb { 'rename' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'rename') }> }
+    token replace-verb { 'replace' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'replace') }> }
     token right-adjective { 'right' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'right') }> }
     token select-verb { 'select' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'select') }> }
     token semi-adjective { 'semi' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'semi') }> }
@@ -36,10 +41,13 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token summarize-verb { 'summarize' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'summarize') }> }
     token tabulate-verb { 'tabulate' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'tabulate') }> }
     token ungroup-verb { 'ungroup' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'ungroup') }> }
+    token unique-adjective { 'unique' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'unique') }> }
 
     rule for-which-phrase { <for-preposition> <which-determiner> | <that-pronoun> <adhere-verb> <to-preposition> }
-    rule cross-tabulate-phrase { <cross-verb> <tabulate-verb> }
+    rule complete-cases-phrase { <complete-adjective> <cases-noun> }
     rule contingency-matrix-phrase { <contingency-noun> [ <matrix-noun> | <table-noun> ] }
+    rule cross-tabulate-phrase { <cross-verb> <tabulate-verb> }
+    rule keep-only-phrase { 'keep' 'only'? }
     rule with-formula-phrase { <with-preposition> <the-determiner>? <formula-noun> }
 
     # True dplyr/tidyverse commands
@@ -52,7 +60,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     rule data-phrase { <.the-determiner>? <data> }
     rule filter { <filter-verb> | <select-verb> }
     rule group-by { <group-verb> [ <by-preposition> | <using-preposition> ] }
-    rule select { <select-verb> | <take-verb> | 'keep' 'only'? }
+    rule select { <select-verb> | <take-verb> | <keep-only-phrase> }
     rule pivot-columns-phrase { <pivot-verb>? <the-determiner>? <columns> }
     rule id-columns-phrase { [ <id-noun> | <identifier-noun> ] <columns> }
     rule rename-directive { <rename-verb> }
