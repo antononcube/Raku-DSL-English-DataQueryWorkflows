@@ -79,8 +79,8 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	method use-data-table($/) { make $<variable-name>.made; }
 
 	# Distinct command
-	method dictinct-command($/) { make $/.values[0].made; }
-	method dictinct-simple-command($/) { make 'dplyr::distinct()'; }
+	method distinct-command($/) { make $/.values[0].made; }
+	method distinct-simple-command($/) { make 'dplyr::distinct()'; }
 
 	# Missing treatment command
 	method missing-treatment-command($/) { make $/.values[0].made; }
