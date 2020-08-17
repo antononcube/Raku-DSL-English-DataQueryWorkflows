@@ -15,6 +15,7 @@
         "DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard" : "lib/DSL/English/DataQueryWorkflows/Actions/Bulgarian/Standard.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames" : "lib/DSL/English/DataQueryWorkflows/Actions/Julia/DataFrames.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::Julia::Predicate" : "lib/DSL/English/DataQueryWorkflows/Actions/Julia/Predicate.rakumod",
+        "DSL::English::DataQueryWorkflows::Actions::Python::Predicate" : "lib/DSL/English/DataQueryWorkflows/Actions/Python/Predicate.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::Python::pandas" : "lib/DSL/English/DataQueryWorkflows/Actions/Python/pandas.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::R::Predicate" : "lib/DSL/English/DataQueryWorkflows/Actions/R/Predicate.rakumod",
         "DSL::English::DataQueryWorkflows::Actions::R::base" : "lib/DSL/English/DataQueryWorkflows/Actions/R/base.rakumod",
