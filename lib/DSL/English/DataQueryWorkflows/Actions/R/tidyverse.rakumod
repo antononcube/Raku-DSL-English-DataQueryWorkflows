@@ -2,7 +2,7 @@
 #==============================================================================
 #
 #   Data Query Workflows R-tidyverse actions in Raku (Perl 6)
-#   Copyright (C) 2018  Anton Antonov
+#   Copyright (C) 2018, 2020  Anton Antonov
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
