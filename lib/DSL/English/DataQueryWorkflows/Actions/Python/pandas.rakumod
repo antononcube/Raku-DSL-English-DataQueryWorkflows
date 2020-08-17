@@ -200,9 +200,9 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	method contingency-matrix-command($/) { $<cross-tabulation-formula>.made }
 	method cross-tabulation-formula($/) {
 		if $<values-variable-name> {
-			make 'obj = obj.crosstab( index = obj.' ~ $<rows-variable-name>.made ~ ', columns = obj.' ~ $<columns-variable-name>.made ~ ', values = obj.' ~ $<values-variable-name>.made ~ ', aggfunc = "sum" )';
+			make 'obj = pandas.crosstab( index = obj.' ~ $<rows-variable-name>.made ~ ', columns = obj.' ~ $<columns-variable-name>.made ~ ', values = obj.' ~ $<values-variable-name>.made ~ ', aggfunc = "sum" )';
 		} else {
-			make 'obj = obj.crosstab( index = obj.' ~ $<rows-variable-name>.made ~ ', columns = obj.' ~ $<columns-variable-name>.made ~ ' )';
+			make 'obj = pandas.crosstab( index = obj.' ~ $<rows-variable-name>.made ~ ', columns = obj.' ~ $<columns-variable-name>.made ~ ' )';
 		}
 	}
 	method rows-variable-name($/) { make $<variable-name>.made; }
