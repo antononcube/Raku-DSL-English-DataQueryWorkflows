@@ -1,7 +1,7 @@
 =begin comment
 #==============================================================================
 #
-#   pandas actions in Raku (Perl 6)
+#   Data Query Workflows Python-pandas actions in Raku (Perl 6)
 #   Copyright (C) 2020  Anton Antonov
 #
 #   This program is free software: you can redistribute it and/or modify
@@ -30,65 +30,218 @@
 
 use v6;
 use DSL::English::DataQueryWorkflows::Grammar;
+use DSL::English::DataQueryWorkflows::Actions::Python::Predicate;
 
 unit module DSL::English::DataQueryWorkflows::Actions::Python::pandas;
 
-class DSL::English::DataQueryWorkflows::Actions::Python::pandas {
+class DSL::English::DataQueryWorkflows::Actions::Python::pandas
+        is DSL::English::DataQueryWorkflows::Actions::Python::Predicate {
 
-  method TOP($/) { make $/.values[0].made; }
+	method TOP($/) { make $/.values[0].made; }
 
-  # General
-  method dataset-name($/) { make $/.values[0].made; }
-  method variable-name($/) { make $/.Str; }
-  method list-separator($/) { make ','; }
-  method variable-names-list($/) { make $<variable-name>>>.made.join(', '); }
-  method integer-value($/) { make $/.Str; }
-  method number-value($/) { make $/.Str; }
-  method wl-expr($/) { make $/.Str; }
+    # Overriding Predicate::predicate-simple -- wrapping the lhs variable specs with 'obj[...]'.
+	method predicate-simple($/) {
+		if $<predicate-relation>.made eq '%!in%' {
+			make '!( obj[' ~ $<lhs>.made ~ '] %in% ' ~ $<rhs>.made ~ ')';
+		} elsif $<predicate-relation>.made eq 'like' {
+			make 'grepl( pattern = ' ~ $<rhs>.made ~ ', x = obj$' ~ $<lhs>.made ~ ')';
+		} else {
+			make 'obj[' ~ $<lhs>.made ~ '] ' ~ $<predicate-relation>.made ~ ' ' ~ $<rhs>.made;
+		}
+	}
 
-  # Trivial
-  method trivial-parameter($/) { make $/.values[0].made; }
-  method trivial-parameter-none($/) { make 'None'; }
-  method trivial-parameter-empty($/) { make '[]'; }
-  method trivial-parameter-automatic($/) { make 'None'; }
-  method trivial-parameter-false($/) { make 'false'; }
-  method trivial-parameter-true($/) { make 'true'; }
+	# General
+	method dataset-name($/) { make $/.Str; }
+	method variable-name($/) { make $/.Str; }
+	method list-separator($/) { make ','; }
+	method variable-names-list($/) { make $<variable-name>>>.made.join(', '); }
+	method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made.join(', '); }
+	method mixed-quoted-variable-names-list($/) { make $<mixed-quoted-variable-name>>>.made.join(', '); }
+	method integer-value($/) { make $/.Str; }
+	method number-value($/) { make $/.Str; }
+	method wl-expr($/) { make $/.Str.substr(1,*-1); }
+	method quoted-variable-name($/) { make $/.values[0].made; }
+	method mixed-quoted-variable-name($/) { make $/.values[0].made; }
+	method single-quoted-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
+	method double-quoted-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
 
-  # Load data
-  method data-load-command($/) { make $/.values[0].made; }
-  method load-data-table($/) { make 'data(' ~ $<data-location-spec>.made ~ ')'; }
-  method data-location-spec($/) { make '\'' ~ $/.Str ~ '\''; }
-  method use-data-table($/) { make $<variable-name>.made; }
+	# Trivial
+	method trivial-parameter($/) { make $/.values[0].made; }
+	method trivial-parameter-none($/) { make 'None'; }
+	method trivial-parameter-empty($/) { make '[]'; }
+	method trivial-parameter-automatic($/) { make 'None'; }
+	method trivial-parameter-false($/) { make 'False'; }
+	method trivial-parameter-true($/) { make 'True'; }
 
-  # Select command
-  method select-command($/) { make 'select(' ~ $<variable-names-list>.made ~ ')'; }
+	# Load data
+	method data-load-command($/) { make $/.values[0].made; }
+	method load-data-table($/) { make '{ data(' ~ $<data-location-spec>.made ~ '); obj =' ~ $<data-location-spec>.made ~ ' }'; }
+	method data-location-spec($/) { make '\'' ~ $/.Str ~ '\''; }
+	method use-data-table($/) { make 'obj = ' ~ $<variable-name>.made; }
 
-  # Filter commands
-  method filter-command($/) { make 'filter(' ~ $<filter-spec>.made ~ ')'; }
-  method filter-spec($/) { make $<predicates-list>.made; }
-  method predicate($/) { make $/>>.made.join(' '); }
-  method predicate-symbol($/) { make $/.Str; }
-  method predicate-value($/) { make $/.values[0].made; }
+	# Distinct command
+	method distinct-command($/) { make $/.values[0].made; }
+	method distinct-simple-command($/) { make 'obj = obj.drop_duplicates()'; }
 
-  # Mutate command
-  method mutate-command($/) { make 'mutate(' ~ $<assign-pairs-list>.made ~ ')'; }
-  method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
-  method assign-pair($/) { make $<variable-name>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
-  method assign-pair-rhs($/) { make $/.values[0].made; }
+	# Missing treatment command
+	method missing-treatment-command($/) { make $/.values[0].made; }
+	method drop-incomplete-cases-command($/) { make 'obj = na_omit(obj)'; }
+	method replace-missing-command($/) { make 'obj = obj.replace( numpy.nan,' ~ $<replace-missing-rhs>.made ; }
 
-  # Group command
-  method group-command($/) { make 'group_by(' ~ $<variable-names-list>.made ~ ')'; }
+    # Select command
+	method select-command($/) { make $/.values[0].made; }
+	method select-plain-variables($/) { make 'obj = obj[[' ~ map( {'"' ~ $_ ~ '"' }, $<variable-names-list>.made ).join(', ') ~ ']]'; }
+	method select-mixed-quoted-variables($/) { make 'obj = obj[[' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ']]'; }
 
-  # Arrange command
-  method arrange-command($/) { make $/.values[0].made; }
-  method arrange-command-simple($/) { make $<variable-names-list>.made; }
-  method arrange-command-ascending($/) { make 'arrange(' ~ $<arrange-command-simple>.made ~ ')'; }
-  method arrange-command-descending($/) { make 'arrange(desc(' ~ $<arrange-command-simple>.made ~ '))'; }
+    # Filter commands
+	method filter-command($/) { make 'obj = obj[' ~ $<filter-spec>.made ~ ']'; }
+	method filter-spec($/) { make $<predicates-list>.made; }
 
-  # Statistics command
-  method statistics-command($/) { make $/.values[0].made; }
-  method count-command($/) { make 'count()'; }
-  method summarize-data($/) { make 'summary()'; }
-  method glimpse-data($/) { make 'glimpse()'; }
-  method summarize-all-command($/) { make 'summarise_all(mean)'; }
+    # Mutate command
+	method mutate-command($/) { make $<assign-pairs-list>.made; }
+	method assign-pairs-list($/) { make 'obj = obj.assign( {' ~ $<assign-pair>>>.made.join(', ') ~ ' } )'; }
+	method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+	method assign-pair-lhs($/) { make $/.values[0].made; }
+	method assign-pair-rhs($/) { make $/.values[0].made; }
+
+    # Group command
+	method group-command($/) { make 'obj = obj ( data = obj, ' ~ $<variable-names-list>.made ~ ')'; }
+
+    # Ungroup command
+	method ungroup-command($/) { make $/.values[0].made; }
+	method ungroup-simple-command($/) { make 'print("Ungrouping is not implemented; there is no ungroup operation in Python-pandas.")'; }
+
+    # Arrange command
+	method arrange-command($/) { make $/.values[0].made; }
+	method arrange-simple-spec($/) { make '[' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ']'; }
+	method arrange-command-ascending($/) { make 'obj = obj.sort_values( ' ~ $<arrange-simple-spec>.made ~ ' )'; }
+	method arrange-command-descending($/) { make 'obj = obj.sort_values( ' ~ $<arrange-simple-spec>.made ~ ', ascending = False )'; }
+
+    # Rename columns command
+    method rename-columns-command($/) { make $/.values[0].made; }
+	method rename-columns-simple($/) {
+        # I am not very comfortable with splitting the made string here, but it works.
+        # Maybe it is better to no not join the elements in <variable-names-list>.
+        # Note that here with subst we assume no single quotes are in <mixed-quoted-variable-names-list>.made .
+        my @currentNames = $<current>.made.subst(:g, '"', '').split(', ');
+        my @newNames = $<new>.made.subst(:g, '"', '').split(', ');
+
+        if @currentNames.elems != @newNames.elems {
+            note 'Same number of current and new column names are expected for column renaming.';
+            make 'obj';
+        } else {
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $n ~ ' : ' ~ $c };
+            make 'obj = obj.rename( columns = { ' ~ $pairs.join(', ') ~ ' } )';
+        }
+    }
+
+    # Drop columns command
+    method drop-columns-command($/) { make $/.values[0].made; }
+    method drop-columns-simple($/) {
+        my @todrop = $<todrop>.made.split(', ');
+        make 'obj = obj.drop( [' ~ $<todrop>.made.join(', ') ~ '] )';
+    }
+
+    # Statistics command
+	method statistics-command($/) { make $/.values[0].made; }
+	method count-command($/) { make 'tidyverse::count()'; }
+	method summarize-data($/) { make 'print(obj.describe())'; }
+	method glimpse-data($/) { make 'print(obj.head())'; }
+	method summarize-all-command($/) { make 'print(obj.describe())'; }
+
+    # Join command
+	method join-command($/) { make $/.values[0].made; }
+
+	method join-by-spec($/) { make '[' ~ $/.values[0].made ~ ']'; }
+
+	method full-join-spec($/)  {
+		if $<join-by-spec> {
+			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ', how = "full" )';
+		} else {
+			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', how = "full" )';
+		}
+	}
+
+	method inner-join-spec($/)  {
+		if $<join-by-spec> {
+			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ', how = "inner" )';
+		} else {
+			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', how = "inner" )';
+		}
+	}
+
+	method left-join-spec($/)  {
+		if $<join-by-spec> {
+			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ', how = "left" )';
+		} else {
+			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', how = "left" )';
+		}
+	}
+
+	method right-join-spec($/)  {
+		if $<join-by-spec> {
+			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ', how = "right" )';
+		} else {
+			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', how = "right" )';
+		}
+	}
+
+	method semi-join-spec($/)  {
+		if $<join-by-spec> {
+			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ', how = "semi" )';
+		} else {
+			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', how = "semi" )';
+		}
+	}
+
+    # Cross tabulate command
+	method cross-tabulation-command($/) { make $/.values[0].made; }
+	method cross-tabulate-command($/) { $<cross-tabulation-formula>.made }
+	method contingency-matrix-command($/) { $<cross-tabulation-formula>.made }
+	method cross-tabulation-formula($/) {
+		if $<values-variable-name> {
+			make 'obj = obj.crosstab( index = obj.' ~ $<rows-variable-name>.made ~ ', columns = obj.' ~ $<columns-variable-name>.made ~ ', values = obj.' ~ $<values-variable-name>.made ~ ', aggfunc = "sum" )';
+		} else {
+			make 'obj = obj.crosstab( index = obj.' ~ $<rows-variable-name>.made ~ ', columns = obj.' ~ $<columns-variable-name>.made ~ ' )';
+		}
+	}
+	method rows-variable-name($/) { make $<variable-name>.made; }
+	method columns-variable-name($/) { make $<variable-name>.made; }
+	method values-variable-name($/) { make $<variable-name>.made; }
+
+    # Reshape command
+    method reshape-command($/) { make $/.values[0].made; }
+
+    # Pivot longer command
+    method pivot-longer-command($/) { make 'obj = reshape( data = obj, ' ~ $<pivot-longer-arguments-list>.made ~ ', direction = "long" )'; }
+    method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
+    method pivot-longer-argument($/) { make $/.values[0].made; }
+
+    method pivot-longer-columns-spec($/) { make 'varying = c( ' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ' )'; }
+
+    method pivot-longer-variable-column-spec($/) { make 'timevar = ' ~ $<quoted-variable-name>.made; }
+
+    method pivot-longer-value-column-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
+
+    # Pivot wide command
+    method pivot-wider-command($/) { make 'obj = reshape( data = obj, ' ~ $<pivot-wider-arguments-list>.made ~ ' , direction = "wide" )'; }
+    method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
+    method pivot-wider-argument($/) { make $/.values[0].made; }
+
+    method pivot-wider-id-columns-spec($/) { make 'idvar = c( ' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ' )'; }
+
+    method pivot-wider-variable-column-spec($/) { make 'timevar = ' ~ $<quoted-variable-name>.made; }
+
+    method pivot-wider-value-column-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
+
+    # Pipeline command
+    method pipeline-command($/) { make $/.values[0].made; }
+    method take-pipeline-value($/) { make 'obj'; }
+    method echo-pipeline-value($/) { make 'print(obj)'; }
+
+    method echo-command($/) { make 'print( ' ~ $<echo-message-spec>.made ~ ' )'; }
+    method echo-message-spec($/) { make $/.values[0].made; }
+    method echo-words-list($/) { make '"' ~ $<variable-name>>>.made.join(' ') ~ '"'; }
+    method echo-variable($/) { make $/.Str; }
+    method echo-text($/) { make $/.Str; }
 }
