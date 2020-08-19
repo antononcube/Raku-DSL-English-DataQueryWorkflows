@@ -90,7 +90,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
     # Select command
 	method select-command($/) { make $/.values[0].made; }
-	method select-plain-variables($/) { make 'obj = obj[[' ~ map( {'"' ~ $_ ~ '"' }, $<variable-names-list>.made ).join(', ') ~ ']]'; }
+	method select-plain-variables($/) { make 'obj = obj[[' ~ map( {'"' ~ $_ ~ '"' }, $<variable-names-list>.made.split(', ') ).join(', ') ~ ']]'; }
 	method select-mixed-quoted-variables($/) { make 'obj = obj[[' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ']]'; }
 
     # Filter commands
@@ -99,7 +99,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
     # Mutate command
 	method mutate-command($/) { make $<assign-pairs-list>.made; }
-	method assign-pairs-list($/) { make 'obj = obj.assign( {' ~ $<assign-pair>>>.made.join(', ') ~ ' } )'; }
+	method assign-pairs-list($/) { make 'obj = obj.assign( ' ~ $<assign-pair>>>.made.join(', ') ~ ' )'; }
 	method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
 	method assign-pair-lhs($/) { make $/.values[0].made; }
 	method assign-pair-rhs($/) { make $/.values[0].made; }
