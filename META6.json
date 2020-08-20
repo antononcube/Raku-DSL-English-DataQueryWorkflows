@@ -33,5 +33,5 @@
     "tags": [
       "data query", "data", "tidyverse", "sql", "pandas", "dataset", "query", "parser", "interpreter", "monad", "workflow", "pipeline"
     ],
-    "source-url" : "https://github.com/antononcube/DSL-English-DataQueryWorkflows.git"
+    "source-url" : "https://github.com/antononcube/Raku-DSL-English-DataQueryWorkflows.git"
 }
