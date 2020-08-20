@@ -1,7 +1,7 @@
 use v6;
 
-#use DSL::English::DataQueryWorkflows::Grammar::FuzzyMatch;
 use DSL::Shared::Roles::English::CommonParts;
+use DSL::Shared::Utilities::FuzzyMatching;
 
 # Data query specific phrases
 role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
