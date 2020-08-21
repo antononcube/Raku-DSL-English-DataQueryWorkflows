@@ -43,15 +43,16 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	method dataset-name($/) { make $/.Str; }
 	method variable-name($/) { make $/.Str; }
 	method list-separator($/) { make ','; }
-	# method variable-names-list($/) { make $<variable-name>>>.made.join(', '); }
 	method variable-names-list($/) { make $<variable-name>>>.made.join(', '); }
 	method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made.join(', '); }
+	method mixed-quoted-variable-names-list($/) { make $<mixed-quoted-variable-name>>>.made.join(', '); }
 	method integer-value($/) { make $/.Str; }
 	method number-value($/) { make $/.Str; }
 	method wl-expr($/) { make $/.Str.substr(1,*-1); }
-	method quoted-variable-name($/) {  make $/.values[0].made; }
-	method single-quoted-variable-name($/) { make '\"' ~ $<variable-name>.made ~ '\"'; }
-	method double-quoted-variable-name($/) { make '\"' ~ $<variable-name>.made ~ '\"'; }
+	method quoted-variable-name($/) { make $/.values[0].made; }
+	method mixed-quoted-variable-name($/) { make $/.values[0].made; }
+	method single-quoted-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
+	method double-quoted-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
 
 	# Trivial
 	method trivial-parameter($/) { make $/.values[0].made; }
@@ -67,8 +68,19 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	method data-location-spec($/) { make '\"' ~ $/.Str ~ '\"'; }
 	method use-data-table($/) { make 'utilizar la tabla: ' ~ $<variable-name>.made; }
 
+	# Distinct command
+	method distinct-command($/) { make $/.values[0].made; }
+	method distinct-simple-command($/) { make 'filas únicas'; }
+
+	# Missing treatment command
+	method missing-treatment-command($/) { make $/.values[0].made; }
+	method drop-incomplete-cases-command($/) { make 'eliminar las filas incompletas'; }
+	method replace-missing-command($/) { make 'reemplazar los valores perdidos con ' ~ $<replace-missing-rhs>.made; }
+
 	# Select command
-	method select-command($/) { make 'escoger columnas: ' ~ $<variable-names-list>.made; }
+	method select-command($/) { make 'escoger columnas: ' ~ $/.values[0].made; }
+	method select-plain-variables($/) { make $<variable-names-list>.made; }
+	method select-mixed-quoted-variables($/) { make $<mixed-quoted-variable-names-list>.made; }
 
 	# Filter commands
 	method filter-command($/) { make 'filtrar con la condicion: ' ~ $<filter-spec>.made; }
@@ -90,7 +102,7 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 
 	# Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
-	method arrange-simple-spec($/) { make $<variable-names-list>.made; }
+	method arrange-simple-spec($/) { make $<mixed-quoted-variable-names-list>.made; }
 	method arrange-command-ascending($/) { make 'ordenar con columnas: ' ~ $<arrange-simple-spec>.made; }
 	method arrange-command-descending($/) { make 'ordenar en orden descendente con columnas: ' ~ $<arrange-simple-spec>.made; }
 
@@ -160,6 +172,31 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	method rows-variable-name($/) { make $<variable-name>.made; }
 	method columns-variable-name($/) { make $<variable-name>.made; }
 	method values-variable-name($/) { make $<variable-name>.made; }
+
+	# Reshape command
+    method reshape-command($/) { make $/.values[0].made; }
+
+	# Pivot longer command
+    method pivot-longer-command($/) { make 'convertir a la forma estrecha ' ~ $<pivot-longer-arguments-list>.made; }
+    method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
+    method pivot-longer-argument($/) { make $/.values[0].made; }
+
+    method pivot-longer-columns-spec($/) { make 'columnas ' ~ $<mixed-quoted-variable-names-list>.made; }
+
+    method pivot-longer-variable-column-spec($/) { make 'colonna variabile ' ~ $<quoted-variable-name>.made; }
+
+    method pivot-longer-value-column-spec($/) { make 'colonna dei valori ' ~ $<quoted-variable-name>.made; }
+
+    # Pivot wider command
+    method pivot-wider-command($/) { make 'convertire in forma ampia ' ~ $<pivot-wider-arguments-list>.made; }
+    method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
+    method pivot-wider-argument($/) { make $/.values[0].made; }
+
+    method pivot-wider-id-columns-spec($/) { make 'colonne identificative ' ~ $<mixed-quoted-variable-names-list>.made ~ ' )'; }
+
+    method pivot-wider-variable-column-spec($/) { make 'colonna variabile ' ~ $<quoted-variable-name>.made; }
+
+    method pivot-wider-value-column-spec($/) { make 'colonna dei valori ' ~ $<quoted-variable-name>.made; }
 
     # Pipeline command
     method pipeline-command($/) { make $/.values[0].made; }

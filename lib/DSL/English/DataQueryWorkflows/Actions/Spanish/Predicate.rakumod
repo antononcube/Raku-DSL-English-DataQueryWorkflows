@@ -18,11 +18,11 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Predicate {
 
   method predicate-simple($/) {
     if $<predicate-relation>.made eq '!in' {
-      make '' ~ $<lhs>.made ~ ' no pertenece al ' ~ $<rhs>.made ~ ')';
+      make $<lhs>.made ~ ' no pertenece al ' ~ $<rhs>.made;
     } elsif $<predicate-relation>.made eq 'like' {
-      make $<rhs>.made ~ ' se asemeja ' ~ $<lhs>.made ~ ')';
+      make $<rhs>.made ~ ' se asemeja ' ~ $<lhs>.made;
     } else {
-      make 'obj.' ~ $<lhs>.made ~ ' ' ~ $<predicate-relation>.made ~ ' ' ~ $<rhs>.made;
+      make $<lhs>.made ~ ' ' ~ $<predicate-relation>.made ~ ' ' ~ $<rhs>.made;
     }
   }
   method logical-connective($/) { make $/.values[0].made; }
