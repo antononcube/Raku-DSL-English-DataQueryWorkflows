@@ -106,6 +106,18 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	method arrange-command-ascending($/) { make 'ordenar con columnas: ' ~ $<arrange-simple-spec>.made; }
 	method arrange-command-descending($/) { make 'ordenar en orden descendente con columnas: ' ~ $<arrange-simple-spec>.made; }
 
+	# Rename columns command
+    method rename-columns-command($/) { make $/.values[0].made; }
+    method rename-columns-simple($/) {
+        make 'renombrar las columnas ' ~ $<current>.made ~ ' como ' ~ $<new>.made;
+    }
+
+    # Drop columns command
+    method drop-columns-command($/) { make $/.values[0].made; }
+    method drop-columns-simple($/) {
+        make 'quitar las columnas ' ~ $<todrop>.made;
+    }
+
 	# Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
 	method count-command($/) { make 'encontrar el tamaño de los subgrupos'; }
