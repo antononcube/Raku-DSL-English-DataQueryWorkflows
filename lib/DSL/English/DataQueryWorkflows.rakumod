@@ -30,7 +30,7 @@ use DSL::English::DataQueryWorkflows::Actions::Spanish::Standard;
 #-----------------------------------------------------------
 
 #my %targetToAction := {
-#    "tidyverse"         => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
+#    'tidyverse'         => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
 #    "R-tidyverse"       => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
 #    "R"             => DSL::English::DataQueryWorkflows::Actions::R::base,
 #    "R-base"        => DSL::English::DataQueryWorkflows::Actions::R::base,
@@ -79,13 +79,13 @@ sub has-semicolon (Str $word) {
 }
 
 #-----------------------------------------------------------
-proto ToDataQueryWorkflowCode(Str $command, Str $target = "tidyverse" ) is export {*}
+proto ToDataQueryWorkflowCode(Str $command, Str $target = 'tidyverse' ) is export {*}
 
-multi ToDataQueryWorkflowCode ( Str $command where not has-semicolon($command), Str $target = "tidyverse" ) {
+multi ToDataQueryWorkflowCode ( Str $command where not has-semicolon($command), Str $target = 'tidyverse' ) {
 
     die 'Unknown target.' unless %targetToAction{$target}:exists;
 
-    my $match = DSL::English::DataQueryWorkflows::Grammar.parse($command, actions => %targetToAction{$target} );
+    my $match = DSL::English::DataQueryWorkflows::Grammar.parse($command.trim, actions => %targetToAction{$target} );
     die 'Cannot parse the given command.' unless $match;
     return $match.made;
 }
