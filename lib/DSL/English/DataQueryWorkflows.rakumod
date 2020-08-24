@@ -25,6 +25,7 @@ use DSL::English::DataQueryWorkflows::Actions::SQL::Standard;
 use DSL::English::DataQueryWorkflows::Actions::WL::System;
 
 use DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard;
+use DSL::English::DataQueryWorkflows::Actions::Korean::Standard;
 use DSL::English::DataQueryWorkflows::Actions::Spanish::Standard;
 
 #-----------------------------------------------------------
@@ -54,6 +55,7 @@ my %targetToAction =
     "WL"               => DSL::English::DataQueryWorkflows::Actions::WL::System,
     "WL-System"        => DSL::English::DataQueryWorkflows::Actions::WL::System,
     "Bulgarian"        => DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard,
+    "Korean"           => DSL::English::DataQueryWorkflows::Actions::Korean::Standard,
     "Spanish"          => DSL::English::DataQueryWorkflows::Actions::Spanish::Standard;
 
 my %targetToSeparator{Str} =
@@ -70,6 +72,7 @@ my %targetToSeparator{Str} =
     "WL"               => ";\n",
     "WL-System"        => ";\n",
     "Bulgarian"        => "\n",
+    "Korean"           => "\n",
     "Spanish"          => "\n";
 
 
