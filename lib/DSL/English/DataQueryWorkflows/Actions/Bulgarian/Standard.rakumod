@@ -75,7 +75,7 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	# Missing treatment command
 	method missing-treatment-command($/) { make $/.values[0].made; }
 	method drop-incomplete-cases-command($/) { make 'премахни непълни редове'; }
-	method replace-missing-command($/) { make 'замести липсвашти стойности с ' ~ $<replace-missing-rhs>.made; }
+	method replace-missing-command($/) { make 'замести липсващи стойности с ' ~ $<replace-missing-rhs>.made; }
 
 	# Select command
 	method select-command($/) { make 'избери колоните: ' ~ $/.values[0].made; }
