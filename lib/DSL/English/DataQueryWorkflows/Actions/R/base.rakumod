@@ -105,7 +105,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method assign-pair-rhs($/) { make $/.values[0].made; }
 
     # Group command
-	method group-command($/) { make 'obj <- by( data = obj, ' ~ $<variable-names-list>.made ~ ')'; }
+	method group-command($/) { make 'obj <- by( data = obj, ' ~ $<variable-names-list>.made.join(', ') ~ ')'; }
 
     # Ungroup command
 	method ungroup-command($/) { make $/.values[0].made; }
@@ -145,7 +145,15 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method count-command($/) { make 'tidyverse::count()'; }
 	method summarize-data($/) { make 'print(summary(obj))'; }
 	method glimpse-data($/) { make 'head(obj)'; }
-	method summarize-all-command($/) { make 'summary(obj)'; }
+	method summarize-all-command($/) {
+		if $<summarize-all-funcs-spec> {
+			note 'Summarize-all with functions is not implemented for R-base.';
+			make 'summary(obj)';
+		} else {
+			make 'summary(obj)';
+		}
+	}
+	method summarize-all-funcs-spec($/) { make 'c(' ~ $<variable-names-list>.made ~ ')'; }
 
     # Join command
 	method join-command($/) { make $/.values[0].made; }
@@ -198,9 +206,9 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method contingency-matrix-command($/) { $<cross-tabulation-formula>.made }
 	method cross-tabulation-formula($/) {
 		if $<values-variable-name> {
-			make 'obj <- xtabs( formula = ' ~ $<values-variable-name>.made ~ ' ~ ' ~ $<rows-variable-name>.made ~ ' + ' ~ $<columns-variable-name>.made ~ ', data = x )';
+			make 'obj <- xtabs( formula = ' ~ $<values-variable-name>.made ~ ' ~ ' ~ $<rows-variable-name>.made ~ ' + ' ~ $<columns-variable-name>.made ~ ', data = obj )';
 		} else {
-			make 'obj <- xtabs( formula = ~ ' ~ $<rows-variable-name>.made ~ ' + ' ~ $<columns-variable-name>.made ~ ', data = x )';
+			make 'obj <- xtabs( formula = ~ ' ~ $<rows-variable-name>.made ~ ' + ' ~ $<columns-variable-name>.made ~ ', data = obj )';
 		}
 	}
 	method rows-variable-name($/) { make $<variable-name>.made; }

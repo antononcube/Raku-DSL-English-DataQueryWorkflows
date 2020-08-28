@@ -129,11 +129,12 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule drop-columns-simple { <.delete-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]? <todrop=.mixed-quoted-variable-names-list> }
 
     # Statistics command
-    rule statistics-command { <count-command> | <glimpse-data> | <summarize-data> | <summarize-all-command> }
+    rule statistics-command { <count-command> | <glimpse-data> | <summarize-all-command> | <summarize-data> }
     rule count-command { <compute-directive> <.the-determiner>? [ <count-verb> | <counts-noun> ] | <count-verb> }
     rule glimpse-data { <.display-directive>? <.a-determiner>? <.glimpse-verb> <.at-preposition>? <.the-determiner>? <data>  }
     rule summarize-data { [ <summarize-verb> | <summarise-verb> ] <data> | <display-directive> <data>? <summary> }
-    rule summarize-all-command { [ <summarize-verb> | <summarise-verb> ] <them-pronoun>? <all-determiner>? }
+    rule summarize-all-command { [ <.summarize-verb> | <.summarise-verb> ] <.them-pronoun>? <.all-determiner>? <.data>? [ <.with-preposition> <.functions>? <summarize-all-funcs-spec> ] }
+    rule summarize-all-funcs-spec { <variable-names-list> }
 
     # Join command
     rule join-command { <inner-join-spec> | <left-join-spec> | <right-join-spec> | <semi-join-spec> | <full-join-spec> }

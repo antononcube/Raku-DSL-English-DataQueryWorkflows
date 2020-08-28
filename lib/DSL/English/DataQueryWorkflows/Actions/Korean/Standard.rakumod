@@ -123,7 +123,14 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 	method count-command($/) { make '하위 그룹의 크기 찾기'; }
 	method summarize-data($/) { make '목적을 요약하다'; }
 	method glimpse-data($/) { make '물체를 엿볼 수있다'; }
-	method summarize-all-command($/) { make '모든 열의 평균값 찾기'; }
+	method summarize-all-command($/) {
+		if $<summarize-all-funcs-spec> {
+			make '모든 열에 ' ~ $<summarize-all-funcs-spec>.made ~ ' 함수 적용';
+		} else {
+			make '모든 열의 평균값 찾기';
+		}
+	}
+	method summarize-all-funcs-spec($/) { make $<variable-names-list>.made; }
 
 	# Join command
 	method join-command($/) { make $/.values[0].made; }

@@ -129,7 +129,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
     method drop-columns-simple($/) {
         # Note that here we assume no single quotes are in <mixed-quoted-variable-names-list>.made .
         my @todrop = $<todrop>.made.subst(:g, '"', '').split(', ');
-        make 'select!( ' ~ map( { 'Not[' ~ $_ ~ ']' }, @todrop ).join(', ') ~ ' )';
+        make 'select!( obj, ' ~ map( { 'Not[' ~ $_ ~ ']' }, @todrop ).join(', ') ~ ' )';
     }
 
 	# Statistics command
@@ -137,7 +137,16 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	method count-command($/) { make 'obj = combine(obj, nrow)'; }
 	method summarize-data($/) { make 'describe(obj)'; }
 	method glimpse-data($/) { make 'first(obj, 6)'; }
-	method summarize-all-command($/) { make 'combine(df, names(df) .=> mean )'; }
+	method summarize-all-command($/) {
+		if $<summarize-all-funcs-spec> {
+			my $funcs = $<summarize-all-funcs-spec>.made.split(', ');
+			make 'combine( obj, ' ~ map( { 'names(obj) .=> ' ~ $_ } , $funcs ).join(', ') ~ ' )';
+		} else {
+			make 'combine( obj, names(obj) .=> mean )';
+		}
+	}
+	method summarize-all-funcs-spec($/) { make $<variable-names-list>.made.subst(:g, ':', ''); }
+
 
 	# Join command
 	method join-command($/) { make $/.values[0].made; }

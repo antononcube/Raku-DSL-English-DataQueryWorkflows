@@ -147,7 +147,15 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	method count-command($/) { make 'tidyverse::count()'; }
 	method summarize-data($/) { make 'print(obj.describe())'; }
 	method glimpse-data($/) { make 'print(obj.head())'; }
-	method summarize-all-command($/) { make 'print(obj.describe())'; }
+	method summarize-all-command($/) {
+		if $<summarize-all-funcs-spec> {
+			note 'Summarize-all with functions is not implemented for Python-pandas.';
+			make 'print(obj.describe())';
+		} else {
+			make 'print(obj.describe())';
+		}
+	}
+	method summarize-all-funcs-spec($/) { make '[' ~ $<variable-names-list>.made ~ ']'; }
 
     # Join command
 	method join-command($/) { make $/.values[0].made; }

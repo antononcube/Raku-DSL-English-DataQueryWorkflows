@@ -123,7 +123,14 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	method count-command($/) { make 'encontrar el tamaño de los subgrupos'; }
 	method summarize-data($/) { make 'describe el objeto'; }
 	method glimpse-data($/) { make 'vislumbrar el objeto'; }
-	method summarize-all-command($/) { make 'encontrar los promedios de todas las columnas'; }
+	method summarize-all-command($/) {
+		if $<summarize-all-funcs-spec> {
+			make 'aplicar sobre todas las columnas las funciones: ' ~ $<summarize-all-funcs-spec>.made;
+		} else {
+			make 'encontrar los promedios de todas las columnas';
+		}
+	}
+	method summarize-all-funcs-spec($/) { make $<variable-names-list>.made; }
 
 	# Join command
 	method join-command($/) { make $/.values[0].made; }

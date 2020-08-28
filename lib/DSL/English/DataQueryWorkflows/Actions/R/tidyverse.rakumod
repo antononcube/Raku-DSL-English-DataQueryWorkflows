@@ -147,7 +147,14 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	method count-command($/) { make 'dplyr::count()'; }
 	method summarize-data($/) { make '( function(x) { print(summary(x)); x } )'; }
 	method glimpse-data($/) { make 'dplyr::glimpse()'; }
-	method summarize-all-command($/) { make 'dplyr::summarise_all(mean)'; }
+	method summarize-all-command($/) {
+		if $<summarize-all-funcs-spec> {
+			make 'dplyr::summarise_all( .funs = ' ~ $<summarize-all-funcs-spec>.made ~ ' )';
+		} else {
+			make 'dplyr::summarise_all(mean)';
+		}
+	}
+	method summarize-all-funcs-spec($/) { make 'c(' ~ $<variable-names-list>.made ~ ')'; }
 	
 	# Join command
 	method join-command($/) { make $/.values[0].made; }
