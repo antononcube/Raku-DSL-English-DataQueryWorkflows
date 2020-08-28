@@ -41,7 +41,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token select-verb { 'select' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'select') }> }
     token semi-adjective { 'semi' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'semi') }> }
     token sort-verb { 'sort' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'sort') }> }
-    token summarise-verb { 'summarise' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'summarise') }> }
+    token summarise-verb { 'summarise' }
     token summarize-verb { 'summarize' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'summarize') }> }
     token tabulate-verb { 'tabulate' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'tabulate') }> }
     token ungroup-verb { 'ungroup' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'ungroup') }> }
