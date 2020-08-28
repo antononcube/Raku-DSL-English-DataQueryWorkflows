@@ -154,7 +154,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 			make 'dplyr::summarise_all(mean)';
 		}
 	}
-	method summarize-all-funcs-spec($/) { make 'c(' ~ $<variable-names-list>.made ~ ')'; }
+	method summarize-all-funcs-spec($/) { make 'c(' ~ map( { $_ ~ ' = ' ~ $_ }, $<variable-names-list>.made.split(', ') ).join(', ') ~ ')'; }
 	
 	# Join command
 	method join-command($/) { make $/.values[0].made; }
