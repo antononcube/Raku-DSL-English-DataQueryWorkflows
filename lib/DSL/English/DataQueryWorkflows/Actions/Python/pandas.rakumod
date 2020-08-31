@@ -206,11 +206,19 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	method cross-tabulation-command($/) { make $/.values[0].made; }
 	method cross-tabulate-command($/) { $<cross-tabulation-formula>.made }
 	method contingency-matrix-command($/) { $<cross-tabulation-formula>.made }
-	method cross-tabulation-formula($/) {
+	method cross-tabulation-formula($/) { make $/.values[0].made; }
+	method cross-tabulation-double-formula($/) {
 		if $<values-variable-name> {
 			make 'obj = pandas.crosstab( index = obj.' ~ $<rows-variable-name>.made ~ ', columns = obj.' ~ $<columns-variable-name>.made ~ ', values = obj.' ~ $<values-variable-name>.made ~ ', aggfunc = "sum" )';
 		} else {
 			make 'obj = pandas.crosstab( index = obj.' ~ $<rows-variable-name>.made ~ ', columns = obj.' ~ $<columns-variable-name>.made ~ ' )';
+		}
+	}
+	method cross-tabulation-single-formula($/) {
+		if $<values-variable-name> {
+			make 'obj = pandas.crosstab( index = obj.' ~ $<rows-variable-name>.made ~ ', values = obj.' ~ $<values-variable-name>.made ~ ', aggfunc = "sum" )';
+		} else {
+			make 'obj = pandas.crosstab( index = obj.' ~ $<rows-variable-name>.made ~ ' )';
 		}
 	}
 	method rows-variable-name($/) { make $<variable-name>.made; }

@@ -181,11 +181,19 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	method cross-tabulation-command($/) { make $/.values[0].made; }
 	method cross-tabulate-command($/) { $<cross-tabulation-formula>.made }
 	method contingency-matrix-command($/) { $<cross-tabulation-formula>.made }
-	method cross-tabulation-formula($/) {
+	method cross-tabulation-formula($/) { make $/.values[0].made; }
+	method cross-tabulation-double-formula($/) {
 		if $<values-variable-name> {
 			make 'hacer una tabla cruzada con filas de ' ~ $<rows-variable-name>.made ~ ', columnas de ' ~ $<columns-variable-name>.made ~ ' y valores de ' ~ $<values-variable-name>;
 		} else {
 			make 'hacer una tabla cruzada con filas de ' ~ $<rows-variable-name>.made ~ ', columnas de ' ~ $<columns-variable-name>.made;
+		}
+	}
+	method cross-tabulation-single-formula($/) {
+		if $<values-variable-name> {
+			make 'hacer una tabla cruzada con filas de ' ~ $<rows-variable-name>.made ~ ' y valores de ' ~ $<values-variable-name>;
+		} else {
+			make 'hacer una tabla cruzada con filas de ' ~ $<rows-variable-name>.made;
 		}
 	}
 	method rows-variable-name($/) { make $<variable-name>.made; }

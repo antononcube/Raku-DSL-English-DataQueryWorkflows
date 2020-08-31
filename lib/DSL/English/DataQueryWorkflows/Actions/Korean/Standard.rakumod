@@ -181,11 +181,19 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 	method cross-tabulation-command($/) { make $/.values[0].made; }
 	method cross-tabulate-command($/) { $<cross-tabulation-formula>.made }
 	method contingency-matrix-command($/) { $<cross-tabulation-formula>.made }
-	method cross-tabulation-formula($/) {
+	method cross-tabulation-formula($/) { make $/.values[0].made; }
+	method cross-tabulation-double-formula($/) {
 		if $<values-variable-name> {
 			make '행과 교차 표로 작성 ' ~ $<rows-variable-name>.made ~ ', 열 ' ~ $<columns-variable-name>.made ~ ' 및 값 ' ~ $<values-variable-name>;
 		} else {
 			make '행과 교차 표로 작성 ' ~ $<rows-variable-name>.made ~ ', 열 ' ~ $<columns-variable-name>.made;
+		}
+	}
+	method cross-tabulation-single-formula($/) {
+		if $<values-variable-name> {
+			make '행과 교차 표로 작성 ' ~ $<rows-variable-name>.made ~ ', 및 값 ' ~ $<values-variable-name>;
+		} else {
+			make '행과 교차 표로 작성 ' ~ $<rows-variable-name>.made;
 		}
 	}
 	method rows-variable-name($/) { make $<variable-name>.made; }

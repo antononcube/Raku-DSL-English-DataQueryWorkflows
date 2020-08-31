@@ -205,11 +205,19 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	method cross-tabulation-command($/) { make $/.values[0].made; }
 	method cross-tabulate-command($/) { $<cross-tabulation-formula>.made }
 	method contingency-matrix-command($/) { $<cross-tabulation-formula>.made }
-	method cross-tabulation-formula($/) {
+	method cross-tabulation-formula($/) { make $/.values[0].made; }
+	method cross-tabulation-double-formula($/) {
 		if $<values-variable-name> {
 			make '(function(x) as.data.frame(xtabs( formula = ' ~ $<values-variable-name>.made ~ ' ~ ' ~ $<rows-variable-name>.made ~ ' + ' ~ $<columns-variable-name>.made ~ ', data = x ), stringsAsFactors=FALSE ))';
 		} else {
 			make '(function(x) as.data.frame(xtabs( formula = ~ ' ~ $<rows-variable-name>.made ~ ' + ' ~ $<columns-variable-name>.made ~ ', data = x ), stringsAsFactors=FALSE ))';
+		}
+	}
+	method cross-tabulation-single-formula($/) {
+		if $<values-variable-name> {
+			make '(function(x) as.data.frame(xtabs( formula = ' ~ $<values-variable-name>.made ~ ' ~ ' ~ $<rows-variable-name>.made ~ ', data = x ), stringsAsFactors=FALSE ))';
+		} else {
+			make '(function(x) as.data.frame(xtabs( formula = ~ ' ~ $<rows-variable-name>.made ~ ', data = x ), stringsAsFactors=FALSE ))';
 		}
 	}
 	method rows-variable-name($/) { make $<variable-name>.made; }

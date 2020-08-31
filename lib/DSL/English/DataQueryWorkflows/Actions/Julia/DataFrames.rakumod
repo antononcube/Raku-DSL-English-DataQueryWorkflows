@@ -197,11 +197,19 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	method cross-tabulation-command($/) { make $/.values[0].made; }
 	method cross-tabulate-command($/) { $<cross-tabulation-formula>.made }
 	method contingency-matrix-command($/) { $<cross-tabulation-formula>.made }
-	method cross-tabulation-formula($/) {
+	method cross-tabulation-formula($/) { make $/.values[0].made; }
+	method cross-tabulation-double-formula($/) {
 		if $<values-variable-name> {
-			make 'obj = combine( x -> sum(x[:, :;' ~ $<values-variable-name> ~ ']), groupby( obj, [ :' ~ $<rows-variable-name>.made ~ ', :' ~ $<columns-variable-name>.made ~ '] ))';
+			make 'obj = combine( x -> sum(x[:, :' ~ $<values-variable-name> ~ ']), groupby( obj, [ :' ~ $<rows-variable-name>.made ~ ', :' ~ $<columns-variable-name>.made ~ '] ))';
 		} else {
 			make 'obj = combine( nrow, groupby( obj, [ :' ~ $<rows-variable-name>.made ~ ', :' ~ $<columns-variable-name>.made ~ '] ))';
+		}
+	}
+	method cross-tabulation-single-formula($/) {
+		if $<values-variable-name> {
+			make 'obj = combine( x -> sum(x[:, :' ~ $<values-variable-name> ~ ']), groupby( obj, [ :' ~ $<rows-variable-name>.made ~ ' ] ))';
+		} else {
+			make 'obj = combine( nrow, groupby( obj, [ :' ~ $<rows-variable-name>.made ~ ' ] ))';
 		}
 	}
 	method rows-variable-name($/) { make $<variable-name>.made; }

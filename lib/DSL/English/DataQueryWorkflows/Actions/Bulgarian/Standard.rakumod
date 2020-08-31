@@ -181,11 +181,19 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	method cross-tabulation-command($/) { make $/.values[0].made; }
 	method cross-tabulate-command($/) { $<cross-tabulation-formula>.made }
 	method contingency-matrix-command($/) { $<cross-tabulation-formula>.made }
-	method cross-tabulation-formula($/) {
+	method cross-tabulation-formula($/) { make $/.values[0].made; }
+	method cross-tabulation-double-formula($/) {
 		if $<values-variable-name> {
 			make 'направи кръстосана таблица с редове от ' ~ $<rows-variable-name>.made ~ ', колони от ' ~ $<columns-variable-name>.made ~ ' и стойности от ' ~ $<values-variable-name>;
 		} else {
 			make 'направи кръстосана таблица с редове от ' ~ $<rows-variable-name>.made ~ ', колони от ' ~ $<columns-variable-name>.made;
+		}
+	}
+	method cross-tabulation-single-formula($/) {
+		if $<values-variable-name> {
+			make 'направи кръстосана таблица с редове от ' ~ $<rows-variable-name>.made ~ ' и стойности от ' ~ $<values-variable-name>;
+		} else {
+			make 'направи кръстосана таблица с редове от ' ~ $<rows-variable-name>.made;
 		}
 	}
 	method rows-variable-name($/) { make $<variable-name>.made; }
