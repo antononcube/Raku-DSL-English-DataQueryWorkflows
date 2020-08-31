@@ -9,8 +9,8 @@ class DSL::English::DataQueryWorkflows::Actions::Python::Predicate {
   # Predicates
   method predicates-list($/) { make $<predicate>>>.made.join(', '); }
   method predicate($/) { make $/.values>>.made.join(' '); }
-  method predicate-sum($/) { make $<predicate-product>>>.made.join(' or '); }
-  method predicate-product($/) { make $<predicate-term>>>.made.join(' and '); }
+  method predicate-sum($/) { make $<predicate-product>>>.made.join(' | '); }
+  method predicate-product($/) { make $<predicate-term>>>.made.join(' & '); }
   method predicate-term($/) { make $/.values[0].made; }
   method predicate-group($/) { make '(' ~ $/<predicate-term>.made ~ ')'; }
 
@@ -26,8 +26,8 @@ class DSL::English::DataQueryWorkflows::Actions::Python::Predicate {
     }
   }
   method logical-connective($/) { make $/.values[0].made; }
-  method and-operator($/) { make 'and'; }
-  method or-operator($/) { make 'or'; }
+  method and-operator($/) { make '&'; }
+  method or-operator($/) { make '|'; }
   method predicate-symbol($/) { make $/.Str; }
   method predicate-value($/) { make $/.values[0].made; }
   method predicate-relation($/) { make $/.values[0].made; }
