@@ -207,16 +207,16 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method cross-tabulation-formula($/) { make $/.values[0].made; }
 	method cross-tabulation-double-formula($/) {
 		if $<values-variable-name> {
-			make 'obj <- xtabs( formula = ' ~ $<values-variable-name>.made ~ ' ~ ' ~ $<rows-variable-name>.made ~ ' + ' ~ $<columns-variable-name>.made ~ ', data = x ), stringsAsFactors=FALSE )';
+			make 'obj <- xtabs( formula = ' ~ $<values-variable-name>.made ~ ' ~ ' ~ $<rows-variable-name>.made ~ ' + ' ~ $<columns-variable-name>.made ~ ', data = obj )';
 		} else {
-			make 'obj <- xtabs( formula = ~ ' ~ $<rows-variable-name>.made ~ ' + ' ~ $<columns-variable-name>.made ~ ', data = x ), stringsAsFactors=FALSE )';
+			make 'obj <- xtabs( formula = ~ ' ~ $<rows-variable-name>.made ~ ' + ' ~ $<columns-variable-name>.made ~ ', data = obj )';
 		}
 	}
 	method cross-tabulation-single-formula($/) {
 		if $<values-variable-name> {
-			make 'obj <- xtabs( formula = ' ~ $<values-variable-name>.made ~ ' ~ ' ~ $<rows-variable-name>.made ~ ', data = x ), stringsAsFactors=FALSE )';
+			make 'obj <- xtabs( formula = ' ~ $<values-variable-name>.made ~ ' ~ ' ~ $<rows-variable-name>.made ~ ', data = obj )';
 		} else {
-			make 'obj <- xtabs( formula = ~ ' ~ $<rows-variable-name>.made ~ ', data = x ), stringsAsFactors=FALSE )';
+			make 'obj <- xtabs( formula = ~ ' ~ $<rows-variable-name>.made ~ ', data = obj )';
 		}
 	}
 	method rows-variable-name($/) { make $<variable-name>.made; }
