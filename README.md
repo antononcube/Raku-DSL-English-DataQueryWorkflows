@@ -58,6 +58,20 @@ Here is example code:
 Additional examples can be found in this file: 
 [DataQueryWorkflows-examples.raku](./examples/DataQueryWorkflows-examples.raku).
 
+## Testing
+
+There are three types of unit tests:
+
+1. for parsing abilities; see [example](./t/Basic-commands.t)
+
+2. for interpretation to correct expected code; see [example](./t/Basic-commands-R-tidyverse.t)
+
+3. for data transformation correctness; see [example](https://github.com/antononcube/R-packages/tree/master/DataQueryWorkflowsTests)
+
+The unit tests R-package \[AAp2\] can be used to test both R and Python translations and equivalence between them.
+
+A similar WL package can have unit tests for Julia, Python, R, and WL. (*Not implemented yet...*) 
+
 ## On naming of translation packages
 
 WL has a `System` context where usually the built-in functions reside. WL adepts know this, but not that much the rest.
@@ -82,4 +96,9 @@ A dedicated GitHub repository was made in order to make the installation with Ra
 \[AAp1\] Anton Antonov, 
 [Data Query Workflows Raku Package](https://github.com/antononcube/ConversationalAgents/tree/master/Packages/Perl6/DataQueryWorkflows), 
 (2020),
-[ConversationalAgents at GitHub](https://github.com/antononcube/ConversationalAgents).
+[ConversationalAgents at GitHub/antononcube](https://github.com/antononcube/ConversationalAgents).
+
+\[AAp2\] Anton Antonov,
+[Data Query Workflows Tests](https://github.com/antononcube/R-packages/tree/master/DataQueryWorkflowsTests),
+(2020),
+[R-packages at GitHub/antononcube](https://github.com/antononcube/R-packages).
