@@ -30,12 +30,12 @@
 
 use v6;
 use DSL::English::DataQueryWorkflows::Grammar;
-use DSL::English::DataQueryWorkflows::Actions::Python::Predicate;
+use DSL::Shared::Actions::Python::PredicateSpecification;
 
 unit module DSL::English::DataQueryWorkflows::Actions::Python::pandas;
 
 class DSL::English::DataQueryWorkflows::Actions::Python::pandas
-        is DSL::English::DataQueryWorkflows::Actions::Python::Predicate {
+        is DSL::Shared::Actions::Python::PredicateSpecification {
 
 	method TOP($/) { make $/.values[0].made; }
 
@@ -51,19 +51,9 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	}
 
 	# General
-	method dataset-name($/) { make $/.Str; }
-	method variable-name($/) { make $/.Str; }
-	method list-separator($/) { make ','; }
 	method variable-names-list($/) { make $<variable-name>>>.made.join(', '); }
 	method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made.join(', '); }
 	method mixed-quoted-variable-names-list($/) { make $<mixed-quoted-variable-name>>>.made.join(', '); }
-	method integer-value($/) { make $/.Str; }
-	method number-value($/) { make $/.Str; }
-	method wl-expr($/) { make $/.Str.substr(1,*-1); }
-	method quoted-variable-name($/) { make $/.values[0].made; }
-	method mixed-quoted-variable-name($/) { make $/.values[0].made; }
-	method single-quoted-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
-	method double-quoted-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
 
 	# Trivial
 	method trivial-parameter($/) { make $/.values[0].made; }
