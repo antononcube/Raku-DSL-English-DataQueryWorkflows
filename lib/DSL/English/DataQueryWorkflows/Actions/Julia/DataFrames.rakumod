@@ -31,11 +31,13 @@
 use v6;
 use DSL::English::DataQueryWorkflows::Grammar;
 use DSL::Shared::Actions::Julia::PredicateSpecification;
+use DSL::Shared::Actions::English::Julia::PipelineCommand;
 
 unit module DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames;
 
 class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
-		is DSL::Shared::Actions::Julia::PredicateSpecification {
+		is DSL::Shared::Actions::Julia::PredicateSpecification
+		is DSL::Shared::Actions::English::Julia::PipelineCommand {
 
     method TOP($/) { make $/.values[0].made; }
 
@@ -201,9 +203,9 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 			make 'obj = combine( nrow, groupby( obj, [ :' ~ $<rows-variable-name>.made ~ ' ] ))';
 		}
 	}
-	method rows-variable-name($/) { make $<variable-name>.made; }
-	method columns-variable-name($/) { make $<variable-name>.made; }
-	method values-variable-name($/) { make $<variable-name>.made; }
+    method rows-variable-name($/) { make $/.values[0].made; }
+    method columns-variable-name($/) { make $/.values[0].made; }
+    method values-variable-name($/) { make $/.values[0].made; }
 
     # Pipeline command
     method pipeline-command($/) { make $/.values[0].made; }

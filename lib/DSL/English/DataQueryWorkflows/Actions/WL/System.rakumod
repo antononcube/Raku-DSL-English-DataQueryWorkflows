@@ -31,11 +31,13 @@
 use v6;
 use DSL::English::DataQueryWorkflows::Grammar;
 use DSL::Shared::Actions::WL::PredicateSpecification;
+use DSL::Shared::Actions::English::WL::PipelineCommand;
 
 unit module DSL::English::DataQueryWorkflows::Actions::WL::System;
 
 class DSL::English::DataQueryWorkflows::Actions::WL::System
-        is DSL::Shared::Actions::WL::PredicateSpecification {
+        is DSL::Shared::Actions::WL::PredicateSpecification
+        is DSL::Shared::Actions::English::WL::PipelineCommand {
 
     method TOP($/) { make $/.values[0].made; }
 
@@ -180,9 +182,9 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
             make 'obj = GroupBy[ obj, #[' ~ $<rows-variable-name>.made ~ ']&, Length ]';
         }
     }
-    method rows-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
-    method columns-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
-    method values-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
+    method rows-variable-name($/) { make '"' ~ $/.values[0].made ~ '"'; }
+    method columns-variable-name($/) { make '"' ~ $/.values[0].made ~ '"'; }
+    method values-variable-name($/) { make '"' ~ $/.values[0].made ~ '"'; }
 
     # Reshape command
     method reshape-command($/) { make $/.values[0].made; }

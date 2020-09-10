@@ -31,11 +31,13 @@
 use v6;
 use DSL::English::DataQueryWorkflows::Grammar;
 use DSL::Shared::Actions::Python::PredicateSpecification;
+use DSL::Shared::Actions::English::Python::PipelineCommand;
 
 unit module DSL::English::DataQueryWorkflows::Actions::Python::pandas;
 
 class DSL::English::DataQueryWorkflows::Actions::Python::pandas
-        is DSL::Shared::Actions::Python::PredicateSpecification {
+        is DSL::Shared::Actions::Python::PredicateSpecification
+		is DSL::Shared::Actions::English::Python::PipelineCommand {
 
 	method TOP($/) { make $/.values[0].made; }
 
@@ -211,9 +213,9 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 			make 'obj = pandas.crosstab( index = obj.' ~ $<rows-variable-name>.made ~ ' )';
 		}
 	}
-	method rows-variable-name($/) { make $<variable-name>.made; }
-	method columns-variable-name($/) { make $<variable-name>.made; }
-	method values-variable-name($/) { make $<variable-name>.made; }
+    method rows-variable-name($/) { make $/.values[0].made; }
+    method columns-variable-name($/) { make $/.values[0].made; }
+    method values-variable-name($/) { make $/.values[0].made; }
 
     # Reshape command
     method reshape-command($/) { make $/.values[0].made; }

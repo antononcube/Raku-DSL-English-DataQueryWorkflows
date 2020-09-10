@@ -1,11 +1,11 @@
 use v6;
 
-use DSL::Shared::Roles::English::CommonParts;
+use DSL::Shared::Roles::English::PipelineCommand;
 use DSL::Shared::Utilities::FuzzyMatching;
 
 # Data query specific phrases
 role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
-        does DSL::Shared::Roles::English::CommonParts {
+        does DSL::Shared::Roles::English::PipelineCommand {
     # Tokens
     token arrange-verb { 'arrange' }
     token ascending-adjective { 'ascending' }

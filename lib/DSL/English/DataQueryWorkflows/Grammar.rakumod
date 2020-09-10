@@ -151,9 +151,9 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule cross-tabulation-formula { <cross-tabulation-double-formula> | <cross-tabulation-single-formula> }
     rule cross-tabulation-double-formula { <.variable-noun>? <rows-variable-name> [ <.list-separator-symbol> | <.with-preposition> ] <.variable-noun>? <columns-variable-name> [ <.over-preposition> <values-variable-name> ]? }
     rule cross-tabulation-single-formula { <.variable-noun>? <rows-variable-name> [ <.over-preposition> <values-variable-name> ]? }
-    rule rows-variable-name { <variable-name> }
-    rule columns-variable-name { <variable-name> }
-    rule values-variable-name { <variable-name> }
+    rule rows-variable-name { <mixed-quoted-variable-name> }
+    rule columns-variable-name { <mixed-quoted-variable-name> }
+    rule values-variable-name { <mixed-quoted-variable-name> }
 
     # Reshape command
     rule reshape-command { <pivot-longer-command> | <pivot-wider-command> }

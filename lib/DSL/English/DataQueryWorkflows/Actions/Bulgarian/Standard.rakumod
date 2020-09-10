@@ -180,9 +180,9 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 			make 'направи кръстосана таблица с редове от ' ~ $<rows-variable-name>.made;
 		}
 	}
-	method rows-variable-name($/) { make $<variable-name>.made; }
-	method columns-variable-name($/) { make $<variable-name>.made; }
-	method values-variable-name($/) { make $<variable-name>.made; }
+    method rows-variable-name($/) { make $/.values[0].made; }
+    method columns-variable-name($/) { make $/.values[0].made; }
+    method values-variable-name($/) { make $/.values[0].made; }
 
 	# Reshape command
     method reshape-command($/) { make $/.values[0].made; }
