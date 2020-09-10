@@ -84,7 +84,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     # Arrange command
     method arrange-command($/) { make $/.values[0].made; }
-    method arrange-simple-spec($/) { make '{' ~ map( { '#["' ~ $_ ~ '"]' }, $<mixed-quoted-variable-names-list>.made.split(', ') ).join(', ') ~ '}'; }
+    method arrange-simple-spec($/) { make '{' ~ map( { '#["' ~ $_.subst(:g, '"', '') ~ '"]' }, $<mixed-quoted-variable-names-list>.made.split(', ') ).join(', ') ~ '}'; }
     method arrange-command-ascending($/) { make 'obj = SortBy[ obj, ' ~ $<arrange-simple-spec>.made ~ '& ]'; }
     method arrange-command-descending($/) { make 'obj = ReverseSortBy[ obj, ' ~ $<arrange-simple-spec>.made ~ '& ]'; }
 
@@ -123,43 +123,43 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method join-by-spec($/) { make '{' ~ $/.values[0].made ~ '}'; }
 
     method full-join-spec($/)  {
-      if $<join-by-spec> {
-        make 'full_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
-      } else {
-        make 'full_join(' ~ $<dataset-name>.made ~ ')';
-      }
+        if $<join-by-spec> {
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ', "Outer"]';
+        } else {
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = Intersection[Normal@Keys@obj[1], Normal@Keys@' ~ $<dataset-name>.made ~ '[1]], "Outer"]';
+        }
     }
 
     method inner-join-spec($/)  {
-      if $<join-by-spec> {
-        make 'inner_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
-      } else {
-        make 'inner_join(' ~ $<dataset-name>.made ~ ')';
-      }
+        if $<join-by-spec> {
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ', "Left"]';
+        } else {
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = Intersection[Normal@Keys@obj[1], Normal@Keys@' ~ $<dataset-name>.made ~ '[1]], "Inner"]';
+        }
     }
 
     method left-join-spec($/)  {
-      if $<join-by-spec> {
-        make 'left_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
-      } else {
-        make 'left_join(' ~ $<dataset-name>.made ~ ')';
-      }
+        if $<join-by-spec> {
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ', "Left"]';
+        } else {
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = Intersection[Normal@Keys@obj[1], Normal@Keys@' ~ $<dataset-name>.made ~ '[1]], "Left"]';
+        }
     }
 
     method right-join-spec($/)  {
-      if $<join-by-spec> {
-        make 'right_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
-      } else {
-        make 'right_join(' ~ $<dataset-name>.made ~ ')';
-      }
+        if $<join-by-spec> {
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ', "Right"]';
+        } else {
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = Intersection[Normal@Keys@obj[1], Normal@Keys@' ~ $<dataset-name>.made ~ '[1]], "Right"]';
+        }
     }
 
     method semi-join-spec($/)  {
-      if $<join-by-spec> {
-        make 'semi_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
-      } else {
-        make 'semi_join(' ~ $<dataset-name>.made ~ ')';
-      }
+        if $<join-by-spec> {
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ', "Right"][All, Normal@Keys@obj[1]]';
+        } else {
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = Intersection[Normal@Keys@obj[1], Normal@Keys@' ~ $<dataset-name>.made ~ '[1]], "Right"][All, Normal@Keys@obj[1]]';
+        }
     }
 
     # Cross tabulate command
