@@ -164,12 +164,21 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method cross-tabulation-command($/) { make $/.values[0].made; }
     method cross-tabulate-command($/) { $<cross-tabulation-formula>.made }
     method contingency-matrix-command($/) { $<cross-tabulation-formula>.made }
-    method cross-tabulation-formula($/) {
-      if $<values-variable-name> {
-        make 'obj = GroupBy[ obj, { #[' ~ $<rows-variable-name>.made ~ '], #[' ~ $<columns-variable-name>.made ~  '] }&, Total[ #[' ~ $<values-variable-name>.made ~ '] & /@ # ]& ]';
-      } else {
-        make 'obj = GroupBy[ obj, { #[' ~ $<rows-variable-name>.made ~ '], #[' ~ $<columns-variable-name>.made ~  '] }&, Length ]';
-      }
+    method cross-tabulation-formula($/) { make $/.values[0].made; }
+	method cross-tabulation-double-formula($/) {
+        if $<values-variable-name> {
+            make 'obj = GroupBy[ obj, { #[' ~ $<rows-variable-name>.made ~ '], #[' ~ $<columns-variable-name>.made ~  '] }&, Total[ #[' ~ $<values-variable-name>.made ~ '] & /@ # ]& ]';
+        } else {
+            make 'obj = GroupBy[ obj, { #[' ~ $<rows-variable-name>.made ~ '], #[' ~ $<columns-variable-name>.made ~  '] }&, Length ]';
+        }
+    }
+    method cross-tabulation-single-formula($/) {
+        if $<values-variable-name> {
+            make 'obj = GroupBy[ obj, #[' ~ $<rows-variable-name>.made ~ ']&, Total[ #[' ~ $<values-variable-name>.made ~ '] & /@ # ]& ]';
+
+        } else {
+            make 'obj = GroupBy[ obj, #[' ~ $<rows-variable-name>.made ~ ']&, Length ]';
+        }
     }
     method rows-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
     method columns-variable-name($/) { make '"' ~ $<variable-name>.made ~ '"'; }
