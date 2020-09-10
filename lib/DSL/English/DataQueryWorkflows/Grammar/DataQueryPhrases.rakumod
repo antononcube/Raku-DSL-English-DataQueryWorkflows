@@ -68,6 +68,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     rule pivot-columns-phrase { <pivot-verb>? <the-determiner>? <columns> }
     rule id-columns-phrase { [ <id-noun> | <identifier-noun> ] <columns> }
     rule rename-directive { <rename-verb> }
+    rule reverse-sort-phrase { <reverse-adjective> [ <sort-verb> | <order-verb> ] }
     rule format-phrase { <form-noun> | <format-noun> }
     rule to-long-form-phrase { <pivot-verb> <to-preposition>? 'longer' <format-phrase>? | <to-preposition> [ 'long' | 'narrow' ] <format-phrase> | <melt-verb>  }
     rule to-wide-form-phrase { <pivot-verb> <to-preposition>? 'wider'  <format-phrase>? | <to-preposition> [ 'wide' | 'broad'  ] <format-noun>   | <cast-verb>  }

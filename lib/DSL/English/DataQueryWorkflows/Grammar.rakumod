@@ -111,10 +111,11 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule arrange-simple-spec { <.by-preposition>? <.the-determiner>? [ <.variables-noun> | <.variable-noun> ]? <mixed-quoted-variable-names-list> }
     rule arrange-command-ascending {
         <.arrange> <.ascending>? <arrange-simple-spec> |
-        <.arrange>  <arrange-simple-spec> <.ascending> }
+        <.arrange> <arrange-simple-spec> <.ascending> }
     rule arrange-command-descending {
         <.arrange> <.descending> <arrange-simple-spec> |
-        <.arrange> <arrange-simple-spec> <.descending> }
+        <.arrange> <arrange-simple-spec> <.descending> |
+        <.reverse-sort-phrase> <arrange-simple-spec> }
 
     # Rename columns
     rule rename-columns-command { <rename-columns-simple> }
