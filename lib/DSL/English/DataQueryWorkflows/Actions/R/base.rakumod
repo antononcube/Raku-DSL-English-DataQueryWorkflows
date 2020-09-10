@@ -211,9 +211,9 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 			make 'obj <- xtabs( formula = ~ ' ~ $<rows-variable-name>.made ~ ', data = obj )';
 		}
 	}
-    method rows-variable-name($/) { make $/.values[0].made; }
-    method columns-variable-name($/) { make $/.values[0].made; }
-    method values-variable-name($/) { make $/.values[0].made; }
+    method rows-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
+    method columns-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
+    method values-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
 
     # Reshape command
     method reshape-command($/) { make $/.values[0].made; }

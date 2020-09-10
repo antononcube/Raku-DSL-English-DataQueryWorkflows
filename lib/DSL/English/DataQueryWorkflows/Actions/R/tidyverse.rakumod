@@ -212,9 +212,9 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 			make '(function(x) as.data.frame(xtabs( formula = ~ ' ~ $<rows-variable-name>.made ~ ', data = x ), stringsAsFactors=FALSE ))';
 		}
 	}
-    method rows-variable-name($/) { make $/.values[0].made; }
-    method columns-variable-name($/) { make $/.values[0].made; }
-    method values-variable-name($/) { make $/.values[0].made; }
+    method rows-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
+    method columns-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
+    method values-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
 
     # Reshape command
     method reshape-command($/) { make $/.values[0].made; }

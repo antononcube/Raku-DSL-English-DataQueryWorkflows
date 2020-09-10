@@ -203,9 +203,9 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 			make 'obj = combine( nrow, groupby( obj, [ :' ~ $<rows-variable-name>.made ~ ' ] ))';
 		}
 	}
-    method rows-variable-name($/) { make $/.values[0].made; }
-    method columns-variable-name($/) { make $/.values[0].made; }
-    method values-variable-name($/) { make $/.values[0].made; }
+    method rows-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
+    method columns-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
+    method values-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
 
     # Pipeline command
     method pipeline-command($/) { make $/.values[0].made; }
