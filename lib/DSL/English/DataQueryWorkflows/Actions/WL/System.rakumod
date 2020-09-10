@@ -53,6 +53,10 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method data-location-spec($/) { make '\'' ~ $/.Str ~ '\''; }
     method use-data-table($/) { make 'obj = ' ~ $<variable-name>.made ; }
 
+    # Distinct command
+	method distinct-command($/) { make $/.values[0].made; }
+	method distinct-simple-command($/) { make 'obj = DeleteDuplicates[obj]'; }
+
     # Select command
 	method select-command($/) { make $/.values[0].made; }
     method select-plain-variables($/) {
