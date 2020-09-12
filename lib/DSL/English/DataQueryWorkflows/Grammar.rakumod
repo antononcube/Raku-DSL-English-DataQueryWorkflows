@@ -185,7 +185,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
 
     # Probably have to be in DSL::Shared::Roles .
     # Assign-pairs and as-pairs
-    rule assign-pair { <assign-pair-lhs> <.assign-to-symbol> <assign-pair-rhs> }
+    rule assign-pair { <assign-pair-lhs> [ <.assign-to-symbol> ] <assign-pair-rhs> }
     rule as-pair     { <assign-pair-rhs> <.as-preposition>   <assign-pair-lhs> }
     rule assign-pairs-list { <assign-pair>+ % <.list-separator> }
     rule as-pairs-list     { <as-pair>+     % <.list-separator> }
@@ -194,7 +194,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
 
     # Correspondence pairs
     rule key-pairs-list { <key-pair>+ % <.list-separator> }
-    rule key-pair { <key-pair-lhs> <.assign-to-symbol> <key-pair-rhs> }
+    rule key-pair { <key-pair-lhs>  [ <.equal-symbol> | <.equal2-symbol> | <.key-to-symbol> | <.equal-relation> ] <key-pair-rhs> }
     rule key-pair-lhs { <mixed-quoted-variable-name> }
     rule key-pair-rhs { <mixed-quoted-variable-name> }
 }
