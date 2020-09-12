@@ -72,18 +72,6 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 
 	# Mutate command
 	method mutate-command($/) { make 'присвои: ' ~ $<assign-pairs-list>.made; }
-	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
-	method as-pairs-list($/)     { make $<as-pair>>>.made.join(', '); }
-	method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
-	method as-pair($/)     { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
-	method assign-pair-lhs($/) { make $/.values[0].made; }
-	method assign-pair-rhs($/) {
-        if $<mixed-quoted-variable-name> {
-            make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"';
-        } else {
-            make $/.values[0].made
-        }
-    }
 
 	# Group command
 	method group-command($/) { make 'групирай с колоните: ' ~ $<variable-names-list>.made; }
@@ -128,7 +116,7 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	# Join command
 	method join-command($/) { make $/.values[0].made; }
 
-	method join-by-spec($/) { make 'c(' ~ $/.values[0].made ~ ')'; }
+	method join-by-spec($/) { make '(' ~ $/.values[0].made ~ ')'; }
 
 	method full-join-spec($/)  {
 		if $<join-by-spec> {
@@ -217,6 +205,27 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
     method pivot-wider-variable-column-spec($/) { make 'променлива колона ' ~ $<quoted-variable-name>.made; }
 
     method pivot-wider-value-column-spec($/) { make 'стойностна колона ' ~ $<quoted-variable-name>.made; }
+
+    # Probably have to be in DSL::Shared::Action .
+    # Assign-pairs and as-pairs
+	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
+	method as-pairs-list($/)     { make $<as-pair>>>.made.join(', '); }
+	method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+	method as-pair($/)     { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+	method assign-pair-lhs($/) { make $/.values[0].made; }
+	method assign-pair-rhs($/) {
+        if $<mixed-quoted-variable-name> {
+            make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"';
+        } else {
+            make $/.values[0].made
+        }
+    }
+
+	# Correspondence pairs
+    method key-pairs-list($/) { make $<key-pair>>>.made.join(', '); }
+    method key-pair($/) { make $<key-pair-lhs>.made ~ ' = ' ~ $<key-pair-rhs>.made; }
+    method key-pair-lhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
+    method key-pair-rhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
 
     # Pipeline command
     method pipeline-command($/) { make $/.values[0].made; }
