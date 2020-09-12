@@ -80,18 +80,6 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 
 	# Mutate command
 	method mutate-command($/) { make 'obj = transform( obj, ' ~ $<assign-pairs-list>.made ~ ' )'; }
-	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
-	method as-pairs-list($/)     { make $<as-pair>>>.made.join(', '); }
-	method assign-pair($/) { make $<assign-pair-rhs>.made ~ ' => ' ~ $<assign-pair-lhs>.made; }
-	method as-pair($/)     { make $<assign-pair-rhs>.made ~ ' => ' ~ $<assign-pair-lhs>.made; }
-	method assign-pair-lhs($/) { make ':' ~ $/.values[0].made.subst(:g, '"', ''); }
-	method assign-pair-rhs($/) {
-        if $<mixed-quoted-variable-name> {
-            make ':' ~ $/.values[0].made.subst(:g, '"', '');
-        } else {
-            make $/.values[0].made
-        }
-    }
 
 	# Group command
 	method group-command($/) { make 'obj = groupby( obj, [' ~ $<variable-names-list>.made ~ '] )'; }
@@ -151,7 +139,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	# Join command
 	method join-command($/) { make $/.values[0].made; }
 	
-	method join-by-spec($/) { make 'c(' ~ $/.values[0].made ~ ')'; }
+	method join-by-spec($/) { make '[' ~ $/.values[0].made ~ ']'; }
 	
 	method full-join-spec($/)  {
 		if $<join-by-spec> {
@@ -215,6 +203,27 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
     method rows-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
     method columns-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
     method values-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
+
+	# Probably have to be in DSL::Shared::Action .
+    # Assign-pairs and as-pairs
+	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
+	method as-pairs-list($/)     { make $<as-pair>>>.made.join(', '); }
+	method assign-pair($/) { make $<assign-pair-rhs>.made ~ ' => ' ~ $<assign-pair-lhs>.made; }
+	method as-pair($/)     { make $<assign-pair-rhs>.made ~ ' => ' ~ $<assign-pair-lhs>.made; }
+	method assign-pair-lhs($/) { make ':' ~ $/.values[0].made.subst(:g, '"', ''); }
+	method assign-pair-rhs($/) {
+        if $<mixed-quoted-variable-name> {
+            make ':' ~ $/.values[0].made.subst(:g, '"', '');
+        } else {
+            make $/.values[0].made
+        }
+    }
+
+	# Correspondence pairs
+    method key-pairs-list($/) { make $<key-pair>>>.made.join(', '); }
+	method key-pair($/) { make ':' ~ $<key-pair-lhs>.made ~ ' => :' ~ $<key-pair-rhs>.made; }
+    method key-pair-lhs($/) { make $/.values[0].made.subst(:g, '"', ''); }
+    method key-pair-rhs($/) { make $/.values[0].made.subst(:g, '"', ''); }
 
     # Pipeline command
     method pipeline-command($/) { make $/.values[0].made; }

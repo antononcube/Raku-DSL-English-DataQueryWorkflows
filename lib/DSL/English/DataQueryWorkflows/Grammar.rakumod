@@ -101,12 +101,6 @@ grammar DSL::English::DataQueryWorkflows::Grammar
 
     # Mutate command
     rule mutate-command { [ <.mutate> | <.assign-verb> | <.transform-verb> ] <.by-preposition>? <assign-pairs-list> }
-    rule assign-pair { <assign-pair-lhs> <.assign-to-symbol> <assign-pair-rhs> }
-    rule as-pair     { <assign-pair-rhs> <.as-preposition>   <assign-pair-lhs> }
-    rule assign-pairs-list { <assign-pair>+ % <.list-separator> }
-    rule as-pairs-list     { <as-pair>+     % <.list-separator> }
-    rule assign-pair-lhs { <mixed-quoted-variable-name> }
-    rule assign-pair-rhs { <mixed-quoted-variable-name> | <wl-expr> }
 
     # Group command
     rule group-command { <group-by> <variable-names-list> }
@@ -141,7 +135,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
 
     # Join command
     rule join-command { <inner-join-spec> | <left-join-spec> | <right-join-spec> | <semi-join-spec> | <full-join-spec> }
-    rule join-by-spec { <assign-pairs-list> | <mixed-quoted-variable-names-list> }
+    rule join-by-spec { <key-pairs-list> | <mixed-quoted-variable-names-list> }
     rule full-join-spec  { <.full-adjective>  <.join-noun> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
     rule inner-join-spec { <.inner-adjective> <.join-noun> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
     rule left-join-spec  { <.left-adjective>  <.join-noun> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
@@ -189,5 +183,18 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     # Same as <pivot-longer-value-column-spec>
     rule pivot-wider-value-column-spec { <.the-determiner>? <.value-column-phrase> <mixed-quoted-variable-name> }
 
+    # Probably have to be in DSL::Shared::Roles .
+    # Assign-pairs and as-pairs
+    rule assign-pair { <assign-pair-lhs> <.assign-to-symbol> <assign-pair-rhs> }
+    rule as-pair     { <assign-pair-rhs> <.as-preposition>   <assign-pair-lhs> }
+    rule assign-pairs-list { <assign-pair>+ % <.list-separator> }
+    rule as-pairs-list     { <as-pair>+     % <.list-separator> }
+    rule assign-pair-lhs { <mixed-quoted-variable-name> }
+    rule assign-pair-rhs { <mixed-quoted-variable-name> | <wl-expr> }
 
+    # Correspondence pairs
+    rule key-pairs-list { <key-pair>+ % <.list-separator> }
+    rule key-pair { <key-pair-lhs> <.assign-to-symbol> <key-pair-rhs> }
+    rule key-pair-lhs { <mixed-quoted-variable-name> }
+    rule key-pair-rhs { <mixed-quoted-variable-name> }
 }

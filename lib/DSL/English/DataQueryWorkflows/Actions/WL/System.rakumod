@@ -46,7 +46,6 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made.join(', '); }
     method mixed-quoted-variable-names-list($/) { make $<mixed-quoted-variable-name>>>.made.join(', '); }
 
-
     # Load data
     method data-load-command($/) { make $/.values[0].made; }
     method load-data-table($/) { make 'obj = ExampleData[' ~ $<data-location-spec>.made ~ ']'; }
@@ -72,18 +71,6 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     # Mutate command
     method mutate-command($/) { make 'obj = Map[ Join[ #, <|' ~ $<assign-pairs-list>.made ~ '|> ]&, obj]' ; }
-    method assign-pair($/) { make '"' ~ $<assign-pair-lhs>.made ~ '" -> ' ~ $<assign-pair-rhs>.made; }
-    method as-pair($/)     { make '"' ~ $<assign-pair-lhs>.made ~ '" -> ' ~ $<assign-pair-rhs>.made; }
-    method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
-    method as-pairs-list($/)     { make $<as-pair>>>.made.join(', '); }
-    method assign-pair-lhs($/) { make $/.values[0].made; }
-    method assign-pair-rhs($/) {
-        if $<mixed-quoted-variable-name> {
-            make '#["' ~ $/.values[0].made.subst(:g, '"', '') ~ '"]';
-        } else {
-            make $/.values[0].made
-        }
-    }
 
     # Group command
     method group-command($/) {
@@ -139,41 +126,41 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     method full-join-spec($/)  {
         if $<join-by-spec> {
-            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ', "Outer"]';
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', ' ~ $<join-by-spec>.made ~ ', "Outer"]';
         } else {
-            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = Intersection[Normal@Keys@obj[1], Normal@Keys@' ~ $<dataset-name>.made ~ '[1]], "Outer"]';
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', Intersection[Normal@Keys@obj[1], Normal@Keys@' ~ $<dataset-name>.made ~ '[1]], "Outer"]';
         }
     }
 
     method inner-join-spec($/)  {
         if $<join-by-spec> {
-            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ', "Left"]';
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', ' ~ $<join-by-spec>.made ~ ', "Left"]';
         } else {
-            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = Intersection[Normal@Keys@obj[1], Normal@Keys@' ~ $<dataset-name>.made ~ '[1]], "Inner"]';
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', Intersection[Normal@Keys@obj[1], Normal@Keys@' ~ $<dataset-name>.made ~ '[1]], "Inner"]';
         }
     }
 
     method left-join-spec($/)  {
         if $<join-by-spec> {
-            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ', "Left"]';
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', ' ~ $<join-by-spec>.made ~ ', "Left"]';
         } else {
-            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = Intersection[Normal@Keys@obj[1], Normal@Keys@' ~ $<dataset-name>.made ~ '[1]], "Left"]';
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', Intersection[Normal@Keys@obj[1], Normal@Keys@' ~ $<dataset-name>.made ~ '[1]], "Left"]';
         }
     }
 
     method right-join-spec($/)  {
         if $<join-by-spec> {
-            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ', "Right"]';
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', ' ~ $<join-by-spec>.made ~ ', "Right"]';
         } else {
-            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = Intersection[Normal@Keys@obj[1], Normal@Keys@' ~ $<dataset-name>.made ~ '[1]], "Right"]';
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', Intersection[Normal@Keys@obj[1], Normal@Keys@' ~ $<dataset-name>.made ~ '[1]], "Right"]';
         }
     }
 
     method semi-join-spec($/)  {
         if $<join-by-spec> {
-            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ', "Right"][All, Normal@Keys@obj[1]]';
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', ' ~ $<join-by-spec>.made ~ ', "Right"][All, Normal@Keys@obj[1]]';
         } else {
-            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', by = Intersection[Normal@Keys@obj[1], Normal@Keys@' ~ $<dataset-name>.made ~ '[1]], "Right"][All, Normal@Keys@obj[1]]';
+            make 'obj = JoinAcross[ obj, ' ~ $<dataset-name>.made ~ ', Intersection[Normal@Keys@obj[1], Normal@Keys@' ~ $<dataset-name>.made ~ '[1]], "Right"][All, Normal@Keys@obj[1]]';
         }
     }
 
@@ -231,6 +218,27 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method pivot-wider-variable-column-spec($/) { make 'names_from = ' ~ $<mixed-quoted-variable-name>.made; }
 
     method pivot-wider-value-column-spec($/) { make 'values_from = ' ~ $<mixed-quoted-variable-name>.made; }
+
+    # Probably have to be in DSL::Shared::Action .
+    # Assign-pairs and as-pairs
+    method assign-pair($/) { make '"' ~ $<assign-pair-lhs>.made ~ '" -> ' ~ $<assign-pair-rhs>.made; }
+    method as-pair($/)     { make '"' ~ $<assign-pair-lhs>.made ~ '" -> ' ~ $<assign-pair-rhs>.made; }
+    method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
+    method as-pairs-list($/)     { make $<as-pair>>>.made.join(', '); }
+    method assign-pair-lhs($/) { make $/.values[0].made; }
+    method assign-pair-rhs($/) {
+        if $<mixed-quoted-variable-name> {
+            make '#["' ~ $/.values[0].made.subst(:g, '"', '') ~ '"]';
+        } else {
+            make $/.values[0].made
+        }
+    }
+
+    # Correspondence pairs
+    method key-pairs-list($/) { make $<key-pair>>>.made.join(', '); }
+    method key-pair($/) { make $<key-pair-lhs>.made ~ ' -> ' ~ $<key-pair-rhs>.made; }
+    method key-pair-lhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
+    method key-pair-rhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
 
     # Pipeline command
     method pipeline-command($/) { make $/.values[0].made; }

@@ -91,18 +91,6 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
     # Mutate command
 	method mutate-command($/) { make $<assign-pairs-list>.made; }
-	method assign-pairs-list($/) { make '{' ~ $<assign-pair>>>.made.join('; ') ~ '}'; }
-	method as-pairs-list($/)     { make '{' ~ $<as-pair>>>.made.join('; ') ~ '}'; }
-	method assign-pair($/) { make 'obj$' ~ $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
-	method as-pair($/)     { make 'obj$' ~ $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
-	method assign-pair-lhs($/) { make $/.values[0].made.subst(:g, '"', ''); }
-	method assign-pair-rhs($/) {
-        if $<mixed-quoted-variable-name> {
-            make 'obj$' ~ $/.values[0].made.subst(:g, '"', '');
-        } else {
-            make $/.values[0].made
-        }
-    }
 
     # Group command
 	method group-command($/) { make 'obj <- by( data = obj, ' ~ $<variable-names-list>.made.join(', ') ~ ')'; }
@@ -159,7 +147,13 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
     # Join command
 	method join-command($/) { make $/.values[0].made; }
 
-	method join-by-spec($/) { make 'c(' ~ $/.values[0].made ~ ')'; }
+	method join-by-spec($/) {
+		if $<mixed-quoted-variable-names-list> {
+			make 'by = c(' ~ $/.values[0].made ~ ')';
+		} else {
+			make $/.values[0].made;
+		}
+	}
 
 	method full-join-spec($/)  {
 		if $<join-by-spec> {
@@ -171,7 +165,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
 	method inner-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
+			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', ' ~ $<join-by-spec>.made ~ ')';
 		} else {
 			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ')';
 		}
@@ -179,17 +173,17 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
 	method left-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ', all.x = TRUE )';
+			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', ' ~ $<join-by-spec>.made ~ ', all.x = TRUE )';
 		} else {
-			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', , all.x = TRUE )';
+			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', all.x = TRUE )';
 		}
 	}
 
 	method right-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ', all.y = TRUE )';
+			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', ' ~ $<join-by-spec>.made ~ ', all.y = TRUE )';
 		} else {
-			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', , all.y = TRUE )';
+			make 'obj <- merge( x = obj, y = ' ~ $<dataset-name>.made ~ ', all.y = TRUE )';
 		}
 	}
 
@@ -248,6 +242,33 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
     method pivot-wider-variable-column-spec($/) { make 'timevar = ' ~ $<quoted-variable-name>.made; }
 
     method pivot-wider-value-column-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
+
+	# Probably have to be in DSL::Shared::Action .
+    # Assign-pairs and as-pairs
+	method assign-pairs-list($/) { make '{' ~ $<assign-pair>>>.made.join('; ') ~ '}'; }
+	method as-pairs-list($/)     { make '{' ~ $<as-pair>>>.made.join('; ') ~ '}'; }
+	method assign-pair($/) { make 'obj$' ~ $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+	method as-pair($/)     { make 'obj$' ~ $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+	method assign-pair-lhs($/) { make $/.values[0].made.subst(:g, '"', ''); }
+	method assign-pair-rhs($/) {
+        if $<mixed-quoted-variable-name> {
+            make 'obj$' ~ $/.values[0].made.subst(:g, '"', '');
+        } else {
+            make $/.values[0].made
+        }
+    }
+
+	# Correspondence pairs
+    method key-pairs-list($/) {
+		my @pairs = $<key-pair>>>.made;
+		my @xs = do for @pairs -> ($x, $y) { $x };
+		my @ys = do for @pairs -> ($x, $y) { $y };
+
+		make 'by.x = c(' ~ @xs.join(', ') ~ '), by.y = c(' ~ @ys.join(', ') ~ ')';
+	}
+    method key-pair($/) { make ( $<key-pair-lhs>.made, $<key-pair-rhs>.made); }
+    method key-pair-lhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
+    method key-pair-rhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
 
     # Pipeline command
     method pipeline-command($/) { make $/.values[0].made; }

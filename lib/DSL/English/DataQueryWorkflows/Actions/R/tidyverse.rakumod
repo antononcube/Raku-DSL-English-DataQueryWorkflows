@@ -90,18 +90,6 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	
 	# Mutate command
 	method mutate-command($/) { make 'dplyr::mutate(' ~ $<assign-pairs-list>.made ~ ')'; }
-	method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
-	method as-pair($/)     { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
-	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
-	method as-pairs-list($/)     { make $<as-pair>>>.made.join(', '); }
-	method assign-pair-lhs($/) { make $/.values[0].made.subst(:g, '"', ''); }
-	method assign-pair-rhs($/) {
-        if $<mixed-quoted-variable-name> {
-            make $/.values[0].made.subst(:g, '"', '');
-        } else {
-            make $/.values[0].made
-        }
-    }
 
 	# Group command
 	method group-command($/) { make 'dplyr::group_by(' ~ $<variable-names-list>.made ~ ')'; }
@@ -249,6 +237,27 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
     method pivot-wider-variable-column-spec($/) { make 'names_from = ' ~ $<quoted-variable-name>.made; }
 
     method pivot-wider-value-column-spec($/) { make 'values_from = ' ~ $<quoted-variable-name>.made; }
+
+	# Probably have to be in DSL::Shared::Action .
+    # Assign-pairs and as-pairs
+	method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+	method as-pair($/)     { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
+	method as-pairs-list($/)     { make $<as-pair>>>.made.join(', '); }
+	method assign-pair-lhs($/) { make $/.values[0].made.subst(:g, '"', ''); }
+	method assign-pair-rhs($/) {
+        if $<mixed-quoted-variable-name> {
+            make $/.values[0].made.subst(:g, '"', '');
+        } else {
+            make $/.values[0].made
+        }
+    }
+
+	# Correspondence pairs
+    method key-pairs-list($/) { make $<key-pair>>>.made.join(', '); }
+    method key-pair($/) { make $<key-pair-lhs>.made ~ ' = ' ~ $<key-pair-rhs>.made; }
+    method key-pair-lhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
+    method key-pair-rhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
 
     # Pipeline command
     method pipeline-command($/) { make $/.values[0].made; }

@@ -91,18 +91,6 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
     # Mutate command
 	method mutate-command($/) { make $<assign-pairs-list>.made; }
-	method assign-pairs-list($/) { make 'obj = obj.assign( ' ~ $<assign-pair>>>.made.join(', ') ~ ' )'; }
-	method as-pairs-list($/)     { make 'obj = obj.assign( ' ~ $<as-pair>>>.made.join(', ') ~ ' )'; }
-	method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
-	method as-pair($/)     { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
-	method assign-pair-lhs($/) { make $/.values[0].made.subst(:g, '"', ''); }
-	method assign-pair-rhs($/) {
-        if $<mixed-quoted-variable-name> {
-            make 'obj["' ~ $/.values[0].made.subst(:g, '"', '') ~ '"]';
-        } else {
-            make $/.values[0].made
-        }
-    }
 
     # Group command
 	method group-command($/) { make 'obj = obj ( data = obj, ' ~ $<variable-names-list>.made ~ ')'; }
@@ -161,11 +149,17 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
     # Join command
 	method join-command($/) { make $/.values[0].made; }
 
-	method join-by-spec($/) { make '[' ~ $/.values[0].made ~ ']'; }
+	method join-by-spec($/) {
+		if $<mixed-quoted-variable-names-list> {
+			make 'on = [' ~ $/.values[0].made ~ ']';
+		} else {
+			make $/.values[0].made;
+		}
+	}
 
 	method full-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ', how = "full" )';
+			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', ' ~ $<join-by-spec>.made ~ ', how = "full" )';
 		} else {
 			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', how = "full" )';
 		}
@@ -173,7 +167,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
 	method inner-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ', how = "inner" )';
+			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', ' ~ $<join-by-spec>.made ~ ', how = "inner" )';
 		} else {
 			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', how = "inner" )';
 		}
@@ -181,7 +175,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
 	method left-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ', how = "left" )';
+			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', ' ~ $<join-by-spec>.made ~ ', how = "left" )';
 		} else {
 			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', how = "left" )';
 		}
@@ -189,7 +183,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
 	method right-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ', how = "right" )';
+			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', ' ~ $<join-by-spec>.made ~ ', how = "right" )';
 		} else {
 			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', how = "right" )';
 		}
@@ -197,7 +191,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
 	method semi-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ', how = "semi" )';
+			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', ' ~ $<join-by-spec>.made ~ ', how = "semi" )';
 		} else {
 			make 'obj = obj.merge( ' ~ $<dataset-name>.made ~ ', how = "semi" )';
 		}
@@ -250,6 +244,33 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
     method pivot-wider-variable-column-spec($/) { make 'timevar = ' ~ $<quoted-variable-name>.made; }
 
     method pivot-wider-value-column-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
+
+	# Probably have to be in DSL::Shared::Action .
+    # Assign-pairs and as-pairs
+	method assign-pairs-list($/) { make 'obj = obj.assign( ' ~ $<assign-pair>>>.made.join(', ') ~ ' )'; }
+	method as-pairs-list($/)     { make 'obj = obj.assign( ' ~ $<as-pair>>>.made.join(', ') ~ ' )'; }
+	method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+	method as-pair($/)     { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+	method assign-pair-lhs($/) { make $/.values[0].made.subst(:g, '"', ''); }
+	method assign-pair-rhs($/) {
+        if $<mixed-quoted-variable-name> {
+            make 'obj["' ~ $/.values[0].made.subst(:g, '"', '') ~ '"]';
+        } else {
+            make $/.values[0].made
+        }
+    }
+
+	# Correspondence pairs
+    method key-pairs-list($/) {
+		my @pairs = $<key-pair>>>.made;
+		my @xs = do for @pairs -> ($x, $y) { $x };
+		my @ys = do for @pairs -> ($x, $y) { $y };
+
+		make 'on = None, left_on = [' ~ @xs.join(', ') ~ '], right_on = [' ~ @ys.join(', ') ~ ']';
+	}
+    method key-pair($/) { make ( $<key-pair-lhs>.made, $<key-pair-rhs>.made); }
+    method key-pair-lhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
+    method key-pair-rhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
 
     # Pipeline command
     method pipeline-command($/) { make $/.values[0].made; }
