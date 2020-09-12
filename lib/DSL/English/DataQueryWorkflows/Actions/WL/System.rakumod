@@ -72,10 +72,18 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     # Mutate command
     method mutate-command($/) { make 'obj = Map[ Join[ #, <|' ~ $<assign-pairs-list>.made ~ '|> ]&, obj]' ; }
-    method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
     method assign-pair($/) { make '"' ~ $<assign-pair-lhs>.made ~ '" -> ' ~ $<assign-pair-rhs>.made; }
+    method as-pair($/)     { make '"' ~ $<assign-pair-lhs>.made ~ '" -> ' ~ $<assign-pair-rhs>.made; }
+    method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
+    method as-pairs-list($/)     { make $<as-pair>>>.made.join(', '); }
     method assign-pair-lhs($/) { make $/.values[0].made; }
-    method assign-pair-rhs($/) { make $/.values[0].made; }
+    method assign-pair-rhs($/) {
+        if $<mixed-quoted-variable-name> {
+            make '#["' ~ $/.values[0].made.subst(:g, '"', '') ~ '"]';
+        } else {
+            make $/.values[0].made
+        }
+    }
 
     # Group command
     method group-command($/) {
@@ -106,6 +114,9 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
             my $current = @currentNames.join(', ');
             make 'obj = Map[ Join[ KeyDrop[ #, {' ~ $current ~ '} ], <| ' ~ $pairs.join(', ') ~ '|> ]&, obj]';
         }
+    }
+    method rename-columns-by-pairs($/) {
+        make 'obj = Map[ Join[ #, <|' ~ $/.values[0].made ~ '|> ]&, obj][All, Keys[ <|' ~ $/.values[0].made ~ '|> ] ]' ;
     }
 
     # Drop columns command

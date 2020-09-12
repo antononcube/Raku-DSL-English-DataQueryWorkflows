@@ -71,19 +71,27 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 
 	# Select command
   	method select-command($/) { make $/.values[0].made; }
-	method select-plain-variables($/) { make 'select!( obj, ' ~ $<variable-names-list>.made ~ ')'; }
-	method select-mixed-quoted-variables($/) { make 'select!( obj, ' ~ $<mixed-quoted-variable-names-list>.made ~ ')'; }
+	method select-plain-variables($/) { make 'obj = select( obj, ' ~ $<variable-names-list>.made ~ ')'; }
+	method select-mixed-quoted-variables($/) { make 'obj = select( obj, ' ~ $<mixed-quoted-variable-names-list>.made ~ ')'; }
 
 	# Filter commands
 	method filter-command($/) { make 'obj = obj[ ' ~ $<filter-spec>.made ~ ', :]'; }
 	method filter-spec($/) { make $<predicates-list>.made; }
 
 	# Mutate command
-	method mutate-command($/) { make 'transform!( ' ~ $<assign-pairs-list>.made ~ ' )'; }
+	method mutate-command($/) { make 'obj = transform( obj, ' ~ $<assign-pairs-list>.made ~ ' )'; }
 	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
-	method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
-	method assign-pair-lhs($/) { make $/.values[0].made; }
-	method assign-pair-rhs($/) { make $/.values[0].made; }
+	method as-pairs-list($/)     { make $<as-pair>>>.made.join(', '); }
+	method assign-pair($/) { make $<assign-pair-rhs>.made ~ ' => ' ~ $<assign-pair-lhs>.made; }
+	method as-pair($/)     { make $<assign-pair-rhs>.made ~ ' => ' ~ $<assign-pair-lhs>.made; }
+	method assign-pair-lhs($/) { make ':' ~ $/.values[0].made.subst(:g, '"', ''); }
+	method assign-pair-rhs($/) {
+        if $<mixed-quoted-variable-name> {
+            make ':' ~ $/.values[0].made.subst(:g, '"', '');
+        } else {
+            make $/.values[0].made
+        }
+    }
 
 	# Group command
 	method group-command($/) { make 'obj = groupby( obj, [' ~ $<variable-names-list>.made ~ '] )'; }
@@ -95,8 +103,8 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	# Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
 	method arrange-simple-spec($/) { make $<mixed-quoted-variable-names-list>.made; }
-	method arrange-command-ascending($/) { make 'sort!( obj, [' ~ $<arrange-simple-spec>.made ~ '] )'; }
-	method arrange-command-descending($/) { make 'sort!( obj, [' ~ $<arrange-simple-spec>.made ~ '], rev=true ))'; }
+	method arrange-command-ascending($/) { make 'obj = sort( obj, [' ~ $<arrange-simple-spec>.made ~ '] )'; }
+	method arrange-command-descending($/) { make 'obj = sort( obj, [' ~ $<arrange-simple-spec>.made ~ '], rev=true ))'; }
 
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
@@ -111,16 +119,17 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
             make 'obj';
         } else {
             my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $c ~ ' => ' ~ $n };
-            make 'rename!( obj, ' ~ $pairs.join(', ') ~ ' )';
+            make 'obj = rename( obj, ' ~ $pairs.join(', ') ~ ' )';
         }
     }
+    method rename-columns-by-pairs($/) { make 'select!( obj, ' ~ $/.values[0].made ~ ')'; }
 
     # Drop columns command
     method drop-columns-command($/) { make $/.values[0].made; }
     method drop-columns-simple($/) {
         # Note that here we assume no single quotes are in <mixed-quoted-variable-names-list>.made .
         my @todrop = $<todrop>.made.subst(:g, '"', '').split(', ');
-        make 'select!( obj, ' ~ map( { 'Not[' ~ $_ ~ ']' }, @todrop ).join(', ') ~ ' )';
+        make 'obj = select( obj, ' ~ map( { 'Not[' ~ $_ ~ ']' }, @todrop ).join(', ') ~ ' )';
     }
 
 	# Statistics command

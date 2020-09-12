@@ -73,9 +73,17 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	# Mutate command
 	method mutate-command($/) { make 'присвои: ' ~ $<assign-pairs-list>.made; }
 	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
+	method as-pairs-list($/)     { make $<as-pair>>>.made.join(', '); }
 	method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+	method as-pair($/)     { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
 	method assign-pair-lhs($/) { make $/.values[0].made; }
-	method assign-pair-rhs($/) { make $/.values[0].made; }
+	method assign-pair-rhs($/) {
+        if $<mixed-quoted-variable-name> {
+            make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"';
+        } else {
+            make $/.values[0].made
+        }
+    }
 
 	# Group command
 	method group-command($/) { make 'групирай с колоните: ' ~ $<variable-names-list>.made; }
@@ -95,6 +103,7 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
     method rename-columns-simple($/) {
         make 'преименувай колоните ' ~ $<current>.made ~ ' като ' ~ $<new>.made;
     }
+    method rename-columns-by-pairs($/) { make 'преименувай колоните с ' ~ $/.values[0].made; }
 
     # Drop columns command
     method drop-columns-command($/) { make $/.values[0].made; }

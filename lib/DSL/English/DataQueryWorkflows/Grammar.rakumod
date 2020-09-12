@@ -47,13 +47,13 @@ grammar DSL::English::DataQueryWorkflows::Grammar
         <data-load-command> |
         <distinct-command> |
         <missing-treatment-command> |
+        <rename-columns-command> |
         <select-command> |
         <filter-command> |
         <mutate-command> |
         <group-command> |
         <ungroup-command> |
         <arrange-command> |
-        <rename-columns-command> |
         <drop-columns-command> |
         <statistics-command> |
         <join-command> |
@@ -81,6 +81,14 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule replace-missing-command { <.replace-verb> <.missing-values-phrase> <.with-preposition> <replace-missing-rhs> }
     rule replace-missing-rhs { <number-value> | <mixed-quoted-variable-name> | <wl-expr> }
 
+    # Rename columns
+    rule rename-columns-command { <rename-columns-by-pairs> | <rename-columns-simple> }
+    rule rename-columns-simple { <.rename-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]?
+                                 <current=.mixed-quoted-variable-names-list>
+                                 [ <.to-preposition> | <.into-preposition> | <.as-preposition> ]
+                                 <new=.mixed-quoted-variable-names-list> }
+    rule rename-columns-by-pairs { [ <.rename-directive> | <.select-verb> ] [ <as-pairs-list> | <assign-pairs-list> ] }
+
     # Select command
     rule select-command { <select-plain-variables> | <select-mixed-quoted-variables> }
     rule select-opening-phrase { <select> <the-determiner>? [ <variables-noun> | <variable-noun> | <columns> ]? }
@@ -92,11 +100,13 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule filter-spec { <predicates-list> }
 
     # Mutate command
-    rule mutate-command { [ <mutate> | <assign> | <transform-verb> ] <.by-preposition>? <assign-pairs-list> }
+    rule mutate-command { [ <.mutate> | <.assign-verb> | <.transform-verb> ] <.by-preposition>? <assign-pairs-list> }
     rule assign-pair { <assign-pair-lhs> <.assign-to-symbol> <assign-pair-rhs> }
+    rule as-pair     { <assign-pair-rhs> <.as-preposition>   <assign-pair-lhs> }
+    rule assign-pairs-list { <assign-pair>+ % <.list-separator> }
+    rule as-pairs-list     { <as-pair>+     % <.list-separator> }
     rule assign-pair-lhs { <mixed-quoted-variable-name> }
     rule assign-pair-rhs { <mixed-quoted-variable-name> | <wl-expr> }
-    rule assign-pairs-list { <assign-pair>+ % <.list-separator> }
 
     # Group command
     rule group-command { <group-by> <variable-names-list> }
@@ -116,13 +126,6 @@ grammar DSL::English::DataQueryWorkflows::Grammar
         <.arrange> <.descending> <arrange-simple-spec> |
         <.arrange> <arrange-simple-spec> <.descending> |
         <.reverse-sort-phrase> <arrange-simple-spec> }
-
-    # Rename columns
-    rule rename-columns-command { <rename-columns-simple> }
-    rule rename-columns-simple { <.rename-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]?
-                                 <current=.mixed-quoted-variable-names-list>
-                                 [ <.to-preposition> | <.into-preposition> | <.as-preposition> ]
-                                 <new=.mixed-quoted-variable-names-list> }
 
     # Drop columns
     rule drop-columns-command { <drop-columns-simple> }

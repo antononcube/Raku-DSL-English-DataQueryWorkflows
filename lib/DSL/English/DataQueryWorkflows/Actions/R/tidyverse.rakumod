@@ -90,11 +90,19 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	
 	# Mutate command
 	method mutate-command($/) { make 'dplyr::mutate(' ~ $<assign-pairs-list>.made ~ ')'; }
-	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
 	method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
-	method assign-pair-lhs($/) { make $/.values[0].made; }
-	method assign-pair-rhs($/) { make $/.values[0].made; }
-	
+	method as-pair($/)     { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
+	method as-pairs-list($/)     { make $<as-pair>>>.made.join(', '); }
+	method assign-pair-lhs($/) { make $/.values[0].made.subst(:g, '"', ''); }
+	method assign-pair-rhs($/) {
+        if $<mixed-quoted-variable-name> {
+            make $/.values[0].made.subst(:g, '"', '');
+        } else {
+            make $/.values[0].made
+        }
+    }
+
 	# Group command
 	method group-command($/) { make 'dplyr::group_by(' ~ $<variable-names-list>.made ~ ')'; }
 	
@@ -125,6 +133,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
             make 'dplyr::rename( ' ~ $pairs.join(', ') ~ ' )';
         }
     }
+    method rename-columns-by-pairs($/) { make 'dplyr::select(' ~ $<as-pairs-list>.made ~ ')'; }
 
     # Drop columns command
     method drop-columns-command($/) { make $/.values[0].made; }

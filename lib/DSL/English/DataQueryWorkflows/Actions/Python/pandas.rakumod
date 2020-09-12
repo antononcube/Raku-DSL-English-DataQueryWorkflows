@@ -92,9 +92,17 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
     # Mutate command
 	method mutate-command($/) { make $<assign-pairs-list>.made; }
 	method assign-pairs-list($/) { make 'obj = obj.assign( ' ~ $<assign-pair>>>.made.join(', ') ~ ' )'; }
+	method as-pairs-list($/)     { make 'obj = obj.assign( ' ~ $<as-pair>>>.made.join(', ') ~ ' )'; }
 	method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
-	method assign-pair-lhs($/) { make $/.values[0].made; }
-	method assign-pair-rhs($/) { make $/.values[0].made; }
+	method as-pair($/)     { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+	method assign-pair-lhs($/) { make $/.values[0].made.subst(:g, '"', ''); }
+	method assign-pair-rhs($/) {
+        if $<mixed-quoted-variable-name> {
+            make 'obj["' ~ $/.values[0].made.subst(:g, '"', '') ~ '"]';
+        } else {
+            make $/.values[0].made
+        }
+    }
 
     # Group command
 	method group-command($/) { make 'obj = obj ( data = obj, ' ~ $<variable-names-list>.made ~ ')'; }
@@ -126,6 +134,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
             make 'obj = obj.rename( columns = { ' ~ $pairs.join(', ') ~ ' } )';
         }
     }
+    method rename-columns-by-pairs($/) { make $/.values[0].made; }
 
     # Drop columns command
     method drop-columns-command($/) { make $/.values[0].made; }
