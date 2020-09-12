@@ -9,7 +9,7 @@ plan 18;
 my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
 
 #-----------------------------------------------------------
-# Creation
+# Basic commands
 #-----------------------------------------------------------
 
 ok $pCOMMAND.parse('use data frame dfTitanic'),

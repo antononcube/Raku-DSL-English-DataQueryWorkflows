@@ -7,7 +7,7 @@ plan 11;
 
 
 #-----------------------------------------------------------
-# Creation
+# Basic commands
 #-----------------------------------------------------------
 
 is to_DataQuery_tidyverse('use data frame dfTitanic'),
