@@ -3,7 +3,7 @@ use lib 'lib';
 use DSL::English::DataQueryWorkflows::Grammar;
 use Test;
 
-plan 16;
+plan 18;
 
 # Shortcut
 my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
@@ -36,6 +36,9 @@ ok $pCOMMAND.parse('select passengerAge and passengerSex'),
 ok $pCOMMAND.parse('select passengerAge, passengerClass, and passengerSex'),
         'select passengerAge, passengerClass, and passengerSex';
 
+ok $pCOMMAND.parse('select passengerAge as age, passengerClass as class, and passengerSex as sex'),
+        'select passengerAge as age, passengerClass as class, and passengerSex as sex';
+
 ok $pCOMMAND.parse('drop passengerAge, passengerClass, and passengerSex'),
         'drop passengerAge, passengerClass, and passengerSex';
 
@@ -44,6 +47,9 @@ ok $pCOMMAND.parse('delete passengerAge and passengerSex'),
 
 ok $pCOMMAND.parse('rename passengerAge, passengerClass, and passengerSex as age, class, sex'),
         'rename passengerAge, passengerClass, and passengerSex as age, class, sex';
+
+ok $pCOMMAND.parse('rename passengerAge as age, passengerClass as class and passengerSex as sex'),
+        'rename passengerAge as age, passengerClass as class and passengerSex as sex';
 
 ok $pCOMMAND.parse('drop passengerAge, passengerClass, and passengerSex'),
         'drop passengerAge, passengerClass, and passengerSex';

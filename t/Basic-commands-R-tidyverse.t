@@ -3,7 +3,7 @@ use lib 'lib';
 use DSL::English::DataQueryWorkflows;
 use Test;
 
-plan 10;
+plan 11;
 
 
 #-----------------------------------------------------------
@@ -25,6 +25,11 @@ like to_DataQuery_tidyverse('select passengerAge and passengerSex'),
 like to_DataQuery_tidyverse('select passengerAge, passengerClass, and passengerSex'),
         / 'select(' \h* 'passengerAge' \h* ',' \h* 'passengerClass' ',' \h* 'passengerSex' \h* ')' /,
         'select passengerAge, passengerClass, and passengerSex';
+
+
+like to_DataQuery_tidyverse('select passengerAge as age, passengerClass as class'),
+        / 'select(' \h* 'age' \h* '=' \h* 'passengerAge' \h* ',' \h* 'class' \h* '=' \h* 'passengerClass' \h* ')' /,
+        'select passengerAge as age, passengerClass as class';
 
 like to_DataQuery_tidyverse('drop the column passengerAge'),
         / 'mutate(' \h* 'passengerAge' \h* '=' \h* 'NULL' \h* ')' /,
