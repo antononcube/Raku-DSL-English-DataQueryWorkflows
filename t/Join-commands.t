@@ -3,7 +3,7 @@ use lib 'lib';
 use DSL::English::DataQueryWorkflows::Grammar;
 use Test;
 
-plan 7;
+plan 9;
 
 # Shortcut
 my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
@@ -32,5 +32,11 @@ ok $pCOMMAND.parse('inner join with dfStarwarsVehicles by "character" equals "na
 
 ok $pCOMMAND.parse('inner join with dfStarswars by "name" = "name2" and mass = mass3'),
         'inner join with dfStarswars by "name" = "name2" and mass = mass3';
+
+ok $pCOMMAND.parse('inner join with dfStarswars by `{"name" -> "name2", "mass" -> mass3}`'),
+        'inner join with dfStarswars by `{"name" -> "name2", "mass" -> mass3}`';
+
+ok $pCOMMAND.parse('inner join with dfStarswars by `c("name" = "name2", "mass" = mass3)`'),
+        'inner join with dfStarswars by `c("name" = "name2", "mass" = mass3)`';
 
 done-testing;
