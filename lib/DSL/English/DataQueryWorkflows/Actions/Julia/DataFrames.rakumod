@@ -45,15 +45,12 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	method variable-names-list($/) { make map( {':' ~ $_ }, $<variable-name>>>.made ).join(', '); }
 	method quoted-variable-names-list($/) { make map( {':' ~ $_.subst(:g, '"', '') }, $<quoted-variable-name>>>.made ).join(', '); }
 	method mixed-quoted-variable-names-list($/) { make map( {':' ~ $_.subst(:g, '"', '') }, $<mixed-quoted-variable-name>>>.made ).join(', '); }
-	
-	# Trivial
-	method trivial-parameter($/) { make $/.values[0].made; }
-	method trivial-parameter-none($/) { make 'missing'; }
-	method trivial-parameter-empty($/) { make '[]'; }
-	method trivial-parameter-automatic($/) { make 'Null'; }
-	method trivial-parameter-false($/) { make 'false'; }
-	method trivial-parameter-true($/) { make 'true'; }
-	
+
+	# Column specs
+    method column-specs-list($/) { make $<column-spec>>>.made.join(', '); }
+    method column-spec($/) {  make $/.values[0].made; }
+    method column-name-spec($/) { make ':' ~ $<mixed-quoted-variable-name>.made.subst(:g, '"', ''); }
+
 	# Load data
 	method data-load-command($/) { make $/.values[0].made; }
 	method load-data-table($/) { make 'obj = ' ~ $<data-location-spec>.made; }
@@ -194,21 +191,21 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	method cross-tabulation-formula($/) { make $/.values[0].made; }
 	method cross-tabulation-double-formula($/) {
 		if $<values-variable-name> {
-			make 'obj = combine( x -> sum(x[:, :' ~ $<values-variable-name> ~ ']), groupby( obj, [ :' ~ $<rows-variable-name>.made ~ ', :' ~ $<columns-variable-name>.made ~ '] ))';
+			make 'obj = combine( x -> sum(x[:, ' ~ $<values-variable-name>.made ~ ']), groupby( obj, [ ' ~ $<rows-variable-name>.made ~ ', ' ~ $<columns-variable-name>.made ~ '] ))';
 		} else {
-			make 'obj = combine( nrow, groupby( obj, [ :' ~ $<rows-variable-name>.made ~ ', :' ~ $<columns-variable-name>.made ~ '] ))';
+			make 'obj = combine( nrow, groupby( obj, [ ' ~ $<rows-variable-name>.made ~ ', ' ~ $<columns-variable-name>.made ~ '] ))';
 		}
 	}
 	method cross-tabulation-single-formula($/) {
 		if $<values-variable-name> {
-			make 'obj = combine( x -> sum(x[:, :' ~ $<values-variable-name> ~ ']), groupby( obj, [ :' ~ $<rows-variable-name>.made ~ ' ] ))';
+			make 'obj = combine( x -> sum(x[:, ' ~ $<values-variable-name>.made ~ ']), groupby( obj, [ ' ~ $<rows-variable-name>.made ~ ' ] ))';
 		} else {
-			make 'obj = combine( nrow, groupby( obj, [ :' ~ $<rows-variable-name>.made ~ ' ] ))';
+			make 'obj = combine( nrow, groupby( obj, [ ' ~ $<rows-variable-name>.made ~ ' ] ))';
 		}
 	}
-    method rows-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
-    method columns-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
-    method values-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
+    method rows-variable-name($/) { make $/.values[0].made; }
+    method columns-variable-name($/) { make $/.values[0].made; }
+    method values-variable-name($/) { make $/.values[0].made; }
 
 	# Probably have to be in DSL::Shared::Action .
     # Assign-pairs and as-pairs

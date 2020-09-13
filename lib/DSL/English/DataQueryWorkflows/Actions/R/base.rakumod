@@ -57,13 +57,10 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made; }
 	method mixed-quoted-variable-names-list($/) { make $<mixed-quoted-variable-name>>>.made; }
 
-	# Trivial
-	method trivial-parameter($/) { make $/.values[0].made; }
-	method trivial-parameter-none($/) { make 'NA'; }
-	method trivial-parameter-empty($/) { make 'c()'; }
-	method trivial-parameter-automatic($/) { make 'NULL'; }
-	method trivial-parameter-false($/) { make 'FALSE'; }
-	method trivial-parameter-true($/) { make 'TRUE'; }
+	# Column specs
+    method column-specs-list($/) { make $<column-spec>>>.made.join(', '); }
+    method column-spec($/) {  make $/.values[0].made; }
+    method column-name-spec($/) { make '"' ~ $<mixed-quoted-variable-name>.made.subst(:g, '"', '') ~ '"'; }
 
 	# Load data
 	method data-load-command($/) { make $/.values[0].made; }
@@ -214,9 +211,9 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 			make 'obj <- xtabs( formula = ~ ' ~ $<rows-variable-name>.made ~ ', data = obj )';
 		}
 	}
-    method rows-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
-    method columns-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
-    method values-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
+    method rows-variable-name($/) { make $/.values[0]; }
+    method columns-variable-name($/) { make $/.values[0]; }
+    method values-variable-name($/) { make $/.values[0]; }
 
     # Reshape command
     method reshape-command($/) { make $/.values[0].made; }
@@ -226,22 +223,24 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
     method pivot-longer-argument($/) { make $/.values[0].made; }
 
-    method pivot-longer-columns-spec($/) { make 'varying = c( ' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ' )'; }
+	method pivot-longer-id-columns-spec($/) { make 'idvar = c( ' ~ $/.values[0].made ~ ' )'; }
 
-    method pivot-longer-variable-column-spec($/) { make 'timevar = ' ~ $<quoted-variable-name>.made; }
+    method pivot-longer-columns-spec($/) { make 'varying = list(' ~ $/.values[0].made ~ ' )'; }
 
-    method pivot-longer-value-column-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
+    method pivot-longer-variable-column-name-spec($/) { make 'timevar = ' ~ $/.values[0].made; }
+
+    method pivot-longer-value-column-name-spec($/) { make 'v.names = ' ~ $/.values[0].made; }
 
     # Pivot wider command
     method pivot-wider-command($/) { make 'obj <- reshape( data = obj, ' ~ $<pivot-wider-arguments-list>.made ~ ' , direction = "wide" )'; }
     method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
     method pivot-wider-argument($/) { make $/.values[0].made; }
 
-    method pivot-wider-id-columns-spec($/) { make 'idvar = c( ' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ' )'; }
+    method pivot-wider-id-columns-spec($/) { make 'idvar = c( ' ~ $/.values[0].made.join(', ') ~ ' )'; }
 
-    method pivot-wider-variable-column-spec($/) { make 'timevar = ' ~ $<quoted-variable-name>.made; }
+    method pivot-wider-variable-column-spec($/) { make 'timevar = ' ~ $/.values[0].made; }
 
-    method pivot-wider-value-column-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
+    method pivot-wider-value-column-spec($/) { make 'v.names = ' ~ $/.values[0].made; }
 
 	# Probably have to be in DSL::Shared::Action .
     # Assign-pairs and as-pairs

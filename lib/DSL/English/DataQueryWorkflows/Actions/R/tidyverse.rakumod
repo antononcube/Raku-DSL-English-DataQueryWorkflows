@@ -55,15 +55,12 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	method variable-names-list($/) { make $<variable-name>>>.made.join(', '); }
 	method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made.join(', '); }
 	method mixed-quoted-variable-names-list($/) { make $<mixed-quoted-variable-name>>>.made.join(', '); }
-	
-	# Trivial
-	method trivial-parameter($/) { make $/.values[0].made; }
-	method trivial-parameter-none($/) { make 'NA'; }
-	method trivial-parameter-empty($/) { make 'c()'; }
-	method trivial-parameter-automatic($/) { make 'NULL'; }
-	method trivial-parameter-false($/) { make 'FALSE'; }
-	method trivial-parameter-true($/) { make 'TRUE'; }
-	
+
+	# Column specs
+    method column-specs-list($/) { make $<column-spec>>>.made.join(', '); }
+    method column-spec($/) {  make $/.values[0].made; }
+    method column-name-spec($/) { make $<mixed-quoted-variable-name>.made.subst(:g, '"', ''); }
+
 	# Load data
 	method data-load-command($/) { make $/.values[0].made; }
 	method load-data-table($/) { make '{ data(' ~ $<data-location-spec>.made ~ '); ' ~ $<data-location-spec>.made ~ ' }'; }
@@ -227,29 +224,29 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
     method pivot-longer-argument($/) { make $/.values[0].made; }
 
-    method pivot-longer-columns-spec($/) { make 'cols = c( ' ~ $<mixed-quoted-variable-names-list>.made ~ ' )'; }
+    method pivot-longer-columns-spec($/) { make 'cols = c( ' ~ $/.values[0].made ~ ' )'; }
 
-    method pivot-longer-variable-column-spec($/) { make 'names_to = ' ~ $<quoted-variable-name>.made; }
+    method pivot-longer-variable-column-name-spec($/) { make 'names_to = ' ~ $/.values[0].made; }
 
-    method pivot-longer-value-column-spec($/) { make 'values_to = ' ~ $<quoted-variable-name>.made; }
+    method pivot-longer-value-column-name-spec($/) { make 'values_to = ' ~ $/.values[0].made; }
 
     # Pivot wider command
     method pivot-wider-command($/) { make 'tidyr::pivot_wider(' ~ $<pivot-wider-arguments-list>.made ~ ' )'; }
     method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
     method pivot-wider-argument($/) { make $/.values[0].made; }
 
-    method pivot-wider-id-columns-spec($/) { make 'id_cols = c( ' ~ $<mixed-quoted-variable-names-list>.made ~ ' )'; }
+    method pivot-wider-id-columns-spec($/) { make 'id_cols = c( ' ~ $/.values[0].made ~ ' )'; }
 
-    method pivot-wider-variable-column-spec($/) { make 'names_from = ' ~ $<quoted-variable-name>.made; }
+    method pivot-wider-variable-column-spec($/) { make 'names_from = ' ~ $/.values[0].made; }
 
-    method pivot-wider-value-column-spec($/) { make 'values_from = ' ~ $<quoted-variable-name>.made; }
+    method pivot-wider-value-column-spec($/) { make 'values_from = ' ~ $/.values[0].made; }
 
 	# Probably have to be in DSL::Shared::Action .
     # Assign-pairs and as-pairs
-	method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
-	method as-pair($/)     { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
 	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
 	method as-pairs-list($/)     { make $<as-pair>>>.made.join(', '); }
+	method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+	method as-pair($/)     { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
 	method assign-pair-lhs($/) { make $/.values[0].made.subst(:g, '"', ''); }
 	method assign-pair-rhs($/) {
         if $<mixed-quoted-variable-name> {

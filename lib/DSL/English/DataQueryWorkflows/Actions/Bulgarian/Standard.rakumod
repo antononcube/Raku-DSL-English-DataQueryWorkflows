@@ -46,6 +46,11 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made.join(', '); }
 	method mixed-quoted-variable-names-list($/) { make $<mixed-quoted-variable-name>>>.made.join(', '); }
 
+	# Column specs
+    method column-specs-list($/) { make $<column-spec>>>.made.join(', '); }
+    method column-spec($/) {  make $/.values[0].made; }
+    method column-name-spec($/) { make '"' ~ $<mixed-quoted-variable-name>.made.subst(:g, '"', '') ~ '"'; }
+
 	# Load data
 	method data-load-command($/) { make $/.values[0].made; }
 	method load-data-table($/) { make 'зареди таблицата: ' ~ $<data-location-spec>.made; }
@@ -189,22 +194,24 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
     method pivot-longer-argument($/) { make $/.values[0].made; }
 
-    method pivot-longer-columns-spec($/) { make 'колоните ' ~ $<mixed-quoted-variable-names-list>.made; }
+    method pivot-longer-id-columns-spec($/) { make 'id колоните ' ~ $/.values[0].made; }
 
-    method pivot-longer-variable-column-spec($/) { make 'променлива колона ' ~ $<quoted-variable-name>.made; }
+    method pivot-longer-columns-spec($/) { make 'колоните ' ~ $/.values[0].made; }
 
-    method pivot-longer-value-column-spec($/) { make 'стойностна колона ' ~ $<quoted-variable-name>.made; }
+    method pivot-longer-variable-column-name-spec($/) { make 'променлива колона ' ~ $/.values[0].made; }
+
+    method pivot-longer-value-column-name-spec($/) { make 'стойностна колона ' ~ $/.values[0].made; }
 
     # Pivot wider command
     method pivot-wider-command($/) { make 'преобразувай я широка форма ' ~ $<pivot-wider-arguments-list>.made; }
     method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
     method pivot-wider-argument($/) { make $/.values[0].made; }
 
-    method pivot-wider-id-columns-spec($/) { make 'идентификаторни колони ' ~ $<mixed-quoted-variable-names-list>.made ~ ' )'; }
+    method pivot-wider-id-columns-spec($/) { make 'идентификаторни колони ' ~ $/.values[0].made; }
 
-    method pivot-wider-variable-column-spec($/) { make 'променлива колона ' ~ $<quoted-variable-name>.made; }
+    method pivot-wider-variable-column-spec($/) { make 'променлива колона ' ~ $/.values[0].made; }
 
-    method pivot-wider-value-column-spec($/) { make 'стойностна колона ' ~ $<quoted-variable-name>.made; }
+    method pivot-wider-value-column-spec($/) { make 'стойностна колона ' ~ $/.values[0].made; }
 
     # Probably have to be in DSL::Shared::Action .
     # Assign-pairs and as-pairs

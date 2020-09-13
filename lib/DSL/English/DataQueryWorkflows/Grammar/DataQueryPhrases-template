@@ -65,7 +65,8 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     rule filter { <filter-verb> | <select-verb> }
     rule group-by { <group-verb> [ <by-preposition> | <using-preposition> ] }
     rule select { <select-verb> | <take-verb> | <keep-only-phrase> }
-    rule pivot-columns-phrase { <pivot-verb>? <the-determiner>? <columns> }
+    rule pivot-columns-phrase    { [ <pivot-verb> | <variable-noun> ]? <the-determiner>? <columns> }
+    rule pivot-id-columns-phrase { [ <pivot-verb> | <variable-noun> ]? <the-determiner>? <id-columns-phrase> }
     rule id-columns-phrase { [ <id-noun> | <identifier-noun> ] <columns> }
     rule rename-directive { <rename-verb> }
     rule reverse-sort-phrase { <reverse-adjective> [ <sort-verb> | <order-verb> ] }

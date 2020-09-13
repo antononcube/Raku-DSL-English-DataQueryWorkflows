@@ -46,6 +46,11 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made.join(', '); }
     method mixed-quoted-variable-names-list($/) { make $<mixed-quoted-variable-name>>>.made.join(', '); }
 
+    # Column specs
+    method column-specs-list($/) { make $<column-spec>>>.made.join(', '); }
+    method column-spec($/) {  make $/.values[0].made; }
+    method column-name-spec($/) { make '"' ~ $<mixed-quoted-variable-name>.made.subst(:g, '"', '') ~ '"'; }
+
     # Load data
     method data-load-command($/) { make $/.values[0].made; }
     method load-data-table($/) { make 'obj = ExampleData[' ~ $<data-location-spec>.made ~ ']'; }
@@ -55,6 +60,11 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     # Distinct command
 	method distinct-command($/) { make $/.values[0].made; }
 	method distinct-simple-command($/) { make 'obj = DeleteDuplicates[obj]'; }
+
+    # Missing treatment command
+	method missing-treatment-command($/) { make $/.values[0].made; }
+	method drop-incomplete-cases-command($/) { make 'obj = DeleteMissing[obj, 1, 2]'; }
+	method replace-missing-command($/) { make 'obj = obj /. _Missing ->' ~ $<replace-missing-rhs>.made ; }
 
     # Select command
 	method select-command($/) { make $/.values[0].made; }
@@ -190,40 +200,38 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
             make 'obj = GroupBy[ obj, #[' ~ $<rows-variable-name>.made ~ ']&, Length ]';
         }
     }
-    method rows-variable-name($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
-    method columns-variable-name($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
-    method values-variable-name($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
+    method rows-variable-name($/) { make $/.values[0].made; }
+    method columns-variable-name($/) { make $/.values[0].made; }
+    method values-variable-name($/) { make $/.values[0].made; }
 
     # Reshape command
     method reshape-command($/) { make $/.values[0].made; }
 
     # Pivot longer command
     method pivot-longer-command($/) {
-        my $cols  = 'obj';
-        if $<pivot-longer-columns-spec> {
-            $cols = 'Map[KeyTake[#, ' ~ $<pivot-longer-columns-spec>.made ~ '] &, obj]'
-        }
-        make 'obj = Dataset[Apply[Join][Query[All, KeyValueMap[List /* Replace[{k_, v_} :> Association["Variable" -> k, "Value" -> v]]]] @ ' ~ $cols ~ ']]';
+        make 'obj = ToLongForm[ obj, ' ~ $<pivot-longer-arguments-list>.made ~ ' ]';
     }
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
     method pivot-longer-argument($/) { make $/.values[0].made; }
 
-    method pivot-longer-columns-spec($/) { make '{' ~ $<mixed-quoted-variable-names-list>.made ~ '}'; }
+    method pivot-longer-id-columns-spec($/) { make '"IdentifierColumns" -> {' ~ $/.values[0].made ~ '}'; }
 
-    method pivot-longer-variable-column-spec($/) { make 'names_to = ' ~ $<mixed-quoted-variable-name>.made; }
+    method pivot-longer-columns-spec($/)    { make '"VariableColumns" -> {' ~ $/.values[0].made ~ '}'; }
 
-    method pivot-longer-value-column-spec($/) { make 'values_to = ' ~ $<mixed-quoted-variable-name>.made; }
+    method pivot-longer-variable-column-name-spec($/) { make '"VariablesTo" -> ' ~ $/.values[0].made; }
+
+    method pivot-longer-value-column-name-spec($/) { make '"ValuesTo" -> ' ~ $/.values[0].made; }
 
     # Pivot wider command
     method pivot-wider-command($/) { make 'tidyr::pivot_wider(' ~ $<pivot-wider-arguments-list>.made ~ ' )'; }
     method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
     method pivot-wider-argument($/) { make $/.values[0].made; }
 
-    method pivot-wider-id-columns-spec($/) { make 'id_cols = c( ' ~ $<mixed-quoted-variable-names-list>.made ~ ' )'; }
+    method pivot-wider-id-columns-spec($/) { make 'id_cols = c( ' ~ $/.values[0].made ~ ' )'; }
 
-    method pivot-wider-variable-column-spec($/) { make 'names_from = ' ~ $<mixed-quoted-variable-name>.made; }
+    method pivot-wider-variable-column-spec($/) { make 'names_from = ' ~ $/.values[0].made; }
 
-    method pivot-wider-value-column-spec($/) { make 'values_from = ' ~ $<mixed-quoted-variable-name>.made; }
+    method pivot-wider-value-column-spec($/) { make 'values_from = ' ~ $/.values[0].made; }
 
     # Probably have to be in DSL::Shared::Action .
     # Assign-pairs and as-pairs

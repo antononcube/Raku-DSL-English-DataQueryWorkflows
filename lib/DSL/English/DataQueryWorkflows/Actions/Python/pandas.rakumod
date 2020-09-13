@@ -43,12 +43,15 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
     # Overriding Predicate::predicate-simple -- wrapping the lhs variable specs with 'obj[...]'.
 	method predicate-simple($/) {
+		my $plhs = 'obj.' ~ $<lhs>.made;
+		my $prhs = $<rhs>.made;
+
 		if $<predicate-relation>.made eq '%!in%' {
-			make '!( obj[' ~ $<lhs>.made ~ '] %in% ' ~ $<rhs>.made ~ ')';
+			make '!( obj[' ~ $plhs ~ '] %in% ' ~ $prhs ~ ')';
 		} elsif $<predicate-relation>.made eq 'like' {
-			make 'grepl( pattern = ' ~ $<rhs>.made ~ ', x = obj$' ~ $<lhs>.made ~ ')';
+			make 'grepl( pattern = ' ~ $prhs ~ ', x = obj$' ~ $plhs ~ ')';
 		} else {
-			make 'obj[' ~ $<lhs>.made ~ '] ' ~ $<predicate-relation>.made ~ ' ' ~ $<rhs>.made;
+			make $plhs ~ $<predicate-relation>.made ~ ' ' ~ $prhs;
 		}
 	}
 
@@ -57,13 +60,10 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made.join(', '); }
 	method mixed-quoted-variable-names-list($/) { make $<mixed-quoted-variable-name>>>.made.join(', '); }
 
-	# Trivial
-	method trivial-parameter($/) { make $/.values[0].made; }
-	method trivial-parameter-none($/) { make 'None'; }
-	method trivial-parameter-empty($/) { make '[]'; }
-	method trivial-parameter-automatic($/) { make 'None'; }
-	method trivial-parameter-false($/) { make 'False'; }
-	method trivial-parameter-true($/) { make 'True'; }
+	# Column specs
+    method column-specs-list($/) { make $<column-spec>>>.made.join(', '); }
+    method column-spec($/) {  make $/.values[0].made; }
+    method column-name-spec($/) { make 'obj.' ~ $<mixed-quoted-variable-name>.made.subst(:g, '"', ''); }
 
 	# Load data
 	method data-load-command($/) { make $/.values[0].made; }
@@ -77,7 +77,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
 	# Missing treatment command
 	method missing-treatment-command($/) { make $/.values[0].made; }
-	method drop-incomplete-cases-command($/) { make 'obj = na_omit(obj)'; }
+	method drop-incomplete-cases-command($/) { make 'obj = obj.dropna()'; }
 	method replace-missing-command($/) { make 'obj = obj.replace( numpy.nan,' ~ $<replace-missing-rhs>.made ; }
 
     # Select command
@@ -204,9 +204,9 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	method cross-tabulation-formula($/) { make $/.values[0].made; }
 	method cross-tabulation-double-formula($/) {
 		if $<values-variable-name> {
-			make 'obj = pandas.crosstab( index = obj.' ~ $<rows-variable-name>.made ~ ', columns = obj.' ~ $<columns-variable-name>.made ~ ', values = obj.' ~ $<values-variable-name>.made ~ ', aggfunc = "sum" )';
+			make 'obj = pandas.crosstab( index = ' ~ $<rows-variable-name>.made ~ ', columns = ' ~ $<columns-variable-name>.made ~ ', values = ' ~ $<values-variable-name>.made ~ ', aggfunc = "sum" )';
 		} else {
-			make 'obj = pandas.crosstab( index = obj.' ~ $<rows-variable-name>.made ~ ', columns = obj.' ~ $<columns-variable-name>.made ~ ' )';
+			make 'obj = pandas.crosstab( index = ' ~ $<rows-variable-name>.made ~ ', columns = ' ~ $<columns-variable-name>.made ~ ' )';
 		}
 	}
 	method cross-tabulation-single-formula($/) {
@@ -216,9 +216,9 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 			make 'obj = pandas.crosstab( index = obj.' ~ $<rows-variable-name>.made ~ ' )';
 		}
 	}
-    method rows-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
-    method columns-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
-    method values-variable-name($/) { make $/.values[0].made.subst(:g, '"', ''); }
+    method rows-variable-name($/) { make $/.values[0].made; }
+    method columns-variable-name($/) { make $/.values[0].made; }
+    method values-variable-name($/) { make $/.values[0].made; }
 
     # Reshape command
     method reshape-command($/) { make $/.values[0].made; }
@@ -230,9 +230,9 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
     method pivot-longer-columns-spec($/) { make 'varying = c( ' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ' )'; }
 
-    method pivot-longer-variable-column-spec($/) { make 'timevar = ' ~ $<quoted-variable-name>.made; }
+    method pivot-longer-variable-column-name-spec($/) { make 'timevar = ' ~ $<quoted-variable-name>.made; }
 
-    method pivot-longer-value-column-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
+    method pivot-longer-value-column-name-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
 
     # Pivot wide command
     method pivot-wider-command($/) { make 'obj = reshape( data = obj, ' ~ $<pivot-wider-arguments-list>.made ~ ' , direction = "wide" )'; }

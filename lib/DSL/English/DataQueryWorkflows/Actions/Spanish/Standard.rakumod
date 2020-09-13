@@ -46,6 +46,11 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made.join(', '); }
 	method mixed-quoted-variable-names-list($/) { make $<mixed-quoted-variable-name>>>.made.join(', '); }
 
+	# Column specs
+    method column-specs-list($/) { make $<column-spec>>>.made.join(', '); }
+    method column-spec($/) {  make $/.values[0].made; }
+    method column-name-spec($/) { make '"' ~ $<mixed-quoted-variable-name>.made.subst(:g, '"', '') ~ '"'; }
+
 	# Load data
 	method data-load-command($/) { make $/.values[0].made; }
 	method load-data-table($/) { make 'cargar la tabla: ' ~ $<data-location-spec>.made; }
@@ -189,22 +194,24 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
     method pivot-longer-argument($/) { make $/.values[0].made; }
 
-    method pivot-longer-columns-spec($/) { make 'columnas ' ~ $<mixed-quoted-variable-names-list>.made; }
+	method pivot-longer-id-columns-spec($/) { make 'columnas ' ~ $/.values[0].made; }
 
-    method pivot-longer-variable-column-spec($/) { make 'colonna variabile ' ~ $<quoted-variable-name>.made; }
+    method pivot-longer-columns-spec($/) { make 'columnas ' ~ $/.values[0].made; }
 
-    method pivot-longer-value-column-spec($/) { make 'colonna dei valori ' ~ $<quoted-variable-name>.made; }
+    method pivot-longer-variable-column-name-spec($/) { make 'colonna variabile ' ~ $/.values[0].made; }
+
+    method pivot-longer-value-column-name-spec($/) { make 'colonna dei valori ' ~ $/.values[0].made; }
 
     # Pivot wider command
     method pivot-wider-command($/) { make 'convertire in forma ampia ' ~ $<pivot-wider-arguments-list>.made; }
     method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
     method pivot-wider-argument($/) { make $/.values[0].made; }
 
-    method pivot-wider-id-columns-spec($/) { make 'colonne identificative ' ~ $<mixed-quoted-variable-names-list>.made ~ ' )'; }
+    method pivot-wider-id-columns-spec($/) { make 'colonne identificative ' ~$/.values[0].made; }
 
-    method pivot-wider-variable-column-spec($/) { make 'colonna variabile ' ~ $<quoted-variable-name>.made; }
+    method pivot-wider-variable-column-spec($/) { make 'colonna variabile ' ~ $/.values[0].made; }
 
-    method pivot-wider-value-column-spec($/) { make 'colonna dei valori ' ~ $<quoted-variable-name>.made; }
+    method pivot-wider-value-column-spec($/) { make 'colonna dei valori ' ~ $/.values[0].made; }
 
 	# Probably have to be in DSL::Shared::Action .
     # Assign-pairs and as-pairs

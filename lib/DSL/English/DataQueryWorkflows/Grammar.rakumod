@@ -60,6 +60,11 @@ grammar DSL::English::DataQueryWorkflows::Grammar
         <reshape-command> |
         <cross-tabulation-command> }
 
+    # Column specs
+    rule column-specs-list { <column-spec>+ % <list-separator> }
+    rule column-spec { <column-name-spec> | <wl-expr> }
+    rule column-name-spec { <mixed-quoted-variable-name> }
+
     # Load data
     rule data-load-command { <load-data-table> | <use-data-table> }
     rule data-location-spec { <dataset-name> }
@@ -149,25 +154,33 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule cross-tabulation-formula { <cross-tabulation-double-formula> | <cross-tabulation-single-formula> }
     rule cross-tabulation-double-formula { <.variable-noun>? <rows-variable-name> [ <.list-separator-symbol> | <.with-preposition> ] <.variable-noun>? <columns-variable-name> [ <.over-preposition> <values-variable-name> ]? }
     rule cross-tabulation-single-formula { <.variable-noun>? <rows-variable-name> [ <.over-preposition> <values-variable-name> ]? }
-    rule rows-variable-name { <mixed-quoted-variable-name> }
-    rule columns-variable-name { <mixed-quoted-variable-name> }
-    rule values-variable-name { <mixed-quoted-variable-name> }
+    rule rows-variable-name { <column-spec> }
+    rule columns-variable-name { <column-spec> }
+    rule values-variable-name { <column-spec> }
 
     # Reshape command
     rule reshape-command { <pivot-longer-command> | <pivot-wider-command> }
 
     # To long form command
-    rule pivot-longer-command { <.convert-verb>? <.to-long-form-phrase> <.filler-separator> <pivot-longer-arguments-list> }
+    rule pivot-longer-command {
+        :my Int $*COLS = 0;
+        :my Int $*IDCOLS = 0;
+        :my Int $*VARTO = 0;
+        :my Int $*VALTO = 0;
+        <.convert-verb>? <.to-long-form-phrase> <.filler-separator> <pivot-longer-arguments-list> }
+
     regex pivot-longer-arguments-list { <pivot-longer-argument>+ % [ [ <list-separator> | <ws> ] <filler-separator>? ] }
-    regex pivot-longer-argument { <pivot-longer-columns-spec> | <pivot-longer-variable-column-spec> | <pivot-longer-value-column-spec> }
+    regex pivot-longer-argument { <pivot-longer-id-columns-spec> | <pivot-longer-columns-spec> | <pivot-longer-variable-column-name-spec> | <pivot-longer-value-column-name-spec> }
 
-    rule filler-separator { <with-preposition> | <using-preposition> | <for-preposition> }
+    rule filler-separator { <and-conjunction>? [ <with-preposition> | <using-preposition> | <for-preposition> ] }
 
-    rule pivot-longer-columns-spec { <.the-determiner>? <.pivot-columns-phrase> <mixed-quoted-variable-names-list> }
+    rule pivot-longer-id-columns-spec { <?{$*IDCOLS == 0}> <.the-determiner>? <.pivot-id-columns-phrase> <column-specs-list> {$*IDCOLS == 1} }
 
-    rule pivot-longer-variable-column-spec { <.the-determiner>? <.variable-column-name-phrase> <mixed-quoted-variable-name> }
+    rule pivot-longer-columns-spec { <?{$*COLS == 0}> <.the-determiner>? <.pivot-columns-phrase> <column-specs-list> {$*COLS = 1} }
 
-    rule pivot-longer-value-column-spec { <.the-determiner>? <.value-column-name-phrase> <mixed-quoted-variable-name> }
+    rule pivot-longer-variable-column-name-spec { <?{$*VARTO == 0}> <.the-determiner>? <.variable-column-name-phrase> <column-spec> {$*VARTO == 0} }
+
+    rule pivot-longer-value-column-name-spec { <?{$*VALTO == 0}> <.the-determiner>? <.value-column-name-phrase> <column-spec> <?{$*VALTO == 0}> }
 
     # To wider form command
     rule pivot-wider-command { <.convert-verb>? <.to-wide-form-phrase>  <.filler-separator> <pivot-wider-arguments-list> }
@@ -175,13 +188,13 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     regex pivot-wider-argument { <pivot-wider-id-columns-spec> | <pivot-wider-variable-column-spec> | <pivot-wider-value-column-spec> }
 
     # Same as <pivot-longer-columns-spec>
-    rule pivot-wider-id-columns-spec { <.the-determiner>? <.id-columns-phrase> <mixed-quoted-variable-names-list> }
+    rule pivot-wider-id-columns-spec { <.the-determiner>? <.id-columns-phrase> <column-specs-list> }
 
-    # Same as <pivot-longer-variable-column-spec>
-    rule pivot-wider-variable-column-spec { <.the-determiner>? <.variable-column-phrase> <mixed-quoted-variable-name> }
+    # Same as <pivot-longer-variable-column-name-spec>
+    rule pivot-wider-variable-column-spec { <.the-determiner>? <.variable-column-phrase> <column-spec> }
 
-    # Same as <pivot-longer-value-column-spec>
-    rule pivot-wider-value-column-spec { <.the-determiner>? <.value-column-phrase> <mixed-quoted-variable-name> }
+    # Same as <pivot-longer-value-column-name-spec>
+    rule pivot-wider-value-column-spec { <.the-determiner>? <.value-column-phrase> <column-spec> }
 
     # Probably have to be in DSL::Shared::Roles .
     # Assign-pairs and as-pairs
