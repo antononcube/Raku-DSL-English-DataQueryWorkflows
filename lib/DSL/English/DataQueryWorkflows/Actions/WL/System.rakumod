@@ -122,7 +122,13 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     # Join command
     method join-command($/) { make $/.values[0].made; }
 
-    method join-by-spec($/) { make '{' ~ $/.values[0].made ~ '}'; }
+    method join-by-spec($/) {
+		if $<mixed-quoted-variable-names-list> {
+			make '{' ~ map( { '"' ~ $_ ~ '"'}, $/.values[0].made.subst(:g, '"', '').split(', ') ).join(', ') ~ '}';
+		} else {
+			make $/.values[0].made;
+		}
+	}
 
     method full-join-spec($/)  {
         if $<join-by-spec> {

@@ -148,8 +148,14 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	# Join command
 	method join-command($/) { make $/.values[0].made; }
 	
-	method join-by-spec($/) { make 'c(' ~ $/.values[0].made ~ ')'; }
-	
+	method join-by-spec($/) {
+		if $<mixed-quoted-variable-names-list> {
+			make 'c(' ~ map( { '"' ~ $_ ~ '"'}, $/.values[0].made.subst(:g, '"', '').split(', ') ).join(', ') ~ ')';
+		} else {
+			make $/.values[0].made;
+		}
+	}
+
 	method full-join-spec($/)  {
       if $<join-by-spec> {
 		  make 'dplyr::full_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
@@ -217,7 +223,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
     method reshape-command($/) { make $/.values[0].made; }
 
     # Pivot longer command
-    method pivot-longer-command($/) { make 'tidyr::pivot_longer(' ~ $<pivot-longer-arguments-list>.made ~ ' )'; }
+    method pivot-longer-command($/) { make 'tidyr::pivot_longer( ' ~ $<pivot-longer-arguments-list>.made ~ ' )'; }
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
     method pivot-longer-argument($/) { make $/.values[0].made; }
 

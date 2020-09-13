@@ -151,7 +151,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
 	method join-by-spec($/) {
 		if $<mixed-quoted-variable-names-list> {
-			make 'on = [' ~ $/.values[0].made ~ ']';
+			make 'on = [' ~ map( { '"' ~ $_ ~ '"'}, $/.values[0].made.subst(:g, '"', '').split(', ') ).join(', ') ~ ']';
 		} else {
 			make $/.values[0].made;
 		}

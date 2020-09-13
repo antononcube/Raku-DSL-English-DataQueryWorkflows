@@ -149,7 +149,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
 	method join-by-spec($/) {
 		if $<mixed-quoted-variable-names-list> {
-			make 'by = c(' ~ $/.values[0].made ~ ')';
+			make 'by = c(' ~ map( { '"' ~ $_.subst(:g, '"', '') ~ '"'}, $/.values[0].made ).join(', ') ~ ')';
 		} else {
 			make $/.values[0].made;
 		}
@@ -232,7 +232,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
     method pivot-longer-value-column-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
 
-    # Pivot wide command
+    # Pivot wider command
     method pivot-wider-command($/) { make 'obj <- reshape( data = obj, ' ~ $<pivot-wider-arguments-list>.made ~ ' , direction = "wide" )'; }
     method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
     method pivot-wider-argument($/) { make $/.values[0].made; }

@@ -43,8 +43,8 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 
 	# General
 	method variable-names-list($/) { make map( {':' ~ $_ }, $<variable-name>>>.made ).join(', '); }
-	method quoted-variable-names-list($/) { make map( {':' ~ $_ }, $<quoted-variable-name>>>.made ).join(', '); }
-	method mixed-quoted-variable-names-list($/) { make map( {':' ~ $_ }, $<mixed-quoted-variable-name>>>.made ).join(', '); }
+	method quoted-variable-names-list($/) { make map( {':' ~ $_.subst(:g, '"', '') }, $<quoted-variable-name>>>.made ).join(', '); }
+	method mixed-quoted-variable-names-list($/) { make map( {':' ~ $_.subst(:g, '"', '') }, $<mixed-quoted-variable-name>>>.made ).join(', '); }
 	
 	# Trivial
 	method trivial-parameter($/) { make $/.values[0].made; }
@@ -138,9 +138,15 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 
 	# Join command
 	method join-command($/) { make $/.values[0].made; }
-	
-	method join-by-spec($/) { make '[' ~ $/.values[0].made ~ ']'; }
-	
+
+	method join-by-spec($/) {
+		if $<mixed-quoted-variable-names-list> {
+			make '[' ~ $/.values[0].made ~ ']';
+		} else {
+			make $/.values[0].made;
+		}
+	}
+
 	method full-join-spec($/)  {
 		if $<join-by-spec> {
 			make 'obj = outerjoin( obj, ' ~ $<dataset-name>.made ~ ', on = ' ~ $<join-by-spec>.made ~ ')';
