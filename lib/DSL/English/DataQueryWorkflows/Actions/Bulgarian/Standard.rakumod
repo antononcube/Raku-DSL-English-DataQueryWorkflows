@@ -70,6 +70,7 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	method select-command($/) { make 'избери колоните: ' ~ $/.values[0].made; }
 	method select-plain-variables($/) { make $<variable-names-list>.made; }
 	method select-mixed-quoted-variables($/) { make $<mixed-quoted-variable-names-list>.made; }
+    method select-columns-by-pairs($/) { make 'преименувай и избери колоните с ' ~ $/.values[0].made; }
 
 	# Filter commands
 	method filter-command($/) { make 'филтрирай с предиката: ' ~ $<filter-spec>.made; }

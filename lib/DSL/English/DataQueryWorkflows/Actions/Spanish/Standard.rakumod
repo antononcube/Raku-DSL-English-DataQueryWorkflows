@@ -70,6 +70,7 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	method select-command($/) { make 'escoger columnas: ' ~ $/.values[0].made; }
 	method select-plain-variables($/) { make $<variable-names-list>.made; }
 	method select-mixed-quoted-variables($/) { make $<mixed-quoted-variable-names-list>.made; }
+    method select-columns-by-pairs($/) { make 'cambiar el nombre y seleccionar las columnas ' ~ $/.values[0].made; }
 
 	# Filter commands
 	method filter-command($/) { make 'filtrar con la condicion: ' ~ $<filter-spec>.made; }

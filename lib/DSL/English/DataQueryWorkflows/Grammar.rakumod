@@ -47,13 +47,13 @@ grammar DSL::English::DataQueryWorkflows::Grammar
         <data-load-command> |
         <distinct-command> |
         <missing-treatment-command> |
-        <rename-columns-command> |
         <select-command> |
         <filter-command> |
         <mutate-command> |
         <group-command> |
         <ungroup-command> |
         <arrange-command> |
+        <rename-columns-command> |
         <drop-columns-command> |
         <statistics-command> |
         <join-command> |
@@ -92,13 +92,14 @@ grammar DSL::English::DataQueryWorkflows::Grammar
                                  <current=.mixed-quoted-variable-names-list>
                                  [ <.to-preposition> | <.into-preposition> | <.as-preposition> ]
                                  <new=.mixed-quoted-variable-names-list> }
-    rule rename-columns-by-pairs { [ <.rename-directive> | <.select-verb> ] [ <as-pairs-list> | <assign-pairs-list> ] }
+    rule rename-columns-by-pairs { <.rename-directive> [ <as-pairs-list> | <assign-pairs-list> ] }
 
     # Select command
-    rule select-command { <select-plain-variables> | <select-mixed-quoted-variables> }
+    rule select-command { <select-columns-by-pairs> | <select-plain-variables> | <select-mixed-quoted-variables> }
     rule select-opening-phrase { <select> <the-determiner>? [ <variables-noun> | <variable-noun> | <columns> ]? }
     rule select-plain-variables { <.select-opening-phrase> <variable-names-list> }
     rule select-mixed-quoted-variables { <.select-opening-phrase> <mixed-quoted-variable-names-list> }
+    rule select-columns-by-pairs { <.select-verb> [ <as-pairs-list> | <assign-pairs-list> ] }
 
     # Filter command
     rule filter-command { <filter> <.the-determiner>? <.rows>? [ <.for-which-phrase>? | <.by-preposition> ] <filter-spec> }
@@ -134,7 +135,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule statistics-command { <count-command> | <glimpse-data> | <summarize-all-command> | <summarize-data> }
     rule count-command { <compute-directive> <.the-determiner>? [ <count-verb> | <counts-noun> ] | <count-verb> }
     rule glimpse-data { <.display-directive>? <.a-determiner>? <.glimpse-verb> <.at-preposition>? <.the-determiner>? <data>  }
-    rule summarize-data { [ <summarize-verb> | <summarise-verb> ] <data> | <display-directive> <data>? <summary> }
+    rule summarize-data { [ <summarize-verb> | <summarise-verb> | <summary> ] <data>? | <display-directive> <data>? <summary> }
     rule summarize-all-command { [ <.summarize-verb> | <.summarise-verb> ] <.them-pronoun>? <.all-determiner>? <.data>? [ <.with-preposition> <.functions>? <summarize-all-funcs-spec> ] }
     rule summarize-all-funcs-spec { <variable-names-list> }
 

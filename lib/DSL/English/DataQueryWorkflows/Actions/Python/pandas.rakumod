@@ -84,6 +84,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	method select-command($/) { make $/.values[0].made; }
 	method select-plain-variables($/) { make 'obj = obj[[' ~ map( {'"' ~ $_ ~ '"' }, $<variable-names-list>.made.split(', ') ).join(', ') ~ ']]'; }
 	method select-mixed-quoted-variables($/) { make 'obj = obj[[' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ']]'; }
+    method select-columns-by-pairs($/) { make $/.values[0].made; }
 
     # Filter commands
 	method filter-command($/) { make 'obj = obj[' ~ $<filter-spec>.made ~ ']'; }

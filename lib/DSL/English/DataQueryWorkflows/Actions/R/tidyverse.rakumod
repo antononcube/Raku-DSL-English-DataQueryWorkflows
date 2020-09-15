@@ -80,6 +80,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	method select-command($/) { make $/.values[0].made; }
 	method select-plain-variables($/) { make 'dplyr::select(' ~ $<variable-names-list>.made ~ ')'; }
 	method select-mixed-quoted-variables($/) { make 'dplyr::select_at( .vars = c(' ~ $<mixed-quoted-variable-names-list>.made ~ ') )'; }
+    method select-columns-by-pairs($/) { make 'dplyr::select(' ~ $<as-pairs-list>.made ~ ')'; }
 
 	# Filter commands
 	method filter-command($/) { make 'dplyr::filter(' ~ $<filter-spec>.made ~ ')'; }
@@ -118,7 +119,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
             make 'dplyr::rename( ' ~ $pairs.join(', ') ~ ' )';
         }
     }
-    method rename-columns-by-pairs($/) { make 'dplyr::select(' ~ $<as-pairs-list>.made ~ ')'; }
+    method rename-columns-by-pairs($/) { make 'dplyr::rename(' ~ $<as-pairs-list>.made ~ ')'; }
 
     # Drop columns command
     method drop-columns-command($/) { make $/.values[0].made; }

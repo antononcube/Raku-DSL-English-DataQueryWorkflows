@@ -81,6 +81,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method select-command($/) { make $/.values[0].made; }
 	method select-plain-variables($/) { make 'obj <- obj[ , c(' ~ map( {'"' ~ $_ ~ '"' }, $<variable-names-list>.made ).join(', ') ~ ') ]'; }
 	method select-mixed-quoted-variables($/) { make 'obj <- obj[ , c(' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ') ]'; }
+    method select-columns-by-pairs($/) { make $/.values[0].made; }
 
     # Filter commands
 	method filter-command($/) { make 'obj <- obj[' ~ $<filter-spec>.made ~ ', ]'; }

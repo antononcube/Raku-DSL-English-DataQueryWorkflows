@@ -70,6 +70,7 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 	method select-command($/) { make '열을 선택: ' ~ $/.values[0].made; }
 	method select-plain-variables($/) { make $<variable-names-list>.made; }
 	method select-mixed-quoted-variables($/) { make $<mixed-quoted-variable-names-list>.made; }
+    method select-columns-by-pairs($/) { make $/.values[0].made ~ ' 열의 이름을 바꾸고 선택하십시오'; }
 
 	# Filter commands
 	method filter-command($/) { make '술어로 필터링: ' ~ $<filter-spec>.made; }

@@ -74,6 +74,9 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method select-mixed-quoted-variables($/) {
       make 'obj = Map[ KeyTake[ #, {' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ '} ]&, obj]';
     }
+    method select-columns-by-pairs($/) {
+        make 'obj = Map[ Join[ #, <|' ~ $/.values[0].made ~ '|> ]&, obj][All, Keys[ <|' ~ $/.values[0].made ~ '|> ] ]' ;
+    }
 
     # Filter commands
     method filter-command($/) { make 'obj = Select[ obj, ' ~ $<filter-spec>.made ~ ' & ]'; }
@@ -113,7 +116,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
         }
     }
     method rename-columns-by-pairs($/) {
-        make 'obj = Map[ Join[ #, <|' ~ $/.values[0].made ~ '|> ]&, obj][All, Keys[ <|' ~ $/.values[0].made ~ '|> ] ]' ;
+        make 'obj = Map[ Join[ #, <|' ~ $/.values[0].made ~ '|> ]&, obj][All, KeyDrop[ #, #[[1, All, 2, 1]] & @ Hold[ {' ~ $/.values[0].made ~ '} ] ]& ]' ;
     }
 
     # Drop columns command

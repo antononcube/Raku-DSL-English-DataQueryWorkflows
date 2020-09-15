@@ -70,6 +70,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
   	method select-command($/) { make $/.values[0].made; }
 	method select-plain-variables($/) { make 'obj = select( obj, ' ~ $<variable-names-list>.made ~ ')'; }
 	method select-mixed-quoted-variables($/) { make 'obj = select( obj, ' ~ $<mixed-quoted-variable-names-list>.made ~ ')'; }
+    method select-columns-by-pairs($/) { make 'select!( obj, ' ~ $/.values[0].made ~ ')'; }
 
 	# Filter commands
 	method filter-command($/) { make 'obj = obj[ ' ~ $<filter-spec>.made ~ ', :]'; }
@@ -107,7 +108,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
             make 'obj = rename( obj, ' ~ $pairs.join(', ') ~ ' )';
         }
     }
-    method rename-columns-by-pairs($/) { make 'select!( obj, ' ~ $/.values[0].made ~ ')'; }
+    method rename-columns-by-pairs($/) { make 'rename!( obj, ' ~ $/.values[0].made ~ ')'; }
 
     # Drop columns command
     method drop-columns-command($/) { make $/.values[0].made; }
