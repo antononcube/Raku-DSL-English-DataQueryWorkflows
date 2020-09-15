@@ -208,7 +208,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
     method columns-variable-name($/) { make $/.values[0].made; }
     method values-variable-name($/) { make $/.values[0].made; }
 
-	# Probably have to be in DSL::Shared::Action .
+	# Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
 	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
 	method as-pairs-list($/)     { make $<as-pair>>>.made.join(', '); }

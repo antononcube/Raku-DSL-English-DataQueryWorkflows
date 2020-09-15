@@ -236,7 +236,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     method pivot-wider-value-column-spec($/) { make 'values_from = ' ~ $/.values[0].made; }
 
-    # Probably have to be in DSL::Shared::Action .
+    # Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
     method assign-pair($/) { make '"' ~ $<assign-pair-lhs>.made ~ '" -> ' ~ $<assign-pair-rhs>.made; }
     method as-pair($/)     { make '"' ~ $<assign-pair-lhs>.made ~ '" -> ' ~ $<assign-pair-rhs>.made; }
