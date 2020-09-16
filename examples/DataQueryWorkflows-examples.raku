@@ -43,8 +43,7 @@ my $commands4 = '
 use dfTitanic;
 delete missing values;
 filter with passengerSex is "male" and passengerSurvival equals "died" or passengerSurvival is "survived" ;
-filter by passengerClass is like "1.";
-cross tabulate passengerClass over passengerAge;
+cross tabulate passengerClass and passengerSex over passengerAge;
 ';
 
 my $commands5 = '
@@ -55,54 +54,27 @@ my $commands5 = '
       mutate bmi = `obj.mass / obj.height ** 2`;
       arrange by the variable "bmi", "mass", "height" descending;';
 
-my $commands6 = 'use dfTitanic;
-rename columns "passengerSex" and "passengerAge" as "sex" and "age";
-select age and sex;
-cross tabulate sex over age;
-summarize data;';
-
-my $commands7 = 'use dfTitanic;
-rename "passengerSex" and "passengerClass" as "sex" and "class";
-cross tabulate "sex" and "class";
-echo pipeline values;';
-
-my $commands8 = 'use starwars;
+my $commands6 = 'use starwars;
 select the columns name, mass, height;
 convert to long form using the columns mass and height, and with the variable column name "Var1" and with values column name "VAL";
 convert to wide form using the id column name and using variable column Var1 and with value column VAL';
 
-my $commands9 = 'use dfTitanic;
-select "passengerSex" as "sex", and "passengerClass" as "class";';
+#my $commands7 = 'use dfTitanic; mutate sex = passengerSex, class = passengerClass and sex = passengerAge';
 
-my $commands10 = 'use dfTitanic;
-mutate sex = passengerSex, and class = passengerClass;';
+my $commands7 = 'use dfTitanic; select passengerSex, passengerClass, passengerAge';
 
-say "\n", '=' x 30;
-say '-' x 3, 'Julia-DataFrames:';
-say '=' x 30;
+my $commands8 = 'use dfTitanic; rename passengerSex as sex and "passengerClass" as "class" and "passengerAge" as age';
 
-#say DSL::English::DataQueryWorkflows::Grammar.parse( 'keep unique values only');
-
-say ToDataQueryWorkflowCode($commands9, 'Spanish');
+my $commands9 = 'use dfTitanic; rename "passengerSex", passengerClass, passengerAge as sex, class, age';
 
 
-say "\n", '=' x 30;
-say '-' x 3, 'R-tidyverse:';
-say '=' x 30;
+my @commandsList = ($commands7, $commands8, $commands9);
+my @targetsList = ('WL', 'WL', 'WL');
 
-say ToDataQueryWorkflowCode($commands9, 'Korean');
+for @commandsList Z @targetsList -> ($c, $t) {
+    say "\n", '=' x 30;
+    say '-' x 3, $t, ':';
+    say '=' x 30;
 
-#
-#say "\n", '=' x 30;
-#say '-' x 3, 'R-tidyverse:';
-#say '=' x 30;
-#
-#say ToDataQueryWorkflowCode($commands2, 'R-tidyverse');
-#
-#say "\n", '-' x 3, 'Julia-DataFrames:';
-#
-#say ToDataQueryWorkflowCode( $commands4, 'Julia-DataFrames' );
-#
-#say "\n", '-' x 3, 'WL-System:';
-#
-#say ToDataQueryWorkflowCode( $commands4, 'WL-System' );
+    say ToDataQueryWorkflowCode($c, $t);
+};
