@@ -76,6 +76,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method missing-treatment-command($/) { make $/.values[0].made; }
 	method drop-incomplete-cases-command($/) { make 'obj <- na.omit(obj)'; }
 	method replace-missing-command($/) { make 'obj[ is.na(obj) ] <- ' ~ $<replace-missing-rhs>.made ; }
+    method replace-missing-rhs($/) { make $/.values[0].made; }
 
     # Select command
 	method select-command($/) { make $/.values[0].made; }

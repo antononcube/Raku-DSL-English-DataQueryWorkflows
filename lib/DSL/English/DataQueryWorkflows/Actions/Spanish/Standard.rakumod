@@ -65,6 +65,7 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	method missing-treatment-command($/) { make $/.values[0].made; }
 	method drop-incomplete-cases-command($/) { make 'eliminar las filas incompletas'; }
 	method replace-missing-command($/) { make 'reemplazar los valores perdidos con ' ~ $<replace-missing-rhs>.made; }
+    method replace-missing-rhs($/) { make $/.values[0].made; }
 
 	# Select command
 	method select-command($/) { make $/.values[0].made; }

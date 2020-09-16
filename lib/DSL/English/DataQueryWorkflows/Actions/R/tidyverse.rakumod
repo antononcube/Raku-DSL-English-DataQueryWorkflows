@@ -75,6 +75,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	method missing-treatment-command($/) { make $/.values[0].made; }
 	method drop-incomplete-cases-command($/) { make 'na.omit()'; }
 	method replace-missing-command($/) { make 'tidyr::replace_na( ' ~ $<replace-missing-rhs>.made ~ ' )'; }
+    method replace-missing-rhs($/) { make $/.values[0].made; }
 
 	# Select command
 	method select-command($/) { make $/.values[0].made; }
