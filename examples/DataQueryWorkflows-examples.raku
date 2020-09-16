@@ -61,15 +61,19 @@ convert to wide form using the id column name and using variable column Var1 and
 
 #my $commands7 = 'use dfTitanic; mutate sex = passengerSex, class = passengerClass and sex = passengerAge';
 
-my $commands7 = 'use dfTitanic; select passengerSex, passengerClass, passengerAge';
+my $commands7 = 'use dfTitanic; replace missing with 0; select passengerSex, passengerClass, passengerAge';
 
 my $commands8 = 'use dfTitanic; select passengerSex as sex and "passengerClass" as "class" and "passengerAge" as age';
 
 my $commands9 = 'use dfTitanic; select "passengerSex", passengerClass, passengerAge as sex, class, age';
 
 
-my @commandsList = ($commands7, $commands8, $commands9);
-my @targetsList = map( { 'Python-pandas' }, 1 .. @commandsList.elems );
+#my @commandsList = ($commands7, $commands8, $commands9);
+#my @targetsList = map( { 'Python-pandas' }, 1 .. @commandsList.elems );
+
+#my @targetsList = ( "Bulgarian", "Koreand", "Spanish" );
+my @targetsList = ( 'Julia-DataFrames', 'Python-pandas',  'R-base', 'R-tidyverse', "WL",);
+my @commandsList = map( { $commands7 }, 1 .. @targetsList.elems );
 
 for @commandsList Z @targetsList -> ($c, $t) {
     say "\n", '=' x 30;
