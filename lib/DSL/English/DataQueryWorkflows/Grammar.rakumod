@@ -129,7 +129,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
 
     # Drop columns
     rule drop-columns-command { <drop-columns-simple> }
-    rule drop-columns-simple { <.delete-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]? <todrop=.mixed-quoted-variable-names-list> }
+    rule drop-columns-simple { <.delete-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]? <todrop=.column-specs-list> }
 
     # Statistics command
     rule statistics-command { <count-command> | <glimpse-data> | <summarize-all-command> | <summarize-data> }
