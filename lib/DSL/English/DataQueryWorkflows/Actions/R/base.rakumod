@@ -126,7 +126,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
-    method rename-columns-simple($/) {
+    method rename-columns-by-two-lists($/) {
 		## See how the <mixed-quoted-variable-names-list> was made.
         my @currentNames = $<current>.made.split(', ');
         my @newNames = $<new>.made.split(', ');

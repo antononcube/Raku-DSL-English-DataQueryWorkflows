@@ -67,9 +67,9 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	method replace-missing-command($/) { make 'замести липсващи стойности с ' ~ $<replace-missing-rhs>.made; }
 
 	# Select command
-	method select-command($/) { make 'избери колоните: ' ~ $/.values[0].made; }
-	method select-plain-variables($/) { make $<variable-names-list>.made; }
-	method select-mixed-quoted-variables($/) { make $<mixed-quoted-variable-names-list>.made; }
+	method select-command($/) { make $/.values[0].made; }
+	method select-columns-simple($/) { make 'избери колоните: ' ~ $/.values[0].made; }
+	method select-columns-by-two-lists($/) { make 'избери колоните ' ~ $<current>.made ~ ' и преименувай като ' ~ $<new>.made; }
     method select-columns-by-pairs($/) { make 'преименувай и избери колоните с ' ~ $/.values[0].made; }
 
 	# Filter commands
@@ -94,7 +94,7 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
-    method rename-columns-simple($/) {
+    method rename-columns-by-two-lists($/) {
         make 'преименувай колоните ' ~ $<current>.made ~ ' като ' ~ $<new>.made;
     }
     method rename-columns-by-pairs($/) { make 'преименувай колоните с ' ~ $/.values[0].made; }

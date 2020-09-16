@@ -80,11 +80,13 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
             make 'obj';
         } else {
             my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $n ~ ' -> #[' ~ $c ~ ']' };
-            make 'obj = Map[ Join[ #, <|' ~ $pairs.join(', ') ~ '|> ]&, obj][All, {' ~ @newNames.join(', ') ~ '} ] ]' ;
+            make 'obj = Map[ <|' ~ $pairs.join(', ') ~ '|>&, obj]' ;
         }
     }
     method select-columns-by-pairs($/) {
-        make 'obj = Map[ Join[ #, <|' ~ $/.values[0].made ~ '|> ]&, obj][All, Keys[ <|' ~ $/.values[0].made ~ '|> ] ]' ;
+        my @pairs = $/.values[0].made;
+		my $res = do for @pairs -> ( $lhs, $rhs ) { $lhs ~ ' -> #[' ~ $rhs ~ ']' };
+		make 'obj = Map[ <|' ~ $res.join(', ') ~ '|>&, obj]';
     }
 
     # Filter commands
@@ -111,7 +113,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
-    method rename-columns-simple($/) {
+    method rename-columns-by-two-lists($/) {
         my @currentNames = $<current>.made.split(', ');
         my @newNames = $<new>.made.split(', ');
 
@@ -125,7 +127,10 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
         }
     }
     method rename-columns-by-pairs($/) {
-        make 'obj = Map[ Join[ #, <|' ~ $/.values[0].made ~ '|> ]&, obj][All, KeyDrop[ #, #[[1, All, 2, 1]] & @ Hold[ {' ~ $/.values[0].made ~ '} ] ]& ]' ;
+        my @pairs = $/.values[0].made;
+		my $res = do for @pairs -> ( $lhs, $rhs ) { $lhs ~ ' -> #[' ~ $rhs ~ ']' };
+        my @toDrop = do for @pairs -> ( $lhs, $rhs ) { $rhs };
+		make  'obj = Map[ Join[ KeyDrop[ #, {' ~ @toDrop.join(', ')~ '} ], <|' ~ $res.join(', ') ~ '|> ]&, obj]';
     }
 
     # Drop columns command
@@ -247,14 +252,14 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     # Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
-    method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' -> ' ~ $<assign-pair-rhs>.made; }
-    method as-pair($/)     { make $<assign-pair-lhs>.made ~ ' -> ' ~ $<assign-pair-rhs>.made; }
-    method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
-    method as-pairs-list($/)     { make $<as-pair>>>.made.join(', '); }
+	method assign-pairs-list($/) { make $<assign-pair>>>.made; }
+	method as-pairs-list($/)     { make $<as-pair>>>.made; }
+	method assign-pair($/) { make ( $<assign-pair-lhs>.made, $<assign-pair-rhs>.made); }
+	method as-pair($/)     { make ( $<assign-pair-lhs>.made, $<assign-pair-rhs>.made); }
     method assign-pair-lhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
     method assign-pair-rhs($/) {
         if $<mixed-quoted-variable-name> {
-            make '#["' ~ $/.values[0].made.subst(:g, '"', '') ~ '"]';
+            make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"';
         } else {
             make $/.values[0].made
         }

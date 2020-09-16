@@ -68,8 +68,21 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 
 	# Select command
   	method select-command($/) { make $/.values[0].made; }
-	method select-plain-variables($/) { make 'obj = select( obj, ' ~ $<variable-names-list>.made ~ ')'; }
-	method select-mixed-quoted-variables($/) { make 'obj = select( obj, ' ~ $<mixed-quoted-variable-names-list>.made ~ ')'; }
+	method select-columns-simple($/) { make 'obj = obj[ : , ' ~ $/.values[0].made ~ ']'; }
+	method select-columns-by-two-lists($/) {
+		        # I am not very comfortable with splitting the made string here, but it works.
+        # Maybe it is better to no not join the elements in <variable-names-list>.
+        my @currentNames = $<current>.made.split(', ');
+        my @newNames = $<new>.made.split(', ');
+
+        if @currentNames.elems != @newNames.elems {
+            note 'Same number of current and new column names are expected for column renaming.';
+            make 'obj';
+        } else {
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $c ~ ' => ' ~ $n };
+            make 'obj = obj[ :, ' ~ $pairs.join(', ') ~ ' ]';
+        }
+	}
     method select-columns-by-pairs($/) { make 'select!( obj, ' ~ $/.values[0].made ~ ')'; }
 
 	# Filter commands
@@ -94,7 +107,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
-    method rename-columns-simple($/) {
+    method rename-columns-by-two-lists($/) {
         # I am not very comfortable with splitting the made string here, but it works.
         # Maybe it is better to no not join the elements in <variable-names-list>.
         my @currentNames = $<current>.made.split(', ');

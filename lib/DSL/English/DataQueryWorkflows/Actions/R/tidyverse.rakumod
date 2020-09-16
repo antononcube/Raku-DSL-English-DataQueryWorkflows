@@ -118,7 +118,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
-    method rename-columns-simple($/) {
+    method rename-columns-by-two-lists($/) {
         # I am not very comfortable with splitting the made string here, but it works.
         # Maybe it is better to no not join the elements in <variable-names-list>.
         # Note that here with subst we assume no single quotes are in <mixed-quoted-variable-names-list>.made .

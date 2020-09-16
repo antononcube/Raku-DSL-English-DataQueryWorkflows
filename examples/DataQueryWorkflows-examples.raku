@@ -63,18 +63,20 @@ convert to wide form using the id column name and using variable column Var1 and
 
 my $commands7 = 'use dfTitanic; select passengerSex, passengerClass, passengerAge';
 
-my $commands8 = 'use dfTitanic; rename passengerSex as sex and "passengerClass" as "class" and "passengerAge" as age';
+my $commands8 = 'use dfTitanic; select passengerSex as sex and "passengerClass" as "class" and "passengerAge" as age';
 
-my $commands9 = 'use dfTitanic; rename "passengerSex", passengerClass, passengerAge as sex, class, age';
+my $commands9 = 'use dfTitanic; select "passengerSex", passengerClass, passengerAge as sex, class, age';
 
 
 my @commandsList = ($commands7, $commands8, $commands9);
-my @targetsList = ('WL', 'WL', 'WL');
+my @targetsList = map( { 'Python-pandas' }, 1 .. @commandsList.elems );
 
 for @commandsList Z @targetsList -> ($c, $t) {
     say "\n", '=' x 30;
-    say '-' x 3, $t, ':';
-    say '=' x 30;
+    say $t, ':';
+    say '-' x 30;
+    say $c;
+    say '-' x 30;
 
     say ToDataQueryWorkflowCode($c, $t);
 };

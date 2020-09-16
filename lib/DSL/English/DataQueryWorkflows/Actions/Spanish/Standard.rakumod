@@ -67,9 +67,9 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	method replace-missing-command($/) { make 'reemplazar los valores perdidos con ' ~ $<replace-missing-rhs>.made; }
 
 	# Select command
-	method select-command($/) { make 'escoger columnas: ' ~ $/.values[0].made; }
-	method select-plain-variables($/) { make $<variable-names-list>.made; }
-	method select-mixed-quoted-variables($/) { make $<mixed-quoted-variable-names-list>.made; }
+	method select-command($/) { make $/.values[0].made; }
+	method select-columns-simple($/) { make 'escoger columnas: '  ~ $/.values[0].made; }
+	method select-columns-by-two-lists($/) { make 'seleccione las columnas ' ~ $<current>.made ~ ' y cambie el nombre a ' ~ $<new>.made; }
     method select-columns-by-pairs($/) { make 'cambiar el nombre y seleccionar las columnas ' ~ $/.values[0].made; }
 
 	# Filter commands
@@ -94,7 +94,7 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 
 	# Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
-    method rename-columns-simple($/) {
+    method rename-columns-by-two-lists($/) {
         make 'renombrar las columnas ' ~ $<current>.made ~ ' como ' ~ $<new>.made;
     }
     method rename-columns-by-pairs($/) { make 'renombrar las columnas con ' ~ $/.values[0].made; }

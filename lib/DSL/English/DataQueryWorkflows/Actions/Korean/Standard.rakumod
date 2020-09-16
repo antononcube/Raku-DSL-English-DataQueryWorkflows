@@ -67,10 +67,10 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 	method replace-missing-command($/) { make '결 측값 제거 ' ~ $<replace-missing-rhs>.made; }
 
 	# Select command
-	method select-command($/) { make '열을 선택: ' ~ $/.values[0].made; }
-	method select-plain-variables($/) { make $<variable-names-list>.made; }
-	method select-mixed-quoted-variables($/) { make $<mixed-quoted-variable-names-list>.made; }
-    method select-columns-by-pairs($/) { make $/.values[0].made ~ ' 열의 이름을 바꾸고 선택하십시오'; }
+	method select-command($/) { make $/.values[0].made; }
+	method select-columns-simple($/) { make $/.values[0].made ~ ' 열 선택'; }
+	method select-columns-by-two-lists($/) { make $<current>.made ~ ' 열을 선택하고 ' ~ $<new>.made ~ ' 로 이름을 바꿉니다'; }
+    method select-columns-by-pairs($/) { make $/.values[0].made ~ ' 로 열을 선택하고 이름을 바꿉니다' ; }
 
 	# Filter commands
 	method filter-command($/) { make '술어로 필터링: ' ~ $<filter-spec>.made; }
@@ -94,7 +94,7 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
-    method rename-columns-simple($/) {
+    method rename-columns-by-two-lists($/) {
         make '열 이름 바꾸기 ' ~ $<current>.made ~ ' 같이 ' ~ $<new>.made;
     }
     method rename-columns-by-pairs($/) { make $/.values[0].made ~ ' 로 열 이름 바꾸기'; }

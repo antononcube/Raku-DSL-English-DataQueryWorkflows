@@ -82,9 +82,23 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
     # Select command
 	method select-command($/) { make $/.values[0].made; }
-	method select-plain-variables($/) { make 'obj = obj[[' ~ map( {'"' ~ $_ ~ '"' }, $<variable-names-list>.made.split(', ') ).join(', ') ~ ']]'; }
-	method select-mixed-quoted-variables($/) { make 'obj = obj[[' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ']]'; }
-    method select-columns-by-pairs($/) { make $/.values[0].made; }
+	method select-columns-simple($/) { make 'obj = obj[[' ~ map( {'"' ~ $_ ~ '"' }, $/.values[0].made.split(', ') ).join(', ') ~ ']]'; }
+	method select-columns-by-two-lists($/) {
+		# Almost the same as rename-columns-by-two-lists($/) .
+		my @currentNames = $<current>.made.subst(:g, '"', '').split(', ');
+        my @newNames = $<new>.made.subst(:g, '"', '').split(', ');
+
+        if @currentNames.elems != @newNames.elems {
+            note 'Same number of current and new column names are expected for column selection with renaming.';
+            make 'obj';
+        } else {
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $n ~ ' : ' ~ $c };
+            make 'obj = obj.rename( columns = { ' ~ $pairs.join(', ') ~ ' }, inplace = False )' ~
+					"\n" ~
+					'obj = obj[[ ' ~ map( { '"' ~ $_ ~ '"' }, @newNames ).join(", ") ~ ']]';
+        }
+	}
+	method select-columns-by-pairs($/) { make 'obj = obj[[' ~ $/.values[0].made.join(', ') ~ ']]'; }
 
     # Filter commands
 	method filter-command($/) { make 'obj = obj[' ~ $<filter-spec>.made ~ ']'; }
@@ -108,7 +122,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
-	method rename-columns-simple($/) {
+	method rename-columns-by-two-lists($/) {
         # I am not very comfortable with splitting the made string here, but it works.
         # Maybe it is better to no not join the elements in <variable-names-list>.
         # Note that here with subst we assume no single quotes are in <mixed-quoted-variable-names-list>.made .
@@ -120,7 +134,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
             make 'obj';
         } else {
             my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $n ~ ' : ' ~ $c };
-            make 'obj = obj.rename( columns = { ' ~ $pairs.join(', ') ~ ' } )';
+            make 'obj.rename( columns = { ' ~ $pairs.join(', ') ~ ' }, inplace = True )';
         }
     }
     method rename-columns-by-pairs($/) { make $/.values[0].made; }

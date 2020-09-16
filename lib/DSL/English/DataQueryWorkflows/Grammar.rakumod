@@ -87,8 +87,8 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule replace-missing-rhs { <number-value> | <mixed-quoted-variable-name> | <wl-expr> }
 
     # Rename columns
-    rule rename-columns-command { <rename-columns-by-pairs> | <rename-columns-simple> }
-    rule rename-columns-simple { <.rename-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]?
+    rule rename-columns-command { <rename-columns-by-pairs> | <rename-columns-by-two-lists> }
+    rule rename-columns-by-two-lists { <.rename-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]?
                                  <current=.column-specs-list>
                                  [ <.to-preposition> | <.into-preposition> | <.as-preposition> ]
                                  <new=.column-specs-list> }
