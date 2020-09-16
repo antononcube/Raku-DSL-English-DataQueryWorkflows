@@ -78,8 +78,22 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 
 	# Select command
 	method select-command($/) { make $/.values[0].made; }
-	method select-plain-variables($/) { make 'dplyr::select(' ~ $<variable-names-list>.made ~ ')'; }
-	method select-mixed-quoted-variables($/) { make 'dplyr::select_at( .vars = c(' ~ $<mixed-quoted-variable-names-list>.made ~ ') )'; }
+	method select-columns-simple($/) { make 'dplyr::select(' ~ $/.values[0].made ~ ')'; }
+	method select-columns-by-two-lists($/) {
+		# I am not very comfortable with splitting the made string here, but it works.
+        # Maybe it is better to no not join the elements in <variable-names-list>.
+        # Note that here with subst we assume no single quotes are in <mixed-quoted-variable-names-list>.made .
+        my @currentNames = $<current>.made.subst(:g, '"', '').split(', ');
+        my @newNames = $<new>.made.subst(:g, '"', '').split(', ');
+
+        if @currentNames.elems != @newNames.elems {
+            note 'Same number of current and new column names are expected for column selection with renaming.';
+            make 'dplyr::mutate()';
+        } else {
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $n ~ ' = ' ~ $c };
+            make 'dplyr::select( ' ~ $pairs.join(', ') ~ ' )';
+        }
+    }
     method select-columns-by-pairs($/) { make 'dplyr::select(' ~ $<as-pairs-list>.made ~ ')'; }
 
 	# Filter commands

@@ -68,11 +68,20 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     # Select command
 	method select-command($/) { make $/.values[0].made; }
-    method select-plain-variables($/) {
-      make 'obj = Map[ KeyTake[ #, {' ~ map( { '"' ~ $_ ~ '"' }, $<variable-names-list>.made ).join(', ') ~ '} ]&, obj]';
+    method select-columns-simple($/) {
+      make 'obj = Map[ KeyTake[ #, {' ~ $/.values[0].made.join(', ') ~ '} ]&, obj]';
     }
-    method select-mixed-quoted-variables($/) {
-      make 'obj = Map[ KeyTake[ #, {' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ '} ]&, obj]';
+    method select-columns-by-two-lists($/) {
+        my @currentNames = $<current>.made.split(', ');
+        my @newNames = $<new>.made.split(', ');
+
+        if @currentNames.elems != @newNames.elems {
+            note 'Same number of current and new column names are expected for column selction with renaming.';
+            make 'obj';
+        } else {
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $n ~ ' -> #[' ~ $c ~ ']' };
+            make 'obj = Map[ Join[ #, <|' ~ $pairs.join(', ') ~ '|> ]&, obj][All, {' ~ @newNames.join(', ') ~ '} ] ]' ;
+        }
     }
     method select-columns-by-pairs($/) {
         make 'obj = Map[ Join[ #, <|' ~ $/.values[0].made ~ '|> ]&, obj][All, Keys[ <|' ~ $/.values[0].made ~ '|> ] ]' ;
@@ -226,23 +235,23 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method pivot-longer-value-column-name-spec($/) { make '"ValuesTo" -> ' ~ $/.values[0].made; }
 
     # Pivot wider command
-    method pivot-wider-command($/) { make 'tidyr::pivot_wider(' ~ $<pivot-wider-arguments-list>.made ~ ' )'; }
+    method pivot-wider-command($/) { make 'obj = ToWideForm[ ' ~ $<pivot-wider-arguments-list>.made ~ ' ]'; }
     method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
     method pivot-wider-argument($/) { make $/.values[0].made; }
 
-    method pivot-wider-id-columns-spec($/) { make 'id_cols = c( ' ~ $/.values[0].made ~ ' )'; }
+    method pivot-wider-id-columns-spec($/) { make ' "IdentifierColumns" -> {' ~ $/.values[0].made ~ '}'; }
 
-    method pivot-wider-variable-column-spec($/) { make 'names_from = ' ~ $/.values[0].made; }
+    method pivot-wider-variable-column-spec($/) { make '"VariablesFrom" -> ' ~ $/.values[0].made; }
 
-    method pivot-wider-value-column-spec($/) { make 'values_from = ' ~ $/.values[0].made; }
+    method pivot-wider-value-column-spec($/) { make '"ValuesFrom" -> ' ~ $/.values[0].made; }
 
     # Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
-    method assign-pair($/) { make '"' ~ $<assign-pair-lhs>.made ~ '" -> ' ~ $<assign-pair-rhs>.made; }
-    method as-pair($/)     { make '"' ~ $<assign-pair-lhs>.made ~ '" -> ' ~ $<assign-pair-rhs>.made; }
+    method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' -> ' ~ $<assign-pair-rhs>.made; }
+    method as-pair($/)     { make $<assign-pair-lhs>.made ~ ' -> ' ~ $<assign-pair-rhs>.made; }
     method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
     method as-pairs-list($/)     { make $<as-pair>>>.made.join(', '); }
-    method assign-pair-lhs($/) { make $/.values[0].made; }
+    method assign-pair-lhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
     method assign-pair-rhs($/) {
         if $<mixed-quoted-variable-name> {
             make '#["' ~ $/.values[0].made.subst(:g, '"', '') ~ '"]';

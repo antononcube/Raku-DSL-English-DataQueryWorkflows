@@ -47,13 +47,13 @@ grammar DSL::English::DataQueryWorkflows::Grammar
         <data-load-command> |
         <distinct-command> |
         <missing-treatment-command> |
+        <rename-columns-command> |
         <select-command> |
         <filter-command> |
         <mutate-command> |
         <group-command> |
         <ungroup-command> |
         <arrange-command> |
-        <rename-columns-command> |
         <drop-columns-command> |
         <statistics-command> |
         <join-command> |
@@ -89,16 +89,16 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     # Rename columns
     rule rename-columns-command { <rename-columns-by-pairs> | <rename-columns-simple> }
     rule rename-columns-simple { <.rename-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]?
-                                 <current=.mixed-quoted-variable-names-list>
+                                 <current=.column-specs-list>
                                  [ <.to-preposition> | <.into-preposition> | <.as-preposition> ]
-                                 <new=.mixed-quoted-variable-names-list> }
+                                 <new=.column-specs-list> }
     rule rename-columns-by-pairs { <.rename-directive> [ <as-pairs-list> | <assign-pairs-list> ] }
 
     # Select command
-    rule select-command { <select-columns-by-pairs> | <select-plain-variables> | <select-mixed-quoted-variables> }
+    rule select-command { <select-columns-by-pairs> | <select-columns-by-two-lists> | <select-columns-simple> }
     rule select-opening-phrase { <select> <the-determiner>? [ <variables-noun> | <variable-noun> | <columns> ]? }
-    rule select-plain-variables { <.select-opening-phrase> <variable-names-list> }
-    rule select-mixed-quoted-variables { <.select-opening-phrase> <mixed-quoted-variable-names-list> }
+    rule select-columns-simple { <.select-opening-phrase> <column-specs-list> }
+    rule select-columns-by-two-lists { <.select-opening-phrase> <current=.column-specs-list> <.as-preposition> <new=.column-specs-list> }
     rule select-columns-by-pairs { <.select-verb> [ <as-pairs-list> | <assign-pairs-list> ] }
 
     # Filter command

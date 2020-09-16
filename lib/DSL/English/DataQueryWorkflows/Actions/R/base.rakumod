@@ -79,16 +79,37 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
     # Select command
 	method select-command($/) { make $/.values[0].made; }
-	method select-plain-variables($/) { make 'obj <- obj[ , c(' ~ map( {'"' ~ $_ ~ '"' }, $<variable-names-list>.made ).join(', ') ~ ') ]'; }
-	method select-mixed-quoted-variables($/) { make 'obj <- obj[ , c(' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ') ]'; }
-    method select-columns-by-pairs($/) { make $/.values[0].made; }
+	method select-columns-simple($/) { make 'obj <- obj[, c(' ~ $/.values[0].made ~ ')]'; }
+    method select-columns-by-two-lists($/) {
+		## See how the <mixed-quoted-variable-names-list> was made.
+        my @currentNames = $<current>.made.split(', ');
+        my @newNames = $<new>.made.split(', ');
+
+        if @currentNames.elems != @newNames.elems {
+            note 'Same number of current and new column names are expected for column selection with renaming.';
+            make 'obj';
+        } else {
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { 'colnames(obj) <- gsub( ' ~ $c ~ ', ' ~ $n ~ ', colnames(obj) )' };
+			make $pairs.join(" ;\n") ~ "\n" ~ 'obj <- obj[, c(' ~ @newNames.join(', ') ~ ')]';
+        }
+    }
+	method select-columns-by-pairs($/) {
+		my @pairs = $/.values[0].made;
+		my $res = do for @pairs -> ( $lhs, $rhs ) { 'colnames(obj) <- gsub( "' ~ $rhs ~ '", "' ~ $lhs ~ '", colnames(obj) )' };
+		my $newcols = do for @pairs -> ( $lhs, $rhs ) { '"' ~ $lhs ~ '"' };
+		make $res.join("\n") ~ "\n" ~ 'obj[, c('~ $newcols.join(', ') ~ ')]';
+	}
 
     # Filter commands
 	method filter-command($/) { make 'obj <- obj[' ~ $<filter-spec>.made ~ ', ]'; }
 	method filter-spec($/) { make $<predicates-list>.made; }
 
     # Mutate command
-	method mutate-command($/) { make $<assign-pairs-list>.made; }
+	method mutate-command($/) {
+		my @pairs = $/.values[0].made;
+		my $res = do for @pairs -> ( $lhs, $rhs ) { 'obj$' ~ $lhs ~ ' <- obj$' ~ $rhs; };
+		make '{' ~ $res.join("; ") ~ '}';
+	}
 
     # Group command
 	method group-command($/) { make 'obj <- by( data = obj, ' ~ $<variable-names-list>.made.join(', ') ~ ')'; }
@@ -107,18 +128,23 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
     method rename-columns-command($/) { make $/.values[0].made; }
     method rename-columns-simple($/) {
 		## See how the <mixed-quoted-variable-names-list> was made.
-        my @currentNames = $<current>.made;
-        my @newNames = $<new>.made;
+        my @currentNames = $<current>.made.split(', ');
+        my @newNames = $<new>.made.split(', ');
 
         if @currentNames.elems != @newNames.elems {
             note 'Same number of current and new column names are expected for column renaming.';
             make 'obj';
         } else {
             my $pairs = do for @currentNames Z @newNames -> ($c, $n) { 'colnames(obj) <- gsub( ' ~ $c ~ ', ' ~ $n ~ ', colnames(obj) )' };
-            make $pairs.join(" ;\n");
+			make $pairs.join(" ;\n") ~ "\n" ~ 'obj <- obj[,' ~ ~ 'setdiff( colnames(obj), c(' ~ @currentNames.join(', ') ~ '))]';
         }
     }
-    method rename-columns-by-pairs($/) { make $/.values[0].made; }
+    method rename-columns-by-pairs($/) {
+		my @pairs = $/.values[0].made;
+		my $res = do for @pairs -> ( $lhs, $rhs ) { 'colnames(obj) <- gsub( "' ~ $rhs ~ '", "' ~ $lhs ~ '", colnames(obj) )' };
+		my $oldcols = do for @pairs -> ( $lhs, $rhs ) { '"' ~ $rhs ~ '"' };
+		make $res.join(" ;\n") ~ "\n" ~ 'obj <- obj[,' ~ ~ 'setdiff( colnames(obj), c(' ~ $oldcols.join(', ') ~ '))]';
+	}
 
     # Drop columns command
     method drop-columns-command($/) { make $/.values[0].made; }
@@ -245,14 +271,14 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
 	# Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
-	method assign-pairs-list($/) { make '{' ~ $<assign-pair>>>.made.join('; ') ~ '}'; }
-	method as-pairs-list($/)     { make '{' ~ $<as-pair>>>.made.join('; ') ~ '}'; }
-	method assign-pair($/) { make 'obj$' ~ $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
-	method as-pair($/)     { make 'obj$' ~ $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+	method assign-pairs-list($/) { make $<assign-pair>>>.made; }
+	method as-pairs-list($/)     { make $<as-pair>>>.made; }
+	method assign-pair($/) { make ( $<assign-pair-lhs>.made, $<assign-pair-rhs>.made); }
+	method as-pair($/)     { make ( $<assign-pair-lhs>.made, $<assign-pair-rhs>.made); }
 	method assign-pair-lhs($/) { make $/.values[0].made.subst(:g, '"', ''); }
 	method assign-pair-rhs($/) {
         if $<mixed-quoted-variable-name> {
-            make 'obj$' ~ $/.values[0].made.subst(:g, '"', '');
+            make $/.values[0].made.subst(:g, '"', '');
         } else {
             make $/.values[0].made
         }
