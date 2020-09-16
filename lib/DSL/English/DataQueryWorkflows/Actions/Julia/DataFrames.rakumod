@@ -77,7 +77,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
         my @newNames = $<new>.made.split(', ');
 
         if @currentNames.elems != @newNames.elems {
-            note 'Same number of current and new column names are expected for column renaming.';
+            note 'Same number of current and new column names are expected for column selection with renaming.';
             make 'obj';
         } else {
             my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $c ~ ' => ' ~ $n };
