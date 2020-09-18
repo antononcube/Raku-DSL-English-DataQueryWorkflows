@@ -71,7 +71,7 @@ my $commands9 = 'use dfTitanic; select "passengerSex", passengerClass, passenger
 #my @commandsList = ($commands7, $commands8, $commands9);
 #my @targetsList = map( { 'Python-pandas' }, 1 .. @commandsList.elems );
 
-#my @targetsList = ( "Bulgarian", "Koreand", "Spanish" );
+#my @targetsList = ( "Bulgarian", "Korean", "Spanish" );
 my @targetsList = ( 'Julia-DataFrames', 'Python-pandas',  'R-base', 'R-tidyverse', "WL",);
 my @commandsList = map( { $commands7 }, 1 .. @targetsList.elems );
 

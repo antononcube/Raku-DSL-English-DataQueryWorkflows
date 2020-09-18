@@ -15,6 +15,8 @@ Standard Query Language (SQL) or RStudio's library tidyverse.
 
 unit module DSL::English::DataQueryWorkflows;
 
+use DSL::Shared::Utilities::MetaSpecifications;
+
 use DSL::English::DataQueryWorkflows::Grammar;
 
 use DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames;
@@ -95,15 +97,21 @@ multi ToDataQueryWorkflowCode ( Str $command where not has-semicolon($command), 
 
 multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str $target = 'tidyverse' ) {
 
-    die 'Unknown target.' unless %targetToAction{$target}:exists;
+    my $specTarget = get-dsl-spec( $command, 'target');
+
+    $specTarget = !$specTarget ?? $target !! $specTarget.value;
+
+    die 'Unknown target.' unless %targetToAction{$specTarget}:exists;
 
     my @commandLines = $command.trim.split(/ ';' \s* /);
 
     @commandLines = grep { $_.Str.chars > 0 }, @commandLines;
 
-    my @dqLines = map { ToDataQueryWorkflowCode($_, $target) }, @commandLines;
+    my @cmdLines = map { ToDataQueryWorkflowCode($_, $specTarget) }, @commandLines;
 
-    return @dqLines.join( %targetToSeparator{$target} ).trim;
+    @cmdLines = grep { $_.^name eq 'Str' }, @cmdLines;
+
+    return @cmdLines.join( %targetToSeparator{$specTarget} ).trim;
 }
 
 multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str $target where $target eq 'SQL' ) {
@@ -114,11 +122,11 @@ multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str 
 
     @commandLines = grep { $_.Str.chars > 0 }, @commandLines;
 
-    my @dqLines = map { ToDataQueryWorkflowCode($_, $target) }, @commandLines;
+    my @cmdLines = map { ToDataQueryWorkflowCode($_, $target) }, @commandLines;
 
-    my %sqlLines = @dqLines;
+    my %sqlLines = @cmdLines;
 
-    return @dqLines.join( %targetToSeparator{$target} ).trim;
+    return @cmdLines.join( %targetToSeparator{$target} ).trim;
 }
 
 #-----------------------------------------------------------
