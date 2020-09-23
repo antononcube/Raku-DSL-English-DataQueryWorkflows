@@ -270,6 +270,9 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
     method pivot-wider-value-column-spec($/) { make 'v.names = ' ~ $/.values[0].made; }
 
+	# Make dictionary command
+    method make-dictionary-command($/) { make 'obj <- setNames( obj[, '  ~ $<valcol>.made ~'], obj[, ' ~ $<keycol>.made ~ '] )';}
+
 	# Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
 	method assign-pairs-list($/) { make $<assign-pair>>>.made; }

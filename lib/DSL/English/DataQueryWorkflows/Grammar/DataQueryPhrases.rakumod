@@ -9,12 +9,14 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     # Tokens
     token arrange-verb { 'arrange' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'arrange') }> }
     token ascending-adjective { 'ascending' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'ascending') }> }
+    token association-noun { 'association' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'association') }> }
     token cases-noun { 'cases' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cases') }> }
     token cast-verb { 'cast' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cast') }> }
     token combine-verb { 'combine' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'combine') }> }
     token complete-adjective { 'complete' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'complete') }> }
     token cross-verb { 'cross' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cross') }> }
     token descending-adjective { 'descending' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'descending') }> }
+    token dictionary-noun { 'dictionary' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'dictionary') }> }
     token distinct-adjective { 'distinct' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'distinct') }> }
     token duplicate-adjective { 'duplicate' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'duplicate') }> }
     token duplicates-noun { 'duplicates' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'duplicates') }> }
@@ -29,6 +31,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token join-noun { 'join' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'join') }> }
     token keep-verb { 'keep' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'keep') }> }
     token left-adjective { 'left' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'left') }> }
+    token mapping-noun { 'mapping' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'mapping') }> }
     token melt-verb { 'melt' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'melt') }> }
     token mutate-verb { 'mutate' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'mutate') }> }
     token omit-directive { 'omit' | 'exclude' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'exclude') }> }
@@ -62,6 +65,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
 
     rule arrange { [ <arrange-verb> | <order-verb> | <sort-verb> ] [ <by-preposition> | <using-preposition> ]? }
     rule data-phrase { <.the-determiner>? <data> }
+    rule dictionary-phrase { <.association-noun> | <.dictionary-noun> | <.mapping-noun> }
     rule filter { <filter-verb> | <select-verb> }
     rule group-by { <group-verb> [ <by-preposition> | <using-preposition> ] }
     rule select { <select-verb> | <take-verb> | <keep-only-phrase> }

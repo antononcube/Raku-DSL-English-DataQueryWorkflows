@@ -160,7 +160,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule values-variable-name { <column-spec> }
 
     # Reshape command
-    rule reshape-command { <pivot-longer-command> | <pivot-wider-command> }
+    rule reshape-command { <pivot-longer-command> | <pivot-wider-command> | <make-dictionary-command> }
 
     # To long form command
     rule pivot-longer-command {
@@ -196,6 +196,11 @@ grammar DSL::English::DataQueryWorkflows::Grammar
 
     # Same as <pivot-longer-value-column-name-spec>
     rule pivot-wider-value-column-spec { <.the-determiner>? <.value-column-phrase> <column-spec> }
+
+    # Make dictionary command
+    rule make-dictionary-command { <.create-directive> <.dictionary-phrase> <.make-dictionary-filler>? <keycol=.column-spec> <.dictionary-relation-symbol> <valcol=.column-spec> }
+    rule make-dictionary-filler { [ <for-preposition> | <using-preposition> | <mapping-noun> ] <the-determiner>? <columns>? | <mapping-noun> | <from-preposition> }
+    rule dictionary-relation-symbol { <.to-preposition> | <.as-preposition> | <.key-to-symbol> | <.equal-symbol> }
 
     # Probably have to be in DSL::Shared::Roles .
     # Assign-pairs and as-pairs

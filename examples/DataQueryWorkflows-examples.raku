@@ -24,7 +24,7 @@ use DSL::English::DataQueryWorkflows;
 
 say "=" x 10;
 
-my $commands = 'use dfTitanic;filter by passengerSex == "male";echo text grouping by variables;group by passengerClass, passengerSurvival;count;ungroup;';
+my $commands = 'use dfTitanic; filter by passengerSex == "male"; echo text grouping by variables; group by passengerClass, passengerSurvival;count; ungroup;';
 
 my $commands2 = "use dfStarwars;
 semi join with dfStarwarsFilms by 'name';
@@ -72,15 +72,40 @@ my $commands9 = 'use dfTitanic; select "passengerSex", passengerClass, passenger
 #my @targetsList = map( { 'Python-pandas' }, 1 .. @commandsList.elems );
 
 #my @targetsList = ( "Bulgarian", "Korean", "Spanish" );
-my @targetsList = ( 'Julia-DataFrames', 'Python-pandas',  'R-base', 'R-tidyverse', "WL",);
-my @commandsList = map( { $commands7 }, 1 .. @targetsList.elems );
+#my @targetsList = ( 'Julia-DataFrames', 'Python-pandas',  'R-base', 'R-tidyverse', "WL" );
+#my @targetsList = ( 'Python-pandas' );
+#my @commandsList = map( { $commands7 }, 1 .. @targetsList.elems );
+#
+#for @commandsList Z @targetsList -> ($c, $t) {
+#    say "\n", '=' x 30;
+#    say $t, ':';
+#    say '-' x 30;
+#    say $c;
+#    say '-' x 30;
+#
+#    say ToDataQueryWorkflowCode($c, $t);
+#}
 
-for @commandsList Z @targetsList -> ($c, $t) {
-    say "\n", '=' x 30;
-    say $t, ':';
-    say '-' x 30;
-    say $c;
-    say '-' x 30;
+#my @testCommands = (
+#'DSL TARGET Python-pandas; use dfTitanic; select the columns name, species, mass and height; cross tabulate species over mass',
+#'DSL TARGET Python-pandas; use dfStarwars; select species, mass and height as species1, mass2, height2; cross tabulate species over mass;',
+#'DSL TARGET Python-pandas; use dfStarwars; select species, homeworld, mass and height; cross tabulate species and homeworld over mass; take pipeline value',
+#'DSL TARGET Python-pandas; use dfStarwars; select species as var1, mass as var2, height as var3'
+#);
 
-    say ToDataQueryWorkflowCode($c, $t);
+my @testCommands = (
+'DSL TARGET WL-System; use dfTitanic; make dictionary mapping id -> passengerSex',
+'DSL TARGET WL-System; use dfTitanic; make dictionary from "id" to "passengerSex"',
+'DSL TARGET R-tidyverse; use dfTitanic; make dictionary for id to passengerSex',
+'DSL TARGET R-base; use dfTitanic; make dictionary mapping the column id as passengerSex',
+);
+
+for @testCommands -> $c {
+    say "=" x 30;
+say $c;
+say '-' x 30;
+    my $start = now;
+    my $res = ToDataQueryWorkflowCode( $c );
+    say "time:", now - $start;
+    say $res;
 };

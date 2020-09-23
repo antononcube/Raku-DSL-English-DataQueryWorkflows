@@ -215,6 +215,9 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 
     method pivot-wider-value-column-spec($/) { make 'colonna dei valori ' ~ $/.values[0].made; }
 
+	# Make dictionary command
+    method make-dictionary-command($/) { make 'hacer que el diccionario mapee la columna ' ~ $<keycol>.made ~ ' a la columna ' ~ $<valcol>.made; }
+
 	# Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
 	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }

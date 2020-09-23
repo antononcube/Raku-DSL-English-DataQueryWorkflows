@@ -215,6 +215,9 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 
     method pivot-wider-value-column-spec($/) { make 'стойностна колона ' ~ $/.values[0].made; }
 
+	# Make dictionary command
+    method make-dictionary-command($/) { make 'направи речник от колона '  ~ $<keycol>.made ~' към колона ' ~ $<valcol>.made;}
+
     # Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
 	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }

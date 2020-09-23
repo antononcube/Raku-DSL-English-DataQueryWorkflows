@@ -58,18 +58,18 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	# General
 	method variable-names-list($/) { make $<variable-name>>>.made.join(', '); }
 	method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made.join(', '); }
-	method mixed-quoted-variable-names-list($/) { make $<mixed-quoted-variable-name>>>.made.join(', '); }
+	method mixed-quoted-variable-names-list($/) { map( { '"' ~ $_ ~ '"' }, make $<mixed-quoted-variable-name>>>.made ).join(', '); }
 
 	# Column specs
     method column-specs-list($/) { make $<column-spec>>>.made.join(', '); }
     method column-spec($/) {  make $/.values[0].made; }
-    method column-name-spec($/) { make 'obj.' ~ $<mixed-quoted-variable-name>.made.subst(:g, '"', ''); }
+    method column-name-spec($/) { make map( {'"' ~ $_ ~ '"' }, $<mixed-quoted-variable-name>.made.subst(:g, '"', '') ); }
 
 	# Load data
 	method data-load-command($/) { make $/.values[0].made; }
-	method load-data-table($/) { make '{ data(' ~ $<data-location-spec>.made ~ '); obj =' ~ $<data-location-spec>.made ~ ' }'; }
+	method load-data-table($/) { make '{ data(' ~ $<data-location-spec>.made ~ '); obj =' ~ $<data-location-spec>.made ~ '.copy() }'; }
 	method data-location-spec($/) { make '\'' ~ $/.Str ~ '\''; }
-	method use-data-table($/) { make 'obj = ' ~ $<variable-name>.made; }
+	method use-data-table($/) { make 'obj = ' ~ $<variable-name>.made ~ '.copy()'; }
 
 	# Distinct command
 	method distinct-command($/) { make $/.values[0].made; }
@@ -83,23 +83,29 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
     # Select command
 	method select-command($/) { make $/.values[0].made; }
-	method select-columns-simple($/) { make 'obj = obj[[' ~ map( {'"' ~ $_ ~ '"' }, $/.values[0].made.split(', ') ).join(', ') ~ ']]'; }
+	method select-columns-simple($/) { make 'obj = obj[[' ~  $/.values[0].made.split(', ').join(', ') ~ ']]'; }
 	method select-columns-by-two-lists($/) {
 		# Almost the same as rename-columns-by-two-lists($/) .
-		my @currentNames = $<current>.made.subst(:g, '"', '').split(', ');
-        my @newNames = $<new>.made.subst(:g, '"', '').split(', ');
+		my @currentNames = $<current>.made.split(', ');
+        my @newNames = $<new>.made.split(', ');
 
         if @currentNames.elems != @newNames.elems {
             note 'Same number of current and new column names are expected for column selection with renaming.';
             make 'obj';
         } else {
-            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $n ~ ' : ' ~ $c };
-            make 'obj = obj.rename( columns = { ' ~ $pairs.join(', ') ~ ' }, inplace = False )' ~
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $c ~ ' : ' ~ $n };
+            make 'obj.rename( columns = { ' ~ $pairs.join(', ') ~ ' }, inplace = True )' ~
 					"\n" ~
-					'obj = obj[[ ' ~ map( { '"' ~ $_ ~ '"' }, @newNames ).join(", ") ~ ']]';
+					'obj = obj[[ ' ~ @newNames.join(', ') ~ ']]';
         }
 	}
-	method select-columns-by-pairs($/) { make 'obj = obj[[' ~ $/.values[0].made.join(', ') ~ ']]'; }
+	method select-columns-by-pairs($/) {
+		my @newCols = $/.values[0].made.split( / '=' | '(' | ')' | ',' / );
+		my $res = $/.values[0].made;
+		@newCols = grep( { $_.chars > 0 }, @newCols[2..*-1] );
+		@newCols = @newCols[0,2...*];
+		make $res ~ "\n" ~ 'obj = obj[[' ~ map( { '"' ~ $_.trim ~ '"' }, @newCols ).join(', ') ~ ']]';
+	}
 
     # Filter commands
 	method filter-command($/) { make 'obj = obj[' ~ $<filter-spec>.made ~ ']'; }
@@ -127,14 +133,14 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
         # I am not very comfortable with splitting the made string here, but it works.
         # Maybe it is better to no not join the elements in <variable-names-list>.
         # Note that here with subst we assume no single quotes are in <mixed-quoted-variable-names-list>.made .
-        my @currentNames = $<current>.made.subst(:g, '"', '').split(', ');
-        my @newNames = $<new>.made.subst(:g, '"', '').split(', ');
+        my @currentNames = $<current>.made.split(', ');
+        my @newNames = $<new>.made.split(', ');
 
         if @currentNames.elems != @newNames.elems {
             note 'Same number of current and new column names are expected for column renaming.';
             make 'obj';
         } else {
-            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $n ~ ' : ' ~ $c };
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $c ~ ' : ' ~ $n };
             make 'obj.rename( columns = { ' ~ $pairs.join(', ') ~ ' }, inplace = True )';
         }
     }
@@ -227,14 +233,14 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	}
 	method cross-tabulation-single-formula($/) {
 		if $<values-variable-name> {
-			make 'obj = pandas.crosstab( index = obj.' ~ $<rows-variable-name>.made ~ ', values = obj.' ~ $<values-variable-name>.made ~ ', aggfunc = "sum" )';
+			make 'obj = pandas.crosstab( index = ' ~ $<rows-variable-name>.made ~ ', values = '~ $<values-variable-name>.made ~ ', aggfunc = "sum" )';
 		} else {
-			make 'obj = pandas.crosstab( index = obj.' ~ $<rows-variable-name>.made ~ ' )';
+			make 'obj = pandas.crosstab( index = ' ~ $<rows-variable-name>.made ~ ' )';
 		}
 	}
-    method rows-variable-name($/) { make $/.values[0].made; }
-    method columns-variable-name($/) { make $/.values[0].made; }
-    method values-variable-name($/) { make $/.values[0].made; }
+    method rows-variable-name($/)    { make 'obj.' ~ $/.values[0].made.subst(:g, '"', ''); }
+    method columns-variable-name($/) { make 'obj.' ~ $/.values[0].made.subst(:g, '"', ''); }
+    method values-variable-name($/)  { make 'obj.' ~ $/.values[0].made.subst(:g, '"', ''); }
 
     # Reshape command
     method reshape-command($/) { make $/.values[0].made; }

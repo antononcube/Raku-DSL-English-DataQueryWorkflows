@@ -257,6 +257,9 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 
     method pivot-wider-value-column-spec($/) { make 'values_from = ' ~ $/.values[0].made; }
 
+	# Make dictionary command
+    method make-dictionary-command($/) { make 'dplyr::select( ' ~ $<keycol>.made ~', ' ~ $<valcol>.made ~ ' )';}
+
 	# Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
 	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }

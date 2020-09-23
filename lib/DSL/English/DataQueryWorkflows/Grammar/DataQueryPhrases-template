@@ -9,12 +9,14 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     # Tokens
     token arrange-verb { 'arrange' }
     token ascending-adjective { 'ascending' }
+    token association-noun { 'association' }
     token cases-noun { 'cases' }
     token cast-verb { 'cast' }
     token combine-verb { 'combine' }
     token complete-adjective { 'complete' }
     token cross-verb { 'cross' }
     token descending-adjective { 'descending' }
+    token dictionary-noun { 'dictionary' }
     token distinct-adjective { 'distinct' }
     token duplicate-adjective { 'duplicate' }
     token duplicates-noun { 'duplicates' }
@@ -29,6 +31,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token join-noun { 'join' }
     token keep-verb { 'keep' }
     token left-adjective { 'left' }
+    token mapping-noun { 'mappint' }
     token melt-verb { 'melt' }
     token mutate-verb { 'mutate' }
     token omit-directive { 'omit' | 'exclude' }

@@ -251,6 +251,9 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     method pivot-wider-value-column-spec($/) { make '"ValuesFrom" -> ' ~ $/.values[0].made; }
 
+    # Make dictionary command
+    method make-dictionary-command($/) { make 'obj = Association @ Normal @ Map[ #[' ~ $<keycol>.made ~'] -> #[' ~ $<valcol>.made ~ ']&, obj ]';}
+
     # Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
 	method assign-pairs-list($/) { make $<assign-pair>>>.made; }
