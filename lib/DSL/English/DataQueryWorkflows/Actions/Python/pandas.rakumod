@@ -267,6 +267,9 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
     method pivot-wider-value-column-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
 
+	# Make dictionary command
+    method make-dictionary-command($/) { make 'obj = dict(zip( obj[' ~ $<keycol>.made ~'], obj[' ~ $<valcol>.made ~ '] ))';}
+
 	# Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
 	method assign-pairs-list($/) { make 'obj = obj.assign( ' ~ $<assign-pair>>>.made.join(', ') ~ ' )'; }

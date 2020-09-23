@@ -222,6 +222,18 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
     method columns-variable-name($/) { make $/.values[0].made; }
     method values-variable-name($/) { make $/.values[0].made; }
 
+  # Reshape command
+    method reshape-command($/) { make $/.values[0].made; }
+
+    # Pivot longer command
+    method pivot-longer-command($/) { make 'Not implemented'; }
+
+	# Pivot wide command
+    method pivot-wider-command($/) {make 'Not implemented'; }
+
+	# Make dictionary command
+    method make-dictionary-command($/) { make 'obj = Dict(zip( obj[:, ' ~ $<keycol>.made ~', obj[:, ' ~ $<valcol>.made ~ '] ))';}
+
 	# Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
 	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
