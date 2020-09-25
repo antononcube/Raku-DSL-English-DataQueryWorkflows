@@ -63,7 +63,8 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token mutate { <mutate-verb> }
     token order { <order-verb> }
 
-    rule arrange { [ <arrange-verb> | <order-verb> | <sort-verb> ] [ <by-preposition> | <using-preposition> ]? }
+    rule arrange-directive { <arrange-verb> | <order-verb> | <sort-verb> }
+    rule arrange-by-phrase { <arrange-directive> [ <by-preposition> | <using-preposition> | <with-preposition> ] }
     rule data-phrase { <.the-determiner>? <data> }
     rule dictionary-phrase { <.association-noun> | <.dictionary-noun> | <.mapping-noun> }
     rule filter { <filter-verb> | <select-verb> }

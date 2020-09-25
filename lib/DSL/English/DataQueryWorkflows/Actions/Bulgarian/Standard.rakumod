@@ -89,9 +89,12 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 
 	# Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
-	method arrange-simple-spec($/) { make $<mixed-quoted-variable-names-list>.made; }
-	method arrange-command-ascending($/) { make 'сортирай с колоните: ' ~ $<arrange-simple-spec>.made; }
-	method arrange-command-descending($/) { make 'сортирай в низходящ ред с колоните: ' ~ $<arrange-simple-spec>.made; }
+	method arrange-simple-command($/) {
+        make $<reverse-sort-phrase> || $<descending> ?? 'сортирай в низходящ ред' !! 'сортирай';
+    }
+	method arrange-by-spec($/) { make $<mixed-quoted-variable-names-list>.made; }
+	method arrange-by-command-ascending($/) { make 'сортирай с колоните: ' ~ $<arrange-by-spec>.made; }
+	method arrange-by-command-descending($/) { make 'сортирай в низходящ ред с колоните: ' ~ $<arrange-by-spec>.made; }
 
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
@@ -112,13 +115,13 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	method summarize-data($/) { make 'опиши обекта'; }
 	method glimpse-data($/) { make 'покажи визия на обекта'; }
 	method summarize-all-command($/) {
-		if $<summarize-all-funcs-spec> {
-			make 'приложи по всички колони функцийте: ' ~ $<summarize-all-funcs-spec>.made;
+		if $<summarize-funcs-spec> {
+			make 'приложи по всички колони функцийте: ' ~ $<summarize-funcs-spec>.made;
 		} else {
 			make 'намери средните стойности на всички колони';
 		}
 	}
-	method summarize-all-funcs-spec($/) { make $<variable-names-list>.made; }
+	method summarize-funcs-spec($/) { make $<variable-names-list>.made; }
 
 	# Join command
 	method join-command($/) { make $/.values[0].made; }

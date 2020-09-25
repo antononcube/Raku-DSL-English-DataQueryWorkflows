@@ -89,9 +89,12 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 
 	# Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
-	method arrange-simple-spec($/) { make $<mixed-quoted-variable-names-list>.made; }
-	method arrange-command-ascending($/) { make '열로 정렬: ' ~ $<arrange-simple-spec>.made; }
-	method arrange-command-descending($/) { make '열과 함께 내림차순으로 정렬: ' ~ $<arrange-simple-spec>.made; }
+	method arrange-simple-command($/) {
+        make $<reverse-sort-phrase> || $<descending> ?? '역 정렬' !! '종류';
+    }
+	method arrange-by-spec($/) { make $<mixed-quoted-variable-names-list>.made; }
+	method arrange-by-command-ascending($/) { make '열로 정렬: ' ~ $<arrange-by-spec>.made; }
+	method arrange-by-command-descending($/) { make '열과 함께 내림차순으로 정렬: ' ~ $<arrange-by-spec>.made; }
 
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
@@ -112,13 +115,13 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 	method summarize-data($/) { make '목적을 요약하다'; }
 	method glimpse-data($/) { make '물체를 엿볼 수있다'; }
 	method summarize-all-command($/) {
-		if $<summarize-all-funcs-spec> {
-			make '모든 열에 ' ~ $<summarize-all-funcs-spec>.made ~ ' 함수 적용';
+		if $<summarize-funcs-spec> {
+			make '모든 열에 ' ~ $<summarize-funcs-spec>.made ~ ' 함수 적용';
 		} else {
 			make '모든 열의 평균값 찾기';
 		}
 	}
-	method summarize-all-funcs-spec($/) { make $<variable-names-list>.made; }
+	method summarize-funcs-spec($/) { make $<variable-names-list>.made; }
 
 	# Join command
 	method join-command($/) { make $/.values[0].made; }

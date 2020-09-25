@@ -89,9 +89,12 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 
 	# Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
-	method arrange-simple-spec($/) { make $<mixed-quoted-variable-names-list>.made; }
-	method arrange-command-ascending($/) { make 'ordenar con columnas: ' ~ $<arrange-simple-spec>.made; }
-	method arrange-command-descending($/) { make 'ordenar en orden descendente con columnas: ' ~ $<arrange-simple-spec>.made; }
+	method arrange-simple-command($/) {
+        make $<reverse-sort-phrase> || $<descending> ?? 'orden descendente' !! 'ordenar';
+    }
+	method arrange-by-spec($/) { make $<mixed-quoted-variable-names-list>.made; }
+	method arrange-by-command-ascending($/) { make 'ordenar con columnas: ' ~ $<arrange-by-spec>.made; }
+	method arrange-by-command-descending($/) { make 'ordenar en orden descendente con columnas: ' ~ $<arrange-by-spec>.made; }
 
 	# Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
@@ -112,13 +115,13 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	method summarize-data($/) { make 'describe el objeto'; }
 	method glimpse-data($/) { make 'vislumbrar el objeto'; }
 	method summarize-all-command($/) {
-		if $<summarize-all-funcs-spec> {
-			make 'aplicar sobre todas las columnas las funciones: ' ~ $<summarize-all-funcs-spec>.made;
+		if $<summarize-funcs-spec> {
+			make 'aplicar sobre todas las columnas las funciones: ' ~ $<summarize-funcs-spec>.made;
 		} else {
 			make 'encontrar los promedios de todas las columnas';
 		}
 	}
-	method summarize-all-funcs-spec($/) { make $<variable-names-list>.made; }
+	method summarize-funcs-spec($/) { make $<variable-names-list>.made; }
 
 	# Join command
 	method join-command($/) { make $/.values[0].made; }

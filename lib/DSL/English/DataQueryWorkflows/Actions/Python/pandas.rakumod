@@ -123,9 +123,12 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
     # Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
-	method arrange-simple-spec($/) { make '[' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ']'; }
-	method arrange-command-ascending($/) { make 'obj = obj.sort_values( ' ~ $<arrange-simple-spec>.made ~ ' )'; }
-	method arrange-command-descending($/) { make 'obj = obj.sort_values( ' ~ $<arrange-simple-spec>.made ~ ', ascending = False )'; }
+	method arrange-simple-command($/) {
+        make $<reverse-sort-phrase> || $<descending> ?? 'obj = obj.sort_values(ascending = False)' !! 'obj = obj.sort_values()';
+    }
+	method arrange-by-spec($/) { make '[' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ']'; }
+	method arrange-by-command-ascending($/) { make 'obj = obj.sort_values( ' ~ $<arrange-by-spec>.made ~ ' )'; }
+	method arrange-by-command-descending($/) { make 'obj = obj.sort_values( ' ~ $<arrange-by-spec>.made ~ ', ascending = False )'; }
 
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
@@ -159,14 +162,14 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	method summarize-data($/) { make 'print(obj.describe())'; }
 	method glimpse-data($/) { make 'print(obj.head())'; }
 	method summarize-all-command($/) {
-		if $<summarize-all-funcs-spec> {
+		if $<summarize-funcs-spec> {
 			note 'Summarize-all with functions is not implemented for Python-pandas.';
 			make 'print(obj.describe())';
 		} else {
 			make 'print(obj.describe())';
 		}
 	}
-	method summarize-all-funcs-spec($/) { make '[' ~ $<variable-names-list>.made ~ ']'; }
+	method summarize-funcs-spec($/) { make '[' ~ $<variable-names-list>.made ~ ']'; }
 
     # Join command
 	method join-command($/) { make $/.values[0].made; }

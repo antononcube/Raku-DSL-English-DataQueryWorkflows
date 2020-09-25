@@ -121,9 +121,12 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
     # Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
-	method arrange-simple-spec($/) { make 'c(' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ')'; }
-	method arrange-command-ascending($/) { make 'obj <- obj[ order(obj[ ,' ~ $<arrange-simple-spec>.made ~ ']), ]'; }
-	method arrange-command-descending($/) { make 'obj <- obj[ rev(order(obj[ ,' ~ $<arrange-simple-spec>.made ~ '])), ]'; }
+	method arrange-simple-command($/) {
+        make $<reverse-sort-phrase> || $<descending> ?? 'obj = obj[rev(order(obj)),]' !! 'obj = obj[order(obj),]';
+    }
+	method arrange-by-spec($/) { make 'c(' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ')'; }
+	method arrange-by-command-ascending($/) { make 'obj <- obj[ order(obj[ ,' ~ $<arrange-by-spec>.made ~ ']), ]'; }
+	method arrange-by-command-descending($/) { make 'obj <- obj[ rev(order(obj[ ,' ~ $<arrange-by-spec>.made ~ '])), ]'; }
 
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
@@ -160,14 +163,22 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method summarize-data($/) { make 'print(summary(obj))'; }
 	method glimpse-data($/) { make 'head(obj)'; }
 	method summarize-all-command($/) {
-		if $<summarize-all-funcs-spec> {
+		if $<summarize-funcs-spec> {
 			note 'Summarize-all with functions is not implemented for R-base.';
 			make 'summary(obj)';
 		} else {
 			make 'summary(obj)';
 		}
 	}
-	method summarize-all-funcs-spec($/) { make 'c(' ~ $<variable-names-list>.made ~ ')'; }
+	method summarize-at-command($/) {
+		my $cols = 'c(' ~ map( { '"' ~ $_ ~ '"' }, $<cols>.made ).join(', ') ~ ')';
+		if $<summarize-funcs-spec> {
+			make 'Reduce( function(a,f) rbind( a, lapply( starwars[,' ~ $cols ~ '], f) ), init = NULL, x =' ~ $<summarize-funcs-spec>.made ~ ' )';
+		} else {
+			make 'Reduce( function(a,f) rbind( a, lapply( starwars[,' ~ $cols ~ '], f) ), init = NULL, x = c( Min = function(.) min(., na.rm = T), Max = function(.) max(., na.rm = T), Mean = function(.) mean(., na.rm = T), Median = function(.) median(., na.rm = T), Sum = function(.) sum(., na.rm = T) ) )';
+		}
+	}
+	method summarize-funcs-spec($/) { make 'c(' ~ $<variable-name-or-wl-expr-list>.made.join(', ') ~ ')'; }
 
     # Join command
 	method join-command($/) { make $/.values[0].made; }
@@ -300,14 +311,4 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
     method key-pair-lhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
     method key-pair-rhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
 
-    # Pipeline command
-    method pipeline-command($/) { make $/.values[0].made; }
-    method take-pipeline-value($/) { make 'obj'; }
-    method echo-pipeline-value($/) { make 'print(obj)'; }
-
-    method echo-command($/) { make 'print( ' ~ $<echo-message-spec>.made ~ ' )'; }
-    method echo-message-spec($/) { make $/.values[0].made; }
-    method echo-words-list($/) { make '"' ~ $<variable-name>>>.made.join(' ') ~ '"'; }
-    method echo-variable($/) { make $/.Str; }
-    method echo-text($/) { make $/.Str; }
 }

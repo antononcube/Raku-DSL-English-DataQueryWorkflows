@@ -113,9 +113,12 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	
 	# Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
-	method arrange-simple-spec($/) { make $<mixed-quoted-variable-names-list>.made; }
-	method arrange-command-ascending($/) { make 'dplyr::arrange(' ~ $<arrange-simple-spec>.made ~ ')'; }
-	method arrange-command-descending($/) { make 'dplyr::arrange(desc(' ~ $<arrange-simple-spec>.made ~ '))'; }
+	method arrange-simple-command($/) {
+		make $<reverse-sort-phrase> || $<descending> ?? 'dplyr::arrange(desc(.))' !! 'dplyr::arrange()';
+	}
+	method arrange-by-spec($/) { make $<mixed-quoted-variable-names-list>.made; }
+	method arrange-by-command-ascending($/) { make 'dplyr::arrange(' ~ $<arrange-by-spec>.made ~ ')'; }
+	method arrange-by-command-descending($/) { make 'dplyr::arrange(desc(' ~ $<arrange-by-spec>.made ~ '))'; }
 
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
@@ -150,13 +153,21 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	method summarize-data($/) { make '( function(x) { print(summary(x)); x } )'; }
 	method glimpse-data($/) { make 'dplyr::glimpse()'; }
 	method summarize-all-command($/) {
-		if $<summarize-all-funcs-spec> {
-			make 'dplyr::summarise_all( .funs = ' ~ $<summarize-all-funcs-spec>.made ~ ' )';
+		if $<summarize-funcs-spec> {
+			make 'dplyr::summarise_all( .funs = ' ~ $<summarize-funcs-spec>.made ~ ' )';
 		} else {
 			make 'dplyr::summarise_all(mean)';
 		}
 	}
-	method summarize-all-funcs-spec($/) { make 'c(' ~ map( { $_ ~ ' = ' ~ $_ }, $<variable-names-list>.made.split(', ') ).join(', ') ~ ')'; }
+	method summarize-at-command($/) {
+		my $cols = 'c(' ~ map( { '"' ~ $_ ~ '"' }, $<cols>.made.split(', ') ).join(', ') ~ ')';
+		if $<summarize-funcs-spec> {
+			make 'dplyr::summarise_at( .vars = ' ~ $cols ~ ', ' ~ '.funs = ' ~ $<summarize-funcs-spec>.made ~ ' )';
+		} else {
+			make 'dplyr::summarise_at( .vars = ' ~ $cols ~ ', .funs = c( Min = function(.) min(., na.rm = T), Max = function(.) max(., na.rm = T), Mean = function(.) mean(., na.rm = T), Median = function(.) median(., na.rm = T), Sum = function(.) sum(., na.rm = T) ) )';
+		}
+	}
+	method summarize-funcs-spec($/) { make 'c(' ~ map( { $_ ~ ' = ' ~ $_ }, $<variable-name-or-wl-expr-list>.made ).join(', ') ~ ')'; }
 	
 	# Join command
 	method join-command($/) { make $/.values[0].made; }

@@ -108,9 +108,12 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     # Arrange command
     method arrange-command($/) { make $/.values[0].made; }
-    method arrange-simple-spec($/) { make '{' ~ map( { '#["' ~ $_.subst(:g, '"', '') ~ '"]' }, $<mixed-quoted-variable-names-list>.made.split(', ') ).join(', ') ~ '}'; }
-    method arrange-command-ascending($/) { make 'obj = SortBy[ obj, ' ~ $<arrange-simple-spec>.made ~ '& ]'; }
-    method arrange-command-descending($/) { make 'obj = ReverseSortBy[ obj, ' ~ $<arrange-simple-spec>.made ~ '& ]'; }
+    method arrange-simple-command($/) {
+        make $<reverse-sort-phrase> || $<descending> ?? 'obj = ReverseSort[obj]' !! 'obj = Sort[obj]';
+    }
+    method arrange-by-spec($/) { make '{' ~ map( { '#["' ~ $_.subst(:g, '"', '') ~ '"]' }, $<mixed-quoted-variable-names-list>.made.split(', ') ).join(', ') ~ '}'; }
+    method arrange-by-command-ascending($/) { make 'obj = SortBy[ obj, ' ~ $<arrange-by-spec>.made ~ '& ]'; }
+    method arrange-by-command-descending($/) { make 'obj = ReverseSortBy[ obj, ' ~ $<arrange-by-spec>.made ~ '& ]'; }
 
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
@@ -146,6 +149,12 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method summarize-data($/) { make 'Echo[ResourceFunction["RecordsSummary"][obj], "summarize:"]'; }
     method glimpse-data($/) { make 'Echo[RandomSample[obj,UpTo[6]], "glimpse:"]'; }
     method summarize-all-command($/) { make 'Echo[Mean[obj], "summarize-all:"]'; }
+	method summarize-at-command($/) {
+		my $cols = '{' ~ map( { '"' ~ $_ ~ '"' }, $<cols>.made.split(', ') ).join(', ') ~ '}';
+        my $funcs = $<summarize-funcs-spec> ?? $<summarize-funcs-spec>.made !! '{Length, Min, Max, Mean, Median, Total}';
+        make 'obj = Dataset[obj][All, Association @ Flatten @ Outer[ToString[#1] <> "_" <> ToString[#2] -> Query[#2, #1] &,' ~ $cols ~ ', '  ~ $funcs ~ ']]';
+    }
+	method summarize-funcs-spec($/) { make '{' ~ $<variable-name-or-wl-expr-list>.made.join(', ') ~ '}'; }
 
     # Join command
     method join-command($/) { make $/.values[0].made; }
@@ -205,15 +214,16 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method cross-tabulation-formula($/) { make $/.values[0].made; }
 	method cross-tabulation-double-formula($/) {
         if $<values-variable-name> {
-            make 'obj = GroupBy[ obj, { #[' ~ $<rows-variable-name>.made ~ '], #[' ~ $<columns-variable-name>.made ~  '] }&, Total[ #[' ~ $<values-variable-name>.made ~ '] & /@ # ]& ]';
+            #make 'obj = GroupBy[ obj, { #[' ~ $<rows-variable-name>.made ~ '], #[' ~ $<columns-variable-name>.made ~  '] }&, Total[ #[' ~ $<values-variable-name>.made ~ '] & /@ # ]& ]';
+            make 'obj = ResourceFunction["CrossTabulate"][ { #[' ~ $<rows-variable-name>.made ~ '], #[' ~ $<columns-variable-name>.made ~  '], #[' ~ $<values-variable-name>.made ~ '] }& /@ obj ]';
         } else {
-            make 'obj = GroupBy[ obj, { #[' ~ $<rows-variable-name>.made ~ '], #[' ~ $<columns-variable-name>.made ~  '] }&, Length ]';
+            #make 'obj = GroupBy[ obj, { #[' ~ $<rows-variable-name>.made ~ '], #[' ~ $<columns-variable-name>.made ~  '] }&, Length ]';
+            make 'obj = ResourceFunction["CrossTabulate"][ { #[' ~ $<rows-variable-name>.made ~ '], #[' ~ $<columns-variable-name>.made ~  '] }& /@ obj ]';
         }
     }
     method cross-tabulation-single-formula($/) {
         if $<values-variable-name> {
             make 'obj = GroupBy[ obj, #[' ~ $<rows-variable-name>.made ~ ']&, Total[ #[' ~ $<values-variable-name>.made ~ '] & /@ # ]& ]';
-
         } else {
             make 'obj = GroupBy[ obj, #[' ~ $<rows-variable-name>.made ~ ']&, Length ]';
         }

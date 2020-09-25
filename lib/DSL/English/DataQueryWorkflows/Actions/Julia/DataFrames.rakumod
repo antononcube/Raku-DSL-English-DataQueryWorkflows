@@ -102,9 +102,12 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 
 	# Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
-	method arrange-simple-spec($/) { make $<mixed-quoted-variable-names-list>.made; }
-	method arrange-command-ascending($/) { make 'obj = sort( obj, [' ~ $<arrange-simple-spec>.made ~ '] )'; }
-	method arrange-command-descending($/) { make 'obj = sort( obj, [' ~ $<arrange-simple-spec>.made ~ '], rev=true ))'; }
+	method arrange-simple-command($/) {
+        make $<reverse-sort-phrase> || $<descending> ?? 'obj = sort( obj, rev=true )' !! 'obj = sort( obj )';
+    }
+	method arrange-by-spec($/) { make $<mixed-quoted-variable-names-list>.made; }
+	method arrange-by-command-ascending($/) { make 'obj = sort( obj, [' ~ $<arrange-by-spec>.made ~ '] )'; }
+	method arrange-by-command-descending($/) { make 'obj = sort( obj, [' ~ $<arrange-by-spec>.made ~ '], rev=true )'; }
 
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
@@ -138,14 +141,14 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	method summarize-data($/) { make 'describe(obj)'; }
 	method glimpse-data($/) { make 'first(obj, 6)'; }
 	method summarize-all-command($/) {
-		if $<summarize-all-funcs-spec> {
-			my $funcs = $<summarize-all-funcs-spec>.made.split(', ');
+		if $<summarize-funcs-spec> {
+			my $funcs = $<summarize-funcs-spec>.made.split(', ');
 			make 'combine( obj, ' ~ map( { 'names(obj) .=> ' ~ $_ } , $funcs ).join(', ') ~ ' )';
 		} else {
 			make 'combine( obj, names(obj) .=> mean )';
 		}
 	}
-	method summarize-all-funcs-spec($/) { make $<variable-names-list>.made.subst(:g, ':', ''); }
+	method summarize-funcs-spec($/) { make $<variable-names-list>.made.subst(:g, ':', ''); }
 
 
 	# Join command

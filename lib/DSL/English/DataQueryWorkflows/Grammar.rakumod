@@ -116,28 +116,30 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule ungroup-simple-command { <ungroup-verb> | <combine-verb> }
 
     # Arrange command
-    rule arrange-command { <arrange-command-descending> | <arrange-command-ascending> }
+    rule arrange-command { <arrange-by-command-descending> | <arrange-by-command-ascending> | <arrange-simple-command> }
+    rule arrange-simple-command { <.arrange-directive> [ <ascending> | <descending> ] | <reverse-sort-phrase> }
     rule arrange-command-filler { <by-preposition> <the-determiner>? [ <variables-noun> | <variable-noun> ]? }
-    rule arrange-simple-spec { <.by-preposition>? <.the-determiner>? [ <.variables-noun> | <.variable-noun> ]? <mixed-quoted-variable-names-list> }
-    rule arrange-command-ascending {
-        <.arrange> <.ascending>? <arrange-simple-spec> |
-        <.arrange> <arrange-simple-spec> <.ascending> }
-    rule arrange-command-descending {
-        <.arrange> <.descending> <arrange-simple-spec> |
-        <.arrange> <arrange-simple-spec> <.descending> |
-        <.reverse-sort-phrase> <arrange-simple-spec> }
+    rule arrange-by-spec { <.by-preposition>? <.the-determiner>? [ <.variables-noun> | <.variable-noun> ]? <mixed-quoted-variable-names-list> }
+    rule arrange-by-command-ascending {
+        <.arrange-directive> <.ascending>? <arrange-by-spec> |
+        <.arrange-by-phrase> <arrange-by-spec> <.ascending> }
+    rule arrange-by-command-descending {
+        <.arrange-directive> <.descending> <arrange-by-spec> |
+        <.arrange-by-phrase> <arrange-by-spec> <.descending> |
+        <.reverse-sort-phrase> <arrange-by-spec> }
 
     # Drop columns
     rule drop-columns-command { <drop-columns-simple> }
     rule drop-columns-simple { <.delete-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]? <todrop=.column-specs-list> }
 
     # Statistics command
-    rule statistics-command { <count-command> | <glimpse-data> | <summarize-all-command> | <summarize-data> }
+    rule statistics-command { <count-command> | <glimpse-data> | <summarize-all-command> | <summarize-at-command> | <summarize-data> }
     rule count-command { <compute-directive> <.the-determiner>? [ <count-verb> | <counts-noun> ] | <count-verb> }
     rule glimpse-data { <.display-directive>? <.a-determiner>? <.glimpse-verb> <.at-preposition>? <.the-determiner>? <data>  }
     rule summarize-data { [ <summarize-verb> | <summarise-verb> | <summary> ] <data>? | <display-directive> <data>? <summary> }
-    rule summarize-all-command { [ <.summarize-verb> | <.summarise-verb> ] <.them-pronoun>? <.all-determiner>? <.data>? [ <.with-preposition> <.functions>? <summarize-all-funcs-spec> ] }
-    rule summarize-all-funcs-spec { <variable-names-list> }
+    rule summarize-all-command { [ <.summarize-verb> | <.summarise-verb> ] <.them-pronoun>? <.all-determiner>? <.data>? [ <.with-preposition> <.functions>? <summarize-funcs-spec> ] }
+    rule summarize-at-command { [ <.summarize-verb> | <.summarise-verb> ] <.the-determiner>? <.columns> <cols=.mixed-quoted-variable-names-list> [ <.with-preposition> <.the-determiner>? <.functions>? <summarize-funcs-spec> ]? }
+    rule summarize-funcs-spec { <variable-name-or-wl-expr-list> }
 
     # Join command
     rule join-command { <inner-join-spec> | <left-join-spec> | <right-join-spec> | <semi-join-spec> | <full-join-spec> }
