@@ -43,7 +43,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
     # Overriding Predicate::predicate-simple -- wrapping the lhs variable specs with 'obj[...]'.
 	method predicate-simple($/) {
-		my $plhs = 'obj.' ~ $<lhs>.made;
+		my $plhs = 'obj[' ~ $<lhs>.made ~ ']';
 		my $prhs = $<rhs>.made;
 
 		if $<predicate-relation>.made eq '%!in%' {
@@ -126,7 +126,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	method arrange-simple-command($/) {
         make $<reverse-sort-phrase> || $<descending> ?? 'obj = obj.sort_values(ascending = False)' !! 'obj = obj.sort_values()';
     }
-	method arrange-by-spec($/) { make '[' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ']'; }
+	method arrange-by-spec($/) { make '[' ~ $/.values[0].made.join(', ') ~ ']'; }
 	method arrange-by-command-ascending($/) { make 'obj = obj.sort_values( ' ~ $<arrange-by-spec>.made ~ ' )'; }
 	method arrange-by-command-descending($/) { make 'obj = obj.sort_values( ' ~ $<arrange-by-spec>.made ~ ', ascending = False )'; }
 

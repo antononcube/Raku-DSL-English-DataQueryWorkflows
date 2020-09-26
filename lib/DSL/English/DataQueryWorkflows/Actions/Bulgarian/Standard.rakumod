@@ -92,7 +92,7 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	method arrange-simple-command($/) {
         make $<reverse-sort-phrase> || $<descending> ?? 'сортирай в низходящ ред' !! 'сортирай';
     }
-	method arrange-by-spec($/) { make $<mixed-quoted-variable-names-list>.made; }
+	method arrange-by-spec($/) { make $/.values[0].made; }
 	method arrange-by-command-ascending($/) { make 'сортирай с колоните: ' ~ $<arrange-by-spec>.made; }
 	method arrange-by-command-descending($/) { make 'сортирай в низходящ ред с колоните: ' ~ $<arrange-by-spec>.made; }
 

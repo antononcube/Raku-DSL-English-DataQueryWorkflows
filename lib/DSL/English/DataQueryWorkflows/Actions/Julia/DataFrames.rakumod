@@ -69,7 +69,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 
 	# Select command
   	method select-command($/) { make $/.values[0].made; }
-	method select-columns-simple($/) { make 'obj = obj[ : , ' ~ $/.values[0].made ~ ']'; }
+	method select-columns-simple($/) { make 'obj = obj[ : , [' ~ $/.values[0].made ~ ']]'; }
 	method select-columns-by-two-lists($/) {
 		        # I am not very comfortable with splitting the made string here, but it works.
         # Maybe it is better to no not join the elements in <variable-names-list>.
@@ -105,7 +105,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	method arrange-simple-command($/) {
         make $<reverse-sort-phrase> || $<descending> ?? 'obj = sort( obj, rev=true )' !! 'obj = sort( obj )';
     }
-	method arrange-by-spec($/) { make $<mixed-quoted-variable-names-list>.made; }
+	method arrange-by-spec($/) { make $/.values[0].made; }
 	method arrange-by-command-ascending($/) { make 'obj = sort( obj, [' ~ $<arrange-by-spec>.made ~ '] )'; }
 	method arrange-by-command-descending($/) { make 'obj = sort( obj, [' ~ $<arrange-by-spec>.made ~ '], rev=true )'; }
 

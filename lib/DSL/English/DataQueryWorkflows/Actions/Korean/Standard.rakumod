@@ -92,7 +92,7 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 	method arrange-simple-command($/) {
         make $<reverse-sort-phrase> || $<descending> ?? '역 정렬' !! '종류';
     }
-	method arrange-by-spec($/) { make $<mixed-quoted-variable-names-list>.made; }
+	method arrange-by-spec($/) { make $/.values[0].made; }
 	method arrange-by-command-ascending($/) { make '열로 정렬: ' ~ $<arrange-by-spec>.made; }
 	method arrange-by-command-descending($/) { make '열과 함께 내림차순으로 정렬: ' ~ $<arrange-by-spec>.made; }
 

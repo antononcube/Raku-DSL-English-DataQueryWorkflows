@@ -124,7 +124,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method arrange-simple-command($/) {
         make $<reverse-sort-phrase> || $<descending> ?? 'obj = obj[rev(order(obj)),]' !! 'obj = obj[order(obj),]';
     }
-	method arrange-by-spec($/) { make 'c(' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ')'; }
+	method arrange-by-spec($/) { make 'c(' ~ $/.values[0].made.join(', ') ~ ')'; }
 	method arrange-by-command-ascending($/) { make 'obj <- obj[ order(obj[ ,' ~ $<arrange-by-spec>.made ~ ']), ]'; }
 	method arrange-by-command-descending($/) { make 'obj <- obj[ rev(order(obj[ ,' ~ $<arrange-by-spec>.made ~ '])), ]'; }
 

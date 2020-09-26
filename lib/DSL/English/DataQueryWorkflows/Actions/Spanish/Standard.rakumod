@@ -92,7 +92,7 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	method arrange-simple-command($/) {
         make $<reverse-sort-phrase> || $<descending> ?? 'orden descendente' !! 'ordenar';
     }
-	method arrange-by-spec($/) { make $<mixed-quoted-variable-names-list>.made; }
+	method arrange-by-spec($/) { make $/.values[0].made; }
 	method arrange-by-command-ascending($/) { make 'ordenar con columnas: ' ~ $<arrange-by-spec>.made; }
 	method arrange-by-command-descending($/) { make 'ordenar en orden descendente con columnas: ' ~ $<arrange-by-spec>.made; }
 

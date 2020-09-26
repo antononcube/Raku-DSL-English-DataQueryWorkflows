@@ -111,7 +111,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method arrange-simple-command($/) {
         make $<reverse-sort-phrase> || $<descending> ?? 'obj = ReverseSort[obj]' !! 'obj = Sort[obj]';
     }
-    method arrange-by-spec($/) { make '{' ~ map( { '#["' ~ $_.subst(:g, '"', '') ~ '"]' }, $<mixed-quoted-variable-names-list>.made.split(', ') ).join(', ') ~ '}'; }
+    method arrange-by-spec($/) { make '{' ~ map( { '#["' ~ $_.subst(:g, '"', '') ~ '"]' }, $/.values[0].made.split(', ') ).join(', ') ~ '}'; }
     method arrange-by-command-ascending($/) { make 'obj = SortBy[ obj, ' ~ $<arrange-by-spec>.made ~ '& ]'; }
     method arrange-by-command-descending($/) { make 'obj = ReverseSortBy[ obj, ' ~ $<arrange-by-spec>.made ~ '& ]'; }
 

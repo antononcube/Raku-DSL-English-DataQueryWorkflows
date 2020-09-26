@@ -119,7 +119,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule arrange-command { <arrange-by-command-descending> | <arrange-by-command-ascending> | <arrange-simple-command> }
     rule arrange-simple-command { <.arrange-directive> [ <ascending> | <descending> ] | <reverse-sort-phrase> }
     rule arrange-command-filler { <by-preposition> <the-determiner>? [ <variables-noun> | <variable-noun> ]? }
-    rule arrange-by-spec { <.by-preposition>? <.the-determiner>? [ <.variables-noun> | <.variable-noun> ]? <mixed-quoted-variable-names-list> }
+    rule arrange-by-spec { <.by-preposition>? <.the-determiner>? [ <.variables-noun> | <.variable-noun> ]? <column-specs-list> }
     rule arrange-by-command-ascending {
         <.arrange-directive> <.ascending>? <arrange-by-spec> |
         <.arrange-by-phrase> <arrange-by-spec> <.ascending> }

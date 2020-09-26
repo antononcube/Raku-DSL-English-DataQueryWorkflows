@@ -93,19 +93,30 @@ my $commands9 = 'use dfTitanic; select "passengerSex", passengerClass, passenger
 #'DSL TARGET Python-pandas; use dfStarwars; select species as var1, mass as var2, height as var3'
 #);
 
+#my @testCommands = (
+#'DSL TARGET Julia-DataFrames; use data frame dfStarwars; keep the columns name, homeworld, mass & height; arrange by mass, height, and name',
+#'DSL TARGET Python-pandas; use data frame dfStarwars; keep the columns name, homeworld, mass & height; arrange by mass, height, and name',
+#'DSL TARGET R-tidyverse; use data frame dfStarwars; keep the columns name, homeworld, mass & height; arrange by mass, height, and name',
+#'DSL TARGET R-base; use data frame dfStarwars; keep the columns name, homeworld, mass & height; arrange by mass, height, and name',
+#'DSL TARGET WL-System; use data frame dfStarwars; keep the columns name, homeworld, mass & height; arrange by mass, height, and name'
+#);
+
 my @testCommands = (
-'DSL TARGET WL-System; use dfTitanic; make dictionary mapping id -> passengerSex',
-'DSL TARGET WL-System; use dfTitanic; make dictionary from "id" to "passengerSex"',
-'DSL TARGET R-tidyverse; use dfTitanic; make dictionary for id to passengerSex',
-'DSL TARGET R-base; use dfTitanic; make dictionary mapping the column id as passengerSex',
+"
+DSL TARGET Python-pandas;
+use dfStarwars;
+filter by 'species' is 'Human';
+select name, sex, homeworld;
+inner join with dfStarwarsVehicles on 'name';
+"
 );
 
 for @testCommands -> $c {
     say "=" x 30;
-say $c;
-say '-' x 30;
+    say $c;
+    say '-' x 30;
     my $start = now;
-    my $res = ToDataQueryWorkflowCode( $c );
+    my $res = ToDataQueryWorkflowCode($c);
     say "time:", now - $start;
     say $res;
 };
