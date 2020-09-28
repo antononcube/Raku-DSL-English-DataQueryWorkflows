@@ -95,9 +95,9 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
         }
     }
 	method select-columns-by-pairs($/) {
-		my @pairs = $/.values[0].made;
-		my $res = do for @pairs -> ( $lhs, $rhs ) { 'colnames(obj) <- gsub( "' ~ $rhs ~ '", "' ~ $lhs ~ '", colnames(obj) )' };
-		my $newcols = do for @pairs -> ( $lhs, $rhs ) { '"' ~ $lhs ~ '"' };
+		my @triplets = $/.values[0].made;
+		my $res = do for @triplets -> ( $lhs, $rhsName, $rhs ) { 'colnames(obj) <- gsub( ' ~ $rhsName ~ ', ' ~ $lhs ~ ', colnames(obj) )' };
+		my $newcols = do for @triplets -> ( $lhs, $rhsName, $rhs ) { $lhs };
 		make $res.join("\n") ~ "\n" ~ 'obj[, c('~ $newcols.join(', ') ~ ')]';
 	}
 
@@ -107,8 +107,8 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
     # Mutate command
 	method mutate-command($/) {
-		my @pairs = $/.values[0].made;
-		my $res = do for @pairs -> ( $lhs, $rhs ) { 'obj$' ~ $lhs ~ ' <- obj$' ~ $rhs; };
+		my @triplets = $/.values[0].made;
+		my $res = do for @triplets -> ( $lhs, $rhsName, $rhs ) { 'obj[[' ~ $lhs ~ ']] <- ' ~ $rhs; };
 		make '{' ~ $res.join("; ") ~ '}';
 	}
 
@@ -145,8 +145,8 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
     }
     method rename-columns-by-pairs($/) {
 		my @pairs = $/.values[0].made;
-		my $res = do for @pairs -> ( $lhs, $rhs ) { 'colnames(obj) <- gsub( "' ~ $rhs ~ '", "' ~ $lhs ~ '", colnames(obj) )' };
-		my $oldcols = do for @pairs -> ( $lhs, $rhs ) { '"' ~ $rhs ~ '"' };
+		my $res = do for @pairs -> ( $lhs, $rhsName, $rhs ) { 'colnames(obj) <- gsub( ' ~ $rhsName ~ ', ' ~ $lhs ~ ', colnames(obj) )' };
+		my $oldcols = do for @pairs -> ( $lhs, $rhsName, $rhs ) { $rhsName };
 		make $res.join(" ;\n") ~ "\n" ~ 'obj <- obj[,' ~ ~ 'setdiff( colnames(obj), c(' ~ $oldcols.join(', ') ~ '))]';
 	}
 
@@ -288,14 +288,15 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
     # Assign-pairs and as-pairs
 	method assign-pairs-list($/) { make $<assign-pair>>>.made; }
 	method as-pairs-list($/)     { make $<as-pair>>>.made; }
-	method assign-pair($/) { make ( $<assign-pair-lhs>.made, $<assign-pair-rhs>.made); }
-	method as-pair($/)     { make ( $<assign-pair-lhs>.made, $<assign-pair-rhs>.made); }
-	method assign-pair-lhs($/) { make $/.values[0].made.subst(:g, '"', ''); }
+	method assign-pair($/) { make ( $<assign-pair-lhs>.made, |$<assign-pair-rhs>.made ); }
+	method as-pair($/)     { make ( $<assign-pair-lhs>.made, |$<assign-pair-rhs>.made ); }
+	method assign-pair-lhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
 	method assign-pair-rhs($/) {
         if $<mixed-quoted-variable-name> {
-            make $/.values[0].made.subst(:g, '"', '');
+            my $v = '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"';
+			make ( $v, 'obj[[' ~ $v ~ ']]' );
         } else {
-            make $/.values[0].made
+            make ( $/.values[0].made, $/.values[0].made )
         }
     }
 

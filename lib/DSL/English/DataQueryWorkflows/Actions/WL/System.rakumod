@@ -86,7 +86,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     }
     method select-columns-by-pairs($/) {
         my @pairs = $/.values[0].made;
-		my $res = do for @pairs -> ( $lhs, $rhs ) { $lhs ~ ' -> #[' ~ $rhs ~ ']' };
+		my $res = do for @pairs -> ( $lhs, $rhsName, $rhs ) { $lhs ~ ' -> ' ~ $rhs };
 		make 'obj = Map[ <|' ~ $res.join(', ') ~ '|>&, obj]';
     }
 
@@ -95,7 +95,11 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method filter-spec($/) { make $<predicates-list>.made; }
 
     # Mutate command
-    method mutate-command($/) { make 'obj = Map[ Join[ #, <|' ~ $<assign-pairs-list>.made ~ '|> ]&, obj]' ; }
+    method mutate-command($/) {
+        my @pairs = $/.values[0].made;
+		my $res = do for @pairs -> ( $lhs, $rhsName, $rhs ) { $lhs ~ ' -> ' ~ $rhs };
+		make  'obj = Map[ Join[ #, <|' ~ $res.join(', ') ~ '|> ]&, obj]';
+    }
 
     # Group command
     method group-command($/) {
@@ -132,8 +136,8 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     }
     method rename-columns-by-pairs($/) {
         my @pairs = $/.values[0].made;
-		my $res = do for @pairs -> ( $lhs, $rhs ) { $lhs ~ ' -> #[' ~ $rhs ~ ']' };
-        my @toDrop = do for @pairs -> ( $lhs, $rhs ) { $rhs };
+		my $res = do for @pairs -> ( $lhs, $rhsName, $rhs ) { $lhs ~ ' -> ' ~ $rhs };
+        my @toDrop = do for @pairs -> ( $lhs, $rhsName, $rhs ) { $rhsName };
 		make  'obj = Map[ Join[ KeyDrop[ #, {' ~ @toDrop.join(', ')~ '} ], <|' ~ $res.join(', ') ~ '|> ]&, obj]';
     }
 
@@ -268,14 +272,15 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     # Assign-pairs and as-pairs
 	method assign-pairs-list($/) { make $<assign-pair>>>.made; }
 	method as-pairs-list($/)     { make $<as-pair>>>.made; }
-	method assign-pair($/) { make ( $<assign-pair-lhs>.made, $<assign-pair-rhs>.made); }
-	method as-pair($/)     { make ( $<assign-pair-lhs>.made, $<assign-pair-rhs>.made); }
+	method assign-pair($/) { make ( $<assign-pair-lhs>.made, |$<assign-pair-rhs>.made ); }
+	method as-pair($/)     { make ( $<assign-pair-lhs>.made, |$<assign-pair-rhs>.made ); }
     method assign-pair-lhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
     method assign-pair-rhs($/) {
         if $<mixed-quoted-variable-name> {
-            make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"';
+            my $v = '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"';
+            make ( $v, '#[' ~ $v ~ ']' )
         } else {
-            make $/.values[0].made
+            make ( $/.values[0].made, $/.values[0].made )
         }
     }
 
