@@ -173,6 +173,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
     # Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
+	method data-dimensions-command($/) { make 'print(dim(obj))'; }
 	method count-command($/) { make 'tidyverse::count()'; }
 	method summarize-data($/) { make 'print(summary(obj))'; }
 	method glimpse-data($/) { make 'head(obj)'; }
@@ -272,7 +273,13 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
     method reshape-command($/) { make $/.values[0].made; }
 
     # Pivot longer command
-    method pivot-longer-command($/) { make 'obj <- reshape( data = obj, ' ~ $<pivot-longer-arguments-list>.made ~ ', direction = "long" )'; }
+    method pivot-longer-command($/) {
+		if $<pivot-longer-arguments-list> {
+			make 'obj <- reshape( data = obj, ' ~ $<pivot-longer-arguments-list>.made ~ ', direction = "long" )';
+		} else {
+			make 'obj <- reshape( data = obj, idvar = 1, varying = list(2:ncol(obj)), timevar = "Variable", v.names = "Value", direction = "long" )';
+		}
+	}
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
     method pivot-longer-argument($/) { make $/.values[0].made; }
 

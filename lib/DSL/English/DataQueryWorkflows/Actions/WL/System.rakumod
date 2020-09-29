@@ -162,6 +162,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     # Statistics command
     method statistics-command($/) { make $/.values[0].made; }
+    method data-dimensions-command($/) { make 'Echo[Dimensions[obj]]'; }
     method count-command($/) { make 'obj = obj[All, Length]'; }
     method summarize-data($/) { make 'Echo[ResourceFunction["RecordsSummary"][obj], "summarize:"]'; }
     method glimpse-data($/) { make 'Echo[RandomSample[obj,UpTo[6]], "glimpse:"]'; }
@@ -254,7 +255,11 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     # Pivot longer command
     method pivot-longer-command($/) {
-        make 'obj = ToLongForm[ obj, ' ~ $<pivot-longer-arguments-list>.made ~ ' ]';
+        if $<pivot-longer-arguments-list> {
+            make 'obj = ToLongForm[ obj, ' ~ $<pivot-longer-arguments-list>.made ~ ' ]';
+        } else {
+            make 'obj = ToLongForm[ obj ]';
+        }
     }
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
     method pivot-longer-argument($/) { make $/.values[0].made; }

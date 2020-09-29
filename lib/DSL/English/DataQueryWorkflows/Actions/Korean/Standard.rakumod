@@ -113,6 +113,7 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 
 	# Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
+	method data-dimensions-command($/) { make '치수 표시'; }
 	method count-command($/) { make '하위 그룹의 크기 찾기'; }
 	method summarize-data($/) { make '목적을 요약하다'; }
 	method glimpse-data($/) { make '물체를 엿볼 수있다'; }
@@ -197,7 +198,13 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
     method reshape-command($/) { make $/.values[0].made; }
 
 	# Pivot longer command
-    method pivot-longer-command($/) { make '좁은 형태로 변신하다 ' ~ $<pivot-longer-arguments-list>.made; }
+    method pivot-longer-command($/) {
+		if  $<pivot-longer-arguments-list> {
+			make $<pivot-longer-arguments-list>.made ~ ' 를 사용하여 긴 형식으로 변환';
+		} else {
+			make '긴 형식으로 변환';
+		}
+	}
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
     method pivot-longer-argument($/) { make $/.values[0].made; }
 

@@ -101,22 +101,35 @@ my $commands9 = 'use dfTitanic; select "passengerSex", passengerClass, passenger
 #'DSL TARGET WL-System; use data frame dfStarwars; keep the columns name, homeworld, mass & height; arrange by mass, height, and name'
 #);
 
+#my @testCommands = (
+#"
+#DSL TARGET Python-pandas;
+#use dfStarwars;
+#filter by 'species' is 'Human';
+#select name, sex, homeworld;
+#inner join with dfStarwarsVehicles on 'name';
+#"
+#);
+#'use dfTitanicLongForm; convert to wide form with id column id, variable column Variable and value column Value'
 my @testCommands = (
-"
-DSL TARGET Python-pandas;
-use dfStarwars;
-filter by 'species' is 'Human';
-select name, sex, homeworld;
-inner join with dfStarwarsVehicles on 'name';
-"
+'convert to long form using the columns mass and height, and using the variable column name "Var1" and with values column name "VAL"',
+'use dfTitanic; display data dimensions; to long form with identifier column id'
 );
+
+my @targets = ('Python-pandas');
+#my @targets = ('Julia-DataFrames', 'Python-pandas', 'R-base', 'R-tidyverse', 'WL-System');
+#my @targets = ('Bulgarian', 'Korean', 'Spanish');
 
 for @testCommands -> $c {
     say "=" x 30;
     say $c;
-    say '-' x 30;
-    my $start = now;
-    my $res = ToDataQueryWorkflowCode($c);
-    say "time:", now - $start;
-    say $res;
+    for @targets -> $t {
+        say '-' x 30;
+        say $t;
+        say '-' x 30;
+        my $start = now;
+        my $res = ToDataQueryWorkflowCode($c, $t);
+        say "time:", now - $start;
+        say $res;
+    }
 };

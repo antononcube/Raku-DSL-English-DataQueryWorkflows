@@ -113,6 +113,7 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 
 	# Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
+	method data-dimensions-command($/) { make 'mostrar dimensiones'; }
 	method count-command($/) { make 'encontrar el tamaño de los subgrupos'; }
 	method summarize-data($/) { make 'describe el objeto'; }
 	method glimpse-data($/) { make 'vislumbrar el objeto'; }
@@ -197,7 +198,13 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
     method reshape-command($/) { make $/.values[0].made; }
 
 	# Pivot longer command
-    method pivot-longer-command($/) { make 'convertir a la forma estrecha ' ~ $<pivot-longer-arguments-list>.made; }
+    method pivot-longer-command($/) {
+		if  $<pivot-longer-arguments-list> {
+			make 'convertir a formato largo con ' ~ $<pivot-longer-arguments-list>.made;
+		} else {
+			make 'convertir a formato largo';
+		}
+	}
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
     method pivot-longer-argument($/) { make $/.values[0].made; }
 

@@ -136,7 +136,8 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule drop-columns-simple { <.delete-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]? <todrop=.column-specs-list> }
 
     # Statistics command
-    rule statistics-command { <count-command> | <glimpse-data> | <summarize-all-command> | <summarize-at-command> | <summarize-data> }
+    rule statistics-command { <data-dimensions-command> | <count-command> | <glimpse-data> | <summarize-all-command> | <summarize-at-command> | <summarize-data> }
+    rule data-dimensions-command { <.display-directive> <.data-noun>? [ <dimensions-noun> | <shape-noun> ] }
     rule count-command { <compute-directive> <.the-determiner>? [ <count-verb> | <counts-noun> ] | <count-verb> }
     rule glimpse-data { <.display-directive>? <.a-determiner>? <.glimpse-verb> <.at-preposition>? <.the-determiner>? <data>  }
     rule summarize-data { [ <summarize-verb> | <summarise-verb> | <summary> ] <data>? | <display-directive> <data>? <summary> }
@@ -173,7 +174,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
         :my Int $*IDCOLS = 0;
         :my Int $*VARTO = 0;
         :my Int $*VALTO = 0;
-        <.convert-verb>? <.to-long-form-phrase> <.filler-separator> <pivot-longer-arguments-list> }
+        <.convert-verb>? <.to-long-form-phrase> [ <.filler-separator> <pivot-longer-arguments-list> ]? }
 
     regex pivot-longer-arguments-list { <pivot-longer-argument>+ % [ [ <list-separator> | <ws> ] <filler-separator>? ] }
     regex pivot-longer-argument { <pivot-longer-id-columns-spec> | <pivot-longer-columns-spec> | <pivot-longer-variable-column-name-spec> | <pivot-longer-value-column-name-spec> }

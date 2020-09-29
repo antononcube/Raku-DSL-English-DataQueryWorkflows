@@ -150,6 +150,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 
 	# Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
+	method data-dimensions-command($/) { make 'print(size(obj))'; }
 	method count-command($/) { make 'obj = combine(obj, nrow)'; }
 	method summarize-data($/) { make 'describe(obj)'; }
 	method glimpse-data($/) { make 'first(obj, 6)'; }

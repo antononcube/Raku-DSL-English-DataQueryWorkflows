@@ -178,6 +178,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
     # Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
+	method data-dimensions-command($/) { make 'print(obj.shape)'; }
 	method count-command($/) { make 'tidyverse::count()'; }
 	method summarize-data($/) { make 'print(obj.describe())'; }
 	method glimpse-data($/) { make 'print(obj.head())'; }
@@ -269,15 +270,23 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
     method reshape-command($/) { make $/.values[0].made; }
 
     # Pivot longer command
-    method pivot-longer-command($/) { make 'obj = reshape( data = obj, ' ~ $<pivot-longer-arguments-list>.made ~ ', direction = "long" )'; }
+    method pivot-longer-command($/) {
+		if $<pivot-longer-arguments-list> {
+			make 'obj = pandas.melt( dfTitanic, ' ~ $<pivot-longer-arguments-list>.made ~ ' )';
+		} else {
+			make 'obj = pandas.melt( obj, id_vars = obj.columns[0], var_name = "Variable", value_name = "Value" )';
+		}
+	}
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
     method pivot-longer-argument($/) { make $/.values[0].made; }
 
-    method pivot-longer-columns-spec($/) { make 'varying = c( ' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ' )'; }
+    method pivot-longer-id-columns-spec($/) { make 'id_vars = [' ~ $/.values[0].made ~ ']'; }
 
-    method pivot-longer-variable-column-name-spec($/) { make 'timevar = ' ~ $<quoted-variable-name>.made; }
+    method pivot-longer-columns-spec($/)    { make 'value_vars = [' ~ $/.values[0].made ~ ']'; }
 
-    method pivot-longer-value-column-name-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
+    method pivot-longer-variable-column-name-spec($/) { make 'var_name = ' ~ $/.values[0].made; }
+
+    method pivot-longer-value-column-name-spec($/) { make 'value_name ' ~ $/.values[0].made; }
 
     # Pivot wide command
     method pivot-wider-command($/) { make 'obj = reshape( data = obj, ' ~ $<pivot-wider-arguments-list>.made ~ ' , direction = "wide" )'; }

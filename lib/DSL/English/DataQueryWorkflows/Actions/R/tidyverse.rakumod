@@ -162,6 +162,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 
 	# Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
+	method data-dimensions-command($/) { make '( function(x) { print(dim(x)); x } )'; }
 	method count-command($/) { make 'dplyr::count()'; }
 	method summarize-data($/) { make '( function(x) { print(summary(x)); x } )'; }
 	method glimpse-data($/) { make 'dplyr::glimpse()'; }
@@ -260,7 +261,13 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
     method reshape-command($/) { make $/.values[0].made; }
 
     # Pivot longer command
-    method pivot-longer-command($/) { make 'tidyr::pivot_longer( ' ~ $<pivot-longer-arguments-list>.made ~ ' )'; }
+    method pivot-longer-command($/) {
+		if $<pivot-longer-arguments-list> {
+			make 'tidyr::pivot_longer( ' ~ $<pivot-longer-arguments-list>.made ~ ' )';
+		} else {
+			make 'dplyr::mutate_all(.funs = as.character) %>% tidyr::pivot_longer( cols = -1, names_to = "Variable", values_to = "Value")';
+		}
+	}
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
     method pivot-longer-argument($/) { make $/.values[0].made; }
 

@@ -113,6 +113,7 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 
 	# Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
+	method data-dimensions-command($/) { make 'покажи размерите'; }
 	method count-command($/) { make 'намери размера на под-групите'; }
 	method summarize-data($/) { make 'опиши обекта'; }
 	method glimpse-data($/) { make 'покажи визия на обекта'; }
@@ -197,7 +198,13 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
     method reshape-command($/) { make $/.values[0].made; }
 
 	# Pivot longer command
-    method pivot-longer-command($/) { make 'преобразувай в тясна форма ' ~ $<pivot-longer-arguments-list>.made; }
+    method pivot-longer-command($/) {
+		if  $<pivot-longer-arguments-list> {
+			make 'преобразувай в тясна форма ' ~ $<pivot-longer-arguments-list>.made;
+		} else {
+			make 'преобразувай в тясна форма';
+		}
+	}
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
     method pivot-longer-argument($/) { make $/.values[0].made; }
 
