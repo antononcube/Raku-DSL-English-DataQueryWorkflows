@@ -102,7 +102,20 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	method filter-spec($/) { make $<predicates-list>.made; }
 	
 	# Mutate command
-	method mutate-command($/) { make 'dplyr::mutate(' ~ $<assign-pairs-list>.made ~ ')'; }
+	method mutate-command($/) { make $/.values[0].made; }
+    method mutate-by-two-lists($/) {
+		my @currentNames = $<current>.made.subst(:g, '"', '').split(', ');
+        my @newNames = $<new>.made.subst(:g, '"', '').split(', ');
+
+        if @currentNames.elems != @newNames.elems {
+            note 'Same number of current and new column names are expected for mutation by two lists.';
+            make 'dplyr::mutate()';
+        } else {
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $n ~ ' = ' ~ $c };
+            make 'dplyr::mutate(' ~ $pairs.join(', ') ~ ')';
+        }
+	}
+	method mutate-by-pairs($/) { make 'dplyr::mutate(' ~ $/.values[0].made ~ ')'; }
 
 	# Group command
 	method group-command($/) { make 'dplyr::group_by(' ~ $<variable-names-list>.made ~ ')'; }
@@ -131,10 +144,10 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 
         if @currentNames.elems != @newNames.elems {
             note 'Same number of current and new column names are expected for column renaming.';
-            make 'dplyr::mutate()';
+            make 'dplyr::rename()';
         } else {
             my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $n ~ ' = ' ~ $c };
-            make 'dplyr::rename( ' ~ $pairs.join(', ') ~ ' )';
+            make 'dplyr::rename(' ~ $pairs.join(', ') ~ ')';
         }
     }
     method rename-columns-by-pairs($/) { make 'dplyr::rename(' ~ $<as-pairs-list>.made ~ ')'; }

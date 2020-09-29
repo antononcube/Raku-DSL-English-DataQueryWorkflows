@@ -78,7 +78,9 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	method filter-spec($/) { make $<predicates-list>.made; }
 
 	# Mutate command
-	method mutate-command($/) { make 'присвои: ' ~ $<assign-pairs-list>.made; }
+	method mutate-command($/) { make $/.values[0].made; }
+	method mutate-by-two-lists($/) { make 'присвои колоните ' ~ $<current>.made ~ ' на ' ~ $<new>.made; }
+	method mutate-by-pairs($/) { make 'присвои: ' ~ $/.values[0].made; }
 
 	# Group command
 	method group-command($/) { make 'групирай с колоните: ' ~ $<variable-names-list>.made; }

@@ -106,7 +106,21 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method filter-spec($/) { make $<predicates-list>.made; }
 
     # Mutate command
-	method mutate-command($/) {
+	method mutate-command($/) { make $/.values[0].made; }
+    method mutate-by-two-lists($/) {
+		## See how the <mixed-quoted-variable-names-list> was made.
+        my @currentNames = $<current>.made.split(', ');
+        my @newNames = $<new>.made.split(', ');
+
+        if @currentNames.elems != @newNames.elems {
+            note 'Same number of current and new column names are expected for mutation by two lists.';
+            make 'obj';
+        } else {
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { 'obj[[' ~ $n ~ ']] <- obj[[' ~ $c ~ ']]' };
+			make $pairs.join(" ;\n");
+        }
+    }
+	method mutate-by-pairs($/) {
 		my @triplets = $/.values[0].made;
 		my $res = do for @triplets -> ( $lhs, $rhsName, $rhs ) { 'obj[[' ~ $lhs ~ ']] <- ' ~ $rhs; };
 		make '{' ~ $res.join("; ") ~ '}';

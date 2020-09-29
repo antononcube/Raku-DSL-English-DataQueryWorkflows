@@ -77,7 +77,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
         my @newNames = $<new>.made.split(', ');
 
         if @currentNames.elems != @newNames.elems {
-            note 'Same number of current and new column names are expected for column selction with renaming.';
+            note 'Same number of current and new column names are expected for column selection with renaming.';
             make 'obj';
         } else {
             my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $n ~ ' -> #[' ~ $c ~ ']' };
@@ -95,10 +95,23 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method filter-spec($/) { make $<predicates-list>.made; }
 
     # Mutate command
-    method mutate-command($/) {
+    method mutate-command($/) { make $/.values[0].made; }
+    method mutate-by-two-lists($/) {
+        my @currentNames = $<current>.made.split(', ');
+        my @newNames = $<new>.made.split(', ');
+
+        if @currentNames.elems != @newNames.elems {
+            note 'Same number of current and new column names are expected for mutation with two lists.';
+            make 'obj';
+        } else {
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $n ~ ' -> #[' ~ $c ~ ']' };
+            make 'obj = Map[ Join[ #, <|' ~ $pairs.join(', ') ~ '|> ]&, obj]' ;
+        }
+    }
+    method mutate-by-pairs($/) {
         my @pairs = $/.values[0].made;
 		my $res = do for @pairs -> ( $lhs, $rhsName, $rhs ) { $lhs ~ ' -> ' ~ $rhs };
-		make  'obj = Map[ Join[ #, <|' ~ $res.join(', ') ~ '|> ]&, obj]';
+		make 'obj = Map[ Join[ #, <|' ~ $res.join(', ') ~ '|> ]&, obj]';
     }
 
     # Group command

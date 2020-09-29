@@ -78,7 +78,9 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 	method filter-spec($/) { make $<predicates-list>.made; }
 
 	# Mutate command
-	method mutate-command($/) { make '양수인: ' ~ $<assign-pairs-list>.made; }
+	method mutate-command($/) { make $/.values[0].made; }
+	method mutate-by-two-lists($/) { $<current>.made ~ ' 열을 ' ~ $<new>.made ~ ' 에 할당';}
+	method mutate-by-pairs($/) { make '양수인: ' ~ $/.values[0].made;  }
 
 	# Group command
 	method group-command($/) { make '열로 그룹화: ' ~ $<variable-names-list>.made; }

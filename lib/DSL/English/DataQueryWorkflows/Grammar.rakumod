@@ -106,7 +106,10 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule filter-spec { <predicates-list> }
 
     # Mutate command
-    rule mutate-command { [ <.mutate> | <.assign-verb> | <.transform-verb> ] <.by-preposition>? <assign-pairs-list> }
+    rule mutate-command { <mutate-by-pairs> | <mutate-by-two-lists> }
+    rule mutate-opening-phrase { <mutate> | <assign-verb> | <transform-verb> }
+    rule mutate-by-two-lists { <.mutate-opening-phrase> <current=.column-specs-list> <.as-preposition> <new=.column-specs-list> }
+    rule mutate-by-pairs { <.mutate-opening-phrase> <.by-preposition>? [ <as-pairs-list> | <assign-pairs-list> ] }
 
     # Group command
     rule group-command { <group-by> <variable-names-list> }

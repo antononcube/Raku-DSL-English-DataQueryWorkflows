@@ -112,7 +112,27 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	method filter-spec($/) { make $<predicates-list>.made; }
 
     # Mutate command
-	method mutate-command($/) { make $<assign-pairs-list>.made; }
+	method mutate-command($/) { make $/.values[0].made; }
+    method mutate-by-two-lists($/) {
+		# Almost the same as rename-columns-by-two-lists($/) .
+        my @currentNames = $<current>.made.split(', ');
+        my @newNames = $<new>.made.split(', ');
+
+        if @currentNames.elems != @newNames.elems {
+            note 'Same number of current and new column names are expected for mutation with two lists.';
+            make 'obj';
+        } else {
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $n ~ ' : ' ~ $c };
+            make 'obj = obj.asign(' ~ $pairs.join(', ') ~ ')';
+        }
+	}
+	method mutate-by-pairs($/) {
+		my @newCols = $/.values[0].made.split( / '=' | '(' | ')' | ',' / );
+		my $res = $/.values[0].made;
+		@newCols = grep( { $_.chars > 0 }, @newCols[2..*-1] );
+		@newCols = @newCols[0,2...*];
+		make $res ~ "\n" ~ 'obj = obj[[' ~ map( { '"' ~ $_.trim ~ '"' }, @newCols ).join(', ') ~ ']]';
+	}
 
     # Group command
 	method group-command($/) { make 'obj = obj ( data = obj, ' ~ $<variable-names-list>.made ~ ')'; }

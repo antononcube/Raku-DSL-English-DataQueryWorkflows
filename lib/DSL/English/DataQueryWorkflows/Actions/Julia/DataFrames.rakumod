@@ -71,7 +71,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
   	method select-command($/) { make $/.values[0].made; }
 	method select-columns-simple($/) { make 'obj = obj[ : , [' ~ $/.values[0].made ~ ']]'; }
 	method select-columns-by-two-lists($/) {
-		        # I am not very comfortable with splitting the made string here, but it works.
+		# I am not very comfortable with splitting the made string here, but it works.
         # Maybe it is better to no not join the elements in <variable-names-list>.
         my @currentNames = $<current>.made.split(', ');
         my @newNames = $<new>.made.split(', ');
@@ -91,7 +91,20 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	method filter-spec($/) { make $<predicates-list>.made; }
 
 	# Mutate command
-	method mutate-command($/) { make 'obj = transform( obj, ' ~ $<assign-pairs-list>.made ~ ' )'; }
+	method mutate-command($/) { make $/.values[0].made; }
+	method mutate-by-two-lists($/) {
+		my @currentNames = $<current>.made.split(', ');
+        my @newNames = $<new>.made.split(', ');
+
+        if @currentNames.elems != @newNames.elems {
+            note 'Same number of current and new column names are expected for mutation with two lists.';
+            make 'obj';
+        } else {
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $c ~ ' => ' ~ $n };
+            make 'obj = transform( obj, ' ~ $pairs.join(', ') ~ ' )';
+        }
+	}
+	method mutate-by-pairs($/) { make 'obj = transform( obj, ' ~ $/.values[0].made ~ ' )'; }
 
 	# Group command
 	method group-command($/) { make 'obj = groupby( obj, [' ~ $<variable-names-list>.made ~ '] )'; }
