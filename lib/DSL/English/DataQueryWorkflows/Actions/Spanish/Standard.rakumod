@@ -39,6 +39,8 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 		is DSL::Shared::Actions::CommonStructures
         is DSL::English::DataQueryWorkflows::Actions::Spanish::Predicate {
 
+	has $.name = 'DSL-English-DataQueryWorkflows-Spanish-Standard';
+
     method TOP($/) { make $/.values[0].made; }
 
 	# General

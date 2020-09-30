@@ -39,6 +39,8 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 		is DSL::Shared::Actions::CommonStructures
         is DSL::English::DataQueryWorkflows::Actions::Bulgarian::Predicate {
 
+	has $.name = 'DSL-English-DataQueryWorkflows-Bulgarian-Standard';
+
     method TOP($/) { make $/.values[0].made; }
 
 	# General

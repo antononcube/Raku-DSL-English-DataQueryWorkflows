@@ -49,6 +49,8 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         is DSL::Shared::Actions::R::PredicateSpecification
 		is DSL::Shared::Actions::English::R::PipelineCommand {
 
+	has $.name = 'DSL-English-DataQueryWorkflows-R-tidyverse';
+
 	method TOP($/) { make $/.values[0].made; }
 
 	# General

@@ -39,6 +39,8 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
         is DSL::Shared::Actions::WL::PredicateSpecification
         is DSL::Shared::Actions::English::WL::PipelineCommand {
 
+    has $.name = 'DSL-English-DataQueryWorkflows-WL-System';
+
     method TOP($/) { make $/.values[0].made; }
 
     # General

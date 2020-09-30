@@ -39,6 +39,8 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
         is DSL::Shared::Actions::R::PredicateSpecification
 		is DSL::Shared::Actions::English::R::PipelineCommand {
 
+	has $.name = 'DSL-English-DataQueryWorkflows-R-base';
+
 	method TOP($/) { make $/.values[0].made; }
 
 	# Overriding Predicate::predicate-simple -- prefixing the lhs variable specs with 'obj$'.

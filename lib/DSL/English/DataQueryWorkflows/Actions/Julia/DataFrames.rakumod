@@ -39,6 +39,8 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 		is DSL::Shared::Actions::Julia::PredicateSpecification
 		is DSL::Shared::Actions::English::Julia::PipelineCommand {
 
+	has $.name = 'DSL-English-DataQueryWorkflows-Julia-DataFrames';
+
     method TOP($/) { make $/.values[0].made; }
 
 	# General

@@ -39,6 +39,8 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
         is DSL::Shared::Actions::Python::PredicateSpecification
 		is DSL::Shared::Actions::English::Python::PipelineCommand {
 
+	has $.name = 'DSL-English-DataQueryWorkflows-Python-pandas';
+
 	method TOP($/) { make $/.values[0].made; }
 
     # Overriding Predicate::predicate-simple -- wrapping the lhs variable specs with 'obj[...]'.
