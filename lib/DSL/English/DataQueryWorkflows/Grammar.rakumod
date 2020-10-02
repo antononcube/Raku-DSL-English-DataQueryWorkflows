@@ -136,13 +136,13 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule drop-columns-simple { <.delete-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]? <todrop=.column-specs-list> }
 
     # Statistics command
-    rule statistics-command { <data-dimensions-command> | <count-command> | <glimpse-data> | <summarize-all-command> | <summarize-at-command> | <summarize-data> }
+    rule statistics-command { <data-dimensions-command> | <count-command> | <glimpse-data> | <summarize-all-command> | <summarize-at-command> | <data-summary-command> }
     rule data-dimensions-command { <.display-directive> <.data-noun>? [ <dimensions-noun> | <shape-noun> ] }
     rule count-command { <compute-directive> <.the-determiner>? [ <count-verb> | <counts-noun> ] | <count-verb> }
-    rule glimpse-data { <.display-directive>? <.a-determiner>? <.glimpse-verb> <.at-preposition>? <.the-determiner>? <data>  }
-    rule summarize-data { [ <summarize-verb> | <summarise-verb> | <summary> ] <data>? | <display-directive> <data>? <summary> }
+    rule glimpse-data { <.display-directive>? <.a-determiner>? <.glimpse-verb> <.at-preposition>? <.the-determiner>? <.data-noun>? }
+    rule data-summary-command { [ <summarize-verb> | <summarise-verb> | <summary> ] <data-noun>? | <display-directive> <data-noun>? <summary> }
     rule summarize-all-command { [ <.summarize-verb> | <.summarise-verb> ] <.them-pronoun>? <.all-determiner>? <.data>? [ <.with-preposition> <.functions>? <summarize-funcs-spec> ] }
-    rule summarize-at-command { [ <.summarize-verb> | <.summarise-verb> ] <.the-determiner>? <.columns> <cols=.mixed-quoted-variable-names-list> [ <.with-preposition> <.the-determiner>? <.functions>? <summarize-funcs-spec> ]? }
+    rule summarize-at-command { [ <.summarize-verb> | <.summarise-verb> ] [ <.the-determiner>? <.columns> | <.at-preposition> ]? <cols=.mixed-quoted-variable-names-list> [ <.with-preposition> <.the-determiner>? <.functions>? <summarize-funcs-spec> ]? }
     rule summarize-funcs-spec { <variable-name-or-wl-expr-list> }
 
     # Join command
