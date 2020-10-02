@@ -41,6 +41,8 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token rename-verb { 'rename' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'rename') }> }
     token replace-verb { 'replace' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'replace') }> }
     token right-adjective { 'right' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'right') }> }
+    token safe-adjective { 'safe' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'safe') }> }
+    token safely-adverb { 'safely' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'safely') }> }
     token select-verb { 'select' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'select') }> }
     token semi-adjective { 'semi' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'semi') }> }
     token sort-verb { 'sort' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'sort') }> }
@@ -63,24 +65,25 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token mutate { <mutate-verb> }
     token order { <order-verb> }
 
-    rule arrange-directive { <arrange-verb> | <order-verb> | <sort-verb> }
     rule arrange-by-phrase { <arrange-directive> [ <by-preposition> | <using-preposition> | <with-preposition> ] }
+    rule arrange-directive { <arrange-verb> | <order-verb> | <sort-verb> }
     rule data-phrase { <.the-determiner>? <data> }
     rule dictionary-phrase { <.association-noun> | <.dictionary-noun> | <.mapping-noun> }
     rule filter { <filter-verb> | <select-verb> }
+    rule format-phrase { <form-noun> | <format-noun> }
     rule group-by { <group-verb> [ <by-preposition> | <using-preposition> ] }
-    rule select { <select-verb> | <take-verb> | <keep-only-phrase> }
+    rule id-columns-phrase { [ <id-noun> | <identifier-noun> ] <columns> }
     rule pivot-columns-phrase    { [ <pivot-verb> | <variable-noun> ]? <the-determiner>? <columns> }
     rule pivot-id-columns-phrase { [ <pivot-verb> | <variable-noun> ]? <the-determiner>? <id-columns-phrase> }
-    rule id-columns-phrase { [ <id-noun> | <identifier-noun> ] <columns> }
     rule rename-directive { <rename-verb> }
     rule reverse-sort-phrase { <reverse-adjective> [ <sort-verb> | <order-verb> ] }
-    rule format-phrase { <form-noun> | <format-noun> }
+    rule safely-directive { <safe-adjective> | <safely-adverb> }
+    rule select { <select-verb> | <take-verb> | <keep-only-phrase> }
     rule to-long-form-phrase { <pivot-verb> <to-preposition>? 'longer' <format-phrase>? | <to-preposition> [ 'long' | 'narrow' ] <format-phrase> | <melt-verb>  }
     rule to-wide-form-phrase { <pivot-verb> <to-preposition>? 'wider'  <format-phrase>? | <to-preposition> [ 'wide' | 'broad'  ] <format-noun>   | <cast-verb>  }
-    rule variable-column-phrase { <variable-noun> <column-noun>? }
-    rule variable-column-name-phrase { <variable-column-phrase> <name-noun> }
-    rule value-column-phrase { <value-noun> <column-noun>? }
     rule value-column-name-phrase { <value-column-phrase> <name-noun> }
+    rule value-column-phrase { <value-noun> <column-noun>? }
+    rule variable-column-name-phrase { <variable-column-phrase> <name-noun> }
+    rule variable-column-phrase { <variable-noun> <column-noun>? }
 }
 
