@@ -49,7 +49,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         is DSL::Shared::Actions::R::PredicateSpecification
 		is DSL::Shared::Actions::English::R::PipelineCommand {
 
-	has $.name = 'DSL-English-DataQueryWorkflows-R-tidyverse';
+	has Str $.name = 'DSL-English-DataQueryWorkflows-R-tidyverse';
 
 	method TOP($/) { make $/.values[0].made; }
 
@@ -166,7 +166,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	method statistics-command($/) { make $/.values[0].made; }
 	method data-dimensions-command($/) { make '( function(x) { print(dim(x)); x } )'; }
 	method count-command($/) { make 'dplyr::count()'; }
-	method summarize-data($/) { make '( function(x) { print(summary(x)); x } )'; }
+	method data-summary-command($/) { make '( function(x) { print(summary(x)); x } )'; }
 	method glimpse-data($/) { make 'dplyr::glimpse()'; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {

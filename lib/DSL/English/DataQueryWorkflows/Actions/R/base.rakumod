@@ -39,7 +39,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
         is DSL::Shared::Actions::R::PredicateSpecification
 		is DSL::Shared::Actions::English::R::PipelineCommand {
 
-	has $.name = 'DSL-English-DataQueryWorkflows-R-base';
+	has Str $.name = 'DSL-English-DataQueryWorkflows-R-base';
 
 	method TOP($/) { make $/.values[0].made; }
 
@@ -177,7 +177,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method statistics-command($/) { make $/.values[0].made; }
 	method data-dimensions-command($/) { make 'print(dim(obj))'; }
 	method count-command($/) { make 'tidyverse::count()'; }
-	method summarize-data($/) { make 'print(summary(obj))'; }
+	method data-summary-command($/) { make 'print(summary(obj))'; }
 	method glimpse-data($/) { make 'head(obj)'; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
