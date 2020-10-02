@@ -31,7 +31,8 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token join-noun { 'join' }
     token keep-verb { 'keep' }
     token left-adjective { 'left' }
-    token mapping-noun { 'mappint' }
+    token map-verb { 'map' }
+    token mapping-noun { 'mapping' }
     token melt-verb { 'melt' }
     token mutate-verb { 'mutate' }
     token omit-directive { 'omit' | 'exclude' }
@@ -71,6 +72,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     rule filter { <filter-verb> | <select-verb> }
     rule format-phrase { <form-noun> | <format-noun> }
     rule group-by { <group-verb> [ <by-preposition> | <using-preposition> ] }
+    rule group-map { <group-verb> [ <mapping-noun> | <map-verb> ] | <apply-verb> <per-preposition> <group-verb> }
     rule id-columns-phrase { [ <id-noun> | <identifier-noun> ] <columns> }
     rule pivot-columns-phrase    { [ <pivot-verb> | <variable-noun> ]? <the-determiner>? <columns> }
     rule pivot-id-columns-phrase { [ <pivot-verb> | <variable-noun> ]? <the-determiner>? <id-columns-phrase> }

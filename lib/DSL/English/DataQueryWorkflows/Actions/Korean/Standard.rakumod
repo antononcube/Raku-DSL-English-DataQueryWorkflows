@@ -30,16 +30,16 @@
 
 use v6;
 use DSL::English::DataQueryWorkflows::Grammar;
-use DSL::Shared::Actions::CommonStructures;
 use DSL::English::DataQueryWorkflows::Actions::Korean::Predicate;
+use DSL::Shared::Actions::English::PipelineCommand;
 
 unit module DSL::English::DataQueryWorkflows::Actions::Korean::Standard;
 
 class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
-		is DSL::Shared::Actions::CommonStructures
+		is DSL::Shared::Actions::English::PipelineCommand
         is DSL::English::DataQueryWorkflows::Actions::Korean::Predicate {
 
-	has $.name = 'DSL-English-DataQueryWorkflows-Korean-Standard';
+	has Str $.name = 'DSL-English-DataQueryWorkflows-Korean-Standard';
 
     method TOP($/) { make $/.values[0].made; }
 
@@ -84,8 +84,10 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 	method mutate-by-two-lists($/) { $<current>.made ~ ' 열을 ' ~ $<new>.made ~ ' 에 할당';}
 	method mutate-by-pairs($/) { make '양수인: ' ~ $/.values[0].made;  }
 
-	# Group command
-	method group-command($/) { make '열로 그룹화: ' ~ $<variable-names-list>.made; }
+    # Group command
+    method group-command($/) { make $/.values[0].made; }
+	method group-by-command($/) { make '열로 그룹화: ' ~ $/.values[0]; }
+	method group-map-command($/) { make '각 그룹 ' ~ $/.values[0].made ~ ' 에 적용 '; }
 
 	# Ungroup command
 	method ungroup-command($/) { make $/.values[0].made; }
@@ -117,7 +119,7 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 	method statistics-command($/) { make $/.values[0].made; }
 	method data-dimensions-command($/) { make '치수 표시'; }
 	method count-command($/) { make '하위 그룹의 크기 찾기'; }
-	method summarize-data($/) { make '목적을 요약하다'; }
+	method data-summary-command($/) { make '목적을 요약하다'; }
 	method glimpse-data($/) { make '물체를 엿볼 수있다'; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
@@ -126,7 +128,8 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 			make '모든 열의 평균값 찾기';
 		}
 	}
-	method summarize-funcs-spec($/) { make $<variable-names-list>.made; }
+	method summarize-at-command($/) { make '함수 ' ~ $<summarize-funcs-spec>.made ~' 를 사용하여 ' ~ $<cols>.made ~ ' 열 요약'; }
+    method summarize-funcs-spec($/) { make $<variable-name-or-wl-expr-list>.made.join(', '); }
 
 	# Join command
 	method join-command($/) { make $/.values[0].made; }

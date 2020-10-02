@@ -117,13 +117,15 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     }
 
     # Group command
-    method group-command($/) {
+    method group-command($/) { make $/.values[0].made; }
+    method group-by-command($/) {
         my $obj = %.properties<IsGrouped>:exists ?? 'Join @@ obj' !! 'obj';
         %.properties<IsGrouped> = True;
-        my @vars = map( { '#["' ~ $_ ~ '"]' }, $<variable-names-list>.made );
+        my @vars = map( { '#[' ~ $_ ~ ']' }, $/.values[0].made.split(', ') );
         my $vars = @vars.elems == 1 ?? @vars.join(', ') !! '{' ~ @vars.join(', ' ) ~ '}';
         make 'obj = GroupBy[ ' ~ $obj ~ ', ' ~ $vars ~ '& ]';
     }
+    method group-map-command($/) { make 'obj = Map[ ' ~ $/.values[0].made ~ ', obj ]'; }
 
     # Ungroup command
     method ungroup-command($/) { make $/.values[0].made; }

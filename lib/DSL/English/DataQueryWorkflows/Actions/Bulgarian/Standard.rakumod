@@ -30,16 +30,16 @@
 
 use v6;
 use DSL::English::DataQueryWorkflows::Grammar;
-use DSL::Shared::Actions::CommonStructures;
 use DSL::English::DataQueryWorkflows::Actions::Bulgarian::Predicate;
+use DSL::Shared::Actions::English::PipelineCommand;
 
 unit module DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard;
 
 class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
-		is DSL::Shared::Actions::CommonStructures
+		is DSL::Shared::Actions::English::PipelineCommand
         is DSL::English::DataQueryWorkflows::Actions::Bulgarian::Predicate {
 
-	has $.name = 'DSL-English-DataQueryWorkflows-Bulgarian-Standard';
+	has Str $.name = 'DSL-English-DataQueryWorkflows-Bulgarian-Standard';
 
     method TOP($/) { make $/.values[0].made; }
 
@@ -84,8 +84,10 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	method mutate-by-two-lists($/) { make 'присвои колоните ' ~ $<current>.made ~ ' на ' ~ $<new>.made; }
 	method mutate-by-pairs($/) { make 'присвои: ' ~ $/.values[0].made; }
 
-	# Group command
-	method group-command($/) { make 'групирай с колоните: ' ~ $<variable-names-list>.made; }
+    # Group command
+    method group-command($/) { make $/.values[0].made; }
+	method group-by-command($/) { make 'групирай с колоните: ' ~ $/.values[0]; }
+	method group-map-command($/) { make 'приложи към всяка група: ' ~ $/.values[0].made; }
 
 	# Ungroup command
 	method ungroup-command($/) { make $/.values[0].made; }
@@ -117,7 +119,7 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	method statistics-command($/) { make $/.values[0].made; }
 	method data-dimensions-command($/) { make 'покажи размерите'; }
 	method count-command($/) { make 'намери размера на под-групите'; }
-	method summarize-data($/) { make 'опиши обекта'; }
+	method data-summary-command($/) { make 'опиши обекта'; }
 	method glimpse-data($/) { make 'покажи визия на обекта'; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
@@ -126,7 +128,8 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 			make 'намери средните стойности на всички колони';
 		}
 	}
-	method summarize-funcs-spec($/) { make $<variable-names-list>.made; }
+	method summarize-at-command($/) { make 'сумаризирай колоните: ' ~ $<cols>.made ~ ' с функциите: ' ~ $<summarize-funcs-spec>.made; }
+	method summarize-funcs-spec($/) { make $<variable-name-or-wl-expr-list>.made.join(', '); }
 
 	# Join command
 	method join-command($/) { make $/.values[0].made; }

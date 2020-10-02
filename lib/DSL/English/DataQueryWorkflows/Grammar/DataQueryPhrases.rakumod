@@ -26,11 +26,12 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token formula-noun { 'formula' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'formula') }> }
     token full-adjective { 'full' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'full') }> }
     token glimpse-verb { 'glimpse' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'glimpse') }> }
-    token group-verb { 'group' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'group') }> }
+    token group-verb { 'group' | ([\w]+) <?{ $0.Str ne 'ungroup' and is-fuzzy-match( $0.Str, 'group') }> }
     token inner-adjective { 'inner' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'inner') }> }
     token join-noun { 'join' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'join') }> }
     token keep-verb { 'keep' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'keep') }> }
     token left-adjective { 'left' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'left') }> }
+    token map-verb { 'map' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'map') }> }
     token mapping-noun { 'mapping' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'mapping') }> }
     token melt-verb { 'melt' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'melt') }> }
     token mutate-verb { 'mutate' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'mutate') }> }
@@ -49,7 +50,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token summarise-verb { 'summarise' }
     token summarize-verb { 'summarize' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'summarize') }> }
     token tabulate-verb { 'tabulate' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'tabulate') }> }
-    token ungroup-verb { 'ungroup' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'ungroup') }> }
+    token ungroup-verb { 'ungroup' | ([\w]+) <?{ $0.Str ne 'group' and is-fuzzy-match( $0.Str, 'ungroup') }> }
     token unique-adjective { 'unique' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'unique') }> }
 
     rule for-which-phrase { <for-preposition> <which-determiner> | <that-pronoun> <adhere-verb> <to-preposition> }
@@ -72,6 +73,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     rule filter { <filter-verb> | <select-verb> }
     rule format-phrase { <form-noun> | <format-noun> }
     rule group-by { <group-verb> [ <by-preposition> | <using-preposition> ] }
+    rule group-map { <group-verb> [ <mapping-noun> | <map-verb> ] | <apply-verb> <per-preposition> <group-verb> }
     rule id-columns-phrase { [ <id-noun> | <identifier-noun> ] <columns> }
     rule pivot-columns-phrase    { [ <pivot-verb> | <variable-noun> ]? <the-determiner>? <columns> }
     rule pivot-id-columns-phrase { [ <pivot-verb> | <variable-noun> ]? <the-determiner>? <id-columns-phrase> }

@@ -30,16 +30,16 @@
 
 use v6;
 use DSL::English::DataQueryWorkflows::Grammar;
-use DSL::Shared::Actions::CommonStructures;
 use DSL::English::DataQueryWorkflows::Actions::Spanish::Predicate;
+use DSL::Shared::Actions::English::PipelineCommand;
 
 unit module DSL::English::DataQueryWorkflows::Actions::Spanish::Standard;
 
 class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
-		is DSL::Shared::Actions::CommonStructures
+		is DSL::Shared::Actions::English::PipelineCommand
         is DSL::English::DataQueryWorkflows::Actions::Spanish::Predicate {
 
-	has $.name = 'DSL-English-DataQueryWorkflows-Spanish-Standard';
+	has Str $.name = 'DSL-English-DataQueryWorkflows-Spanish-Standard';
 
     method TOP($/) { make $/.values[0].made; }
 
@@ -84,8 +84,10 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	method mutate-by-two-lists($/) { 'asignar las columnas ' ~ $<current>.made ~ ' a ' ~ $<new>.made;}
 	method mutate-by-pairs($/) { make 'apropiado: ' ~  $/.values[0].made; }
 
-	# Group command
-	method group-command($/) { make 'agrupar con columnas: ' ~ $<variable-names-list>.made; }
+    # Group command
+    method group-command($/) { make $/.values[0].made; }
+	method group-by-command($/) { make 'agrupar con columnas: ' ~ $/.values[0].made; }
+	method group-map-command($/) { make 'aplicar a cada grupo: ' ~ $/.values[0].made; }
 
 	# Ungroup command
 	method ungroup-command($/) { make $/.values[0].made; }
@@ -117,7 +119,7 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	method statistics-command($/) { make $/.values[0].made; }
 	method data-dimensions-command($/) { make 'mostrar dimensiones'; }
 	method count-command($/) { make 'encontrar el tamaño de los subgrupos'; }
-	method summarize-data($/) { make 'describe el objeto'; }
+	method data-summary-command($/) { make 'describe el objeto'; }
 	method glimpse-data($/) { make 'vislumbrar el objeto'; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
@@ -126,7 +128,8 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 			make 'encontrar los promedios de todas las columnas';
 		}
 	}
-	method summarize-funcs-spec($/) { make $<variable-names-list>.made; }
+	method summarize-at-command($/) { make 'resumir las columnas: ' ~ $<cols>.made ~ ' con las funciones: ' ~ $<summarize-funcs-spec>.made; }
+    method summarize-funcs-spec($/) { make $<variable-name-or-wl-expr-list>.made.join(', '); }
 
 	# Join command
 	method join-command($/) { make $/.values[0].made; }

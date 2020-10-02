@@ -111,14 +111,19 @@ my $commands9 = 'use dfTitanic; select "passengerSex", passengerClass, passenger
 #"
 #);
 #'use dfTitanicLongForm; convert to wide form with id column id, variable column Variable and value column Value'
+#my @testCommands = (
+#'convert to long form using the columns mass and height, and using the variable column name "Var1" and with values column name "VAL"',
+#'use dfTitanic; display data dimensions; to long form with identifier column id'
+#);
 my @testCommands = (
-'convert to long form using the columns mass and height, and using the variable column name "Var1" and with values column name "VAL"',
-'use dfTitanic; display data dimensions; to long form with identifier column id'
+'use dfStarwars; ungroup; replace missing with 0; summarize mass with Mean, Max;',
+'use dfStarwars; group by species; apply per group `length`; summarize mass with Mean, Max;',
+'use dfStarwars; group by species and `"homeworld"`; echo data summary; group by gender; summarize mass with Mean, Max;'
 );
 
-my @targets = ('Python-pandas');
+#my @targets = ('Python-pandas');
 #my @targets = ('Julia-DataFrames', 'Python-pandas', 'R-base', 'R-tidyverse', 'WL-System');
-#my @targets = ('Bulgarian', 'Korean', 'Spanish');
+my @targets = ('Bulgarian', 'Korean', 'Spanish');
 
 for @testCommands -> $c {
     say "=" x 30;

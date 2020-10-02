@@ -112,7 +112,9 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule mutate-by-pairs { <.mutate-opening-phrase> <.by-preposition>? [ <as-pairs-list> | <assign-pairs-list> ] }
 
     # Group command
-    rule group-command { <group-by> <variable-names-list> }
+    rule group-command { <group-by-command> | <group-map-command> }
+    rule group-by-command { <.group-by> <column-specs-list> }
+    rule group-map-command { <.group-map> [ <.the-determiner>? <.function> ]? <wl-expr> }
 
     # Ungroup command
     rule ungroup-command { <ungroup-simple-command> }
@@ -136,11 +138,11 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule drop-columns-simple { <.delete-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]? <todrop=.column-specs-list> }
 
     # Statistics command
-    rule statistics-command { <data-dimensions-command> | <count-command> | <glimpse-data> | <summarize-all-command> | <summarize-at-command> | <data-summary-command> }
+    rule statistics-command { <data-dimensions-command> | <count-command> | <glimpse-data> | <summarize-all-command> | <data-summary-command> | <summarize-at-command> }
     rule data-dimensions-command { <.display-directive> <.data-noun>? [ <dimensions-noun> | <shape-noun> ] }
     rule count-command { <compute-directive> <.the-determiner>? [ <count-verb> | <counts-noun> ] | <count-verb> }
     rule glimpse-data { <.display-directive>? <.a-determiner>? <.glimpse-verb> <.at-preposition>? <.the-determiner>? <.data-noun>? }
-    rule data-summary-command { [ <summarize-verb> | <summarise-verb> | <summary> ] <data-noun>? | <display-directive> <data-noun>? <summary> }
+    rule data-summary-command { <display-directive>? [ <summarize-verb> | <summarise-verb> | <summary> ] <.the-determiner>? <data-noun>? | <display-directive>? <data-noun>? <summary> }
     rule summarize-all-command { [ <.summarize-verb> | <.summarise-verb> ] <.them-pronoun>? <.all-determiner>? <.data>? [ <.with-preposition> <.functions>? <summarize-funcs-spec> ] }
     rule summarize-at-command { [ <.summarize-verb> | <.summarise-verb> ] [ <.the-determiner>? <.columns> | <.at-preposition> ]? <cols=.mixed-quoted-variable-names-list> [ <.with-preposition> <.the-determiner>? <.functions>? <summarize-funcs-spec> ]? }
     rule summarize-funcs-spec { <variable-name-or-wl-expr-list> }

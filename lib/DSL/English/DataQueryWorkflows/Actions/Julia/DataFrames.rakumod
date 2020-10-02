@@ -108,8 +108,10 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	}
 	method mutate-by-pairs($/) { make 'obj = transform( obj, ' ~ $/.values[0].made ~ ' )'; }
 
-	# Group command
-	method group-command($/) { make 'obj = groupby( obj, [' ~ $<variable-names-list>.made ~ '] )'; }
+    # Group command
+    method group-command($/) { make $/.values[0].made; }
+	method group-by-command($/) { make 'obj = groupby( obj, [' ~ $/.values[0].made ~ '] )'; }
+	method group-map-command($/) { make 'obj = obj do ' ~ $/.values[0].made ~ ' end'; }
 
 	# Ungroup command
 	method ungroup-command($/) { make $/.values[0].made; }
@@ -164,6 +166,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 			make 'combine( obj, names(obj) .=> mean )';
 		}
 	}
+	method summarize-at-command($/) { make 'Not implemented.'; }
 	method summarize-funcs-spec($/) { make $<variable-name-or-wl-expr-list>.made.subst(:g, ':', ''); }
 
 

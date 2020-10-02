@@ -129,7 +129,9 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	}
 
     # Group command
-	method group-command($/) { make 'obj <- by( data = obj, ' ~ $<variable-names-list>.made.join(', ') ~ ')'; }
+    method group-command($/) { make $/.values[0].made; }
+	method group-by-command($/) { make 'obj <- split( x = obj, f = ' ~ $/.values[0].made ~ ' )'; }
+	method group-map-command($/) { make 'obj <- lapply( X = obj, FUN = ' ~ $/.values[0].made ~ ' )'; }
 
     # Ungroup command
 	method ungroup-command($/) { make $/.values[0].made; }

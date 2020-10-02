@@ -119,9 +119,11 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	}
 	method mutate-by-pairs($/) { make 'dplyr::mutate(' ~ $/.values[0].made ~ ')'; }
 
-	# Group command
-	method group-command($/) { make 'dplyr::group_by(' ~ $<variable-names-list>.made ~ ')'; }
-	
+    # Group command
+    method group-command($/) { make $/.values[0].made; }
+	method group-by-command($/) { make 'dplyr::group_by(' ~ $/.values[0].made ~ ')'; }
+	method group-map-command($/) { make 'dplyr::group_map( ' ~ $/.values[0].made ~ ' )'; }
+
 	# Ungroup command
 	method ungroup-command($/) { make $/.values[0].made; }
 	method ungroup-simple-command($/) { make 'ungroup() %>% as.data.frame(stringsAsFactors=FALSE)'; }

@@ -137,7 +137,9 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	}
 
     # Group command
-	method group-command($/) { make 'obj = obj ( data = obj, ' ~ $<variable-names-list>.made ~ ')'; }
+    method group-command($/) { make $/.values[0].made; }
+	method group-by-command($/) { make 'obj = obj.groupby([' ~ $/.values[0].made ~ '])'; }
+	method group-map-command($/) { make 'obj = obj.transform(' ~ $/.values[0].made ~ ')'; }
 
     # Ungroup command
 	method ungroup-command($/) { make $/.values[0].made; }
@@ -192,7 +194,8 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 			make 'print(obj.describe())';
 		}
 	}
-	method summarize-funcs-spec($/) { make '[' ~ $$<variable-name-or-wl-expr-list>.made ~ ']'; }
+	method summarize-at-command($/) { make 'Not implemented.'; }
+	method summarize-funcs-spec($/) { make '[' ~ $<variable-name-or-wl-expr-list>.made.join(', ') ~ ']'; }
 
     # Join command
 	method join-command($/) { make $/.values[0].made; }
