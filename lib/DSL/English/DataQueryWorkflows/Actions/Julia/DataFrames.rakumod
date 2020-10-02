@@ -39,7 +39,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 		is DSL::Shared::Actions::Julia::PredicateSpecification
 		is DSL::Shared::Actions::English::Julia::PipelineCommand {
 
-	has $.name = 'DSL-English-DataQueryWorkflows-Julia-DataFrames';
+	has Str $.name = 'DSL-English-DataQueryWorkflows-Julia-DataFrames';
 
     method TOP($/) { make $/.values[0].made; }
 
@@ -154,7 +154,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	method statistics-command($/) { make $/.values[0].made; }
 	method data-dimensions-command($/) { make 'print(size(obj))'; }
 	method count-command($/) { make 'obj = combine(obj, nrow)'; }
-	method summarize-data($/) { make 'describe(obj)'; }
+	method data-summary-command($/) { make 'describe(obj)'; }
 	method glimpse-data($/) { make 'first(obj, 6)'; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
@@ -164,7 +164,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 			make 'combine( obj, names(obj) .=> mean )';
 		}
 	}
-	method summarize-funcs-spec($/) { make $<variable-names-list>.made.subst(:g, ':', ''); }
+	method summarize-funcs-spec($/) { make $<variable-name-or-wl-expr-list>.made.subst(:g, ':', ''); }
 
 
 	# Join command

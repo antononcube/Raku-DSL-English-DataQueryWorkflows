@@ -39,7 +39,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
         is DSL::Shared::Actions::Python::PredicateSpecification
 		is DSL::Shared::Actions::English::Python::PipelineCommand {
 
-	has $.name = 'DSL-English-DataQueryWorkflows-Python-pandas';
+	has Str $.name = 'DSL-English-DataQueryWorkflows-Python-pandas';
 
 	method TOP($/) { make $/.values[0].made; }
 
@@ -182,7 +182,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	method statistics-command($/) { make $/.values[0].made; }
 	method data-dimensions-command($/) { make 'print(obj.shape)'; }
 	method count-command($/) { make 'tidyverse::count()'; }
-	method summarize-data($/) { make 'print(obj.describe())'; }
+	method data-summary-command($/) { make 'print(obj.describe())'; }
 	method glimpse-data($/) { make 'print(obj.head())'; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
@@ -192,7 +192,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 			make 'print(obj.describe())';
 		}
 	}
-	method summarize-funcs-spec($/) { make '[' ~ $<variable-names-list>.made ~ ']'; }
+	method summarize-funcs-spec($/) { make '[' ~ $$<variable-name-or-wl-expr-list>.made ~ ']'; }
 
     # Join command
 	method join-command($/) { make $/.values[0].made; }
