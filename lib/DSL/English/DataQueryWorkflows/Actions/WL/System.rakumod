@@ -39,7 +39,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
         is DSL::Shared::Actions::WL::PredicateSpecification
         is DSL::Shared::Actions::English::WL::PipelineCommand {
 
-    has $.name = 'DSL-English-DataQueryWorkflows-WL-System';
+    has Str $.name = 'DSL-English-DataQueryWorkflows-WL-System';
 
     method TOP($/) { make $/.values[0].made; }
 
@@ -118,12 +118,19 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     # Group command
     method group-command($/) {
-      make 'obj = GroupBy[ obj, {' ~ map( { '#["' ~ $_ ~ '"]' }, $<variable-names-list>.made ).join(', ') ~ '}& ]';
+        my $obj = %.properties<IsGrouped>:exists ?? 'Join @@ obj' !! 'obj';
+        %.properties<IsGrouped> = True;
+        my @vars = map( { '#["' ~ $_ ~ '"]' }, $<variable-names-list>.made );
+        my $vars = @vars.elems == 1 ?? @vars.join(', ') !! '{' ~ @vars.join(', ' ) ~ '}';
+        make 'obj = GroupBy[ ' ~ $obj ~ ', ' ~ $vars ~ '& ]';
     }
 
     # Ungroup command
     method ungroup-command($/) { make $/.values[0].made; }
-    method ungroup-simple-command($/) { make 'obj = Join @@ Values[obj]'; }
+    method ungroup-simple-command($/) {
+        %.properties<IsGrouped>:delete;
+        make 'obj = Join @@ Values[obj]';
+    }
 
     # Arrange command
     method arrange-command($/) { make $/.values[0].made; }
@@ -165,14 +172,25 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     # Statistics command
     method statistics-command($/) { make $/.values[0].made; }
     method data-dimensions-command($/) { make 'Echo[Dimensions[obj]]'; }
-    method count-command($/) { make 'obj = obj[All, Length]'; }
-    method summarize-data($/) { make 'Echo[ResourceFunction["RecordsSummary"][obj], "summarize:"]'; }
+    method count-command($/) {
+        make %.properties<IsGrouped>:exists ?? 'obj = Map[ Length, obj]' !! 'obj = Length[obj]';
+    }
+    method data-summary-command($/) {
+        make %.properties<IsGrouped>:exists ?? 'Echo[ResourceFunction["RecordsSummary"] /@ obj]' !! 'Echo[ResourceFunction["RecordsSummary"][obj], "summary:"]';
+    }
     method glimpse-data($/) { make 'Echo[RandomSample[obj,UpTo[6]], "glimpse:"]'; }
-    method summarize-all-command($/) { make 'Echo[Mean[obj], "summarize-all:"]'; }
+    method summarize-all-command($/) {
+        make %.properties<IsGrouped>:exists ?? 'Echo[Mean /@ obj, "summarize-all:"]' !! 'Echo[Mean[obj], "summarize-all:"]';
+    }
 	method summarize-at-command($/) {
 		my $cols = '{' ~ map( { '"' ~ $_ ~ '"' }, $<cols>.made.split(', ') ).join(', ') ~ '}';
         my $funcs = $<summarize-funcs-spec> ?? $<summarize-funcs-spec>.made !! '{Length, Min, Max, Mean, Median, Total}';
-        make 'obj = Dataset[obj][All, Association @ Flatten @ Outer[ToString[#1] <> "_" <> ToString[#2] -> Query[#2, #1] &,' ~ $cols ~ ', '  ~ $funcs ~ ']]';
+  
+        if %.properties<IsGrouped>:exists {
+            make 'obj = Dataset[obj][All, Association @ Flatten @ Outer[ToString[#1] <> "_" <> ToString[#2] -> Query[#2, #1] &,' ~ $cols ~ ', '  ~ $funcs ~ ']]';
+        } else {
+            make 'obj = Association @ Flatten @ Outer[ToString[#1] <> "_" <> ToString[#2] -> obj[Query[#2, #1]] &,' ~ $cols ~ ', '  ~ $funcs ~ ']';
+        }
     }
 	method summarize-funcs-spec($/) { make '{' ~ $<variable-name-or-wl-expr-list>.made.join(', ') ~ '}'; }
 

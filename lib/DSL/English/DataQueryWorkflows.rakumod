@@ -90,7 +90,7 @@ multi ToDataQueryWorkflowCode ( Str $command where not has-semicolon($command), 
 
     die 'Unknown target.' unless %targetToAction{$target}:exists;
 
-    my $match = DSL::English::DataQueryWorkflows::Grammar.parse($command.trim, actions => %targetToAction{$target} );
+    my $match = DSL::English::DataQueryWorkflows::Grammar.parse($command.trim, actions => %targetToAction{$target}.new );
     die 'Cannot parse the given command.' unless $match;
     return $match.made;
 }
@@ -102,6 +102,10 @@ multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str 
     $specTarget = !$specTarget ?? $target !! $specTarget.value;
 
     die 'Unknown target.' unless %targetToAction{$specTarget}:exists;
+
+    # Note that this is global, class variable.
+    # It is put to {} here in order to able track group-by statements in WL-System and R-base.
+    %targetToAction{$target}.properties = {};
 
     my @commandLines = $command.trim.split(/ ';' \s* /);
 
