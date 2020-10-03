@@ -121,6 +121,9 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	method count-command($/) { make 'намери размера на под-групите'; }
 	method data-summary-command($/) { make 'опиши обекта'; }
 	method glimpse-data($/) { make 'покажи визия на обекта'; }
+
+	# Summarize command
+    method summarize-command($/) { make $/.values[0].made; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
 			make 'приложи по всички колони функцийте: ' ~ $<summarize-funcs-spec>.made;

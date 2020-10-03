@@ -186,6 +186,9 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	method count-command($/) { make 'tidyverse::count()'; }
 	method data-summary-command($/) { make 'print(obj.describe())'; }
 	method glimpse-data($/) { make 'print(obj.head())'; }
+
+	# Summarize command
+    method summarize-command($/) { make $/.values[0].made; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
 			note 'Summarize-all with functions is not implemented for Python-pandas.';

@@ -121,6 +121,9 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	method count-command($/) { make 'encontrar el tamaño de los subgrupos'; }
 	method data-summary-command($/) { make 'describe el objeto'; }
 	method glimpse-data($/) { make 'vislumbrar el objeto'; }
+
+	# Summarize command
+    method summarize-command($/) { make $/.values[0].made; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
 			make 'aplicar sobre todas las columnas las funciones: ' ~ $<summarize-funcs-spec>.made;

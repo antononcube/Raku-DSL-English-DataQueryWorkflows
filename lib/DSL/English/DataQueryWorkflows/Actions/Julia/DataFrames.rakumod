@@ -158,6 +158,9 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	method count-command($/) { make 'obj = combine(obj, nrow)'; }
 	method data-summary-command($/) { make 'describe(obj)'; }
 	method glimpse-data($/) { make 'first(obj, 6)'; }
+
+	# Summarize command
+    method summarize-command($/) { make $/.values[0].made; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
 			my $funcs = $<summarize-funcs-spec>.made.split(', ');

@@ -170,6 +170,9 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	method count-command($/) { make 'dplyr::count()'; }
 	method data-summary-command($/) { make '( function(x) { print(summary(x)); x } )'; }
 	method glimpse-data($/) { make 'dplyr::glimpse()'; }
+
+	# Summarize command
+    method summarize-command($/) { make $/.values[0].made; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
 			make 'dplyr::summarise_all( .funs = ' ~ $<summarize-funcs-spec>.made ~ ' )';

@@ -121,6 +121,9 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 	method count-command($/) { make '하위 그룹의 크기 찾기'; }
 	method data-summary-command($/) { make '목적을 요약하다'; }
 	method glimpse-data($/) { make '물체를 엿볼 수있다'; }
+
+	# Summarize command
+    method summarize-command($/) { make $/.values[0].made; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
 			make '모든 열에 ' ~ $<summarize-funcs-spec>.made ~ ' 함수 적용';

@@ -173,7 +173,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     # Statistics command
     method statistics-command($/) { make $/.values[0].made; }
-    method data-dimensions-command($/) { make 'Echo[Dimensions[obj]]'; }
+    method data-dimensions-command($/) { make 'Echo[Dimensions[obj], "dimensions:"]'; }
     method count-command($/) {
         make %.properties<IsGrouped>:exists ?? 'obj = Map[ Length, obj]' !! 'obj = Length[obj]';
     }
@@ -184,8 +184,11 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method summarize-all-command($/) {
         make %.properties<IsGrouped>:exists ?? 'Echo[Mean /@ obj, "summarize-all:"]' !! 'Echo[Mean[obj], "summarize-all:"]';
     }
+
+    # Summarize command
+    method summarize-command($/) { make $/.values[0].made; }
 	method summarize-at-command($/) {
-		my $cols = '{' ~ map( { '"' ~ $_ ~ '"' }, $<cols>.made.split(', ') ).join(', ') ~ '}';
+		my $cols = '{' ~ map( { '"' ~ $_.subst(:g, '"', '') ~ '"' }, $<cols>.made.split(', ') ).join(', ') ~ '}';
         my $funcs = $<summarize-funcs-spec> ?? $<summarize-funcs-spec>.made !! '{Length, Min, Max, Mean, Median, Total}';
   
         if %.properties<IsGrouped>:exists {

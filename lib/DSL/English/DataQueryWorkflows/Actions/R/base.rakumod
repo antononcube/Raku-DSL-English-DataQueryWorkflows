@@ -181,6 +181,9 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method count-command($/) { make 'tidyverse::count()'; }
 	method data-summary-command($/) { make 'print(summary(obj))'; }
 	method glimpse-data($/) { make 'head(obj)'; }
+
+	# Summarize command
+    method summarize-command($/) { make $/.values[0].made; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
 			note 'Summarize-all with functions is not implemented for R-base.';
