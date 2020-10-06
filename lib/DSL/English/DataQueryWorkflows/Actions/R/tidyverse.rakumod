@@ -173,6 +173,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 
 	# Summarize command
     method summarize-command($/) { make $/.values[0].made; }
+	method summarize-by-pairs($/) { make 'dplyr::summarize(' ~ $/.values[0].made ~ ')'; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
 			make 'dplyr::summarise_all( .funs = ' ~ $<summarize-funcs-spec>.made ~ ' )';

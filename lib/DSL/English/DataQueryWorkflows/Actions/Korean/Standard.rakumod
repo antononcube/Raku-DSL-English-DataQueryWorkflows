@@ -124,6 +124,7 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 
 	# Summarize command
     method summarize-command($/) { make $/.values[0].made; }
+	method summarize-by-pairs($/) { make '열로 요약 : ' ~ $/.values[0].made; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
 			make '모든 열에 ' ~ $<summarize-funcs-spec>.made ~ ' 함수 적용';

@@ -124,6 +124,7 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 
 	# Summarize command
     method summarize-command($/) { make $/.values[0].made; }
+	method summarize-by-pairs($/) { make 'сумаризирай с формулите: ' ~ $/.values[0].made; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
 			make 'приложи по всички колони функцийте: ' ~ $<summarize-funcs-spec>.made;

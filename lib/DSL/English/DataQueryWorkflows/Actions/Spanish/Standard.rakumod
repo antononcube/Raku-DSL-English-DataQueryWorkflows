@@ -124,6 +124,7 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 
 	# Summarize command
     method summarize-command($/) { make $/.values[0].made; }
+	method summarize-by-pairs($/) { make 'resumir con las columnas: ' ~ $/.values[0].made; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
 			make 'aplicar sobre todas las columnas las funciones: ' ~ $<summarize-funcs-spec>.made;

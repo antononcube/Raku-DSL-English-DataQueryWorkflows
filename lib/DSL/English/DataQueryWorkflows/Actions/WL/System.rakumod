@@ -199,6 +199,11 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     # Summarize command
     method summarize-command($/) { make $/.values[0].made; }
+    method summarize-by-pairs($/) {
+        my @pairs = $/.values[0].made;
+		my $res = do for @pairs -> ( $lhs, $rhsName, $rhs ) { $lhs ~ ' -> ' ~ $rhs };
+		make 'obj = Map[ <|' ~ $res.join(', ') ~ '|>&, obj]';
+    }
 	method summarize-at-command($/) {
 		my $cols = '{' ~ map( { '"' ~ $_.subst(:g, '"', '') ~ '"' }, $<cols>.made.split(', ') ).join(', ') ~ '}';
         my $funcs = $<summarize-funcs-spec> ?? $<summarize-funcs-spec>.made !! '{Length, Min, Max, Mean, Median, Total}';

@@ -178,12 +178,17 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
     # Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
 	method data-dimensions-command($/) { make 'print(dim(obj))'; }
-	method count-command($/) { make 'tidyverse::count()'; }
+	method count-command($/) { make 'length()'; }
 	method data-summary-command($/) { make 'print(summary(obj))'; }
 	method glimpse-data($/) { make 'head(obj)'; }
 
 	# Summarize command
     method summarize-command($/) { make $/.values[0].made; }
+	method summarize-by-pairs($/) {
+		my @triplets = $/.values[0].made;
+		my $res = do for @triplets -> ( $lhs, $rhsName, $rhs ) { 'obj[[' ~ $lhs ~ ']] <- ' ~ $rhs; };
+		make '{' ~ $res.join("; ") ~ '}';
+	}
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
 			note 'Summarize-all with functions is not implemented for R-base.';

@@ -146,7 +146,8 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule data-summary-command { <.display-directive>? [ <.summarize-verb> | <.summarise-verb> | <.summary> ] <.the-determiner>? <.data-noun>? | <.display-directive>? <.data-noun>? <.summary> }
 
     # Summarize command
-    rule summarize-command { <summarize-all-command> | <summarize-at-command> }
+    rule summarize-command { <summarize-by-pairs> | <summarize-all-command> | <summarize-at-command> }
+    rule summarize-by-pairs { [ <.summarize-verb> | <.summarise-verb> ] [ <.by-preposition> | <.using-preposition> ] [ <as-pairs-list> | <assign-pairs-list> ] }
     rule summarize-all-command { [ <.summarize-verb> | <.summarise-verb> ] <.them-pronoun>? <.all-determiner>? <.data>? [ <.with-preposition> <.functions>? <summarize-funcs-spec> ] }
     rule summarize-at-command { [ <.summarize-verb> | <.summarise-verb> ] [ <.the-determiner>? <.columns> | <.at-preposition> ]? <cols=.mixed-quoted-variable-names-list> [ <.with-preposition> <.the-determiner>? <.functions>? <summarize-funcs-spec> ]? }
     rule summarize-funcs-spec { <variable-name-or-wl-expr-list> }

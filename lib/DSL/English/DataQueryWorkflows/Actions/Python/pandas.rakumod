@@ -189,6 +189,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
 	# Summarize command
     method summarize-command($/) { make $/.values[0].made; }
+	method summarize-by-pairs($/) { make 'Not implemented'; }
 	method summarize-all-command($/) {
 		if $<summarize-funcs-spec> {
 			note 'Summarize-all with functions is not implemented for Python-pandas.';
