@@ -140,8 +140,20 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
         make $<reverse-sort-phrase> || $<descending> ?? 'obj = ReverseSort[obj]' !! 'obj = Sort[obj]';
     }
     method arrange-by-spec($/) { make '{' ~ map( { '#["' ~ $_.subst(:g, '"', '') ~ '"]' }, $/.values[0].made.split(', ') ).join(', ') ~ '}'; }
-    method arrange-by-command-ascending($/) { make 'obj = SortBy[ obj, ' ~ $<arrange-by-spec>.made ~ '& ]'; }
-    method arrange-by-command-descending($/) { make 'obj = ReverseSortBy[ obj, ' ~ $<arrange-by-spec>.made ~ '& ]'; }
+    method arrange-by-command-ascending($/) {
+        if %.properties<IsGrouped>:exists {
+            make 'obj = SortBy[ #, ' ~ $<arrange-by-spec>.made ~ '& ]& /@ obj';
+        } else {
+            make 'obj = SortBy[ obj, ' ~ $<arrange-by-spec>.made ~ '& ]';
+        }
+    }
+    method arrange-by-command-descending($/) {
+        if %.properties<IsGrouped>:exists {
+            make 'obj = ReverseSortBy[ #, ' ~ $<arrange-by-spec>.made ~ '& ]& /@ obj';
+        } else {
+            make 'obj = ReverseSortBy[ obj, ' ~ $<arrange-by-spec>.made ~ '& ]';
+        }
+    }
 
     # Rename columns command
     method rename-columns-command($/) { make $/.values[0].made; }
