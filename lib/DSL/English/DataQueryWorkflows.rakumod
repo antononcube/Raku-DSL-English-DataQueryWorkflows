@@ -15,7 +15,7 @@ Standard Query Language (SQL) or RStudio's library tidyverse.
 
 unit module DSL::English::DataQueryWorkflows;
 
-use DSL::Shared::Utilities::MetaSpecifications;
+use DSL::Shared::Utilities::MetaSpecsProcessing;
 
 use DSL::English::DataQueryWorkflows::Grammar;
 
