@@ -12,12 +12,14 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token association-noun { 'association' }
     token cases-noun { 'cases' }
     token cast-verb { 'cast' }
+    token character-noun { 'character' }
     token combine-verb { 'combine' }
     token complete-adjective { 'complete' }
     token cross-verb { 'cross' }
     token descending-adjective { 'descending' }
     token dictionary-noun { 'dictionary' }
     token distinct-adjective { 'distinct' }
+    token divider-noun { 'divider' }
     token duplicate-adjective { 'duplicate' }
     token duplicates-noun { 'duplicates' }
     token filter-verb { 'filter' }
@@ -46,7 +48,10 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token safely-adverb { 'safely' }
     token select-verb { 'select' }
     token semi-adjective { 'semi' }
+    token separator-noun { 'separator' }
     token sort-verb { 'sort' }
+    token splitter-noun { 'splitter' }
+    token splitting-noun { 'splitting' }
     token summarise-verb { 'summarise' }
     token summarize-verb { 'summarize' }
     token tabulate-verb { 'tabulate' }
@@ -80,6 +85,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     rule reverse-sort-phrase { <reverse-adjective> [ <sort-verb> | <order-verb> ] }
     rule safely-directive { <safe-adjective> | <safely-adverb> }
     rule select { <select-verb> | <take-verb> | <keep-only-phrase> }
+    rule string-column-phrase { <the-determiner>? [ <string-noun> | <character-noun> | <text-noun> ] <column-noun> }
     rule to-long-form-phrase { <pivot-verb> <to-preposition>? 'longer' <format-phrase>? | <to-preposition> [ 'long' | 'narrow' ] <format-phrase> | <melt-verb>  }
     rule to-wide-form-phrase { <pivot-verb> <to-preposition>? 'wider'  <format-phrase>? | <to-preposition> [ 'wide' | 'broad'  ] <format-noun>   | <cast-verb>  }
     rule value-column-name-phrase { <value-column-phrase> <name-noun> }

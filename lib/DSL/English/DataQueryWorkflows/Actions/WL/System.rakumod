@@ -325,6 +325,16 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     method pivot-wider-value-column-spec($/) { make '"ValuesFrom" -> ' ~ $/.values[0].made; }
 
+    # Separate string column command
+	method separate-column-command($/) {
+		my $intocols = map( { '"' ~ $_.subst(:g, '"', '') ~ '"' }, $<into>.made.split(', ') ).join(', ');
+		if $<sep> {
+			make 'obj = SeparateColumn[ obj, ' ~ $<col>.made ~ ', {' ~ $intocols ~ '}, "Separator" -> ' ~ $<sep>.made ~ ' ]';
+		} else {
+			make 'obj = SeparateColumn[ obj, ' ~ $<col>.made ~ ', {' ~ $intocols ~ '} ]';
+		}
+	}
+
     # Make dictionary command
     method make-dictionary-command($/) { make 'obj = Association @ Normal @ Map[ #[' ~ $<keycol>.made ~'] -> #[' ~ $<valcol>.made ~ ']&, obj ]';}
 

@@ -12,12 +12,14 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token association-noun { 'association' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'association') }> }
     token cases-noun { 'cases' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cases') }> }
     token cast-verb { 'cast' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cast') }> }
+    token character-noun { 'character' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'character') }> }
     token combine-verb { 'combine' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'combine') }> }
     token complete-adjective { 'complete' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'complete') }> }
     token cross-verb { 'cross' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cross') }> }
     token descending-adjective { 'descending' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'descending') }> }
     token dictionary-noun { 'dictionary' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'dictionary') }> }
     token distinct-adjective { 'distinct' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'distinct') }> }
+    token divider-noun { 'divider' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'divider') }> }
     token duplicate-adjective { 'duplicate' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'duplicate') }> }
     token duplicates-noun { 'duplicates' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'duplicates') }> }
     token filter-verb { 'filter' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'filter') }> }
@@ -46,7 +48,10 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token safely-adverb { 'safely' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'safely') }> }
     token select-verb { 'select' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'select') }> }
     token semi-adjective { 'semi' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'semi') }> }
+    token separator-noun { 'separator' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'separator') }> }
     token sort-verb { 'sort' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'sort') }> }
+    token splitter-noun { 'splitter' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'splitter') }> }
+    token splitting-noun { 'splitting' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'splitting') }> }
     token summarise-verb { 'summarise' }
     token summarize-verb { 'summarize' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'summarize') }> }
     token tabulate-verb { 'tabulate' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'tabulate') }> }
@@ -81,6 +86,8 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     rule reverse-sort-phrase { <reverse-adjective> [ <sort-verb> | <order-verb> ] }
     rule safely-directive { <safe-adjective> | <safely-adverb> }
     rule select { <select-verb> | <take-verb> | <keep-only-phrase> }
+    rule separator-phrase { <separator-noun> | <divider-noun> | <splitter-noun> | <splitting-noun> }
+    rule string-column-phrase { <the-determiner>? [ <string-noun> | <character-noun> | <text-noun> ] <column-noun> }
     rule to-long-form-phrase { <pivot-verb> <to-preposition>? 'longer' <format-phrase>? | <to-preposition> [ 'long' | 'narrow' ] <format-phrase> | <melt-verb>  }
     rule to-wide-form-phrase { <pivot-verb> <to-preposition>? 'wider'  <format-phrase>? | <to-preposition> [ 'wide' | 'broad'  ] <format-noun>   | <cast-verb>  }
     rule value-column-name-phrase { <value-column-phrase> <name-noun> }

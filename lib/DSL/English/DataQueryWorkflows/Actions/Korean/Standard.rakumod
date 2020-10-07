@@ -236,6 +236,11 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 
     method pivot-wider-value-column-spec($/) { make '값 열 ' ~ $/.values[0].made; }
 
+	# Separate string column command
+	method separate-column-command($/) {
+		make 'Not implemented';
+	}
+
 	# Make dictionary command
     method make-dictionary-command($/) { make $<keycol>.made ~ ' 열을 ' ~ $<valcol>.made ~ ' 열로 사전 매핑합니다';}
 

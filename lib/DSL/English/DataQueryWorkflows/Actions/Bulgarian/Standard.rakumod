@@ -236,6 +236,17 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 
     method pivot-wider-value-column-spec($/) { make 'стойностна колона ' ~ $/.values[0].made; }
 
+	# Separate string column command
+	method separate-column-command($/) {
+		my $intocols = map( { '"' ~ $_.subst(:g, '"', '') ~ '"' }, $<into>.made.split(', ') ).join(', ');
+
+		if $<sep> {
+			make 'раздели стойностите на колоната ' ~ $<col>.made ~ ' по колоните ' ~ $intocols;
+		} else {
+			make 'раздели стойностите на колоната ' ~ $<col>.made ~ ' по колоните ' ~ $intocols ~ ', чрез разделителя ' ~ $<sep>.made;
+		}
+	}
+
 	# Make dictionary command
     method make-dictionary-command($/) { make 'направи речник от колона '  ~ $<keycol>.made ~' към колона ' ~ $<valcol>.made;}
 

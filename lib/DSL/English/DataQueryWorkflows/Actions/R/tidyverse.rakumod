@@ -279,6 +279,11 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
     method pivot-longer-argument($/) { make $/.values[0].made; }
 
+	method pivot-longer-id-columns-spec($/) {
+		warn 'The R-tidyverse function tidyr::pivot_longer does not use identifier columns.';
+		make '';
+	}
+
     method pivot-longer-columns-spec($/) { make 'cols = c( ' ~ $/.values[0].made ~ ' )'; }
 
     method pivot-longer-variable-column-name-spec($/) { make 'names_to = ' ~ $/.values[0].made; }
@@ -295,6 +300,16 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
     method pivot-wider-variable-column-spec($/) { make 'names_from = ' ~ $/.values[0].made; }
 
     method pivot-wider-value-column-spec($/) { make 'values_from = ' ~ $/.values[0].made; }
+
+	# Separate string column command
+	method separate-column-command($/) {
+		my $intocols = map( { '"' ~ $_.subst(:g, '"', '') ~ '"' }, $<into>.made.split(', ') ).join(', ');
+		if $<sep> {
+			make 'tidyr::separate( col = ' ~ $<col>.made ~ ', into = c(' ~ $intocols ~ '), sep = ' ~ $<sep>.made ~ ' )';
+		} else {
+			make 'tidyr::separate( col = ' ~ $<col>.made ~ ', into = c(' ~ $intocols ~ ') )';
+		}
+	}
 
 	# Make dictionary command
     method make-dictionary-command($/) { make 'dplyr::select( ' ~ $<keycol>.made ~', ' ~ $<valcol>.made ~ ' )';}

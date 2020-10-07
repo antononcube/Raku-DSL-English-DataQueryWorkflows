@@ -314,6 +314,9 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
     method pivot-wider-value-column-spec($/) { make 'v.names = ' ~ $/.values[0].made; }
 
+	# Separate string column command
+	method separate-column-commands($/) { make 'Not implemented'; }
+
 	# Make dictionary command
     method make-dictionary-command($/) { make 'obj <- setNames( obj[, '  ~ $<valcol>.made ~'], obj[, ' ~ $<keycol>.made ~ '] )';}
 

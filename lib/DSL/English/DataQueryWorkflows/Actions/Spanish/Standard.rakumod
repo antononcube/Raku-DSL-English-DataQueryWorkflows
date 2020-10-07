@@ -236,6 +236,11 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 
     method pivot-wider-value-column-spec($/) { make 'colonna dei valori ' ~ $/.values[0].made; }
 
+	# Separate string column command
+	method separate-column-command($/) {
+		make 'Not implemented';
+	}
+
 	# Make dictionary command
     method make-dictionary-command($/) { make 'hacer que el diccionario mapee la columna ' ~ $<keycol>.made ~ ' a la columna ' ~ $<valcol>.made; }
 

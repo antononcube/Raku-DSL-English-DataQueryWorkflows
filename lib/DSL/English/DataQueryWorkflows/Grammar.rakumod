@@ -59,6 +59,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
         <summarize-command> |
         <join-command> |
         <reshape-command> |
+        <separate-column-command> |
         <cross-tabulation-command> }
 
     # Column specs
@@ -209,6 +210,12 @@ grammar DSL::English::DataQueryWorkflows::Grammar
 
     # Same as <pivot-longer-value-column-name-spec>
     rule pivot-wider-value-column-spec { <.the-determiner>? <.value-column-phrase> <column-spec> }
+
+    # Separate string column command
+    rule separate-column-command {
+        [ <.split-verb> | <.separate-verb> ] <.string-column-phrase> <col=.column-spec>
+        <.into-preposition> <.the-determiner>? <.columns>? <into=.mixed-quoted-variable-names-list>
+        [ <.using-preposition> <.the-determiner>? [ <.string-noun>? <.separator-phrase> ]? <.pattern-noun> <sep=.regex-pattern-spec> ]? }
 
     # Make dictionary command
     rule make-dictionary-command { <.create-directive> <.dictionary-phrase> <.make-dictionary-filler>? <keycol=.column-spec> <.dictionary-relation-symbol> <valcol=.column-spec> }

@@ -257,6 +257,9 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	# Pivot wide command
     method pivot-wider-command($/) {make 'Not implemented'; }
 
+	# Separate string column command
+	method separate-column-commands($/) { make 'Not implemented'; }
+
 	# Make dictionary command
     method make-dictionary-command($/) { make 'obj = Dict(zip( obj[:, ' ~ $<keycol>.made ~', obj[:, ' ~ $<valcol>.made ~ '] ))';}
 

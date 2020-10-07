@@ -308,6 +308,9 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
     method pivot-wider-value-column-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
 
+	# Separate string column command
+	method separate-column-commands($/) { make 'Not implemented'; }
+
 	# Make dictionary command
     method make-dictionary-command($/) { make 'obj = dict(zip( obj[' ~ $<keycol>.made ~'], obj[' ~ $<valcol>.made ~ '] ))';}
 
