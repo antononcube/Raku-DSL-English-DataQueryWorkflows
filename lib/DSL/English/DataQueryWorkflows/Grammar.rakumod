@@ -90,7 +90,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
 
     # Rename columns
     rule rename-columns-command { <rename-columns-by-pairs> | <rename-columns-by-two-lists> }
-    rule rename-columns-by-two-lists { <.rename-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]?
+    rule rename-columns-by-two-lists { <.rename-directive> <.the-determiner>? [ <.data-columns-phrase> | <.data-column-phrase> ]?
                                  <current=.column-specs-list>
                                  [ <.to-preposition> | <.into-preposition> | <.as-preposition> ]
                                  <new=.column-specs-list> }
@@ -137,7 +137,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
 
     # Drop columns
     rule drop-columns-command { <drop-columns-simple> }
-    rule drop-columns-simple { <.delete-directive> <.the-determiner>? [ <.columns> | <.variable-noun> | <.variables-noun> ]? <todrop=.column-specs-list> }
+    rule drop-columns-simple { <.delete-directive> <.the-determiner>? [ <.data-column-phrase> | <.data-columns-phrase> ]? <todrop=.column-specs-list> }
 
     # Statistics command
     rule statistics-command { <data-dimensions-command> | <count-command> | <glimpse-data> | <data-summary-command> }
@@ -150,7 +150,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule summarize-command { <summarize-by-pairs> | <summarize-all-command> | <summarize-at-command> }
     rule summarize-by-pairs { [ <.summarize-verb> | <.summarise-verb> ] [ <.by-preposition> | <.using-preposition> ] [ <as-pairs-list> | <assign-pairs-list> ] }
     rule summarize-all-command { [ <.summarize-verb> | <.summarise-verb> ] <.them-pronoun>? <.all-determiner>? <.data>? [ <.with-preposition> <.functions>? <summarize-funcs-spec> ] }
-    rule summarize-at-command { [ <.summarize-verb> | <.summarise-verb> ] [ <.the-determiner>? <.columns> | <.at-preposition> ]? <cols=.mixed-quoted-variable-names-list> [ <.with-preposition> <.the-determiner>? <.functions>? <summarize-funcs-spec> ]? }
+    rule summarize-at-command { [ <.summarize-verb> | <.summarise-verb> ] [ <.the-determiner>? <.data-columns-phrase> | <.at-preposition> ]? <cols=.mixed-quoted-variable-names-list> [ <.with-preposition> <.the-determiner>? <.functions>? <summarize-funcs-spec> ]? }
     rule summarize-funcs-spec { <variable-name-or-wl-expr-list> }
 
     # Join command
@@ -213,8 +213,8 @@ grammar DSL::English::DataQueryWorkflows::Grammar
 
     # Separate string column command
     rule separate-column-command {
-        [ <.split-verb> | <.separate-verb> ] <.the-determiner>? [ <.string-column-phrase> | <.column-noun> ]? <col=.column-spec>
-        <.into-preposition> <.the-determiner>? <.columns>? <into=.mixed-quoted-variable-names-list>
+        [ <.split-verb> | <.separate-verb> ] <.the-determiner>? [ <.string-column-phrase> | <.data-column-phrase> ]? <col=.column-spec>
+        <.into-preposition> <.the-determiner>? <.data-columns-phrase>? <into=.mixed-quoted-variable-names-list>
         [ <.using-preposition> <.the-determiner>? [ [ <.string-noun>? <.separator-phrase> ]? <.pattern-noun> | <.string-noun>? <.separator-phrase> ] <sep=.separator-spec> ]? }
     rule separator-spec { <regex-pattern-spec> | <regex-pattern> }
 
