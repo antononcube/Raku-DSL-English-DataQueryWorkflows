@@ -69,6 +69,9 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	method replace-missing-command($/) { make 'замести липсващи стойности с ' ~ $<replace-missing-rhs>.made; }
     method replace-missing-rhs($/) { make $/.values[0].made; }
 
+	# Replace command
+    method replace-command($/) { make 'замести ' ~ $<lhs>.made ~ ' с ' ~ $<rhs>.made ; }
+
 	# Select command
 	method select-command($/) { make $/.values[0].made; }
 	method select-columns-simple($/) { make 'избери колоните: ' ~ $/.values[0].made; }

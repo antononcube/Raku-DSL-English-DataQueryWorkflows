@@ -69,6 +69,9 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 	method replace-missing-command($/) { make '결 측값 제거 ' ~ $<replace-missing-rhs>.made; }
     method replace-missing-rhs($/) { make $/.values[0].made; }
 
+	# Replace command
+    method replace-command($/) { make $<lhs>.made ~ ' 를 ' ~ $<rhs>.made ~ ' 로 대체'; }
+
 	# Select command
 	method select-command($/) { make $/.values[0].made; }
 	method select-columns-simple($/) { make $/.values[0].made ~ ' 열 선택'; }

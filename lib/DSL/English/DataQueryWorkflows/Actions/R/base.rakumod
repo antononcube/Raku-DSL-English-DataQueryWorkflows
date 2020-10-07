@@ -80,6 +80,9 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method replace-missing-command($/) { make 'obj[ is.na(obj) ] <- ' ~ $<replace-missing-rhs>.made ; }
     method replace-missing-rhs($/) { make $/.values[0].made; }
 
+	# Replace command
+    method replace-command($/) { make 'Not implemented'; }
+
     # Select command
 	method select-command($/) { make $/.values[0].made; }
 	method select-columns-simple($/) { make 'obj <- obj[, c(' ~ $/.values[0].made ~ ')]'; }

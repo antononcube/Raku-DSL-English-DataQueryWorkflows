@@ -69,6 +69,9 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 	method replace-missing-command($/) { make 'obj = ReplaceAll[ obj, _Missing -> ' ~ $<replace-missing-rhs>.made ~ ' ]'; }
     method replace-missing-rhs($/) { make $/.values[0].made; }
 
+    # Replace command
+    method replace-command($/) { make 'obj = ReplaceAll[ obj, ' ~ $<lhs>.made ~ ' -> ' ~ $<rhs>.made ~ ' ]'; }
+
     # Select command
 	method select-command($/) { make $/.values[0].made; }
     method select-columns-simple($/) {

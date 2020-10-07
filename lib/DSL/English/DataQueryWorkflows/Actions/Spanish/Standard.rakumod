@@ -69,6 +69,9 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	method replace-missing-command($/) { make 'reemplazar los valores perdidos con ' ~ $<replace-missing-rhs>.made; }
     method replace-missing-rhs($/) { make $/.values[0].made; }
 
+	# Replace command
+    method replace-command($/) { make 'reemplazar ' ~ $<lhs>.made ~ ' con ' ~ $<rhs>.made ; }
+
 	# Select command
 	method select-command($/) { make $/.values[0].made; }
 	method select-columns-simple($/) { make 'escoger columnas: '  ~ $/.values[0].made; }

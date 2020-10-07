@@ -47,6 +47,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
         <data-load-command> |
         <distinct-command> |
         <missing-treatment-command> |
+        <replace-command> |
         <rename-columns-command> |
         <select-command> |
         <filter-command> |
@@ -87,6 +88,8 @@ grammar DSL::English::DataQueryWorkflows::Grammar
         <delete-directive> <missing-values-phrase> }
     rule replace-missing-command { <.replace-verb> <.missing-values-phrase> <.with-preposition> <replace-missing-rhs> }
     rule replace-missing-rhs { <number-value> | <mixed-quoted-variable-name> | <wl-expr> }
+
+    rule replace-command { <.replace-verb> <lhs=.replace-missing-rhs> <.with-preposition> <rhs=.replace-missing-rhs>  }
 
     # Rename columns
     rule rename-columns-command { <rename-columns-by-pairs> | <rename-columns-by-two-lists> }

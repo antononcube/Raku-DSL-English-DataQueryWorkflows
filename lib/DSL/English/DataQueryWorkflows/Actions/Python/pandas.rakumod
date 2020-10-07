@@ -45,7 +45,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
     # Overriding Predicate::predicate-simple -- wrapping the lhs variable specs with 'obj[...]'.
 	method predicate-simple($/) {
-		my $plhs = 'obj[' ~ $<lhs>.made ~ ']';
+		my $plhs = 'obj["' ~ $<lhs>.made.subst(:g, '"', '') ~ '"]';
 		my $prhs = $<rhs>.made;
 
 		if $<predicate-relation>.made eq '%!in%' {
@@ -82,6 +82,9 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	method drop-incomplete-cases-command($/) { make 'obj = obj.dropna()'; }
 	method replace-missing-command($/) { make 'obj = obj.replace( numpy.nan,' ~ $<replace-missing-rhs>.made ~ ')'; }
     method replace-missing-rhs($/) { make $/.values[0].made; }
+
+	# Replace command
+    method replace-command($/) { make 'Not implemented'; }
 
     # Select command
 	method select-command($/) { make $/.values[0].made; }
