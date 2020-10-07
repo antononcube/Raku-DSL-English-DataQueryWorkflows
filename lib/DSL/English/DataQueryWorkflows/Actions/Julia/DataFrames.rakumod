@@ -259,6 +259,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 
 	# Separate string column command
 	method separate-column-commands($/) { make 'Not implemented'; }
+	method separator-spec($/) { make $/.values[0].made; }
 
 	# Make dictionary command
     method make-dictionary-command($/) { make 'obj = Dict(zip( obj[:, ' ~ $<keycol>.made ~', obj[:, ' ~ $<valcol>.made ~ '] ))';}

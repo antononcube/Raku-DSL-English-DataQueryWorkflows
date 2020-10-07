@@ -334,6 +334,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 			make 'obj = SeparateColumn[ obj, ' ~ $<col>.made ~ ', {' ~ $intocols ~ '} ]';
 		}
 	}
+    method separator-spec($/) { make $/.values[0].made; }
 
     # Make dictionary command
     method make-dictionary-command($/) { make 'obj = Association @ Normal @ Map[ #[' ~ $<keycol>.made ~'] -> #[' ~ $<valcol>.made ~ ']&, obj ]';}

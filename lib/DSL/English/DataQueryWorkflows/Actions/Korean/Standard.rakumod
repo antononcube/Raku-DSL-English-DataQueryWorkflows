@@ -241,6 +241,7 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 		my $intocols = map( { '"' ~ $_.subst(:g, '"', '') ~ '"' }, $<into>.made.split(', ') ).join(', ');
 		make '문자열 열 ' ~ $<col>.made ~ ' 의 값을 ' ~ $intocols ~ ' 열로 분할';
 	}
+	method separator-spec($/) { make $/.values[0].made; }
 
 	# Make dictionary command
     method make-dictionary-command($/) { make $<keycol>.made ~ ' 열을 ' ~ $<valcol>.made ~ ' 열로 사전 매핑합니다';}

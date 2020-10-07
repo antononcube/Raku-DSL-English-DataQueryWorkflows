@@ -87,7 +87,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     rule safely-directive { <safe-adjective> | <safely-adverb> }
     rule select { <select-verb> | <take-verb> | <keep-only-phrase> }
     rule separator-phrase { <separator-noun> | <divider-noun> | <splitter-noun> | <splitting-noun> }
-    rule string-column-phrase { <the-determiner>? [ <string-noun> | <character-noun> | <text-noun> ] <column-noun> }
+    rule string-column-phrase { [ <string-noun> | <character-noun> | <text-noun> ] <column-noun> }
     rule to-long-form-phrase { <pivot-verb> <to-preposition>? 'longer' <format-phrase>? | <to-preposition> [ 'long' | 'narrow' ] <format-phrase> | <melt-verb>  }
     rule to-wide-form-phrase { <pivot-verb> <to-preposition>? 'wider'  <format-phrase>? | <to-preposition> [ 'wide' | 'broad'  ] <format-noun>   | <cast-verb>  }
     rule value-column-name-phrase { <value-column-phrase> <name-noun> }

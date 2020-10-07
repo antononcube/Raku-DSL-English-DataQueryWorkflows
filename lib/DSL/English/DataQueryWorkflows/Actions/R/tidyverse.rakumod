@@ -310,6 +310,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 			make 'tidyr::separate( col = ' ~ $<col>.made ~ ', into = c(' ~ $intocols ~ ') )';
 		}
 	}
+	method separator-spec($/) { make $/.values[0].made; }
 
 	# Make dictionary command
     method make-dictionary-command($/) { make 'dplyr::select( ' ~ $<keycol>.made ~', ' ~ $<valcol>.made ~ ' )';}

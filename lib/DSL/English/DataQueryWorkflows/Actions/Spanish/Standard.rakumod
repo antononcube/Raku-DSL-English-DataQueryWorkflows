@@ -241,6 +241,7 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 		my $intocols = map( { '"' ~ $_.subst(:g, '"', '') ~ '"' }, $<into>.made.split(', ') ).join(', ');
 		make 'dividir los valores de la columna de cadena ' ~ $<col>.made ~ ' en las columnas ' ~ $intocols;
 	}
+	method separator-spec($/) { make $/.values[0].made; }
 
 	# Make dictionary command
     method make-dictionary-command($/) { make 'hacer que el diccionario mapee la columna ' ~ $<keycol>.made ~ ' a la columna ' ~ $<valcol>.made; }

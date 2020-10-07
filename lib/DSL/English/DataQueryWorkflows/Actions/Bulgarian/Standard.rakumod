@@ -246,6 +246,7 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 			make 'раздели стойностите на колоната ' ~ $<col>.made ~ ' по колоните ' ~ $intocols;
 		}
 	}
+	method separator-spec($/) { make $/.values[0].made; }
 
 	# Make dictionary command
     method make-dictionary-command($/) { make 'направи речник от колона '  ~ $<keycol>.made ~' към колона ' ~ $<valcol>.made;}

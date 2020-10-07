@@ -316,6 +316,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
 	# Separate string column command
 	method separate-column-commands($/) { make 'Not implemented'; }
+	method separator-spec($/) { make $/.values[0].made; }
 
 	# Make dictionary command
     method make-dictionary-command($/) { make 'obj <- setNames( obj[, '  ~ $<valcol>.made ~'], obj[, ' ~ $<keycol>.made ~ '] )';}

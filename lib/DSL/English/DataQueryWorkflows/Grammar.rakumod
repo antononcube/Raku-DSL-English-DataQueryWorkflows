@@ -213,9 +213,10 @@ grammar DSL::English::DataQueryWorkflows::Grammar
 
     # Separate string column command
     rule separate-column-command {
-        [ <.split-verb> | <.separate-verb> ] <.string-column-phrase> <col=.column-spec>
+        [ <.split-verb> | <.separate-verb> ] <.the-determiner>? [ <.string-column-phrase> | <.column-noun> ]? <col=.column-spec>
         <.into-preposition> <.the-determiner>? <.columns>? <into=.mixed-quoted-variable-names-list>
-        [ <.using-preposition> <.the-determiner>? [ <.string-noun>? <.separator-phrase> ]? <.pattern-noun> <sep=.regex-pattern-spec> ]? }
+        [ <.using-preposition> <.the-determiner>? [ <.string-noun>? <.separator-phrase> ]? <.pattern-noun> <sep=.separator-spec> ]? }
+    rule separator-spec { <regex-pattern-spec> | <regex-pattern> }
 
     # Make dictionary command
     rule make-dictionary-command { <.create-directive> <.dictionary-phrase> <.make-dictionary-filler>? <keycol=.column-spec> <.dictionary-relation-symbol> <valcol=.column-spec> }
