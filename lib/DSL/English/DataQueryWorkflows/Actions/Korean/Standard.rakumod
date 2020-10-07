@@ -238,7 +238,8 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 
 	# Separate string column command
 	method separate-column-command($/) {
-		make 'Not implemented';
+		my $intocols = map( { '"' ~ $_.subst(:g, '"', '') ~ '"' }, $<into>.made.split(', ') ).join(', ');
+		make '문자열 열 ' ~ $<col>.made ~ ' 의 값을 ' ~ $intocols ~ ' 열로 분할';
 	}
 
 	# Make dictionary command

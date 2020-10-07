@@ -238,7 +238,8 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 
 	# Separate string column command
 	method separate-column-command($/) {
-		make 'Not implemented';
+		my $intocols = map( { '"' ~ $_.subst(:g, '"', '') ~ '"' }, $<into>.made.split(', ') ).join(', ');
+		make 'dividir los valores de la columna de cadena ' ~ $<col>.made ~ ' en las columnas ' ~ $intocols;
 	}
 
 	# Make dictionary command

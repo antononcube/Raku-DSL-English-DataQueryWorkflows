@@ -241,9 +241,9 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 		my $intocols = map( { '"' ~ $_.subst(:g, '"', '') ~ '"' }, $<into>.made.split(', ') ).join(', ');
 
 		if $<sep> {
-			make 'раздели стойностите на колоната ' ~ $<col>.made ~ ' по колоните ' ~ $intocols;
-		} else {
 			make 'раздели стойностите на колоната ' ~ $<col>.made ~ ' по колоните ' ~ $intocols ~ ', чрез разделителя ' ~ $<sep>.made;
+		} else {
+			make 'раздели стойностите на колоната ' ~ $<col>.made ~ ' по колоните ' ~ $intocols;
 		}
 	}
 
