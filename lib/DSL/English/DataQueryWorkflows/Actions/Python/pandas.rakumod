@@ -183,9 +183,9 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
     # Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
 	method data-dimensions-command($/) { make 'print(obj.shape)'; }
-	method count-command($/) { make 'obj = obj.count()'; }
+	method count-command($/) { make 'obj = obj.size()'; }
 	method echo-count-command($/) {
-        make 'print(obj.count())';
+        make 'print(obj.size())';
     }
 	method data-summary-command($/) { make 'print(obj.describe())'; }
 	method glimpse-data($/) { make 'print(obj.head())'; }
