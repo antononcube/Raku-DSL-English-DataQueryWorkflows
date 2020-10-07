@@ -119,6 +119,7 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 	method statistics-command($/) { make $/.values[0].made; }
 	method data-dimensions-command($/) { make '치수 표시'; }
 	method count-command($/) { make '하위 그룹의 크기 찾기'; }
+	method echo-count-command($/) { make '쇼 카운트'; }
 	method data-summary-command($/) { make '목적을 요약하다'; }
 	method glimpse-data($/) { make '물체를 엿볼 수있다'; }
 

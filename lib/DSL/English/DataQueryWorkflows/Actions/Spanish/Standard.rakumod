@@ -118,7 +118,8 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 	# Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
 	method data-dimensions-command($/) { make 'mostrar dimensiones'; }
-	method count-command($/) { make 'encontrar el tamaño de los subgrupos'; }
+	method count-command($/) { make 'encontrar recuentos'; }
+	method echo-count-command($/) { make 'mostrar recuentos'; }
 	method data-summary-command($/) { make 'describe el objeto'; }
 	method glimpse-data($/) { make 'vislumbrar el objeto'; }
 

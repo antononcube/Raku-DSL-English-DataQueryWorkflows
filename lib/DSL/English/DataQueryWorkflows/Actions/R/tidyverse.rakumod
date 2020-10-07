@@ -168,6 +168,9 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 	method statistics-command($/) { make $/.values[0].made; }
 	method data-dimensions-command($/) { make '( function(x) { print(dim(x)); x } )'; }
 	method count-command($/) { make 'dplyr::count()'; }
+	method echo-count-command($/) {
+        make '( function(x) { print(x %>% dplyr::count()); x } )';
+    }
 	method data-summary-command($/) { make '( function(x) { print(summary(x)); x } )'; }
 	method glimpse-data($/) { make 'dplyr::glimpse()'; }
 

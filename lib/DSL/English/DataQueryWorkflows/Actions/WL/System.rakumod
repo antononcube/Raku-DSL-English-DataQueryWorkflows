@@ -189,6 +189,9 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method count-command($/) {
         make %.properties<IsGrouped>:exists ?? 'obj = Map[ Length, obj]' !! 'obj = Length[obj]';
     }
+    method echo-count-command($/) {
+        make %.properties<IsGrouped>:exists ?? 'Echo[Map[ Length, obj], "counts:"]' !! 'Echo[Length[obj], "counts"]';
+    }
     method data-summary-command($/) {
         make %.properties<IsGrouped>:exists ?? 'Echo[ResourceFunction["RecordsSummary"] /@ obj]' !! 'Echo[ResourceFunction["RecordsSummary"][obj], "summary:"]';
     }

@@ -118,7 +118,8 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	# Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
 	method data-dimensions-command($/) { make 'покажи размерите'; }
-	method count-command($/) { make 'намери размера на под-групите'; }
+	method count-command($/) { make 'намери броя'; }
+	method echo-count-command($/) { make 'покажи броя'; }
 	method data-summary-command($/) { make 'опиши обекта'; }
 	method glimpse-data($/) { make 'покажи визия на обекта'; }
 
