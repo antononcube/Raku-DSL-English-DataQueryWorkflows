@@ -218,7 +218,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     # Separate string column command
     rule separate-column-command {
         [ <.split-verb> | <.separate-verb> ] <.the-determiner>? [ <.string-column-phrase> | <.data-column-phrase> ]? <col=.column-spec>
-        <.into-preposition> <.the-determiner>? <.data-columns-phrase>? <into=.mixed-quoted-variable-names-list>
+        <.into-preposition> <.the-determiner>? [ <.columns> | <.column-noun> ] ? <into=.mixed-quoted-variable-names-list>
         [ <.using-preposition> <.the-determiner>? [ [ <.string-noun>? <.separator-phrase> ]? <.pattern-noun> | <.string-noun>? <.separator-phrase> ] <sep=.separator-spec> ]? }
     rule separator-spec { <regex-pattern-spec> | <regex-pattern> }
 
