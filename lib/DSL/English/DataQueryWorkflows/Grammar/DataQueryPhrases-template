@@ -10,6 +10,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token arrange-verb { 'arrange' }
     token ascending-adjective { 'ascending' }
     token association-noun { 'association' }
+    token broad-adjective { 'broad' }
     token cases-noun { 'cases' }
     token cast-verb { 'cast' }
     token character-noun { 'character' }
@@ -33,10 +34,13 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token join-noun { 'join' }
     token keep-verb { 'keep' }
     token left-adjective { 'left' }
+    token long-adjective { 'long' }
+    token longer-adjective { 'longer' }
     token map-verb { 'map' }
     token mapping-noun { 'mapping' }
     token melt-verb { 'melt' }
     token mutate-verb { 'mutate' }
+    token narrow-adjective { 'narrow' }
     token omit-directive { 'omit' | 'exclude' }
     token only-adverb { 'only' }
     token order-verb { 'order' }
@@ -57,6 +61,8 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token tabulate-verb { 'tabulate' }
     token ungroup-verb { 'ungroup' }
     token unique-adjective { 'unique' }
+    token wide-adjective { 'wide' }
+    token wider-adjective { 'wider' }
 
     rule for-which-phrase { <for-preposition> <which-determiner> | <that-pronoun> <adhere-verb> <to-preposition> }
     rule complete-cases-phrase { <complete-adjective> <cases-noun> }

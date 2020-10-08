@@ -10,6 +10,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token arrange-verb { 'arrange' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'arrange') }> }
     token ascending-adjective { 'ascending' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'ascending') }> }
     token association-noun { 'association' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'association') }> }
+    token broad-adjective { 'broad' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'broad') }> }
     token cases-noun { 'cases' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cases') }> }
     token cast-verb { 'cast' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cast') }> }
     token character-noun { 'character' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'character') }> }
@@ -33,10 +34,13 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token join-noun { 'join' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'join') }> }
     token keep-verb { 'keep' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'keep') }> }
     token left-adjective { 'left' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'left') }> }
+    token long-adjective { 'long' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'long') }> }
+    token longer-adjective { 'longer' | ([\w]+) <?{ $0.Str ne 'long' and is-fuzzy-match( $0.Str, 'longer') }> }
     token map-verb { 'map' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'map') }> }
     token mapping-noun { 'mapping' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'mapping') }> }
     token melt-verb { 'melt' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'melt') }> }
     token mutate-verb { 'mutate' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'mutate') }> }
+    token narrow-adjective { 'narrow' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'narrow') }> }
     token omit-directive { 'omit' | 'exclude' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'exclude') }> }
     token only-adverb { 'only' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'only') }> }
     token order-verb { 'order' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'order') }> }
@@ -57,6 +61,8 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token tabulate-verb { 'tabulate' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'tabulate') }> }
     token ungroup-verb { 'ungroup' | ([\w]+) <?{ $0.Str ne 'group' and is-fuzzy-match( $0.Str, 'ungroup') }> }
     token unique-adjective { 'unique' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'unique') }> }
+    token wide-adjective { 'wide' | ([\w]+) <?{ $0.Str ne 'wider' and is-fuzzy-match( $0.Str, 'wide') }> }
+    token wider-adjective { 'wider' | ([\w]+) <?{ $0.Str ne 'wide' and is-fuzzy-match( $0.Str, 'wider') }> }
 
     rule for-which-phrase { <for-preposition> <which-determiner> | <that-pronoun> <adhere-verb> <to-preposition> }
     rule complete-cases-phrase { <complete-adjective> <cases-noun> }
@@ -88,8 +94,10 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     rule select { <select-verb> | <take-verb> | <keep-only-phrase> }
     rule separator-phrase { <separator-noun> | <divider-noun> | <splitter-noun> | <splitting-noun> }
     rule string-column-phrase { [ <string-noun> | <character-noun> | <text-noun> ] <column-noun> }
-    rule to-long-form-phrase { <pivot-verb> <to-preposition>? 'longer' <format-phrase>? | <to-preposition> [ 'long' | 'narrow' ] <format-phrase> | <melt-verb>  }
-    rule to-wide-form-phrase { <pivot-verb> <to-preposition>? 'wider'  <format-phrase>? | <to-preposition> [ 'wide' | 'broad'  ] <format-noun>   | <cast-verb>  }
+    rule longer-phrase { <longer-adjective> | <long-adjective> | <narrow-adjective> }
+    rule wider-phrase  { <wider-adjective>  | <wide-adjective> | <broad-adjective> }
+    rule to-long-form-phrase { <pivot-verb> <to-preposition>? <longer-phrase> <format-phrase>? | <to-preposition> <longer-phrase> <format-phrase> | <melt-verb>  }
+    rule to-wide-form-phrase { <pivot-verb> <to-preposition>? <wider-phrase>  <format-phrase>? | <to-preposition> <wider-phrase>  <format-phrase> | <cast-verb>  }
     rule value-column-name-phrase { <value-column-phrase> <name-noun> }
     rule value-column-phrase { <value-noun> <column-noun>? }
     rule variable-column-name-phrase { <variable-column-phrase> <name-noun> }
