@@ -321,7 +321,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method pivot-longer-value-column-name-spec($/) { make '"ValuesTo" -> ' ~ $/.values[0].made; }
 
     # Pivot wider command
-    method pivot-wider-command($/) { make 'obj = ToWideForm[ ' ~ $<pivot-wider-arguments-list>.made ~ ' ]'; }
+    method pivot-wider-command($/) { make 'obj = ToWideForm[ obj, ' ~ $<pivot-wider-arguments-list>.made ~ ' ]'; }
     method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
     method pivot-wider-argument($/) { make $/.values[0].made; }
 
