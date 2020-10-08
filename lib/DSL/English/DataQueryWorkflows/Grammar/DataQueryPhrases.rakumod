@@ -23,8 +23,8 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token duplicate-adjective { 'duplicate' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'duplicate') }> }
     token duplicates-noun { 'duplicates' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'duplicates') }> }
     token filter-verb { 'filter' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'filter') }> }
-    token form-noun { 'form' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'form') }> }
-    token format-noun { 'format' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'format') }> }
+    token form-noun { 'form' | ([\w]+) <?{ $0.Str ne 'format' and is-fuzzy-match( $0.Str, 'form') }> }
+    token format-noun { 'format' | ([\w]+) <?{ $0.Str ne 'form' and is-fuzzy-match( $0.Str, 'format') }> }
     token formula-noun { 'formula' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'formula') }> }
     token full-adjective { 'full' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'full') }> }
     token glimpse-verb { 'glimpse' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'glimpse') }> }
