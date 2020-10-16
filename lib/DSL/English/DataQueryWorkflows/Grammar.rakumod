@@ -193,13 +193,13 @@ grammar DSL::English::DataQueryWorkflows::Grammar
 
     rule filler-separator { <and-conjunction>? [ <with-preposition> | <using-preposition> | <for-preposition> ] }
 
-    rule pivot-longer-id-columns-spec { <?{$*IDCOLS == 0}> <.the-determiner>? <.pivot-id-columns-phrase> <column-specs-list> {$*IDCOLS == 1} }
+    rule pivot-longer-id-columns-spec { <?{$*IDCOLS == 0}> <.the-determiner>? <.pivot-id-columns-phrase> <column-specs-list> {$*IDCOLS = 1} }
 
     rule pivot-longer-columns-spec { <?{$*COLS == 0}> <.the-determiner>? <.pivot-columns-phrase> <column-specs-list> {$*COLS = 1} }
 
-    rule pivot-longer-variable-column-name-spec { <?{$*VARTO == 0}> <.the-determiner>? <.variable-column-name-phrase> <column-spec> {$*VARTO == 0} }
+    rule pivot-longer-variable-column-name-spec { <?{$*VARTO == 0}> <.the-determiner>? <.variable-column-name-phrase> <column-spec> {$*VARTO = 1} }
 
-    rule pivot-longer-value-column-name-spec { <?{$*VALTO == 0}> <.the-determiner>? <.value-column-name-phrase> <column-spec> <?{$*VALTO == 0}> }
+    rule pivot-longer-value-column-name-spec { <?{$*VALTO == 0}> <.the-determiner>? <.value-column-name-phrase> <column-spec> <?{$*VALTO = 1}> }
 
     # To wider form command
     rule pivot-wider-command { <.convert-verb>? <.to-wide-form-phrase>  <.filler-separator> <pivot-wider-arguments-list> }
