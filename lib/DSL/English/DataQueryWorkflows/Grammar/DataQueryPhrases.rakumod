@@ -56,8 +56,8 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token sort-verb { 'sort' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'sort') }> }
     token splitter-noun { 'splitter' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'splitter') }> }
     token splitting-noun { 'splitting' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'splitting') }> }
-    token summarise-verb { 'summarise' }
-    token summarize-verb { 'summarize' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'summarize') }> }
+    token summarise-verb { 'summarise' | ([\w]+) <?{ $0.Str ne 'summarize' and is-fuzzy-match( $0.Str, 'summarise') }>}
+    token summarize-verb { 'summarize' | ([\w]+) <?{ $0.Str ne 'summarise' and is-fuzzy-match( $0.Str, 'summarize') }> }
     token tabulate-verb { 'tabulate' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'tabulate') }> }
     token ungroup-verb { 'ungroup' | ([\w]+) <?{ $0.Str ne 'group' and is-fuzzy-match( $0.Str, 'ungroup') }> }
     token unique-adjective { 'unique' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'unique') }> }
