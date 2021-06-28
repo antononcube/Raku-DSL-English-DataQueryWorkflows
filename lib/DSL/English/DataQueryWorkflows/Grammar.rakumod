@@ -226,19 +226,4 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule make-dictionary-command { <.create-directive> <.dictionary-phrase> <.make-dictionary-filler>? <keycol=.column-spec> <.dictionary-relation-symbol> <valcol=.column-spec> }
     rule make-dictionary-filler { [ <for-preposition> | <using-preposition> | <mapping-noun> ] <the-determiner>? <columns>? | <mapping-noun> | <from-preposition> }
     rule dictionary-relation-symbol { <.to-preposition> | <.as-preposition> | <.key-to-symbol> | <.equal-symbol> }
-
-    # Probably have to be in DSL::Shared::Roles .
-    # Assign-pairs and as-pairs
-    rule assign-pair { <assign-pair-lhs> [ <.assign-to-symbol> ] <assign-pair-rhs> }
-    rule as-pair     { <assign-pair-rhs> <.as-preposition>   <assign-pair-lhs> }
-    rule assign-pairs-list { <assign-pair>+ % <.list-separator> }
-    rule as-pairs-list     { <as-pair>+     % <.list-separator> }
-    rule assign-pair-lhs { <mixed-quoted-variable-name> }
-    rule assign-pair-rhs { <mixed-quoted-variable-name> | <wl-expr> }
-
-    # Correspondence pairs
-    rule key-pairs-list { <key-pair>+ % <.list-separator> }
-    rule key-pair { <key-pair-lhs>  [ <.equal-symbol> | <.equal2-symbol> | <.key-to-symbol> | <.equal-relation> ] <key-pair-rhs> }
-    rule key-pair-lhs { <mixed-quoted-variable-name> }
-    rule key-pair-rhs { <mixed-quoted-variable-name> }
 }
