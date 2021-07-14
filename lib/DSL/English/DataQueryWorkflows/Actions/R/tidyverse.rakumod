@@ -51,7 +51,15 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 
 	has Str $.name = 'DSL-English-DataQueryWorkflows-R-tidyverse';
 
-	method TOP($/) { make $/.values[0].made; }
+    # Top
+    method TOP($/) { make $/.values[0].made; }
+
+    # workflow-command-list
+    method workflow-commands-list($/) { make $/.values>>.made.join(" %>%\n"); }
+
+    # workflow-command
+    method workflow-command($/) { make $/.values[0].made; }
+
 
 	# General
 	method variable-names-list($/) { make $<variable-name>>>.made.join(', '); }

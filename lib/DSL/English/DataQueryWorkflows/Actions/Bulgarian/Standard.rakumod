@@ -41,7 +41,14 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 
 	has Str $.name = 'DSL-English-DataQueryWorkflows-Bulgarian-Standard';
 
+    # Top
     method TOP($/) { make $/.values[0].made; }
+
+    # workflow-command-list
+    method workflow-commands-list($/) { make $/.values>>.made.join(";\n"); }
+
+    # workflow-command
+    method workflow-command($/) { make $/.values[0].made; }
 
 	# General
 	method variable-names-list($/) { make $<variable-name>>>.made.join(', '); }

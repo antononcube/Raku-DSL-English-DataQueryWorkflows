@@ -41,8 +41,15 @@ grammar DSL::English::DataQueryWorkflows::Grammar
         does DSL::Shared::Roles::ErrorHandling
         does DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
         does DSL::Shared::Roles::PredicateSpecification {
+
     # TOP
-    rule TOP {
+    rule TOP { <workflow-command> }
+
+    # Workflow commands list
+    rule workflow-commands-list { [ [ <.ws>? <workflow-command> <.ws>? ]+ % <.list-of-commands-separator> ] <.list-of-commands-separator>? }
+
+    # Workflow command
+    rule workflow-command {
         <pipeline-command> |
         <data-load-command> |
         <distinct-command> |
