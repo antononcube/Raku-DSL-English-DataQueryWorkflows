@@ -2,7 +2,22 @@ use lib './lib';
 use lib '.';
 use DSL::English::DataQueryWorkflows;
 
-#say DataQueryWorkflows::Grammar.parse("select mass & height");
+#-----------------------------------------------------------
+my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
+
+sub dq-parse( Str:D $command, Str:D :$rule = 'TOP' ) {
+        $pCOMMAND.parse($command, :$rule);
+}
+
+sub dq-interpret( Str:D $command,
+                  Str:D:$rule = 'TOP',
+                  :$actions = DSL::English::DataQueryWorkflows::Actions::WL::System.new) {
+        $pCOMMAND.parse( $command, :$rule, :$actions ).made;
+}
+
+#----------------------------------------------------------
+
+#say DSL::English::DataQueryWorkflows::Grammar.subparse('separate the column "Variable" into Variable and Set with separator pattern ""');
 
 #say to_dplyr("filter by mass > 10 & height <200");
 
@@ -115,15 +130,21 @@ my $commands9 = 'use dfTitanic; select "passengerSex", passengerClass, passenger
 #'convert to long form using the columns mass and height, and using the variable column name "Var1" and with values column name "VAL"',
 #'use dfTitanic; display data dimensions; to long form with identifier column id'
 #);
+#my @testCommands = (
+#'use dfStarwars; ungroup; replace missing with 0; summarize mass with Mean, Max;',
+#'use dfStarwars; group by species; apply per group `length`; summarize mass with Mean, Max;',
+#'use dfStarwars; group by species and `"homeworld"`; echo data summary; group by gender; summarize "mass" with Mean, Max;'
+#);
 my @testCommands = (
-'use dfStarwars; ungroup; replace missing with 0; summarize mass with Mean, Max;',
-'use dfStarwars; group by species; apply per group `length`; summarize mass with Mean, Max;',
-'use dfStarwars; group by species and `"homeworld"`; echo data summary; group by gender; summarize mass with Mean, Max;'
+'use dsAnscombe;
+pivot to long form with id columns ID1, ID2 and variable columns V1 and V2;
+separate the data column Variable into Variable and Set with separator pattern "";
+to wider format for id columns Set and Variable'
 );
-
-#my @targets = ('Python-pandas');
+#my @targets = ('WL-System');
 #my @targets = ('Julia-DataFrames', 'Python-pandas', 'R-base', 'R-tidyverse', 'WL-System');
 my @targets = ('Bulgarian', 'Korean', 'Spanish');
+#my @targets = ('R-base', 'R-tidyverse', 'WL-System', 'Python-pandas');
 
 for @testCommands -> $c {
     say "=" x 30;
@@ -138,3 +159,11 @@ for @testCommands -> $c {
         say $res;
     }
 };
+
+say "=" x 60;
+
+# say dq-parse( @testCommands[0], rule => 'workflow-commands-list' );
+say dq-interpret(
+        @testCommands[0],
+        rule => 'workflow-commands-list',
+        actions => DSL::English::DataQueryWorkflows::Actions::WL::System.new);
