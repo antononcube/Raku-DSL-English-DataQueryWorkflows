@@ -50,14 +50,21 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
     # workflow-command
     method workflow-command($/) { make $/.values[0].made; }
 
-	# Overriding Predicate::predicate-simple -- prefixing the lhs variable specs with 'obj$'.
+	# Overriding DSL::Shared::Actions::R::PredicateSpecification::predicate-simple :
+	# 1) prefixing the lhs variable specs with 'obj$',
+	# 2) if with quotes using the universal obj[[...]].
 	method predicate-simple($/) {
+		my Str $objCol =
+				self.is-single-quoted($<lhs>.made) || self.is-double-quoted($<lhs>.made)
+				?? 'obj[[' ~ $<lhs>.made ~ ']]'
+				!! 'obj$' ~ $<lhs>.made;
+
 		if $<predicate-relation>.made eq '%!in%' {
-			make '!( obj$' ~ $<lhs>.made ~ ' %in% ' ~ $<rhs>.made ~ ')';
+			make '!( ' ~ $objCol ~ ' %in% ' ~ $<rhs>.made ~ ')';
 		} elsif $<predicate-relation>.made eq 'like' {
-			make 'grepl( pattern = ' ~ $<rhs>.made ~ ', x = obj$' ~ $<lhs>.made ~ ')';
+			make 'grepl( pattern = ' ~ $<rhs>.made ~ ', x = ' ~ $objCol ~ ')';
 		} else {
-			make 'obj$' ~ $<lhs>.made ~ ' ' ~ $<predicate-relation>.made ~ ' ' ~ $<rhs>.made;
+			make $objCol ~ ' ' ~ $<predicate-relation>.made ~ ' ' ~ $<rhs>.made;
 		}
 	}
 

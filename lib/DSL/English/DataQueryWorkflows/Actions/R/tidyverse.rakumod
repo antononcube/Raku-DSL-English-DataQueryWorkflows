@@ -60,6 +60,22 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
     # workflow-command
     method workflow-command($/) { make $/.values[0].made; }
 
+	# Overriding DSL::Shared::Actions::R::PredicateSpecification::predicate-simple :
+	# if with quotes using the universal as.name(...).
+	method predicate-simple($/) {
+		my Str $objCol =
+				self.is-single-quoted($<lhs>.made) || self.is-double-quoted($<lhs>.made)
+				?? 'as.name(' ~ $<lhs>.made ~ ')'
+				!! $<lhs>.made;
+
+		if $<predicate-relation>.made eq '%!in%' {
+			make '!( ' ~ $objCol ~ ' %in% ' ~ $<rhs>.made ~ ')';
+		} elsif $<predicate-relation>.made eq 'like' {
+			make 'grepl( pattern = ' ~ $<rhs>.made ~ ', x = ' ~ $objCol ~ ')';
+		} else {
+			make $objCol ~ ' ' ~ $<predicate-relation>.made ~ ' ' ~ $<rhs>.made;
+		}
+	}
 
 	# General
 	method variable-names-list($/) { make $<variable-name>>>.made.join(', '); }
