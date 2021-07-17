@@ -153,41 +153,41 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 
 	method full-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'externamente compuesto con ' ~ $<dataset-name>.made ~ ' de acuerdo a ' ~ $<join-by-spec>.made ~ ')';
+			make 'externamente compuesto con ' ~ $<dataset-name>.made ~ ' de acuerdo a ' ~ $<join-by-spec>.made;
 		} else {
-			make 'externamente compuesto con ' ~ $<dataset-name>.made ~ ')';
+			make 'externamente compuesto con ' ~ $<dataset-name>.made;
 		}
 	}
 
 	method inner-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'internamente compuesto con ' ~ $<dataset-name>.made ~ ' de acuerdo a ' ~ $<join-by-spec>.made ~ ')';
+			make 'internamente compuesto con ' ~ $<dataset-name>.made ~ ' de acuerdo a ' ~ $<join-by-spec>.made;
 		} else {
-			make 'internamente compuesto con ' ~ $<dataset-name>.made ~ ')';
+			make 'internamente compuesto con ' ~ $<dataset-name>.made;
 		}
 	}
 
 	method left-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'izquierda compuesto con ' ~ $<dataset-name>.made ~ ' de acuerdo a ' ~ $<join-by-spec>.made ~ ')';
+			make 'izquierda compuesto con ' ~ $<dataset-name>.made ~ ' de acuerdo a ' ~ $<join-by-spec>.made;
 		} else {
-			make 'izquierda compuesto con ' ~ $<dataset-name>.made ~ ')';
+			make 'izquierda compuesto con ' ~ $<dataset-name>.made;
 		}
 	}
 
 	method right-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'derecha compuesto con ' ~ $<dataset-name>.made ~ ' de acuerdo a ' ~ $<join-by-spec>.made ~ ')';
+			make 'derecha compuesto con ' ~ $<dataset-name>.made ~ ' de acuerdo a ' ~ $<join-by-spec>.made;
 		} else {
-			make 'derecha compuesto con ' ~ $<dataset-name>.made ~ ')';
+			make 'derecha compuesto con ' ~ $<dataset-name>.made;
 		}
 	}
 
 	method semi-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'semi-compuesto con ' ~ $<dataset-name>.made ~ ' de acuerdo a ' ~ $<join-by-spec>.made ~ ')';
+			make 'semi-compuesto con ' ~ $<dataset-name>.made ~ ' de acuerdo a ' ~ $<join-by-spec>.made;
 		} else {
-			make 'semi-compuesto con ' ~ $<dataset-name>.made ~ ')';
+			make 'semi-compuesto con ' ~ $<dataset-name>.made;
 		}
 	}
 

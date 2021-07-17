@@ -153,41 +153,41 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 
 	method full-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'външно съединение с ' ~ $<dataset-name>.made ~ ' според ' ~ $<join-by-spec>.made ~ ')';
+			make 'външно съединение с ' ~ $<dataset-name>.made ~ ' според ' ~ $<join-by-spec>.made;
 		} else {
-			make 'външно съединение с ' ~ $<dataset-name>.made ~ ')';
+			make 'външно съединение с ' ~ $<dataset-name>.made;
 		}
 	}
 
 	method inner-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'вътрешно съединение с ' ~ $<dataset-name>.made ~ ' според ' ~ $<join-by-spec>.made ~ ')';
+			make 'вътрешно съединение с ' ~ $<dataset-name>.made ~ ' според ' ~ $<join-by-spec>.made;
 		} else {
-			make 'вътрешно съединение с ' ~ $<dataset-name>.made ~ ')';
+			make 'вътрешно съединение с ' ~ $<dataset-name>.made;
 		}
 	}
 
 	method left-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'ляво съединение с ' ~ $<dataset-name>.made ~ ' според ' ~ $<join-by-spec>.made ~ ')';
+			make 'ляво съединение с ' ~ $<dataset-name>.made ~ ' според ' ~ $<join-by-spec>.made;
 		} else {
-			make 'ляво съединение с ' ~ $<dataset-name>.made ~ ')';
+			make 'ляво съединение с ' ~ $<dataset-name>.made;
 		}
 	}
 
 	method right-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'дясно съединение с ' ~ $<dataset-name>.made ~ ' според ' ~ $<join-by-spec>.made ~ ')';
+			make 'дясно съединение с ' ~ $<dataset-name>.made ~ ' според ' ~ $<join-by-spec>.made;
 		} else {
-			make 'дясно съединение с ' ~ $<dataset-name>.made ~ ')';
+			make 'дясно съединение с ' ~ $<dataset-name>.made;
 		}
 	}
 
 	method semi-join-spec($/)  {
 		if $<join-by-spec> {
-			make 'полу-съединение с ' ~ $<dataset-name>.made ~ ' според ' ~ $<join-by-spec>.made ~ ')';
+			make 'полу-съединение с ' ~ $<dataset-name>.made ~ ' според ' ~ $<join-by-spec>.made;
 		} else {
-			make 'полу-съединение с ' ~ $<dataset-name>.made ~ ')';
+			make 'полу-съединение с ' ~ $<dataset-name>.made;
 		}
 	}
 

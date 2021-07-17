@@ -153,41 +153,41 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 
 	method full-join-spec($/)  {
 		if $<join-by-spec> {
-			make '완전 조인 ' ~ $<dataset-name>.made ~ ' 으로 ' ~ $<join-by-spec>.made ~ ')';
+			make '완전 조인 ' ~ $<dataset-name>.made ~ ' 으로 ' ~ $<join-by-spec>.made;
 		} else {
-			make '완전 조인 ' ~ $<dataset-name>.made ~ ')';
+			make '완전 조인 ' ~ $<dataset-name>.made;
 		}
 	}
 
 	method inner-join-spec($/)  {
 		if $<join-by-spec> {
-			make '내부 결합 ' ~ $<dataset-name>.made ~ ' 으로 ' ~ $<join-by-spec>.made ~ ')';
+			make '내부 결합 ' ~ $<dataset-name>.made ~ ' 으로 ' ~ $<join-by-spec>.made;
 		} else {
-			make '내부 결합 ' ~ $<dataset-name>.made ~ ')';
+			make '내부 결합 ' ~ $<dataset-name>.made;
 		}
 	}
 
 	method left-join-spec($/)  {
 		if $<join-by-spec> {
-			make '왼쪽 결합 ' ~ $<dataset-name>.made ~ ' 으로 ' ~ $<join-by-spec>.made ~ ')';
+			make '왼쪽 결합 ' ~ $<dataset-name>.made ~ ' 으로 ' ~ $<join-by-spec>.made;
 		} else {
-			make '왼쪽 결합  ' ~ $<dataset-name>.made ~ ')';
+			make '왼쪽 결합  ' ~ $<dataset-name>.made;
 		}
 	}
 
 	method right-join-spec($/)  {
 		if $<join-by-spec> {
-			make '바로 결합 ' ~ $<dataset-name>.made ~ ' 으로 ' ~ $<join-by-spec>.made ~ ')';
+			make '바로 결합 ' ~ $<dataset-name>.made ~ ' 으로 ' ~ $<join-by-spec>.made;
 		} else {
-			make '바로 결합 ' ~ $<dataset-name>.made ~ ')';
+			make '바로 결합 ' ~ $<dataset-name>.made;
 		}
 	}
 
 	method semi-join-spec($/)  {
 		if $<join-by-spec> {
-			make '세미 조인 ' ~ $<dataset-name>.made ~ ' 으로 ' ~ $<join-by-spec>.made ~ ')';
+			make '세미 조인 ' ~ $<dataset-name>.made ~ ' 으로 ' ~ $<join-by-spec>.made;
 		} else {
-			make '세미 조인 ' ~ $<dataset-name>.made ~ ')';
+			make '세미 조인 ' ~ $<dataset-name>.made;
 		}
 	}
 
