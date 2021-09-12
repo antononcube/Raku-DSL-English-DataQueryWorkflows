@@ -308,4 +308,11 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
     method echo-words-list($/) { make '"' ~ $<variable-name>>>.made.join(' ') ~ '"'; }
     method echo-variable($/) { make $/.Str; }
     method echo-text($/) { make $/.Str; }
+
+	## Setup code
+	method setup-code-command($/) {
+		make q:to/SETUPEND/
+        using HTTP, CSV, DataFrames;
+        SETUPEND
+  }
 }

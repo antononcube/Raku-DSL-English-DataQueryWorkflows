@@ -42,7 +42,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     has Str $.name = 'DSL-English-DataQueryWorkflows-WL-System';
 
     # Top
-    method TOP($/) { make $/.values[0].made; }
+    method TOP($/) { note $/.values[0].made.raku; make $/.values[0].made; }
 
     # workflow-command-list
     method workflow-commands-list($/) { make $/.values>>.made.join(";\n"); }
@@ -384,4 +384,12 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method echo-words-list($/) { make '"' ~ $<variable-name>>>.made.join(' ') ~ '"'; }
     method echo-variable($/) { make $/.Str; }
     method echo-text($/) { make $/.Str; }
+
+    ## Setup code
+    method setup-code-command($/) {
+        make q:to/SETUPEND/
+        Import["https://raw.githubusercontent.com/antononcube/MathematicaForPrediction/master/CrossTabulate.m"];
+        Import["https://raw.githubusercontent.com/antononcube/MathematicaForPrediction/master/DataReshape.m"];
+        SETUPEND
+  }
 }

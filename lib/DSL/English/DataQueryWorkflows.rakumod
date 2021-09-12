@@ -125,7 +125,9 @@ multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str 
 
     @cmdLines = grep { $_.^name eq 'Str' }, @cmdLines;
 
-    return @cmdLines.join( %targetToSeparator{$specTarget} ).trim;
+    my Str $res = @cmdLines.join( %targetToSeparator{$specTarget} ).trim;
+
+    return $res.subst( / ^^ \h* <{ '\'' ~ %targetToSeparator{$specTarget}.trim ~ '\'' }> \h* /, ''):g
 }
 
 multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str $target where $target eq 'SQL' ) {

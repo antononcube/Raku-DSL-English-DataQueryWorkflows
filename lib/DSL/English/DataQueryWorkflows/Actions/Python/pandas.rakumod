@@ -365,4 +365,11 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
     method echo-words-list($/) { make '"' ~ $<variable-name>>>.made.join(' ') ~ '"'; }
     method echo-variable($/) { make $/.Str; }
     method echo-text($/) { make $/.Str; }
+
+	## Setup code
+	method setup-code-command($/) {
+		make q:to/SETUPEND/
+        import pandas
+        SETUPEND
+  }
 }
