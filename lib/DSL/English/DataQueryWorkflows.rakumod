@@ -16,6 +16,7 @@ Standard Query Language (SQL) or RStudio's library tidyverse.
 unit module DSL::English::DataQueryWorkflows;
 
 use DSL::Shared::Utilities::MetaSpecsProcessing;
+use DSL::Shared::Utilities::CommandProcessing;
 
 use DSL::English::DataQueryWorkflows::Grammar;
 
@@ -43,7 +44,7 @@ use DSL::English::DataQueryWorkflows::Actions::Spanish::Standard;
 #    "WL-SQL"        => DSL::English::DataQueryWorkflows::Actions::WL::SQL
 #};
 
-my %targetToAction =
+my %targetToAction{Str} =
     "Julia"             => DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames,
     "Julia-DataFrames"  => DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames,
     "Julia::DataFrames" => DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames,
@@ -65,7 +66,7 @@ my %targetToAction =
     "Korean"            => DSL::English::DataQueryWorkflows::Actions::Korean::Standard,
     "Spanish"           => DSL::English::DataQueryWorkflows::Actions::Spanish::Standard;
 
-my %targetToSeparator{Str} =
+my Str %targetToSeparator{Str} =
     "Julia"             => "\n",
     "Julia-DataFrames"  => "\n",
     "Julia::DataFrames" => "\n",
@@ -75,7 +76,7 @@ my %targetToSeparator{Str} =
     "R-tidyverse"       => " %>%\n",
     "R::tidyverse"      => " %>%\n",
     "tidyverse"         => " %>%\n",
-    "SQL"               => "\n",
+    "SQL"               => ";\n",
     "Mathematica"       => "\n",
     "Python-pandas"     => "\n",
     "Python::pandas"    => "\n",
@@ -96,16 +97,17 @@ sub has-semicolon (Str $word) {
 #-----------------------------------------------------------
 proto ToDataQueryWorkflowCode(Str $command, Str $target = 'tidyverse' ) is export {*}
 
-multi ToDataQueryWorkflowCode ( Str $command where not has-semicolon($command), Str $target = 'tidyverse' ) {
+multi ToDataQueryWorkflowCode ( Str $command, Str $target = 'tidyverse' ) {
 
-    die 'Unknown target.' unless %targetToAction{$target}:exists;
+    DSL::Shared::Utilities::CommandProcessing::ToWorkflowCode( $command,
+                                                               grammar => DSL::English::DataQueryWorkflows::Grammar,
+                                                               :%targetToAction,
+                                                               :%targetToSeparator,
+                                                               :$target )
 
-    my $match = DSL::English::DataQueryWorkflows::Grammar.parse($command.trim, actions => %targetToAction{$target}.new );
-    die 'Cannot parse the given command.' unless $match;
-    return $match.made;
 }
 
-multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str $target = 'tidyverse' ) {
+multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str $target where $target eq 'SQL' ) {
 
     my $specTarget = get-dsl-spec( $command, 'target');
 
@@ -123,22 +125,7 @@ multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str 
 
     my @cmdLines = map { ToDataQueryWorkflowCode($_, $specTarget) }, @commandLines;
 
-    @cmdLines = grep { $_.^name eq 'Str' }, @cmdLines;
-
-    my Str $res = @cmdLines.join( %targetToSeparator{$specTarget} ).trim;
-
-    return $res.subst( / ^^ \h* <{ '\'' ~ %targetToSeparator{$specTarget}.trim ~ '\'' }> \h* /, ''):g
-}
-
-multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str $target where $target eq 'SQL' ) {
-
-    die 'Unknown target.' unless %targetToAction{$target}:exists;
-
-    my @commandLines = $command.trim.split(/ ';' \s* /);
-
-    @commandLines = grep { $_.Str.chars > 0 }, @commandLines;
-
-    my @cmdLines = map { ToDataQueryWorkflowCode($_, $target) }, @commandLines;
+    #@cmdLines = grep { $_.^name eq 'Str' }, @cmdLines;
 
     my %sqlLines = @cmdLines;
 
