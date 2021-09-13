@@ -42,7 +42,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     has Str $.name = 'DSL-English-DataQueryWorkflows-WL-System';
 
     # Top
-    method TOP($/) { note $/.values[0].made.raku; make $/.values[0].made; }
+    method TOP($/) { make $/.values[0].made; }
 
     # workflow-command-list
     method workflow-commands-list($/) { make $/.values>>.made.join(";\n"); }
