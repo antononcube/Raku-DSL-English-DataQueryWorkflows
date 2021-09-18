@@ -41,7 +41,9 @@ say "=" x 10;
 
 my $commands = 'use dfTitanic; filter by passengerSex == "male"; echo text grouping by variables; group by passengerClass, passengerSurvival;count; ungroup;';
 
-my $commands2 = "use dfStarwars;
+my $commands2 = "
+include setup code;
+use dfStarwars;
 semi join with dfStarwarsFilms by 'name';
 sort by 'name', 'film' desc;
 echo data summary;
@@ -135,15 +137,35 @@ my $commands9 = 'use dfTitanic; select "passengerSex", passengerClass, passenger
 #'use dfStarwars; group by species; apply per group `length`; summarize mass with Mean, Max;',
 #'use dfStarwars; group by species and `"homeworld"`; echo data summary; group by gender; summarize "mass" with Mean, Max;'
 #);
-my @testCommands = (
-'use dsAnscombe;
-pivot to long form with id columns ID1, ID2 and variable columns V1 and V2;
-separate the data column Variable into Variable and Set with separator pattern "";
-to wider format for id columns Set and Variable'
+#my @testCommands = (
+#'use dsAnscombe;
+#pivot to long form with id columns ID1, ID2 and variable columns V1 and V2;
+#separate the data column Variable into Variable and Set with separator pattern "";
+#to wider format for id columns Set and Variable'
+#);
+#my @testCommands = (
+#"filter with 'passenger sex' is 'male' and 'passenger survival' equals 'died' or 'passenger survival' is 'survived'",
+#'filter with "passenger sex" is "male" and "passenger survival" equals "died" or "passenger survival" is "survived"',
+#"filter with passengerSex is 'male' and passengerSurvival equals 'died' or passengerSurvival is 'survived'"
+#);
+#my @testCommands = (
+#'include setup code;
+#use dfStarwars;
+#ungroup;
+#replace missing with 0;
+#summarize mass with Mean, Max;
+#assign pipeline object to dfTemp'
+#);
+
+my @testCommands = ("
+include setup code
+use dfTitanic
+filter with 'passenger sex' is 'male' and 'passenger survival' equals 'died' or 'passenger survival' is 'survived'"
 );
-#my @targets = ('WL-System');
-#my @targets = ('Julia-DataFrames', 'Python-pandas', 'R-base', 'R-tidyverse', 'WL-System');
-my @targets = ('Bulgarian', 'Korean', 'Spanish');
+
+#my @targets = ('SQL');
+my @targets = ('Julia-DataFrames', 'Python-pandas', 'R-base', 'R-tidyverse', 'WL-System');
+#my @targets = ('Bulgarian', 'Korean', 'Spanish');
 #my @targets = ('R-base', 'R-tidyverse', 'WL-System', 'Python-pandas');
 
 for @testCommands -> $c {
@@ -154,7 +176,11 @@ for @testCommands -> $c {
         say $t;
         say '-' x 30;
         my $start = now;
-        my $res = ToDataQueryWorkflowCode($c, $t);
+        my $res = ToDataQueryWorkflowCode($c, $t, format => 'hash');
+#        my $res =
+#                dq-interpret($c,
+#                        rule => 'workflow-commands-list',
+#                        actions => DSL::English::DataQueryWorkflows::Actions::R::tidyverse.new);
         say "time:", now - $start;
         say $res;
     }
@@ -163,7 +189,7 @@ for @testCommands -> $c {
 say "=" x 60;
 
 # say dq-parse( @testCommands[0], rule => 'workflow-commands-list' );
-say dq-interpret(
-        @testCommands[0],
-        rule => 'workflow-commands-list',
-        actions => DSL::English::DataQueryWorkflows::Actions::WL::System.new);
+#say dq-interpret(
+#        @testCommands[0],
+#        rule => 'workflow-commands-list',
+#        actions => DSL::English::DataQueryWorkflows::Actions::R::base.new);
