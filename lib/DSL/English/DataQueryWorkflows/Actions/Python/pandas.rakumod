@@ -368,7 +368,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
 	## Setup code
 	method setup-code-command($/) {
-		make q:to/SETUPEND/
+		make 'SETUPCODE' => q:to/SETUPEND/
         import pandas
         SETUPEND
   }

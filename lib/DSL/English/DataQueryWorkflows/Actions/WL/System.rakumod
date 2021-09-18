@@ -387,7 +387,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     ## Setup code
     method setup-code-command($/) {
-        make q:to/SETUPEND/
+        make 'SETUPCODE' => q:to/SETUPEND/
         Import["https://raw.githubusercontent.com/antononcube/MathematicaForPrediction/master/CrossTabulate.m"];
         Import["https://raw.githubusercontent.com/antononcube/MathematicaForPrediction/master/DataReshape.m"];
         SETUPEND

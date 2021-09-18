@@ -95,15 +95,16 @@ sub has-semicolon (Str $word) {
 }
 
 #-----------------------------------------------------------
-proto ToDataQueryWorkflowCode(Str $command, Str $target = 'tidyverse' ) is export {*}
+proto ToDataQueryWorkflowCode(Str $command, Str $target = 'tidyverse', | ) is export {*}
 
-multi ToDataQueryWorkflowCode ( Str $command, Str $target = 'tidyverse' ) {
+multi ToDataQueryWorkflowCode ( Str $command, Str $target = 'tidyverse', *%args ) {
 
     DSL::Shared::Utilities::CommandProcessing::ToWorkflowCode( $command,
                                                                grammar => DSL::English::DataQueryWorkflows::Grammar,
                                                                :%targetToAction,
                                                                :%targetToSeparator,
-                                                               :$target )
+                                                               :$target,
+                                                               |%args )
 
 }
 

@@ -311,7 +311,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 
 	## Setup code
 	method setup-code-command($/) {
-		make q:to/SETUPEND/
+		make 'SETUPCODE' => q:to/SETUPEND/
         using HTTP, CSV, DataFrames;
         SETUPEND
   }

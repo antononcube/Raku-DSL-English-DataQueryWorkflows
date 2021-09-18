@@ -51,7 +51,10 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 
 	has Str $.name = 'DSL-English-DataQueryWorkflows-R-tidyverse';
 
-    # Top
+	# Separator
+	method separator() { " %>%\n" }
+
+	# Top
     method TOP($/) { make $/.values[0].made; }
 
     # workflow-command-list
@@ -384,7 +387,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 
 	## Setup code
 	method setup-code-command($/) {
-		make q:to/SETUPEND/
+		make 'SETUPCODE' => q:to/SETUPEND/
         library(magrittr)
         library(tidyverse)
         SETUPEND
