@@ -24,6 +24,7 @@ use DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames;
 use DSL::English::DataQueryWorkflows::Actions::Python::pandas;
 use DSL::English::DataQueryWorkflows::Actions::R::base;
 use DSL::English::DataQueryWorkflows::Actions::R::tidyverse;
+use DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers;
 use DSL::English::DataQueryWorkflows::Actions::SQL::Standard;
 use DSL::English::DataQueryWorkflows::Actions::WL::System;
 
@@ -54,6 +55,9 @@ my %targetToAction{Str} =
     "R-tidyverse"       => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
     "R::tidyverse"      => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
     "tidyverse"         => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
+    "Raku"              => DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers,
+    "Raku-Reshapers"    => DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers,
+    "Raku::Reshapers"   => DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers,
     "SQL"               => DSL::English::DataQueryWorkflows::Actions::SQL::Standard,
     "Python-pandas"     => DSL::English::DataQueryWorkflows::Actions::Python::pandas,
     "Python::pandas"    => DSL::English::DataQueryWorkflows::Actions::Python::pandas,
@@ -76,6 +80,9 @@ my Str %targetToSeparator{Str} =
     "R-tidyverse"       => " %>%\n",
     "R::tidyverse"      => " %>%\n",
     "tidyverse"         => " %>%\n",
+    "Raku"              => " ;\n",
+    "Raku-Reshapers"    => " ;\n",
+    "Raku::Reshapers"   => " ;\n",
     "SQL"               => ";\n",
     "Mathematica"       => "\n",
     "Python-pandas"     => "\n",
@@ -159,4 +166,11 @@ proto to_DataQuery_WL(Str $) is export {*}
 
 multi to_DataQuery_WL ( Str $command ) {
     return ToDataQueryWorkflowCode( $command, 'WL-System' );
+}
+
+#-----------------------------------------------------------
+proto to-data-query-raku-code($) is export {*}
+
+multi to-data-query-raku-code ( Str $command ) {
+    return ToDataQueryWorkflowCode( $command, 'Raku::Reshapers' );
 }
