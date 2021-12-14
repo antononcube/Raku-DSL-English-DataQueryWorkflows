@@ -39,7 +39,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
         is DSL::Shared::Actions::Raku::PredicateSpecification
         is DSL::Shared::Actions::English::Raku::PipelineCommand {
 
-    has Str $.name = 'DSL-English-DataQueryWorkflows-Raku-reshapers';
+    has Str $.name = 'DSL-English-DataQueryWorkflows-Raku-Reshapers';
 
     # Top
     method TOP($/) { make $/.values[0].made; }
@@ -68,7 +68,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
 
     # Distinct command
 	method distinct-command($/) { make $/.values[0].made; }
-	method distinct-simple-command($/) { make '$obj = DeleteDuplicates[$obj]'; }
+	method distinct-simple-command($/) { make '$obj = unique($obj)'; }
 
     # Missing treatment command
 	method missing-treatment-command($/) { make $/.values[0].made; }
@@ -93,13 +93,13 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
             make '$obj';
         } else {
             my @pairs = do for @currentNames Z @newNames -> ($c, $n) { $c ~ ' => ' ~ $n };
-            make '$obj = { my %colMapper= ' ~ @pairs.join(', ') ~ '; $obj>>.map({ %colMapper{.key}:exists ?? (%colMapper{.key} => .value) !! $_ })>>.Hash };';
+            make '$obj = select-columns( $obj, [' ~ @pairs.join(', ') ~ '] )';
         }
     }
     method select-columns-by-pairs($/) {
         my @pairs = $/.values[0].made;
-		my $res = do for @pairs -> ( $lhs, $rhsName, $rhs ) { $lhs ~ ' => ' ~ $rhs };
-		make '$obj = { my %colMapper= ' ~ @pairs.join(', ') ~ '; $obj>>.map({ %colMapper{.key}:exists ?? (%colMapper{.key} => .value) !! $_ })>>.Hash };';
+		my @res = do for @pairs -> ( $lhs, $rhsName, $rhs ) { $lhs ~ ' => ' ~ $rhs };
+		make '$obj = select-columns( $obj, [' ~ @res.join(', ') ~ '] )';
     }
 
     # Filter commands
@@ -122,8 +122,8 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
     }
     method mutate-by-pairs($/) {
         my @pairs = $/.values[0].made;
-		my $res = do for @pairs -> ( $lhs, $rhsName, $rhs ) { $lhs ~ ' -> ' ~ $rhs };
-		make '$obj = Map[ Join[ #, <|' ~ $res.join(', ') ~ '|> ]&, $obj]';
+		my $res = do for @pairs -> ( $lhs, $rhsName, $rhs ) { $lhs ~ ' => ' ~ $rhs };
+		make 'note "mutate by pairs is not implemented"';
     }
 
     # Group command
@@ -133,7 +133,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
         %.properties<IsGrouped> = True;
         my @vars = map( { '$_{' ~ $_ ~ '}' }, $/.values[0].made.split(', ') );
         my $vars = @vars.elems == 1 ?? @vars.join(', ') !! '{' ~ @vars.join(', ' ) ~ '}';
-        make '$obj = $obj.classify({' ~ $vars.join('.') ~ '})';
+        make '$obj = group-by( $obj, ' ~ $vars.join('.') ~ ')';
     }
     method group-map-command($/) { make '$obj = $obj.map({ $_.key => ' ~ $/.values[0].made ~ '($_.valye) })'; }
 
@@ -176,14 +176,13 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
             make '$obj';
         } else {
             my @pairs = do for @currentNames Z @newNames -> ($c, $n) { $c ~ ' => ' ~ $n };
-            my $current = @currentNames.join(', ');
-            make '$obj = { my %colMapper= ' ~ @pairs.join(', ') ~ '; $obj>>.map({ %colMapper{.key}:exists ?? (%colMapper{.key} => .value) !! $_ })>>.Hash };';
+            make '$obj = rename-columns( $obj, %(' ~ @pairs.join(', ') ~ ') )';
         }
     }
     method rename-columns-by-pairs($/) {
         my @pairs = $/.values[0].made;
-		my $res = do for @pairs -> ( $lhs, $rhsName, $rhs ) { $lhs ~ ' => ' ~ $rhs };
-        make '$obj = { my %colMapper= ' ~ @pairs.join(', ') ~ '; $obj>>.map({ %colMapper{.key}:exists ?? (%colMapper{.key} => .value) !! $_ })>>.Hash };';
+		my @res = do for @pairs -> ( $lhs, $rhsName, $rhs ) { $lhs ~ ' => ' ~ $rhs };
+        make '$obj = rename-columns( $obj, %(' ~ @res.join(', ') ~ ') )';
     }
 
     # Drop columns command
@@ -199,7 +198,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
         make %.properties<IsGrouped>:exists ?? '$obj = $obj>>.elems' !! '$obj = $obj.elems';
     }
     method echo-count-command($/) {
-        make %.properties<IsGrouped>:exists ?? 'Echo[Map[ Length, $obj], "counts:"]' !! 'Echo[Length[$obj], "counts"]';
+        make %.properties<IsGrouped>:exists ?? 'say "counts: {$obj>>.elems}"' !! 'say "counts {$obj.elems}"';
     }
     method data-summary-command($/) {
         make %.properties<IsGrouped>:exists ?? '$obj.map({ say("summary of {$_.key}"); records-summary($_.value) })' !! 'records-summary($obj)';
@@ -214,17 +213,17 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
     method summarize-command($/) { make $/.values[0].made; }
     method summarize-by-pairs($/) {
         my @pairs = $/.values[0].made;
-		my $res = do for @pairs -> ( $lhs, $rhsName, $rhs ) { $lhs ~ ' -> ' ~ $rhs };
-		make '$obj = Map[ <|' ~ $res.join(', ') ~ '|>&, $obj]';
+		my $res = do for @pairs -> ( $lhs, $rhsName, $rhs ) { $lhs ~ ' => ' ~ $rhs };
+		make '$obj = $obj.map({ %(' ~ $res.join(', ') ~ ') })';
     }
 	method summarize-at-command($/) {
-		my $cols = '{' ~ map( { '"' ~ $_.subst(:g, '"', '') ~ '"' }, $<cols>.made.split(', ') ).join(', ') ~ '}';
-        my $funcs = $<summarize-funcs-spec> ?? $<summarize-funcs-spec>.made !! '{Length, Min, Max, Mean, Median, Total}';
+		my $cols = '(' ~ map( { '"' ~ $_.subst(:g, '"', '') ~ '"' }, $<cols>.made.split(', ') ).join(', ') ~ ')';
+        my $funcs = $<summarize-funcs-spec> ?? $<summarize-funcs-spec>.made !! '(&elems, &min, &max, }';
   
         if %.properties<IsGrouped>:exists {
-            make '$obj = Dataset[$obj][All, Association @ Flatten @ Outer[ToString[#1] <> "_" <> ToString[#2] -> Query[#2, #1] &,' ~ $cols ~ ', '  ~ $funcs ~ ']]';
+            make '$obj = $obj.map({ $_.key => summarize-at($_.value, ' ~ $cols ~ ', ' ~ $funcs ~ ') })'
         } else {
-            make '$obj = Association @ Flatten @ Outer[ToString[#1] <> "_" <> ToString[#2] -> $obj[Query[#2, #1]] &,' ~ $cols ~ ', '  ~ $funcs ~ ']';
+            make '$obj = summarize-at( $obj, ' ~ $cols ~ ', ' ~ $funcs ~ ' )'
         }
     }
 	method summarize-funcs-spec($/) { make '(' ~ $<variable-name-or-wl-expr-list>.made.join(', ') ~ ')'; }
