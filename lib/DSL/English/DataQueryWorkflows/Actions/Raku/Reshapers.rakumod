@@ -73,16 +73,21 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
     # Missing treatment command
 	method missing-treatment-command($/) { make $/.values[0].made; }
 	method drop-incomplete-cases-command($/) { make '$obj = DeleteMissing[$obj, 1, 2]'; }
-	method replace-missing-command($/) { make '$obj = ReplaceAll[ $obj, _Missing -> ' ~ $<replace-missing-rhs>.made ~ ' ]'; }
+	method replace-missing-command($/) {
+        make '$obj = $obj.deepmap({ ( ($_ eqv Any) or $_.isa(Nil) or $_.isa(Whatever) ) ?? ' ~ $<replace-missing-rhs>.made ~ ' !! $_ })'
+    }
     method replace-missing-rhs($/) { make $/.values[0].made; }
 
     # Replace command
-    method replace-command($/) { make '$obj = ReplaceAll[ $obj, ' ~ $<lhs>.made ~ ' -> ' ~ $<rhs>.made ~ ' ]'; }
+    # $obj.deepmap({ $_ ~~ Str ?? $_ !! round($_, 0.01) });
+    method replace-command($/) {
+        make '$obj = $obj.deepmap({ $_ ~~ ' ~ $<lhs>.made ~ ' ?? ' ~ $<rhs>.made ~ ' !! $_ })'
+    }
 
     # Select command
 	method select-command($/) { make $/.values[0].made; }
     method select-columns-simple($/) {
-      make '$obj = $obj.grep({ $_.key (elem) Set([' ~ $/.values[0].made.join(', ') ~ ']) }).list';
+      make '$obj = select-columns($obj, (' ~ $/.values[0].made.join(', ') ~') )';
     }
     method select-columns-by-two-lists($/) {
         my @currentNames = $<current>.made.split(', ');
