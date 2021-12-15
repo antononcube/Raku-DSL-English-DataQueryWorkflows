@@ -136,8 +136,8 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
     method group-by-command($/) {
         my $obj = %.properties<IsGrouped>:exists ?? '$obj.values.reduce( -> $x, $y { [|$x, |$y] } )' !! '$obj';
         %.properties<IsGrouped> = True;
-        my @vars = map( { '$_{' ~ $_ ~ '}' }, $/.values[0].made.split(', ') );
-        my $vars = @vars.elems == 1 ?? @vars.join(', ') !! '{' ~ @vars.join(', ' ) ~ '}';
+        my @vars = $/.values[0].made;
+        my $vars = @vars.elems == 1 ?? @vars.join(', ') !! '(' ~ @vars.join(', ' ) ~ ')';
         make '$obj = group-by( $obj, ' ~ $vars.join('.') ~ ')';
     }
     method group-map-command($/) { make '$obj = $obj.map({ $_.key => ' ~ $/.values[0].made ~ '($_.valye) })'; }
@@ -208,10 +208,10 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
     method data-summary-command($/) {
         make %.properties<IsGrouped>:exists ?? '$obj.map({ say("summary of {$_.key}"); records-summary($_.value) })' !! 'records-summary($obj)';
     }
-    method glimpse-data($/) { make '$obj.head, "glimpse (head):"]'; }
+    method glimpse-data($/) { make 'say "glimpse (head): {$obj.head}"'; }
     method summarize-all-command($/) {
-        # This needs more coding / reviewing. (I.e. it is at MVP0 stage.)
-        make %.properties<IsGrouped>:exists ?? 'say("summarize-all:"); records-summary($obj)' !! 'say("summarize-all:"); records-summary($obj)';
+        # This needs more coding
+        self.data-summary-command($/)
     }
 
     # Summarize command
