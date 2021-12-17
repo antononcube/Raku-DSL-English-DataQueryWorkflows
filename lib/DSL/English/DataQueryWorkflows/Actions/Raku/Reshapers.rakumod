@@ -193,7 +193,11 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
     # Drop columns command
     method drop-columns-command($/) { make $/.values[0].made; }
     method drop-columns-simple($/) {
-        make '$obj = Map[ KeyDrop[ #, {' ~ $<todrop>.made ~ '} ]&, $obj]';
+        if not $<todrop>.made.contains(',') {
+            make '$obj = delete-columns( $obj, ' ~ $<todrop>.made ~ ' )';
+        } else {
+            make '$obj = delete-columns( $obj, (' ~ $<todrop>.made ~ ') )';
+        }
     }
 
     # Statistics command
@@ -203,7 +207,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
         make %.properties<IsGrouped>:exists ?? '$obj = $obj>>.elems' !! '$obj = $obj.elems';
     }
     method echo-count-command($/) {
-        make %.properties<IsGrouped>:exists ?? 'say "counts: {$obj>>.elems}"' !! 'say "counts {$obj.elems}"';
+        make %.properties<IsGrouped>:exists ?? 'say "counts: ", $obj>>.elems' !! 'say "counts : {$obj.elems}"';
     }
     method data-summary-command($/) {
         make %.properties<IsGrouped>:exists ?? '$obj.map({ say("summary of {$_.key}"); records-summary($_.value) })' !! 'records-summary($obj)';
