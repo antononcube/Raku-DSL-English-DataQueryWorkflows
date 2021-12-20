@@ -127,7 +127,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         make '{ data(' ~ $<data-location-spec>.made ~ '); ' ~ $<data-location-spec>.made ~ ' }';
     }
     method data-location-spec($/) {
-        make '\'' ~ $/.Str ~ '\'';
+        make $<regex-pattern-spec> ?? $<regex-pattern-spec>.made !! '\'' ~ $/.Str ~ '\'';
     }
     method use-data-table($/) {
         make $<variable-name>.made;

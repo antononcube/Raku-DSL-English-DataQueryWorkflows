@@ -62,8 +62,10 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     # Load data
     method data-load-command($/) { make $/.values[0].made; }
-    method load-data-table($/) { make 'obj = ExampleData[' ~ $<data-location-spec>.made ~ ']'; }
-    method data-location-spec($/) { make '\'' ~ $/.Str ~ '\''; }
+    method load-data-table($/) { make 'obj = ResourceFunction["ExampleDataset"][' ~ $<data-location-spec>.made ~ ']'; }
+    method data-location-spec($/) {
+        make $<regex-pattern-spec> ?? $<regex-pattern-spec>.made !! '\'' ~ $/.Str ~ '\'';
+    }
     method use-data-table($/) { make 'obj = ' ~ $<variable-name>.made ; }
 
     # Distinct command
