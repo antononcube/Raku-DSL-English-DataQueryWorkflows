@@ -380,9 +380,6 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
 	## Setup code
 	method setup-code-command($/) {
-		make 'SETUPCODE' => q:to/SETUPEND/
-        import pandas
-		import ExampleDatasets
-        SETUPEND
-  }
+		make 'SETUPCODE' => ['import pandas', 'from ExampleDatasets import *'].join("\n");
+    }
 }
