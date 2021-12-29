@@ -150,7 +150,10 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
     # Group command
     method group-command($/) { make $/.values[0].made; }
-	method group-by-command($/) { make 'obj = obj.groupby([' ~ $/.values[0].made ~ '])'; }
+	method group-by-command($/) {
+		%.properties<IsGrouped> = True;
+		make 'obj = obj.groupby([' ~ $/.values[0].made ~ '])';
+	}
 	method group-map-command($/) { make 'obj = obj.transform(' ~ $/.values[0].made ~ ')'; }
 
     # Ungroup command
@@ -194,7 +197,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
     # Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
-	method data-dimensions-command($/) { make 'print(obj.shape)'; }
+	method data-dimensions-command($/) { self.echo-count-command($/) }
 	method count-command($/) {
 		if %.properties<IsGrouped>:exists {
 			make 'obj = obj.size()'
