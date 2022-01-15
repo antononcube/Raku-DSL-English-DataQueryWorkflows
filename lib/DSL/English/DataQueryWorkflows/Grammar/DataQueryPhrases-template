@@ -1,21 +1,15 @@
-use v6;
-
-use DSL::Shared::Roles::English::PipelineCommand;
 use DSL::Shared::Utilities::FuzzyMatching;
 
 # Data query specific phrases
-role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
-        does DSL::Shared::Roles::English::PipelineCommand {
+role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     # Tokens
     token arrange-verb { 'arrange' }
     token ascending-adjective { 'ascending' }
     token association-noun { 'association' }
     token broad-adjective { 'broad' }
-    token cases-noun { 'cases' }
     token cast-verb { 'cast' }
     token character-noun { 'character' }
     token combine-verb { 'combine' }
-    token complete-adjective { 'complete' }
     token cross-verb { 'cross' }
     token descending-adjective { 'descending' }
     token dictionary-noun { 'dictionary' }
@@ -23,7 +17,6 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token divider-noun { 'divider' }
     token duplicate-adjective { 'duplicate' }
     token duplicates-noun { 'duplicates' }
-    token filter-verb { 'filter' }
     token form-noun { 'form' }
     token format-noun { 'format' }
     token formula-noun { 'formula' }
@@ -64,8 +57,6 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token wide-adjective { 'wide' }
     token wider-adjective { 'wider' }
 
-    rule for-which-phrase { <for-preposition> <which-determiner> | <that-pronoun> <adhere-verb> <to-preposition> }
-    rule complete-cases-phrase { <complete-adjective> <cases-noun> }
     rule contingency-matrix-phrase { <contingency-noun> [ <matrix-noun> | <table-noun> ] }
     rule cross-tabulate-phrase { <cross-verb> <tabulate-verb> }
     rule keep-only-phrase { <keep-verb> <only-adverb>? }

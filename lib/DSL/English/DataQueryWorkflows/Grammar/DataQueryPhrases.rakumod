@@ -1,21 +1,15 @@
-use v6;
-
-use DSL::Shared::Roles::English::PipelineCommand;
 use DSL::Shared::Utilities::FuzzyMatching;
 
 # Data query specific phrases
-role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
-        does DSL::Shared::Roles::English::PipelineCommand {
+role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     # Tokens
     token arrange-verb { 'arrange' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'arrange') }> }
     token ascending-adjective { 'ascending' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'ascending') }> }
     token association-noun { 'association' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'association') }> }
     token broad-adjective { 'broad' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'broad') }> }
-    token cases-noun { 'cases' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cases') }> }
     token cast-verb { 'cast' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cast') }> }
     token character-noun { 'character' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'character') }> }
     token combine-verb { 'combine' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'combine') }> }
-    token complete-adjective { 'complete' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'complete') }> }
     token cross-verb { 'cross' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'cross') }> }
     token descending-adjective { 'descending' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'descending') }> }
     token dictionary-noun { 'dictionary' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'dictionary') }> }
@@ -23,7 +17,6 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token divider-noun { 'divider' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'divider') }> }
     token duplicate-adjective { 'duplicate' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'duplicate') }> }
     token duplicates-noun { 'duplicates' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'duplicates') }> }
-    token filter-verb { 'filter' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'filter') }> }
     token form-noun { 'form' | ([\w]+) <?{ $0.Str ne 'format' and is-fuzzy-match( $0.Str, 'form') }> }
     token format-noun { 'format' | ([\w]+) <?{ $0.Str ne 'form' and is-fuzzy-match( $0.Str, 'format') }> }
     token formula-noun { 'formula' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'formula') }> }
@@ -64,8 +57,6 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
     token wide-adjective { 'wide' | ([\w]+) <?{ $0.Str ne 'wider' and is-fuzzy-match( $0.Str, 'wide') }> }
     token wider-adjective { 'wider' | ([\w]+) <?{ $0.Str ne 'wide' and is-fuzzy-match( $0.Str, 'wider') }> }
 
-    rule for-which-phrase { <for-preposition> <which-determiner> | <that-pronoun> <adhere-verb> <to-preposition> }
-    rule complete-cases-phrase { <complete-adjective> <cases-noun> }
     rule contingency-matrix-phrase { <contingency-noun> [ <matrix-noun> | <table-noun> ] }
     rule cross-tabulate-phrase { <cross-verb> <tabulate-verb> }
     rule keep-only-phrase { <keep-verb> <only-adverb>? }
