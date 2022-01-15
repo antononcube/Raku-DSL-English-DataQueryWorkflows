@@ -40,7 +40,8 @@ use DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases;
 grammar DSL::English::DataQueryWorkflows::Grammar
         does DSL::Shared::Roles::ErrorHandling
         does DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
-        does DSL::Shared::Roles::PredicateSpecification {
+        does DSL::Shared::Roles::PredicateSpecification
+        does DSL::Shared::Roles::English::PipelineCommand {
 
     # TOP
     rule TOP { <workflow-command> }
