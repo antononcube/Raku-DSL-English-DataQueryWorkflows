@@ -31,13 +31,13 @@
 use v6;
 use DSL::English::DataQueryWorkflows::Grammar;
 use DSL::Shared::Actions::Raku::PredicateSpecification;
-use DSL::Shared::Actions::English::Raku::PipelineCommand;
+use DSL::Shared::Actions::English::Raku::ListManagementCommand;
 
 unit module DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers;
 
 class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
         is DSL::Shared::Actions::Raku::PredicateSpecification
-        is DSL::Shared::Actions::English::Raku::PipelineCommand {
+        is DSL::Shared::Actions::English::Raku::ListManagementCommand {
 
     has Str $.name = 'DSL-English-DataQueryWorkflows-Raku-Reshapers';
 
