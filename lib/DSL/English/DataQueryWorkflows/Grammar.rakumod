@@ -31,15 +31,17 @@
 use v6;
 
 use DSL::Shared::Roles::English::CommonParts;
+use DSL::Shared::Roles::English::ListManagementCommand;
 use DSL::Shared::Roles::English::PipelineCommand;
-use DSL::Shared::Roles::PredicateSpecification;
 use DSL::Shared::Roles::ErrorHandling;
+use DSL::Shared::Roles::PredicateSpecification;
 
 use DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases;
 
 grammar DSL::English::DataQueryWorkflows::Grammar
         does DSL::Shared::Roles::ErrorHandling
         does DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
+        does DSL::Shared::Roles::English::ListManagementCommand
         does DSL::Shared::Roles::PredicateSpecification
         does DSL::Shared::Roles::English::PipelineCommand {
 
@@ -52,6 +54,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     # Workflow command
     rule workflow-command {
         <pipeline-command> |
+        <list-management-command> |
         <data-load-command> |
         <distinct-command> |
         <missing-treatment-command> |
