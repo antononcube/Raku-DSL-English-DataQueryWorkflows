@@ -138,11 +138,14 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
     method group-by-command($/) {
         my $obj = %.properties<IsGrouped>:exists ?? '$obj.values.reduce( -> $x, $y { [|$x, |$y] } )' !! '$obj';
         %.properties<IsGrouped> = True;
-        my @vars = $/.values[0].made;
-        my $vars = @vars.elems == 1 ?? @vars.join(', ') !! '(' ~ @vars.join(', ' ) ~ ')';
+        # This cannot be used since the @vars <column-specs-list> applies .join(',')
+        # my @vars = $/.values[0].made;
+        # my $vars = @vars.elems == 1 ?? @vars.join(', ') !! '(' ~ @vars.join(', ') ~ ')';
+        my $vars = $/.values[0].made;
+        $vars = $vars.contains(',') ?? '(' ~ $vars.join(', ') ~ ')' !! $vars;
         make '$obj = group-by( $obj, ' ~ $vars.join('.') ~ ')';
     }
-    method group-map-command($/) { make '$obj = $obj.map({ $_.key => ' ~ $/.values[0].made ~ '($_.valye) })'; }
+    method group-map-command($/) { make '$obj = $obj.map({ $_.key => ' ~ $/.values[0].made ~ '($_.value) })'; }
 
     # Ungroup command
     method ungroup-command($/) { make $/.values[0].made; }
