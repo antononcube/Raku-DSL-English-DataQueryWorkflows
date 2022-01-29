@@ -67,8 +67,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
         <ungroup-command> |
         <arrange-command> |
         <drop-columns-command> |
-        <statistics-command> |
-        <summarize-command> |
+        [ <statistics-command> || <summarize-command> ] |
         <join-command> |
         <reshape-command> |
         <separate-column-command> |
