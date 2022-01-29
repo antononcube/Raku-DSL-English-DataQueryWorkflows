@@ -232,7 +232,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
     }
 	method summarize-at-command($/) {
 		my $cols = '(' ~ map( { '"' ~ $_.subst(:g, '"', '') ~ '"' }, $<cols>.made.split(', ') ).join(', ') ~ ')';
-        my $funcs = $<summarize-funcs-spec> ?? $<summarize-funcs-spec>.made !! '(&elems, &min, &max, }';
+        my $funcs = $<summarize-funcs-spec> ?? $<summarize-funcs-spec>.made !! '(&elems, &min, &max)';
   
         if %.properties<IsGrouped>:exists {
             make '$obj = $obj.map({ $_.key => summarize-at($_.value, ' ~ $cols ~ ', ' ~ $funcs ~ ') })'
