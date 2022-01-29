@@ -110,7 +110,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
     }
 
     # Filter commands
-    method filter-command($/) { make '$obj = $obj.grep({ ' ~ $<filter-spec>.made ~ ' })'; }
+    method filter-command($/) { make '$obj = $obj.grep({ ' ~ $<filter-spec>.made ~ ' }).Array'; }
     method filter-spec($/) { make $<predicates-list>.made; }
 
     # Mutate command
