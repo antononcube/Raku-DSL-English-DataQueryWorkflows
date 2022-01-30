@@ -191,7 +191,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
     }
     method rename-columns-by-pairs($/) {
         my @pairs = $/.values[0].made;
-		my @res = do for @pairs -> ( $lhs, $rhsName, $rhs ) { $lhs ~ ' => ' ~ $rhs };
+		my @res = do for @pairs -> ( $lhs, $rhsName, $rhs ) { $rhsName ~ ' => ' ~ $lhs };
         make '$obj = rename-columns( $obj, %(' ~ @res.join(', ') ~ ') )';
     }
 
@@ -373,7 +373,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
     method assign-pair-rhs($/) {
         if $<mixed-quoted-variable-name> {
             my $v = '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"';
-            make ( $v, '#[' ~ $v ~ ']' )
+            make ( $v, '$_{' ~ $v ~ '}' )
         } else {
             make ( $/.values[0].made, $/.values[0].made )
         }
