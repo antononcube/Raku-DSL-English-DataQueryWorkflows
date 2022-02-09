@@ -46,6 +46,8 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token select-verb { 'select' }
     token semi-adjective { 'semi' }
     token separator-noun { 'separator' }
+    token skim-verb { 'skim' }
+    token skimming-noun { 'skimming' }
     token sort-verb { 'sort' }
     token splitter-noun { 'splitter' }
     token splitting-noun { 'splitting' }

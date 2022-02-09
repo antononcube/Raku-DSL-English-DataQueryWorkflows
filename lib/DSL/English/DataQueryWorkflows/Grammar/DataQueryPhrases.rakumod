@@ -46,6 +46,8 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token select-verb { 'select' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'select') }> }
     token semi-adjective { 'semi' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'semi') }> }
     token separator-noun { 'separator' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'separator') }> }
+    token skim-verb { 'skim' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'skim', 1) }>}
+    token skimming-verb { 'skimming' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'skimming') }>}
     token sort-verb { 'sort' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'sort') }> }
     token splitter-noun { 'splitter' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'splitter') }> }
     token splitting-noun { 'splitting' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'splitting') }> }
