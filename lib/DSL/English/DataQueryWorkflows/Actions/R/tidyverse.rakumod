@@ -38,16 +38,13 @@
 #==============================================================================
 =end comment
 
-use v6;
 use DSL::English::DataQueryWorkflows::Grammar;
 use DSL::Shared::Actions::R::PredicateSpecification;
-use DSL::Shared::Actions::English::R::PipelineCommand;
-
-unit module DSL::English::DataQueryWorkflows::Actions::R::tidyverse;
+use DSL::English::DataQueryWorkflows::Actions::R::ListManagementCommand-tidyverse;
 
 class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         is DSL::Shared::Actions::R::PredicateSpecification
-        is DSL::Shared::Actions::English::R::PipelineCommand {
+        is DSL::English::DataQueryWorkflows::Actions::R::ListManagementCommand-tidyverse {
 
     has Str $.name = 'DSL-English-DataQueryWorkflows-R-tidyverse';
 
@@ -230,7 +227,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         make $/.values[0].made;
     }
     method ungroup-simple-command($/) {
-        make 'ungroup() %>% as.data.frame(stringsAsFactors=FALSE)';
+        make 'dplyr::ungroup() %>% as.data.frame(stringsAsFactors=FALSE)';
     }
 
     # Arrange command
@@ -308,7 +305,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         make $/.values[0].made;
     }
     method summarize-by-pairs($/) {
-        make 'dplyr::summarize(' ~ $/.values[0].made ~ ')';
+        make 'dplyr::summarize(' ~ $/.values[0].made ~ ', .groups = "drop_last")';
     }
     method summarize-all-command($/) {
         if $<summarize-funcs-spec> {
@@ -582,6 +579,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         make 'SETUPCODE' => q:to/SETUPEND/
         library(magrittr)
         library(tidyverse)
+        library(skimr)
         SETUPEND
 
 
