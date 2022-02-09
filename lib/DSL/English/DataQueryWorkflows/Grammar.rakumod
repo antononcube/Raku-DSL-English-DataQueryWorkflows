@@ -154,11 +154,12 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule drop-columns-simple { <.delete-directive> <.the-determiner>? [ <.data-column-phrase> | <.data-columns-phrase> ]? <todrop=.column-specs-list> }
 
     # Statistics command
-    rule statistics-command { <data-dimensions-command> | <echo-count-command> | <count-command> | <glimpse-data> | <data-summary-command> }
+    rule statistics-command { <data-dimensions-command> | <echo-count-command> | <count-command> | <glimpse-data> | <skim-data> | <data-summary-command> }
     rule data-dimensions-command { [ <.display-directive> <.the-determiner>? <.data-noun>? | <.data-noun> ] [ <dimensions-noun> | <shape-noun> ] }
     rule count-command { <compute-directive> <.the-determiner>? [ <count-verb> | <counts-noun> ] | <count-verb> | <counts-noun> }
     rule echo-count-command { <compute-and-display> <.the-determiner>? [ <count-verb> | <counts-noun> ] | <display-directive> [ <count-verb> | <counts-noun> ] }
     rule glimpse-data { <.display-directive>? <.a-determiner>? <.glimpse-verb> <.at-preposition>? <.the-determiner>? <.data-noun>? }
+    rule skim-data    { [ <.display-directive>? <.a-determiner>? <.skimming-noun> <.of-preposition>? | <.skim-verb> ] <.the-determiner>? <.data-noun>? }
     rule data-summary-command {
         <display-directive>? <the-determiner>? <data-noun>? <summary>|
         [ <summarize-verb> | <summarise-verb> ] <the-determiner>? <data-noun>? }
