@@ -67,7 +67,8 @@ grammar DSL::English::DataQueryWorkflows::Grammar
         <ungroup-command> |
         <arrange-command> |
         <drop-columns-command> |
-        [ <statistics-command> || <summarize-command> ] |
+        <summarize-command> |
+        <statistics-command> |
         <join-command> |
         <reshape-command> |
         <separate-column-command> |
@@ -158,14 +159,17 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule count-command { <compute-directive> <.the-determiner>? [ <count-verb> | <counts-noun> ] | <count-verb> | <counts-noun> }
     rule echo-count-command { <compute-and-display> <.the-determiner>? [ <count-verb> | <counts-noun> ] | <display-directive> [ <count-verb> | <counts-noun> ] }
     rule glimpse-data { <.display-directive>? <.a-determiner>? <.glimpse-verb> <.at-preposition>? <.the-determiner>? <.data-noun>? }
-    rule data-summary-command { <.display-directive>? [ <.summarize-verb> | <.summarise-verb> | <.summary> ] <.the-determiner>? <.data-noun>? | <.display-directive>? <.data-noun>? <.summary> }
+    rule data-summary-command {
+        <display-directive>? <the-determiner>? <data-noun>? <summary>|
+        [ <summarize-verb> | <summarise-verb> ] <the-determiner>? <data-noun>? }
 
     # Summarize command
     rule summarize-command { <summarize-by-pairs> | <summarize-all-command> | <summarize-at-command> }
     rule summarize-by-pairs { [ <.summarize-verb> | <.summarise-verb> ] [ <.by-preposition> | <.using-preposition> ] [ <as-pairs-list> | <assign-pairs-list> ] }
-    rule summarize-all-command { [ <.summarize-verb> | <.summarise-verb> ] <.them-pronoun>? <.all-determiner>? <.data>? [ <.with-preposition> <.functions>? <summarize-funcs-spec> ] }
+    rule summarize-all-command { [ <.summarize-verb> | <.summarise-verb> ] <.all-data-phrase>? [ <.with-preposition> <.functions>? <summarize-funcs-spec> ] }
     rule summarize-at-command { [ <.summarize-verb> | <.summarise-verb> ] [ <.the-determiner>? [ <.data-columns-phrase> | <.data-column-phrase> ] | <.at-preposition> ]? <cols=.mixed-quoted-variable-names-list> [ <.with-preposition> <.the-determiner>? <.functions>? <summarize-funcs-spec> ]? }
     rule summarize-funcs-spec { <variable-name-or-wl-expr-list> }
+    rule all-data-phrase { <them-pronoun>? <all-determiner> | <all-determiner>? <data> <columns-noun>? | <all-determiner> <of-preposition> <them-pronoun> }
 
     # Join command
     rule join-command { <inner-join-spec> | <left-join-spec> | <right-join-spec> | <semi-join-spec> | <full-join-spec> }
