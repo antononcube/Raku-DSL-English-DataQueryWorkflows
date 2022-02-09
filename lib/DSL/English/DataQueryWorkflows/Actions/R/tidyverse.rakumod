@@ -299,6 +299,9 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
     method glimpse-data($/) {
         make 'dplyr::glimpse()';
     }
+    method skim-data($/) {
+        make 'skimr::skim()';
+    }
 
     # Summarize command
     method summarize-command($/) {
