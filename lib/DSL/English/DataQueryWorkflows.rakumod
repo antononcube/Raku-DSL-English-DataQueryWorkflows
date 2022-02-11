@@ -34,66 +34,50 @@ use DSL::English::DataQueryWorkflows::Actions::Spanish::Standard;
 
 #-----------------------------------------------------------
 
-#my %targetToAction := {
-#    'tidyverse'         => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
-#    "R-tidyverse"       => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
-#    "R"             => DSL::English::DataQueryWorkflows::Actions::R::base,
-#    "R-base"        => DSL::English::DataQueryWorkflows::Actions::R::base,
-#    "pandas"        => DSL::English::DataQueryWorkflows::Actions::Python::pandas,
-#    "Python-pandas" => DSL::English::DataQueryWorkflows::Actions::Python::pandas,
-#    "WL"            => DSL::English::DataQueryWorkflows::Actions::WL::Dataset,
-#    "WL-SQL"        => DSL::English::DataQueryWorkflows::Actions::WL::SQL
-#};
-
 my %targetToAction{Str} =
+    "Bulgarian"         => DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard,
     "Julia"             => DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames,
     "Julia-DataFrames"  => DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames,
-    "Julia::DataFrames" => DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames,
+    "Korean"            => DSL::English::DataQueryWorkflows::Actions::Korean::Standard,
+    "Mathematica"       => DSL::English::DataQueryWorkflows::Actions::WL::System,
+    "Python-pandas"     => DSL::English::DataQueryWorkflows::Actions::Python::pandas,
     "R"                 => DSL::English::DataQueryWorkflows::Actions::R::base,
     "R-base"            => DSL::English::DataQueryWorkflows::Actions::R::base,
-    "R::base"           => DSL::English::DataQueryWorkflows::Actions::R::base,
     "R-tidyverse"       => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
-    "R::tidyverse"      => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
-    "tidyverse"         => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
     "Raku"              => DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers,
     "Raku-Reshapers"    => DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers,
-    "Raku::Reshapers"   => DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers,
     "SQL"               => DSL::English::DataQueryWorkflows::Actions::SQL::Standard,
-    "Python-pandas"     => DSL::English::DataQueryWorkflows::Actions::Python::pandas,
-    "Python::pandas"    => DSL::English::DataQueryWorkflows::Actions::Python::pandas,
-    "pandas"            => DSL::English::DataQueryWorkflows::Actions::Python::pandas,
-    "Mathematica"       => DSL::English::DataQueryWorkflows::Actions::WL::System,
+    "Spanish"           => DSL::English::DataQueryWorkflows::Actions::Spanish::Standard,
     "WL"                => DSL::English::DataQueryWorkflows::Actions::WL::System,
     "WL-System"         => DSL::English::DataQueryWorkflows::Actions::WL::System,
-    "WL::System"        => DSL::English::DataQueryWorkflows::Actions::WL::System,
-    "Bulgarian"         => DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard,
-    "Korean"            => DSL::English::DataQueryWorkflows::Actions::Korean::Standard,
-    "Spanish"           => DSL::English::DataQueryWorkflows::Actions::Spanish::Standard;
+    "pandas"            => DSL::English::DataQueryWorkflows::Actions::Python::pandas,
+    "tidyverse"         => DSL::English::DataQueryWorkflows::Actions::R::tidyverse;
+
+my %targetToAction2{Str} = %targetToAction.grep({ $_.key.contains('-') }).map({ $_.key.subst('-', '::') => $_.value }).Hash;
+%targetToAction = |%targetToAction , |%targetToAction2;
+
 
 my Str %targetToSeparator{Str} =
+    "Bulgarian"         => "\n",
     "Julia"             => "\n",
     "Julia-DataFrames"  => "\n",
-    "Julia::DataFrames" => "\n",
-    "R"                 => " ;\n",
-    "R-base"            => " ;\n",
-    "R::base"           => " ;\n",
-    "R-tidyverse"       => " %>%\n",
-    "R::tidyverse"      => " %>%\n",
-    "tidyverse"         => " %>%\n",
-    "Raku"              => " ;\n",
-    "Raku-Reshapers"    => " ;\n",
-    "Raku::Reshapers"   => " ;\n",
-    "SQL"               => ";\n",
+    "Korean"            => "\n",
     "Mathematica"       => "\n",
     "Python-pandas"     => "\n",
-    "Python::pandas"    => "\n",
-    "pandas"            => ".\n",
+    "R"                 => " ;\n",
+    "R-base"            => " ;\n",
+    "R-tidyverse"       => " %>%\n",
+    "Raku"              => " ;\n",
+    "Raku-Reshapers"    => " ;\n",
+    "SQL"               => ";\n",
+    "Spanish"           => "\n",
     "WL"                => ";\n",
     "WL-System"         => ";\n",
-    "WL::System"        => ";\n",
-    "Bulgarian"         => "\n",
-    "Korean"            => "\n",
-    "Spanish"           => "\n";
+    "pandas"            => ".\n",
+    "tidyverse"         => " %>%\n";
+
+my Str %targetToSeparator2{Str} = %targetToSeparator.grep({ $_.key.contains('-') }).map({ $_.key.subst('-', '::') => $_.value }).Hash;
+%targetToSeparator = |%targetToSeparator , |%targetToSeparator2;
 
 
 #-----------------------------------------------------------
