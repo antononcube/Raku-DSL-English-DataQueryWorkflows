@@ -3,7 +3,7 @@ use lib 'lib';
 use DSL::English::DataQueryWorkflows::Grammar;
 use Test;
 
-plan 9;
+plan 12;
 
 # Shortcut
 my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
@@ -14,6 +14,15 @@ my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
 
 ok $pCOMMAND.parse('inner join with dfStarwarsVehicles'),
         'inner join with dfStarwarsVehicles';
+
+ok $pCOMMAND.parse('merge with dfStarwarsVehicles'),
+        'merge with dfStarwarsVehicles';
+
+ok $pCOMMAND.parse('inner merge with dfStarwarsVehicles'),
+        'inner merge with dfStarwarsVehicles';
+
+ok $pCOMMAND.parse('left merge with dfStarwarsVehicles'),
+        'left merge with dfStarwarsVehicles';
 
 ok $pCOMMAND.parse('inner join with dfStarwarsVehicles on "name"'),
         'inner join with dfStarwarsVehicles on "name"';
