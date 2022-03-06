@@ -30,6 +30,7 @@ use DSL::English::DataQueryWorkflows::Actions::WL::System;
 
 use DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard;
 use DSL::English::DataQueryWorkflows::Actions::Korean::Standard;
+use DSL::English::DataQueryWorkflows::Actions::Russian::Standard;
 use DSL::English::DataQueryWorkflows::Actions::Spanish::Standard;
 
 #-----------------------------------------------------------
@@ -46,6 +47,7 @@ my %targetToAction{Str} =
     "R-tidyverse"       => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
     "Raku"              => DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers,
     "Raku-Reshapers"    => DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers,
+    "Russian"           => DSL::English::DataQueryWorkflows::Actions::Russian::Standard,
     "SQL"               => DSL::English::DataQueryWorkflows::Actions::SQL::Standard,
     "Spanish"           => DSL::English::DataQueryWorkflows::Actions::Spanish::Standard,
     "WL"                => DSL::English::DataQueryWorkflows::Actions::WL::System,
@@ -69,6 +71,7 @@ my Str %targetToSeparator{Str} =
     "R-tidyverse"       => " %>%\n",
     "Raku"              => " ;\n",
     "Raku-Reshapers"    => " ;\n",
+    "Russian"           => "\n",
     "SQL"               => ";\n",
     "Spanish"           => "\n",
     "WL"                => ";\n",
@@ -99,7 +102,7 @@ multi ToDataQueryWorkflowCode ( Str $command, Str $target = 'tidyverse', *%args 
 
 }
 
-multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str $target where $target eq 'SQL' ) {
+multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str $target where $_ eq 'SQL', *%args ) {
 
     my $specTarget = get-dsl-spec( $command, 'target');
 
@@ -109,15 +112,20 @@ multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str 
 
     # Note that this is global, class variable.
     # It is put to {} here in order to able track group-by statements in WL-System and R-base.
-    %targetToAction{$target}.properties = {};
+    my $actionsObj =  %targetToAction{$target}.new;
+    $actionsObj.properties = {};
 
     my @commandLines = $command.trim.split(/ ';' \s* /);
 
     @commandLines = grep { $_.Str.chars > 0 }, @commandLines;
 
-    my @cmdLines = map { ToDataQueryWorkflowCode($_, $specTarget) }, @commandLines;
+    #my @cmdLines = map { ToDataQueryWorkflowCode($_, $specTarget) }, @commandLines;
+    my @cmdLines = map { ToWorkflowCode($_, grammar => DSL::English::DataQueryWorkflows::Grammar, actions => $actionsObj, separator => %targetToSeparator{$specTarget}, format => 'hash') }, @commandLines;
+    @cmdLines = @cmdLines.map({ $_.first({ $_.key !eq 'CODE' }) });
 
     #@cmdLines = grep { $_.^name eq 'Str' }, @cmdLines;
+
+    say @cmdLines.raku;
 
     my %sqlLines = @cmdLines;
 
