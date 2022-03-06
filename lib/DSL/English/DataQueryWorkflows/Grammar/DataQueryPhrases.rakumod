@@ -32,6 +32,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token map-verb { 'map' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'map') }> }
     token mapping-noun { 'mapping' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'mapping') }> }
     token melt-verb { 'melt' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'melt') }> }
+    token merge-verb { 'merge' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'merge') }> }
     token mutate-verb { 'mutate' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'mutate') }> }
     token narrow-adjective { 'narrow' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'narrow') }> }
     token omit-directive { 'omit' | 'exclude' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'exclude') }> }
@@ -79,6 +80,8 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule group-by { <group-verb> [ <by-preposition> | <using-preposition> ] }
     rule group-map { <group-verb> [ <mapping-noun> | <map-verb> ] | <apply-verb> <per-preposition> <group-verb> }
     rule id-columns-phrase { [ <id-noun> | <identifier-noun> ] <columns> }
+    rule join-phrase { <join-noun> | <merge-verb>  }
+    rule longer-phrase { <longer-adjective> | <long-adjective> | <narrow-adjective> }
     rule pivot-columns-phrase    { [ <pivot-verb> | <variable-noun> ]? <the-determiner>? <columns> }
     rule pivot-id-columns-phrase { [ <pivot-verb> | <variable-noun> ]? <the-determiner>? <id-columns-phrase> }
     rule rename-directive { <rename-verb> }
@@ -87,13 +90,12 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule select { <select-verb> | <take-verb> | <keep-only-phrase> }
     rule separator-phrase { <separator-noun> | <divider-noun> | <splitter-noun> | <splitting-noun> }
     rule string-column-phrase { [ <string-noun> | <character-noun> | <text-noun> ] <column-noun> }
-    rule longer-phrase { <longer-adjective> | <long-adjective> | <narrow-adjective> }
-    rule wider-phrase  { <wider-adjective>  | <wide-adjective> | <broad-adjective> }
     rule to-long-form-phrase { <pivot-verb> <to-preposition>? <longer-phrase> <format-phrase>? | <to-preposition> <longer-phrase> <format-phrase> | <melt-verb>  }
     rule to-wide-form-phrase { <pivot-verb> <to-preposition>? <wider-phrase>  <format-phrase>? | <to-preposition> <wider-phrase>  <format-phrase> | <cast-verb>  }
     rule value-column-name-phrase { <value-column-phrase> <name-noun> }
     rule value-column-phrase { <value-noun> <column-noun>? }
     rule variable-column-name-phrase { <variable-column-phrase> <name-noun> }
     rule variable-column-phrase { <variable-noun> <column-noun>? }
+    rule wider-phrase  { <wider-adjective>  | <wide-adjective> | <broad-adjective> }
 }
 
