@@ -309,7 +309,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
     # Pivot longer command
     method pivot-longer-command($/) {
 		if $<pivot-longer-arguments-list> {
-			make 'obj = pandas.melt( dfTitanic, ' ~ $<pivot-longer-arguments-list>.made ~ ' )';
+			make 'obj = pandas.melt( obj, ' ~ $<pivot-longer-arguments-list>.made ~ ' )';
 		} else {
 			make 'obj = pandas.melt( obj, id_vars = obj.columns[0], var_name = "Variable", value_name = "Value" )';
 		}
