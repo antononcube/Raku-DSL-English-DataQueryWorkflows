@@ -18,7 +18,7 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #   Written by Anton Antonov,
-#   antononcube <##at##> posteo <##dot##> net
+#   ʇǝu˙oǝʇsod@ǝqnɔuouoʇuɐ,
 #   Windermere, Florida, USA.
 #
 #==============================================================================
@@ -330,24 +330,24 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
     method pivot-longer-argument($/) { make $/.values[0].made; }
 
-    method pivot-longer-id-columns-spec($/) { make '"IdentifierColumns" -> (' ~ $/.values[0].made ~ ')'; }
+    method pivot-longer-id-columns-spec($/) { make 'identifierColumns => (' ~ $/.values[0].made ~ ')'; }
 
-    method pivot-longer-columns-spec($/)    { make '"VariableColumns" -> (' ~ $/.values[0].made ~ ')'; }
+    method pivot-longer-columns-spec($/)    { make 'variableColumns => (' ~ $/.values[0].made ~ ')'; }
 
-    method pivot-longer-variable-column-name-spec($/) { make '"VariablesTo" -> ' ~ $/.values[0].made; }
+    method pivot-longer-variable-column-name-spec($/) { make 'variablesTo => ' ~ $/.values[0].made; }
 
-    method pivot-longer-value-column-name-spec($/) { make '"ValuesTo" -> ' ~ $/.values[0].made; }
+    method pivot-longer-value-column-name-spec($/) { make 'valuesTo => ' ~ $/.values[0].made; }
 
     # Pivot wider command
     method pivot-wider-command($/) { make '$obj = to-wide-format( $obj, ' ~ $<pivot-wider-arguments-list>.made ~ ' )'; }
     method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
     method pivot-wider-argument($/) { make $/.values[0].made; }
 
-    method pivot-wider-id-columns-spec($/) { make ' "IdentifierColumns" -> (' ~ $/.values[0].made ~ ')'; }
+    method pivot-wider-id-columns-spec($/) { make 'identifierColumn => ' ~ $/.values[0].made; }
 
-    method pivot-wider-variable-column-spec($/) { make '"VariablesFrom" -> ' ~ $/.values[0].made; }
+    method pivot-wider-variable-column-spec($/) { make 'variablesFrom => ' ~ $/.values[0].made; }
 
-    method pivot-wider-value-column-spec($/) { make '"ValuesFrom" -> ' ~ $/.values[0].made; }
+    method pivot-wider-value-column-spec($/) { make 'valuesFrom => ' ~ $/.values[0].made; }
 
     # Separate string column command
 	method separate-column-command($/) {
