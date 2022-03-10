@@ -145,7 +145,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 		my $res = $/.values[0].made;
 		@newCols = grep( { $_.chars > 0 }, @newCols[2..*-1] );
 		@newCols = @newCols[0,2...*];
-		make $res ~ "\n" ~ 'obj = obj[[' ~ map( { '"' ~ $_.trim ~ '"' }, @newCols ).join(', ') ~ ']]';
+		make $res;
 	}
 
     # Group command
