@@ -2,14 +2,14 @@
 
 =head1 DSL::English::DataQueryWorkflows
 
-C<DSL::English::DataQueryWorkflows> package has grammar and action classes for the parsing and
-interpretation of natural language commands that specify data queries in the style of
+C<DSL::English::DataQueryWorkflows> package has grammar and action classes for the parsing
+and interpretation of natural language commands that specify data queries in the style of
 Standard Query Language (SQL) or RStudio's library tidyverse.
 
 =head1 Synopsis
 
     use DSL::English::DataQueryWorkflows;
-    my $rcode = to_dplyr("select height & mass; arrange by height descending");
+    my $rcode = ToDataQueryWorkflowCode("select height & mass; arrange by height descending");
 
 =end pod
 
