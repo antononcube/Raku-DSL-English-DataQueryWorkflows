@@ -39,7 +39,6 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token order-verb { 'order' }
     token pivot-verb { 'pivot' }
     token rename-verb { 'rename' }
-    token replace-verb { 'replace' }
     token right-adjective { 'right' }
     token safe-adjective { 'safe' }
     token safely-adverb { 'safely' }
@@ -73,7 +72,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule arrange-by-phrase { <arrange-directive> [ <by-preposition> | <using-preposition> | <with-preposition> ] }
     rule arrange-directive { <arrange-verb> | <order-verb> | <sort-verb> }
     rule data-phrase { <.the-determiner>? <data> }
-    rule filter { <filter-verb> | <select-verb> }
+    rule filter-phrase { <filter-verb> | <select-verb> }
     rule format-phrase { <form-noun> | <format-noun> }
     rule group-by { <group-verb> [ <by-preposition> | <using-preposition> ] }
     rule group-map { <group-verb> [ <mapping-noun> | <map-verb> ] | <apply-verb> <per-preposition> <group-verb> }

@@ -40,7 +40,6 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token order-verb { 'order' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'order') }> }
     token pivot-verb { 'pivot' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'pivot') }> }
     token rename-verb { 'rename' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'rename') }> }
-    token replace-verb { 'replace' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'replace') }> }
     token right-adjective { 'right' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'right') }> }
     token safe-adjective { 'safe' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'safe') }> }
     token safely-adverb { 'safely' | ([\w]+) <?{ is-fuzzy-match( $0.Str, 'safely') }> }
@@ -75,7 +74,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule arrange-directive { <arrange-verb> | <order-verb> | <sort-verb> }
     rule data-phrase { <.the-determiner>? <data> }
     rule dictionary-phrase { <.association-noun> | <.dictionary-noun> | <.mapping-noun> }
-    rule filter { <filter-verb> | <select-verb> }
+    rule filter-phrase { <filter-verb> | <select-verb> }
     rule format-phrase { <form-noun> | <format-noun> }
     rule group-by { <group-verb> [ <by-preposition> | <using-preposition> ] }
     rule group-map { <group-verb> [ <mapping-noun> | <map-verb> ] | <apply-verb> <per-preposition> <group-verb> }

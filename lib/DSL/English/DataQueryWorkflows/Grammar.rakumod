@@ -118,7 +118,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
     rule select-columns-by-pairs { <.select-verb> [ <as-pairs-list> | <assign-pairs-list> ] }
 
     # Filter command
-    rule filter-command { <filter> <.the-determiner>? <.rows>? [ <.for-which-phrase>? | <.by-preposition> ] <filter-spec> }
+    rule filter-command { <filter-phrase> <.the-determiner>? <.rows>? [ <.for-which-phrase>? | <.by-preposition> ] <filter-spec> }
     rule filter-spec { <predicates-list> }
 
     # Mutate command
