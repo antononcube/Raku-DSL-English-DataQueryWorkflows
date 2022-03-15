@@ -132,7 +132,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	# Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
 	method arrange-simple-command($/) {
-        make $<reverse-sort-phrase> || $<descending> ?? 'obj = sort( obj, rev=true )' !! 'obj = sort( obj )';
+        make $<reverse-sort-phrase> || $<descending-phrase> ?? 'obj = sort( obj, rev=true )' !! 'obj = sort( obj )';
     }
 	method arrange-by-spec($/) { make $/.values[0].made; }
 	method arrange-by-command-ascending($/) { make 'obj = sort( obj, [' ~ $<arrange-by-spec>.made ~ '] )'; }

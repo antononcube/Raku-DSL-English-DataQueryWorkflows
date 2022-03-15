@@ -235,7 +235,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         make $/.values[0].made;
     }
     method arrange-simple-command($/) {
-        make $<reverse-sort-phrase> || $<descending> ?? 'dplyr::arrange(desc(.))' !! 'dplyr::arrange()';
+        make $<reverse-sort-phrase> || $<descending-phrase> ?? 'dplyr::arrange(desc(.))' !! 'dplyr::arrange()';
     }
     method arrange-by-spec($/) {
         make $/.values[0].made;

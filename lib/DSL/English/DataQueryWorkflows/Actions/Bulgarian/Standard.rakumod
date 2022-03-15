@@ -106,7 +106,7 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 	# Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
 	method arrange-simple-command($/) {
-        make $<reverse-sort-phrase> || $<descending> ?? 'сортирай в низходящ ред' !! 'сортирай';
+        make $<reverse-sort-phrase> || $<descending-phrase> ?? 'сортирай в низходящ ред' !! 'сортирай';
     }
 	method arrange-by-spec($/) { make $/.values[0].made; }
 	method arrange-by-command-ascending($/) { make 'сортирай с колоните: ' ~ $<arrange-by-spec>.made; }

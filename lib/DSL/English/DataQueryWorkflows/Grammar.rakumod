@@ -123,7 +123,7 @@ grammar DSL::English::DataQueryWorkflows::Grammar
 
     # Mutate command
     rule mutate-command { <mutate-by-pairs> | <mutate-by-two-lists> }
-    rule mutate-opening-phrase { <mutate> | <assign-verb> | <transform-verb> }
+    rule mutate-opening-phrase { <mutate-verb> | <assign-verb> | <transform-verb> }
     rule mutate-by-two-lists { <.mutate-opening-phrase> <current=.column-specs-list> <.as-preposition> <new=.column-specs-list> }
     rule mutate-by-pairs { <.mutate-opening-phrase> <.by-preposition>? [ <as-pairs-list> | <assign-pairs-list> ] }
 
@@ -138,15 +138,15 @@ grammar DSL::English::DataQueryWorkflows::Grammar
 
     # Arrange command
     rule arrange-command { <arrange-by-command-descending> | <arrange-by-command-ascending> | <arrange-simple-command> }
-    rule arrange-simple-command { <.arrange-directive> [ <ascending> | <descending> ] | <reverse-sort-phrase> }
+    rule arrange-simple-command { <.arrange-directive> [ <ascending-phrase> | <descending-phrase> ] | <reverse-sort-phrase> }
     rule arrange-command-filler { <by-preposition> <the-determiner>? [ <variables-noun> | <variable-noun> ]? }
     rule arrange-by-spec { <.by-preposition>? <.the-determiner>? [ <.variables-noun> | <.variable-noun> ]? <column-specs-list> }
     rule arrange-by-command-ascending {
-        <.arrange-directive> <.ascending>? <arrange-by-spec> |
-        <.arrange-by-phrase> <arrange-by-spec> <.ascending> }
+        <.arrange-directive> <.ascending-phrase>? <arrange-by-spec> |
+        <.arrange-by-phrase> <arrange-by-spec> <.ascending-phrase> }
     rule arrange-by-command-descending {
-        <.arrange-directive> <.descending> <arrange-by-spec> |
-        <.arrange-by-phrase> <arrange-by-spec> <.descending> |
+        <.arrange-directive> <.descending-phrase> <arrange-by-spec> |
+        <.arrange-by-phrase> <arrange-by-spec> <.descending-phrase> |
         <.reverse-sort-phrase> <arrange-by-spec> }
 
     # Drop columns

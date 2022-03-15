@@ -149,7 +149,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     # Arrange command
     method arrange-command($/) { make $/.values[0].made; }
     method arrange-simple-command($/) {
-        make $<reverse-sort-phrase> || $<descending> ?? 'obj = ReverseSort[obj]' !! 'obj = Sort[obj]';
+        make $<reverse-sort-phrase> || $<descending-phrase> ?? 'obj = ReverseSort[obj]' !! 'obj = Sort[obj]';
     }
     method arrange-by-spec($/) { make '{' ~ map( { '#["' ~ $_.subst(:g, '"', '') ~ '"]' }, $/.values[0].made.split(', ') ).join(', ') ~ '}'; }
     method arrange-by-command-ascending($/) {

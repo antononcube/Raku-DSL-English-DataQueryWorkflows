@@ -163,7 +163,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
     # Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
 	method arrange-simple-command($/) {
-        make $<reverse-sort-phrase> || $<descending> ?? 'obj = obj.sort_values(ascending = False)' !! 'obj = obj.sort_values()';
+        make $<reverse-sort-phrase> || $<descending-phrase> ?? 'obj = obj.sort_values(ascending = False)' !! 'obj = obj.sort_values()';
     }
 	method arrange-by-spec($/) { make '[' ~ $/.values[0].made.join(', ') ~ ']'; }
 	method arrange-by-command-ascending($/) { make 'obj = obj.sort_values( ' ~ $<arrange-by-spec>.made ~ ' )'; }

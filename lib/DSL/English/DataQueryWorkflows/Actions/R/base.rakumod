@@ -157,7 +157,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
     # Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
 	method arrange-simple-command($/) {
-        make $<reverse-sort-phrase> || $<descending> ?? 'obj = obj[rev(order(obj)),]' !! 'obj = obj[order(obj),]';
+        make $<reverse-sort-phrase> || $<descending-phrase> ?? 'obj = obj[rev(order(obj)),]' !! 'obj = obj[order(obj),]';
     }
 	method arrange-by-spec($/) { make 'c(' ~ $/.values[0].made.join(', ') ~ ')'; }
 	method arrange-by-command-ascending($/) { make 'obj <- obj[ order(obj[ ,' ~ $<arrange-by-spec>.made ~ ']), ]'; }

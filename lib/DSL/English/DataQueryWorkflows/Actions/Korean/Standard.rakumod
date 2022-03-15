@@ -106,7 +106,7 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 	# Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
 	method arrange-simple-command($/) {
-        make $<reverse-sort-phrase> || $<descending> ?? '역 정렬' !! '종류';
+        make $<reverse-sort-phrase> || $<descending-phrase> ?? '역 정렬' !! '종류';
     }
 	method arrange-by-spec($/) { make $/.values[0].made; }
 	method arrange-by-command-ascending($/) { make '열로 정렬: ' ~ $<arrange-by-spec>.made; }
