@@ -93,7 +93,7 @@ proto ToDataQueryWorkflowCode(Str $command, Str $target = 'tidyverse', | ) is ex
 
 multi ToDataQueryWorkflowCode( Str $command, Str $target = 'tidyverse', *%args ) {
 
-    my $lang = %args<lang>:exists ?? %args<lang> !! 'General';
+    my $lang = %args<lang>:exists ?? %args<lang> !! 'English';
 
     my Grammar $grammar = ::("DSL::{$lang}::DataQueryWorkflows::Grammar");
 
