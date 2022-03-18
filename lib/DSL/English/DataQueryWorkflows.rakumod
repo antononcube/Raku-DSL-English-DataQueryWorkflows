@@ -91,16 +91,22 @@ sub has-semicolon (Str $word) {
 #-----------------------------------------------------------
 proto ToDataQueryWorkflowCode(Str $command, Str $target = 'tidyverse', | ) is export {*}
 
-multi ToDataQueryWorkflowCode ( Str $command, Str $target = 'tidyverse', *%args ) {
+multi ToDataQueryWorkflowCode( Str $command, Str $target = 'tidyverse', *%args ) {
+
+    my $lang = %args<lang>:exists ?? %args<lang> !! 'General';
+
+    my Grammar $grammar = ::("DSL::{$lang}::DataQueryWorkflows::Grammar");
+
+    %args = %args.pairs.grep({ $_.key ne 'lang' }).Hash;
 
     DSL::Shared::Utilities::CommandProcessing::ToWorkflowCode( $command,
-                                                               grammar => DSL::English::DataQueryWorkflows::Grammar,
+                                                               :$grammar,
                                                                :%targetToAction,
                                                                :%targetToSeparator,
                                                                :$target,
                                                                |%args )
-
 }
+
 
 multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str $target where $_ eq 'SQL', *%args ) {
 
