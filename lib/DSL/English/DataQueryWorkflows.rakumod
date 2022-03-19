@@ -29,6 +29,7 @@ use DSL::English::DataQueryWorkflows::Actions::SQL::Standard;
 use DSL::English::DataQueryWorkflows::Actions::WL::System;
 
 use DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard;
+use DSL::English::DataQueryWorkflows::Actions::English::Standard;
 use DSL::English::DataQueryWorkflows::Actions::Korean::Standard;
 use DSL::English::DataQueryWorkflows::Actions::Russian::Standard;
 use DSL::English::DataQueryWorkflows::Actions::Spanish::Standard;
@@ -37,6 +38,7 @@ use DSL::English::DataQueryWorkflows::Actions::Spanish::Standard;
 
 my %targetToAction{Str} =
     "Bulgarian"         => DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard,
+    "English"           => DSL::English::DataQueryWorkflows::Actions::English::Standard,
     "Julia"             => DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames,
     "Julia-DataFrames"  => DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames,
     "Korean"            => DSL::English::DataQueryWorkflows::Actions::Korean::Standard,
@@ -61,6 +63,7 @@ my %targetToAction2{Str} = %targetToAction.grep({ $_.key.contains('-') }).map({ 
 
 my Str %targetToSeparator{Str} =
     "Bulgarian"         => "\n",
+    "English"           => "\n",
     "Julia"             => "\n",
     "Julia-DataFrames"  => "\n",
     "Korean"            => "\n",
