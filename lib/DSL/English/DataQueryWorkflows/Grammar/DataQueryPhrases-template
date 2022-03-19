@@ -32,6 +32,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token map-verb { 'map' }
     token mapping-noun { 'mapping' }
     token melt-verb { 'melt' }
+    token merge-noun { <merge-verb> }
     token merge-verb { 'merge' }
     token mutate-verb { 'mutate' }
     token narrow-adjective { 'narrow' }
@@ -78,7 +79,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule group-by { <group-verb> [ <by-preposition> | <using-preposition> ] }
     rule group-map { <group-verb> [ <mapping-noun> | <map-verb> ] | <apply-verb> <per-preposition> <group-verb> }
     rule id-columns-phrase { [ <id-noun> | <identifier-noun> ] <columns> }
-    rule join-phrase { <join-noun> | <merge-verb>  }
+    rule join-phrase { <join-noun> | <merge-verb> | <merge-noun> }
     rule longer-phrase { <longer-adjective> | <long-adjective> | <narrow-adjective> }
     rule pivot-columns-phrase    { [ <pivot-verb> | <variable-noun> ]? <the-determiner>? <columns> }
     rule pivot-id-columns-phrase { [ <pivot-verb> | <variable-noun> ]? <the-determiner>? <id-columns-phrase> }

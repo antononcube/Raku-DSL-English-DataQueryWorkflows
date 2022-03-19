@@ -91,6 +91,9 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     proto token melt-verb {*}
     token melt-verb:sym<English> { :i 'melt' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'melt', 2) }> }
 
+    proto token merge-noun {*}
+    token merge-noun:sym<English> { <merge-verb> }
+
     proto token merge-verb {*}
     token merge-verb:sym<English> { :i 'merge' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'merge', 2) }> }
 
@@ -192,7 +195,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule group-by { <group-verb> [ <by-preposition> | <using-preposition> ] }
     rule group-map { <group-verb> [ <mapping-noun> | <map-verb> ] | <apply-verb> <per-preposition> <group-verb> }
     rule id-columns-phrase { [ <id-noun> | <identifier-noun> ] <columns> }
-    rule join-phrase { <join-noun> | <merge-verb>  }
+    rule join-phrase { <join-noun> | <merge-verb> | <merge-noun> }
     rule longer-phrase { <longer-adjective> | <long-adjective> | <narrow-adjective> }
     rule pivot-columns-phrase    { [ <pivot-verb> | <variable-noun> ]? <the-determiner>? <columns> }
     rule pivot-id-columns-phrase { [ <pivot-verb> | <variable-noun> ]? <the-determiner>? <id-columns-phrase> }
