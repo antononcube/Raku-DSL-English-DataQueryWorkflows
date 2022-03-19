@@ -206,8 +206,8 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule select { <select-verb> | <take-verb> | <keep-only-phrase> }
     rule separator-phrase { <separator-noun> | <divider-noun> | <splitter-noun> | <splitting-noun> }
     rule string-column-phrase { [ <string-noun> | <character-noun> | <text-noun> ] <column-noun> }
-    rule to-long-form-phrase { <pivot-verb> <to-preposition>? <longer-phrase> <format-phrase>? | <to-preposition> <longer-phrase> <format-phrase> | <melt-verb>  }
-    rule to-wide-form-phrase { <pivot-verb> <to-preposition>? <wider-phrase>  <format-phrase>? | <to-preposition> <wider-phrase>  <format-phrase> | <cast-verb>  }
+    rule to-long-form-phrase { <pivot-verb> [ <to-preposition> | <into-preposition> ]? <longer-phrase> <format-phrase>? | [ <to-preposition> | <into-preposition> ] <longer-phrase> <format-phrase> | <melt-verb>  }
+    rule to-wide-form-phrase { <pivot-verb> [ <to-preposition> | <into-preposition> ]? <wider-phrase>  <format-phrase>? | [ <to-preposition> | <into-preposition> ] <wider-phrase>  <format-phrase> | <cast-verb>  }
     rule value-column-name-phrase { <value-column-phrase> <name-noun> }
     rule value-column-phrase { <value-noun> <column-noun>? }
     rule variable-column-name-phrase { <variable-column-phrase> <name-noun> }
