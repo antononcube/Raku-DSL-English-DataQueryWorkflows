@@ -1,8 +1,8 @@
 
 use v6.d;
-use DSL::General::DataQueryWorkflows::Grammar;
+use DSL::English::DataQueryWorkflows::Grammar;
 
-class DSL::General::DataQueryWorkflows::Actions::English::Predicate {
+class DSL::English::DataQueryWorkflows::Actions::English::Predicate {
 
   # Predicates
   method predicates-list($/) { make $<predicate>>>.made.join(', '); }

@@ -30,12 +30,12 @@
 
 use v6.d;
 
-use DSL::General::DataQueryWorkflows::Actions::English::Predicate;
+use DSL::English::DataQueryWorkflows::Actions::English::Predicate;
 use DSL::Shared::Actions::English::PipelineCommand;
 
-class DSL::General::DataQueryWorkflows::Actions::English::Standard
+class DSL::English::DataQueryWorkflows::Actions::English::Standard
 		is DSL::Shared::Actions::English::PipelineCommand
-        is DSL::General::DataQueryWorkflows::Actions::English::Predicate {
+        is DSL::English::DataQueryWorkflows::Actions::English::Predicate {
 
 	has Str $.name = 'DSL-English-DataQueryWorkflows-English-Standard';
 
