@@ -3,7 +3,7 @@ use lib 'lib';
 use DSL::English::DataQueryWorkflows::Grammar;
 use Test;
 
-plan 18;
+plan 19;
 
 # Shortcut
 my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
@@ -14,6 +14,9 @@ my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
 
 ok $pCOMMAND.parse('use data frame dfTitanic'),
         'use data frame dfTitanic';
+
+ok $pCOMMAND.parse('load data table dfTitanic'),
+        'load data table dfTitanic';
 
 ok $pCOMMAND.parse('keep only distinct values'),
         'keep only distinct values';
