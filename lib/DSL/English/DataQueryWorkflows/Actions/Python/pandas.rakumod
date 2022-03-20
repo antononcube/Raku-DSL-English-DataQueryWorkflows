@@ -28,16 +28,15 @@
 #==============================================================================
 =end comment
 
-use v6;
-use DSL::English::DataQueryWorkflows::Grammar;
+use v6.d;
 use DSL::Shared::Actions::Python::PredicateSpecification;
-use DSL::Shared::Actions::English::Python::PipelineCommand;
+use DSL::English::DataQueryWorkflows::Actions::Python::ListManagementCommand-pandas;
 
 unit module DSL::English::DataQueryWorkflows::Actions::Python::pandas;
 
 class DSL::English::DataQueryWorkflows::Actions::Python::pandas
         is DSL::Shared::Actions::Python::PredicateSpecification
-		is DSL::Shared::Actions::English::Python::PipelineCommand {
+		is DSL::English::DataQueryWorkflows::Actions::Python::ListManagementCommand-pandas {
 
 	has Str $.name = 'DSL-English-DataQueryWorkflows-Python-pandas';
 
