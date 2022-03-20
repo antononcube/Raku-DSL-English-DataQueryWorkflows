@@ -21,6 +21,7 @@
     "DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames": "lib/DSL/English/DataQueryWorkflows/Actions/Julia/DataFrames.rakumod",
     "DSL::English::DataQueryWorkflows::Actions::Korean::Predicate": "lib/DSL/English/DataQueryWorkflows/Actions/Korean/Predicate.rakumod",
     "DSL::English::DataQueryWorkflows::Actions::Korean::Standard": "lib/DSL/English/DataQueryWorkflows/Actions/Korean/Standard.rakumod",
+    "DSL::English::DataQueryWorkflows::Actions::Python::ListManagementCommand-pandas": "lib/DSL/English/DataQueryWorkflows/Actions/Python/ListManagementCommand-pandas.rakumod",
     "DSL::English::DataQueryWorkflows::Actions::Python::pandas": "lib/DSL/English/DataQueryWorkflows/Actions/Python/pandas.rakumod",
     "DSL::English::DataQueryWorkflows::Actions::R::ListManagementCommand-tidyverse": "lib/DSL/English/DataQueryWorkflows/Actions/R/ListManagementCommand-tidyverse.rakumod",
     "DSL::English::DataQueryWorkflows::Actions::R::base": "lib/DSL/English/DataQueryWorkflows/Actions/R/base.rakumod",
