@@ -96,11 +96,12 @@ proto ToDataQueryWorkflowCode(Str $command, Str $target = 'tidyverse', | ) is ex
 
 multi ToDataQueryWorkflowCode( Str $command, Str $target = 'tidyverse', *%args ) {
 
-    my $lang = %args<lang>:exists ?? %args<lang> !! 'English';
+    my $lang = %args<language>:exists ?? %args<language> !! 'English';
 
     my Grammar $grammar = ::("DSL::{$lang}::DataQueryWorkflows::Grammar");
 
-    %args = %args.pairs.grep({ $_.key ne 'lang' }).Hash;
+    # Not needed, just showing that :$language is otherwise passed to ToWorkflowCode.
+    # %args = %args.pairs.grep({ $_.key ne 'language' }).Hash;
 
     DSL::Shared::Utilities::CommandProcessing::ToWorkflowCode( $command,
                                                                :$grammar,
