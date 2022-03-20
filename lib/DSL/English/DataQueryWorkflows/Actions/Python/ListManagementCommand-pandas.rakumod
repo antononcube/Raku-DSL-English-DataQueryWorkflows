@@ -15,7 +15,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::ListManagementCommand-p
         } elsif $<list-management-position-query> {
             $<list-management-position-query>.made;
         } else {
-            'obj.iloc[' ~ $/.values[0].made ~ ']';
+            'obj.iloc[' ~ $/.values[0].made ~ '-1]';
         }
     }
 
@@ -39,9 +39,9 @@ class DSL::English::DataQueryWorkflows::Actions::Python::ListManagementCommand-p
     }
     method range-spec($/) {
         if $<range-spec-step> {
-            make 'obj.iloc[' ~ $<range-spec-from>.made ~ ':' ~ $<range-spec-to>.made ~ ':' ~ $<range-spec-step>.made ~ ']'
+            make 'obj.iloc[' ~ $<range-spec-from>.made ~ '-1:' ~ $<range-spec-to>.made ~ ':' ~ $<range-spec-step>.made ~ ']'
         } else {
-            make 'obj.iloc[' ~ $<range-spec-from>.made ~ ':' ~ $<range-spec-to>.made ~ ']'
+            make 'obj.iloc[' ~ $<range-spec-from>.made ~ '-1:' ~ $<range-spec-to>.made ~ ']'
         }
     }
 
@@ -63,7 +63,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::ListManagementCommand-p
     method list-management-position-query($/) {
         my Str $res = $<variable-spec>.made;
         for $<position-query-link>».made.reverse -> $p {
-            $res = $res ~ '[' ~ $p ~ ']'
+            $res = $res ~ '[' ~ $p ~ '-1]'
         }
         make $res;
     }
@@ -75,10 +75,10 @@ class DSL::English::DataQueryWorkflows::Actions::Python::ListManagementCommand-p
         my Str $t = $/.Str.trim.lc;
         my $res =
                 do given $t {
-                    when $_ (elem) <first head> { '0' }
-                    when $_ (elem) <rest tail> { '1:leng(obj)' }
-                    when 'former' { '0' }
-                    when 'latter' { '1' }
+                    when $_ (elem) <first head> { '1' }
+                    when $_ (elem) <rest tail> { '2:len(obj)' }
+                    when 'former' { '1' }
+                    when 'latter' { '2' }
                     when 'last' { 'len(obj)' }
                     default { note "problem with $t"; $t }
                 };
