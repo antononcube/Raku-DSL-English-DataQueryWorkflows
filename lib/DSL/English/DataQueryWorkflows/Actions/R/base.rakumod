@@ -80,8 +80,10 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
 	# Load data
 	method data-load-command($/) { make $/.values[0].made; }
-	method load-data-table($/) { make '{ data(' ~ $<data-location-spec>.made ~ '); obj =' ~ $<data-location-spec>.made ~ ' }'; }
-	method data-location-spec($/) { make '\'' ~ $/.Str ~ '\''; }
+	method load-data-table($/) { make '{ data(' ~ $<data-location-spec>.made ~ '); obj = ' ~ self.unquote($<data-location-spec>.made) ~ ' }'; }
+	method data-location-spec($/) {
+		make $<regex-pattern-spec> ?? $<regex-pattern-spec>.made !! '"' ~ self.unquote($/.Str) ~ '"';
+	}
 	method use-data-table($/) { make 'obj <- ' ~ $<mixed-quoted-variable-name>.made; }
 
 	# Distinct command
