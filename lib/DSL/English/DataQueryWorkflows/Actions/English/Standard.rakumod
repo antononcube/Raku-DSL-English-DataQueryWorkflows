@@ -61,7 +61,9 @@ class DSL::English::DataQueryWorkflows::Actions::English::Standard
 	# Load data
 	method data-load-command($/) { make $/.values[0].made; }
 	method load-data-table($/) { make 'load the data table: ' ~ $<data-location-spec>.made; }
-	method data-location-spec($/) { make '\"' ~ $/.Str ~ '\"'; }
+	method data-location-spec($/) {
+		make $<regex-pattern-spec> ?? $<regex-pattern-spec>.made !! '"' ~ self.unquote($/.Str) ~ '"';
+	}
 	method use-data-table($/) { make 'use the data table: ' ~ $<variable-name>.made; }
 
 	# Distinct command

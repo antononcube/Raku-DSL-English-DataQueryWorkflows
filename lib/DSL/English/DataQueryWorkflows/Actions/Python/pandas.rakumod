@@ -77,7 +77,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	method data-load-command($/) { make $/.values[0].made; }
 	method load-data-table($/) { make 'obj = example_dataset(' ~ $<data-location-spec>.made ~ ')'; }
 	method data-location-spec($/) {
-		make $<regex-pattern-spec> ?? $<regex-pattern-spec>.made !! '\'' ~ $/.Str ~ '\'';
+		make $<regex-pattern-spec> ?? $<regex-pattern-spec>.made !! '\'' ~ self.unquote($/.Str) ~ '\'';
 	}
 	method use-data-table($/) { make 'obj = ' ~ $<variable-name>.made ~ '.copy()'; }
 
