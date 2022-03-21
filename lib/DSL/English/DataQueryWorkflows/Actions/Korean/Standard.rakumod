@@ -66,7 +66,7 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 	method data-location-spec($/) {
 		make $<regex-pattern-spec> ?? $<regex-pattern-spec>.made !! '"' ~ self.unquote($/.Str) ~ '"';
 	}
-	method use-data-table($/) { make '테이블 사용: ' ~ $<variable-name>.made; }
+	method use-data-table($/) { make '테이블 사용: ' ~ $<mixed-quoted-variable-name>.made; }
 
 	# Distinct command
 	method distinct-command($/) { make $/.values[0].made; }

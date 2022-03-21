@@ -79,7 +79,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	method data-location-spec($/) {
 		make $<regex-pattern-spec> ?? $<regex-pattern-spec>.made !! '\'' ~ self.unquote($/.Str) ~ '\'';
 	}
-	method use-data-table($/) { make 'obj = ' ~ $<variable-name>.made ~ '.copy()'; }
+	method use-data-table($/) { make 'obj = ' ~ $<mixed-quoted-variable-name>.made ~ '.copy()'; }
 
 	# Distinct command
 	method distinct-command($/) { make $/.values[0].made; }

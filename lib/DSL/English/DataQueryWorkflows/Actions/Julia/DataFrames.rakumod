@@ -66,7 +66,7 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	method data-location-spec($/) {
 		make $<regex-pattern-spec> ?? $<regex-pattern-spec>.made !! '\'' ~ $/.Str ~ '\'';
 	}
-	method use-data-table($/) { make 'obj = ' ~ $<variable-name>.made; }
+	method use-data-table($/) { make 'obj = ' ~ $<mixed-quoted-variable-name>.made; }
 
 	# Distinct command
 	method distinct-command($/) { make $/.values[0].made; }

@@ -127,7 +127,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         make $<regex-pattern-spec> ?? $<regex-pattern-spec>.made !! '\'' ~ self.unquote($/.Str) ~ '\'';
     }
     method use-data-table($/) {
-        make $<variable-name>.made;
+        make $<mixed-quoted-variable-name>.made;
     }
 
     # Distinct command

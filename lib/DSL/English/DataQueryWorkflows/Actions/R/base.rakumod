@@ -82,7 +82,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method data-load-command($/) { make $/.values[0].made; }
 	method load-data-table($/) { make '{ data(' ~ $<data-location-spec>.made ~ '); obj =' ~ $<data-location-spec>.made ~ ' }'; }
 	method data-location-spec($/) { make '\'' ~ $/.Str ~ '\''; }
-	method use-data-table($/) { make 'obj <- ' ~ $<variable-name>.made; }
+	method use-data-table($/) { make 'obj <- ' ~ $<mixed-quoted-variable-name>.made; }
 
 	# Distinct command
 	method distinct-command($/) { make $/.values[0].made; }
