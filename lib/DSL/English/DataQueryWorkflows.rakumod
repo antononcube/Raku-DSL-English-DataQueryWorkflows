@@ -97,8 +97,14 @@ proto ToDataQueryWorkflowCode(Str $command, Str $target = 'tidyverse', | ) is ex
 multi ToDataQueryWorkflowCode( Str $command, Str $target = 'tidyverse', *%args ) {
 
     my $lang = %args<language>:exists ?? %args<language> !! 'English';
+    $lang = $lang.wordcase;
 
-    my Grammar $grammar = ::("DSL::{$lang}::DataQueryWorkflows::Grammar");
+    my $gname = "DSL::{$lang}::DataQueryWorkflows::Grammar";
+
+    try require ::($gname);
+    if ::($gname) ~~ Failure { die "Failed to load the grammar $gname." }
+
+    my Grammar $grammar = ::($gname);
 
     # Not needed, just showing that :$language is otherwise passed to ToWorkflowCode.
     # %args = %args.pairs.grep({ $_.key ne 'language' }).Hash;
