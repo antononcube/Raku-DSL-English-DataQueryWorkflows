@@ -9,7 +9,7 @@ multi sub MAIN(Str $command,                   #= A string with one or many comm
                Str :$format = 'automatic'      #= The format of the output, one of 'automatic', 'ast', 'code', 'hash', 'json', or 'raku'.
                ) {
 
-    my $formatSpec = 'code' when $format.lc (elem) <auto automatic whatever>;
+    my Str $formatSpec = $format.lc (elem) <auto automatic whatever> ?? 'code' !! $format.lc;
 
     say ToDataQueryWorkflowCode($command, $target, :$language, format => $formatSpec);
 }
