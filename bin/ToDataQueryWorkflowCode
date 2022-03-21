@@ -1,0 +1,23 @@
+#!/usr/bin/env perl6
+
+use DSL::English::DataQueryWorkflows;
+
+#| Translates natural language commands into data transformations programming code.
+multi sub MAIN(Str $command,                   #= A string with one or many commands (separated by ';').
+               Str :$target = 'R-tidyverse',   #= Target (programming language with optional library spec.)
+               Str :$language = 'English',     #= The natural language to translate from.
+               Str :$format = 'automatic'      #= The format of the output, one of 'automatic', 'ast', 'code', 'hash', 'json', or 'raku'.
+               ) {
+
+    my $formatSpec = 'code' when $format.lc (elem) <auto automatic whatever>;
+
+    say ToDataQueryWorkflowCode($command, $target, :$language, format => $formatSpec);
+}
+
+multi sub MAIN(Str $target,                    #= Programming language.
+               Str $command,                   #= A string with one or many commands (separated by ';').
+               Str :$language = 'English',     #= The natural language to translate from.
+               Str :$format = 'automatic',     #= The format of the output, one of 'automatic', 'ast', 'code', 'hash', 'json', or 'raku'.
+               ) {
+    MAIN($command, :$target, :$language, :$format);
+}
