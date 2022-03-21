@@ -92,9 +92,9 @@ sub has-semicolon (Str $word) {
 }
 
 #-----------------------------------------------------------
-proto ToDataQueryWorkflowCode(Str $command, Str $target = 'tidyverse', | ) is export {*}
+proto ToDataQueryWorkflowCode(Str $command, Str $target = 'R-tidyverse', | ) is export {*}
 
-multi ToDataQueryWorkflowCode( Str $command, Str $target = 'tidyverse', *%args ) {
+multi ToDataQueryWorkflowCode( Str $command, Str $target = 'R-tidyverse', *%args ) {
 
     my $lang = %args<language>:exists ?? %args<language> !! 'English';
     $lang = $lang.wordcase;
