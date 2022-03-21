@@ -68,9 +68,9 @@ role DSL::English::DataQueryWorkflows::Grammarish {
 
     # Load data
     rule data-load-command { <load-data-table> | <use-data-table> }
-    rule data-location-spec { <dataset-name> | <variable-name> | <regex-pattern-spec> }
+    rule data-location-spec { <dataset-name> | <mixed-quoted-variable-name> | <regex-pattern-spec> }
     rule load-data-table { <.load-data-directive> <data-location-spec> }
-    rule use-data-table { [ <.use-verb> | <.using-preposition> ] <.the-determiner>? <.data>? <variable-name> }
+    rule use-data-table { [ <.use-verb> | <.using-preposition> ] <.the-determiner>? <.data>? <mixed-quoted-variable-name> }
 
     # Distinct command
     rule distinct-command { <distinct-simple-command> }
