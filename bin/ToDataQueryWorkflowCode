@@ -6,7 +6,7 @@ use DSL::English::DataQueryWorkflows;
 multi sub MAIN(Str $command,                   #= A string with one or many commands (separated by ';').
                Str :$target = 'R-tidyverse',   #= Target (programming language with optional library spec.)
                Str :$language = 'English',     #= The natural language to translate from.
-               Str :$format = 'automatic'      #= The format of the output, one of 'automatic', 'ast', 'code', 'hash', 'json', or 'raku'.
+               Str :$format = 'automatic'      #= The format of the output, one of 'automatic', 'code', 'hash', or 'raku'.
                ) {
 
     my Str $formatSpec = $format.lc (elem) <auto automatic whatever> ?? 'code' !! $format.lc;
@@ -17,7 +17,7 @@ multi sub MAIN(Str $command,                   #= A string with one or many comm
 multi sub MAIN(Str $target,                    #= Programming language.
                Str $command,                   #= A string with one or many commands (separated by ';').
                Str :$language = 'English',     #= The natural language to translate from.
-               Str :$format = 'automatic',     #= The format of the output, one of 'automatic', 'ast', 'code', 'hash', 'json', or 'raku'.
+               Str :$format = 'automatic',     #= The format of the output, one of 'automatic', 'code', 'hash', or 'raku'.
                ) {
     MAIN($command, :$target, :$language, :$format);
 }
