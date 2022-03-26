@@ -26,7 +26,6 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token inner-adjective { 'inner' }
     token join-noun { 'join' }
     token keep-verb { 'keep' }
-    token left-adjective { 'left' }
     token long-adjective { 'long' }
     token longer-adjective { 'longer' }
     token map-verb { 'map' }
@@ -41,7 +40,6 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token order-verb { 'order' }
     token pivot-verb { 'pivot' }
     token rename-verb { 'rename' }
-    token right-adjective { 'right' }
     token safe-adjective { 'safe' }
     token safely-adverb { 'safely' }
     token select-verb { 'select' }
