@@ -33,6 +33,7 @@
     "DSL::English::DataQueryWorkflows::Actions::Spanish::Predicate": "lib/DSL/English/DataQueryWorkflows/Actions/Spanish/Predicate.rakumod",
     "DSL::English::DataQueryWorkflows::Actions::Spanish::Standard": "lib/DSL/English/DataQueryWorkflows/Actions/Spanish/Standard.rakumod",
     "DSL::English::DataQueryWorkflows::Actions::WL::System": "lib/DSL/English/DataQueryWorkflows/Actions/WL/System.rakumod",
+    "DSL::English::DataQueryWorkflows::Grammar": "lib/DSL/English/DataQueryWorkflows/Grammar.rakumod",
     "DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases": "lib/DSL/English/DataQueryWorkflows/Grammar/DataQueryPhrases.rakumod",
     "DSL::English::DataQueryWorkflows::Grammarish": "lib/DSL/English/DataQueryWorkflows/Grammarish.rakumod"
   },
