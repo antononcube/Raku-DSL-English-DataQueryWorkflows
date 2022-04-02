@@ -33,9 +33,11 @@ use v6.d;
 use DSL::English::DataQueryWorkflows::Actions::English::Predicate;
 use DSL::Shared::Actions::English::PipelineCommand;
 use DSL::Shared::Actions::English::Standard::ListManagementCommand;
+use DSL::Shared::Actions::English::Standard::PipelineCommand;
 
 class DSL::English::DataQueryWorkflows::Actions::English::Standard
 		does DSL::Shared::Actions::English::Standard::ListManagementCommand
+		does DSL::Shared::Actions::English::Standard::PipelineCommand
 		is DSL::Shared::Actions::English::PipelineCommand
         is DSL::English::DataQueryWorkflows::Actions::English::Predicate {
 
@@ -285,14 +287,4 @@ class DSL::English::DataQueryWorkflows::Actions::English::Standard
     method key-pair-lhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
     method key-pair-rhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
 
-    # Pipeline command
-    method pipeline-command($/) { make $/.values[0].made; }
-    method take-pipeline-value($/) { make 'take object'; }
-    method echo-pipeline-value($/) { make 'echo pipeline value'; }
-
-    method echo-command($/) { make 'print the message: ' ~ $<echo-message-spec>.made; }
-    method echo-message-spec($/) { make $/.values[0].made; }
-    method echo-words-list($/) { make '"' ~ $<variable-name>>>.made.join(' ') ~ '"'; }
-    method echo-variable($/) { make $/.Str; }
-    method echo-text($/) { make $/.Str; }
 }

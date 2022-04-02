@@ -33,9 +33,11 @@ use DSL::English::DataQueryWorkflows::Grammar;
 use DSL::English::DataQueryWorkflows::Actions::Bulgarian::Predicate;
 use DSL::Shared::Actions::English::PipelineCommand;
 use DSL::Shared::Actions::Bulgarian::Standard::ListManagementCommand;
+use DSL::Shared::Actions::Bulgarian::Standard::PipelineCommand;
 
 class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 		does DSL::Shared::Actions::Bulgarian::Standard::ListManagementCommand
+		does DSL::Shared::Actions::Bulgarian::Standard::PipelineCommand
 		is DSL::Shared::Actions::English::PipelineCommand
         is DSL::English::DataQueryWorkflows::Actions::Bulgarian::Predicate {
 
@@ -285,14 +287,4 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
     method key-pair-lhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
     method key-pair-rhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
 
-    # Pipeline command
-    method pipeline-command($/) { make $/.values[0].made; }
-    method take-pipeline-value($/) { make 'вземи обекта'; }
-    method echo-pipeline-value($/) { make 'ехо на поточната стойност'; }
-
-    method echo-command($/) { make 'отпечатай съобщението: ' ~ $<echo-message-spec>.made; }
-    method echo-message-spec($/) { make $/.values[0].made; }
-    method echo-words-list($/) { make '"' ~ $<variable-name>>>.made.join(' ') ~ '"'; }
-    method echo-variable($/) { make $/.Str; }
-    method echo-text($/) { make $/.Str; }
 }
