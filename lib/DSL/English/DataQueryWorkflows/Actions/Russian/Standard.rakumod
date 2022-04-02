@@ -32,10 +32,10 @@ use v6;
 use DSL::English::DataQueryWorkflows::Grammar;
 use DSL::English::DataQueryWorkflows::Actions::Russian::Predicate;
 use DSL::Shared::Actions::English::PipelineCommand;
-
-unit module DSL::English::DataQueryWorkflows::Actions::Russian::Standard;
+use DSL::Shared::Actions::Russian::Standard::ListManagementCommand;
 
 class DSL::English::DataQueryWorkflows::Actions::Russian::Standard
+		does DSL::Shared::Actions::Russian::Standard::ListManagementCommand
 		is DSL::Shared::Actions::English::PipelineCommand
         is DSL::English::DataQueryWorkflows::Actions::Russian::Predicate {
 
