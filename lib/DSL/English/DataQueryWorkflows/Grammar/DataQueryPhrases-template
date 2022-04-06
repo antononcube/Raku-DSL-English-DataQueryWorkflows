@@ -12,7 +12,6 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token combine-verb { 'combine' }
     token cross-verb { 'cross' }
     token descending-adjective { 'descending' }
-    token dictionary-noun { 'dictionary' }
     token distinct-adjective { 'distinct' }
     token divider-noun { 'divider' }
     token duplicate-adjective { 'duplicate' }

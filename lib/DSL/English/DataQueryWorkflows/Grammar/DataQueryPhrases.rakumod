@@ -31,9 +31,6 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     proto token descending-adjective {*}
     token descending-adjective:sym<English> { :i 'descending' | ([\w]+) <?{ $0.Str ne 'ascending' and is-fuzzy-match($0.Str, 'descending', 2) }> }
 
-    proto token dictionary-noun {*}
-    token dictionary-noun:sym<English> { :i 'dictionary' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'dictionary', 2) }> }
-
     proto token distinct-adjective {*}
     token distinct-adjective:sym<English> { :i 'distinct' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'distinct', 2) }> }
 
