@@ -92,7 +92,11 @@ sub has-semicolon (Str $word) {
 }
 
 #-----------------------------------------------------------
-proto ToDataQueryWorkflowCode(Str $command, Str $target = 'R-tidyverse', | ) is export {*}
+proto ToDataQueryWorkflowCode(Str $command, | ) is export {*}
+
+multi ToDataQueryWorkflowCode( Str $command, :$target = 'R-tidyverse', *%args ) {
+    return ToDataQueryWorkflowCode( $command, $target, |%args);
+}
 
 multi ToDataQueryWorkflowCode( Str $command, Str $target = 'R-tidyverse', *%args ) {
 
