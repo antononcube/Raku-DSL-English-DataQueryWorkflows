@@ -64,9 +64,6 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     proto token inner-adjective {*}
     token inner-adjective:sym<English> { :i 'inner' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'inner', 2) }> }
 
-    proto token join-noun {*}
-    token join-noun:sym<English> { :i 'join' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'join', 2) }> }
-
     proto token keep-verb {*}
     token keep-verb:sym<English> { :i 'keep' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'keep', 2) }> }
 

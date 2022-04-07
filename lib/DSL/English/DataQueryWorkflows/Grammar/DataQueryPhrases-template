@@ -23,7 +23,6 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token glimpse-verb { 'glimpse' }
     token group-verb { 'group' }
     token inner-adjective { 'inner' }
-    token join-noun { 'join' }
     token keep-verb { 'keep' }
     token long-adjective { 'long' }
     token longer-adjective { 'longer' }
