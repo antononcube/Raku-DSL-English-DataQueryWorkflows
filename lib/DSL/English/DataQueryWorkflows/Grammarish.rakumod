@@ -116,8 +116,8 @@ role DSL::English::DataQueryWorkflows::Grammarish {
 
     # Group command
     rule group-command { <group-by-command> | <group-map-command> }
-    rule group-by-command { <.group-by> <.the-determiner>? [ <.column-noun> | <.columns-noun> ]? <column-specs-list> }
-    rule group-map-command { <.group-map> [ <.the-determiner>? <.function> ]? <wl-expr> }
+    rule group-by-command { <.group-by-phrase> <.the-determiner>? [ <.column-noun> | <.columns-noun> ]? <column-specs-list> }
+    rule group-map-command { <.group-map-phrase> [ <.the-determiner>? <.function> ]? <wl-expr> }
 
     # Ungroup command
     rule ungroup-command { <ungroup-simple-command> }

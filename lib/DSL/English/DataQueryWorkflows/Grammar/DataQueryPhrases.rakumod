@@ -201,11 +201,11 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     proto rule format-phrase {*}
     rule format-phrase:sym<English> {  <form-noun> | <format-noun>  }
 
-    proto rule group-by {*}
-    rule group-by:sym<English> {  <group-verb> [ <by-preposition> | <using-preposition> ]  }
+    proto rule group-by-phrase {*}
+    rule group-by-phrase:sym<English> {  <group-verb> [ <by-preposition> | <using-preposition> ]  }
 
-    proto rule group-map {*}
-    rule group-map:sym<English> {  <group-verb> [ <mapping-noun> | <map-verb> ] | <apply-verb> <per-preposition> <group-verb>  }
+    proto rule group-map-phrase {*}
+    rule group-map-phrase:sym<English> {  <group-verb> [ <mapping-noun> | <map-verb> ] | <apply-verb> <per-preposition> <group-verb>  }
 
     proto rule id-columns-phrase {*}
     rule id-columns-phrase:sym<English> {  [ <id-noun> | <identifier-noun> | <identifier-adjective> ] <columns>  }
