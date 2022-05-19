@@ -202,7 +202,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule format-phrase:sym<English> {  <form-noun> | <format-noun>  }
 
     proto rule group-by-phrase {*}
-    rule group-by-phrase:sym<English> {  <group-verb> [ <by-preposition> | <using-preposition> ]  }
+    rule group-by-phrase:sym<English> {  <group-verb> [ <by-preposition> <using-preposition>? | <using-preposition> | <over-preposition> ]  }
 
     proto rule group-map-phrase {*}
     rule group-map-phrase:sym<English> {  <group-verb> [ <mapping-noun> | <map-verb> ] | <apply-verb> <per-preposition> <group-verb>  }
