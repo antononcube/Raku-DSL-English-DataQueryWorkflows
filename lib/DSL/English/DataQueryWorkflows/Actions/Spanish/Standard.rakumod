@@ -35,13 +35,11 @@ use DSL::Shared::Actions::English::PipelineCommand;
 use DSL::Shared::Actions::Spanish::Standard::ListManagementCommand;
 use DSL::Shared::Actions::Spanish::Standard::PipelineCommand;
 
-unit module DSL::English::DataQueryWorkflows::Actions::Spanish::Standard;
-
 class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
+		does DSL::Shared::Actions::Spanish::Standard::ListManagementCommand
+		does DSL::Shared::Actions::Spanish::Standard::PipelineCommand
 		is DSL::Shared::Actions::English::PipelineCommand
-        is DSL::English::DataQueryWorkflows::Actions::Spanish::Predicate
-		is DSL::Shared::Actions::Spanish::Standard::ListManagementCommand
-		is DSL::Shared::Actions::Spanish::Standard::PipelineCommand {
+        is DSL::English::DataQueryWorkflows::Actions::Spanish::Predicate {
 
 	has Str $.name = 'DSL-English-DataQueryWorkflows-Spanish-Standard';
 
