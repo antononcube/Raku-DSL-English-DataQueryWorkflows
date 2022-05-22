@@ -38,6 +38,9 @@ class DSL::English::DataQueryWorkflows::Actions::English::Predicate {
   method in-relation($/) { make 'belogns'; }
   method not-in-relation($/) { make 'does not belong'; }
   method like-relation($/) { make 'is similar to'; }
-
+  method like-start-relation($/) { make 'starts with'; }
+  method like-end-relation($/) { make 'ends with'; }
+  method like-contains-relation($/) { make 'contains'; }
+  method match-relation($/) { make 'matches'; }
 }
 

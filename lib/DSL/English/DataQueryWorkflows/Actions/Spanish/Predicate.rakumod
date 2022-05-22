@@ -42,6 +42,10 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Predicate {
   method in-relation($/) { make 'pertenece a'; }
   method not-in-relation($/) { make 'no pertenece'; }
   method like-relation($/) { make 'se asemeja'; }
+  method like-start-relation($/) { make 'comienza como'; }
+  method like-end-relation($/) { make 'termina como'; }
+  method like-contains-relation($/) { make 'contiene'; }
+  method match-relation($/) { make 'coincide con'; }
 
 }
 

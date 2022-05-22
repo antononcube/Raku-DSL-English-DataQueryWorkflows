@@ -40,6 +40,9 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Predicate {
   method in-relation($/) { make '속하다'; }
   method not-in-relation($/) { make '속하지 않는다'; }
   method like-relation($/) { make '비슷하다'; }
-
+  method like-start-relation($/) { make '로 시작'; }
+  method like-end-relation($/) { make '로 끝나다'; }
+  method like-contains-relation($/) { make '포함'; }
+  method match-relation($/) { make '성냥'; }
 }
 

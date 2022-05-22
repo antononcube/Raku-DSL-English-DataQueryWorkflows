@@ -24,22 +24,25 @@ class DSL::English::DataQueryWorkflows::Actions::Russian::Predicate {
     }
   }
   method logical-connective($/) { make $/.values[0].made; }
-  method and-operator($/) { make 'и'; }
-  method or-operator($/) { make 'или'; }
+  method and-operator:sym<English>($/) { make 'и'; }
+  method or-operator:sym<English>($/) { make 'или'; }
   method predicate-symbol($/) { make $/.Str; }
   method predicate-value($/) { make $/.values[0].made; }
   method predicate-relation($/) { make $/.values[0].made; }
-  method equal-relation($/) { make 'равно'; }
-  method not-equal-relation($/) { make 'не равно'; }
-  method less-relation($/) { make 'меньше'; }
-  method less-equal-relation($/) { make 'меньше или равно'; }
-  method greater-relation($/) { make 'больше'; }
-  method greater-equal-relation($/) { make 'больше или равно'; }
-  method same-relation($/) { make 'то же самое с'; }
-  method not-same-relation($/) { make 'не то же самое с'; }
-  method in-relation($/) { make 'принадлежит'; }
-  method not-in-relation($/) { make 'не принадлежит'; }
-  method like-relation($/) { make 'похож'; }
-
+  method equal-relation:sym<English>($/) { make 'равно'; }
+  method not-equal-relation:sym<English>($/) { make 'не равно'; }
+  method less-relation:sym<English>($/) { make 'меньше'; }
+  method less-equal-relation:sym<English>($/) { make 'меньше или равно'; }
+  method greater-relation:sym<English>($/) { make 'больше'; }
+  method greater-equal-relation:sym<English>($/) { make 'больше или равно'; }
+  method same-relation:sym<English>($/) { make 'то же самое с'; }
+  method not-same-relation:sym<English>($/) { make 'не то же самое с'; }
+  method in-relation:sym<English>($/) { make 'принадлежит к'; }
+  method not-in-relation:sym<English>($/) { make 'не принадлежит к'; }
+  method like-relation:sym<English>($/) { make 'похож на'; }
+  method like-start-relation:sym<English>($/) { make 'начинается с'; }
+  method like-end-relation:sym<English>($/) { make 'заканчивается с'; }
+  method like-contains-relation:sym<English>($/) { make 'содержит'; }
+  method match-relation:sym<English>($/) { make 'соответствует на'; }
 }
 

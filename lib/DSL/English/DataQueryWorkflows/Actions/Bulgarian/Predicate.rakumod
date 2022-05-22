@@ -40,6 +40,9 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Predicate {
   method in-relation($/) { make 'принадлежи'; }
   method not-in-relation($/) { make 'не принадлежи'; }
   method like-relation($/) { make 'наподобява'; }
-
+  method like-start-relation($/) { make 'започва с'; }
+  method like-end-relation($/) { make 'завършва с'; }
+  method like-contains-relation($/) { make 'съдържа'; }
+  method match-relation($/) { make 'наподобява на'; }
 }
 
