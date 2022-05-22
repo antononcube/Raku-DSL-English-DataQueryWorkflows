@@ -33,6 +33,7 @@ use v6;
 use DSL::Shared::Roles::English::CommonParts;
 use DSL::Shared::Roles::English::ListManagementCommand;
 use DSL::Shared::Roles::English::PipelineCommand;
+use DSL::Shared::Roles::English::PredicateSpecification;
 use DSL::Shared::Roles::ErrorHandling;
 use DSL::Shared::Roles::PredicateSpecification;
 
@@ -40,11 +41,12 @@ use DSL::English::DataQueryWorkflows::Grammarish;
 use DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases;
 
 grammar DSL::English::DataQueryWorkflows::Grammar
-        does DSL::English::DataQueryWorkflows::Grammarish
-        does DSL::Shared::Roles::ErrorHandling
         does DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases
+        does DSL::English::DataQueryWorkflows::Grammarish
         does DSL::Shared::Roles::English::ListManagementCommand
-        does DSL::Shared::Roles::PredicateSpecification
-        does DSL::Shared::Roles::English::PipelineCommand {
+        does DSL::Shared::Roles::English::PipelineCommand
+        does DSL::Shared::Roles::English::PredicateSpecification
+        does DSL::Shared::Roles::ErrorHandling
+        does DSL::Shared::Roles::PredicateSpecification {
 
 }
