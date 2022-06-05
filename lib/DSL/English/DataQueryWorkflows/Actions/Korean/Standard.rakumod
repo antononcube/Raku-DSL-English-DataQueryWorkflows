@@ -28,12 +28,11 @@
 #==============================================================================
 =end comment
 
-use v6;
+use v6.d;
+
 use DSL::English::DataQueryWorkflows::Grammar;
 use DSL::English::DataQueryWorkflows::Actions::Korean::Predicate;
 use DSL::Shared::Actions::English::PipelineCommand;
-
-unit module DSL::English::DataQueryWorkflows::Actions::Korean::Standard;
 
 class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 		is DSL::Shared::Actions::English::PipelineCommand

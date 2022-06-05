@@ -28,12 +28,11 @@
 #==============================================================================
 =end comment
 
-use v6;
+use v6.d;
+
 use DSL::English::DataQueryWorkflows::Grammar;
 use DSL::Shared::Actions::Julia::PredicateSpecification;
 use DSL::Shared::Actions::English::Julia::PipelineCommand;
-
-unit module DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames;
 
 class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 		is DSL::Shared::Actions::Julia::PredicateSpecification

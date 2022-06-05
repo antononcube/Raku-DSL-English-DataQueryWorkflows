@@ -1,8 +1,7 @@
 
-use v6;
-use DSL::English::DataQueryWorkflows::Grammar;
+use v6.d;
 
-unit module DSL::English::DataQueryWorkflows::Actions::Korean::Predicate;
+use DSL::English::DataQueryWorkflows::Grammar;
 
 class DSL::English::DataQueryWorkflows::Actions::Korean::Predicate {
 

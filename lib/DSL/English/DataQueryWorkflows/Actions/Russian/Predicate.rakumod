@@ -2,8 +2,6 @@ use v6.d;
 
 use DSL::English::DataQueryWorkflows::Grammar;
 
-unit module DSL::English::DataQueryWorkflows::Actions::Russian::Predicate;
-
 class DSL::English::DataQueryWorkflows::Actions::Russian::Predicate {
 
   # Predicates

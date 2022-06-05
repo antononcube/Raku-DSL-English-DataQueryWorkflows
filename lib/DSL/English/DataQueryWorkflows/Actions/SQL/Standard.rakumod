@@ -18,7 +18,7 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #   Written by Anton Antonov,
-#   antononcube @@@ posteo . net,
+#   ʇǝu˙oǝʇsod@ǝqnɔuouoʇuɐ
 #   Windermere, Florida, USA.
 #
 #==============================================================================
@@ -38,16 +38,15 @@
 #==============================================================================
 =end comment
 
-use v6;
-use DSL::English::DataQueryWorkflows::Grammar;
-use DSL::Shared::Actions::R::PredicateSpecification;
-use DSL::Shared::Actions::English::R::PipelineCommand;
+use v6.d;
 
-unit module DSL::English::DataQueryWorkflows::Actions::SQL::Standard;
+use DSL::English::DataQueryWorkflows::Grammar;
+use DSL::Shared::Actions::Raku::PredicateSpecification;
+use DSL::Shared::Actions::English::Raku::PipelineCommand;
 
 class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
-		is DSL::Shared::Actions::R::PredicateSpecification
-		is DSL::Shared::Actions::English::R::PipelineCommand {
+		is DSL::Shared::Actions::Raku::PredicateSpecification
+		is DSL::Shared::Actions::English::Raku::PipelineCommand {
 
 	has Str $.name = 'DSL-English-DataQueryWorkflows-SQL-Standard';
 
@@ -88,10 +87,10 @@ class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
 	method column-name-spec($/) { make $<mixed-quoted-variable-name>.made.subst(:g, '"', ''); }
 
 	# Load data
-	method data-load-command($/) { make $/.values[0].made; }
+	method data-load-command($/) { make 'data-load' => $/.values[0].made; }
 	method load-data-table($/) { make '{ data(' ~ $<data-location-spec>.made ~ '); ' ~ $<data-location-spec>.made ~ ' }'; }
 	method data-location-spec($/) { make '\'' ~ $/.Str ~ '\''; }
-	method use-data-table($/) { make 'USE' ~ $<variable-name>.made; }
+	method use-data-table($/) { make 'SELECT * INTO #Tbl FROM ' ~ $<variable-name>.made; }
 
 	# Distinct command
 	method distinct-command($/) { make $/.values[0].made; }
@@ -156,11 +155,11 @@ class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
 	method ungroup-simple-command($/) { make '"Not implemented"'; }
 
 	# Arrange command
-	method arrange-command($/) { make $/.values[0].made; }
+	method arrange-command($/) { make 'order-by' => $/.values[0].made; }
 	method arrange-simple-command($/) {
-		make $<reverse-sort-phrase> || $<descending> ?? 'ORDER BY DESC' !! 'ORDER BY';
+		make $<reverse-sort-phrase> || $<descending-adjective> ?? 'ORDER BY DESC' !! 'ORDER BY';
 	}
-	method arrange-by-spec($/) { make "order-by" => $/.values[0].made; }
+	method arrange-by-spec($/) { make $/.values[0].made; }
 	method arrange-by-command-ascending($/) { make 'ORDER BY ' ~ $<arrange-by-spec>.made; }
 	method arrange-by-command-descending($/) { make 'ORDER BY ' ~ $<arrange-by-spec>.made ~ ' DESC'; }
 
@@ -200,6 +199,9 @@ class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
 	}
 	method data-summary-command($/) { make '( function(x) { print(summary(x)); x } )'; }
 	method glimpse-data($/) { make 'dplyr::glimpse()'; }
+	method skim-data($/) {
+		make 'skimr::skim()';
+	}
 
 	# Summarize command
 	method summarize-command($/) { make $/.values[0].made; }
@@ -226,7 +228,7 @@ class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
 
 	method join-by-spec($/) {
 		if $<mixed-quoted-variable-names-list> {
-			make 'c(' ~ map( { '"' ~ $_ ~ '"'}, $/.values[0].made.subst(:g, '"', '').split(', ') ).join(', ') ~ ')';
+			make '(' ~ map( { '"' ~ $_ ~ '"'}, $/.values[0].made.subst(:g, '"', '').split(', ') ).join(', ') ~ ')';
 		} else {
 			make $/.values[0].made;
 		}
@@ -241,34 +243,34 @@ class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
 	}
 
 	method inner-join-spec($/)  {
-		if $<join-by-spec> {
-			make 'INNER JOIN ' ~ $<dataset-name>.made ~ ' ON ' ~ $<join-by-spec>.made;
+		make 'join' => do if $<join-by-spec> {
+			'INNER JOIN ' ~ $<dataset-name>.made ~ ' ON ' ~ $<join-by-spec>.made;
 		} else {
-			make 'INNER JOIN ' ~ $<dataset-name>.made;
+			'INNER JOIN ' ~ $<dataset-name>.made;
 		}
 	}
 
 	method left-join-spec($/)  {
-		if $<join-by-spec> {
-			make 'LEFT JOIN ' ~ $<dataset-name>.made ~ ' ON ' ~ $<join-by-spec>.made;
+		make 'join' => do if $<join-by-spec> {
+			'LEFT JOIN ' ~ $<dataset-name>.made ~ ' ON ' ~ $<join-by-spec>.made;
 		} else {
-			make 'LEFT JOIN ' ~ $<dataset-name>.made;
+			'LEFT JOIN ' ~ $<dataset-name>.made;
 		}
 	}
 
 	method right-join-spec($/)  {
-		if $<join-by-spec> {
-			make 'RIGHT JOIN ' ~ $<dataset-name>.made ~ ' ON ' ~ $<join-by-spec>.made;
+		make 'join' => do if $<join-by-spec> {
+			'RIGHT JOIN ' ~ $<dataset-name>.made ~ ' ON ' ~ $<join-by-spec>.made;
 		} else {
-			make 'RIGHT JOIN ' ~ $<dataset-name>.made;
+			'RIGHT JOIN ' ~ $<dataset-name>.made;
 		}
 	}
 
 	method semi-join-spec($/)  {
-		if $<join-by-spec> {
-			make 'dplyr::semi_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
+		make 'join' => do if $<join-by-spec> {
+			'dplyr::semi_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
 		} else {
-			make 'dplyr::semi_join(' ~ $<dataset-name>.made ~ ')';
+			'dplyr::semi_join(' ~ $<dataset-name>.made ~ ')';
 		}
 	}
 
@@ -343,7 +345,7 @@ class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
 	method separator-spec($/) { make $/.values[0].made; }
 
 	# Make dictionary command
-	method make-dictionary-command($/) { make 'dplyr::select( ' ~ $<keycol>.made ~', ' ~ $<valcol>.made ~ ' )';}
+	method make-dictionary-command($/) { make 'SELECT ' ~ $<keycol>.made ~', ' ~ $<valcol>.made ~ ' )';}
 
 	# Probably have to be in DSL::Shared::Actions .
 	# Assign-pairs and as-pairs

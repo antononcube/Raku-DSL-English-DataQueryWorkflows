@@ -28,12 +28,11 @@
 #==============================================================================
 =end comment
 
-use v6;
+use v6.d;
+
 use DSL::English::DataQueryWorkflows::Grammar;
 use DSL::Shared::Actions::R::PredicateSpecification;
 use DSL::Shared::Actions::English::R::PipelineCommand;
-
-unit module DSL::English::DataQueryWorkflows::Actions::R::base;
 
 class DSL::English::DataQueryWorkflows::Actions::R::base
         is DSL::Shared::Actions::R::PredicateSpecification

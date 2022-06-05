@@ -29,10 +29,9 @@
 =end comment
 
 use v6.d;
+
 use DSL::Shared::Actions::Python::PredicateSpecification;
 use DSL::English::DataQueryWorkflows::Actions::Python::ListManagementCommand-pandas;
-
-unit module DSL::English::DataQueryWorkflows::Actions::Python::pandas;
 
 class DSL::English::DataQueryWorkflows::Actions::Python::pandas
         is DSL::Shared::Actions::Python::PredicateSpecification
