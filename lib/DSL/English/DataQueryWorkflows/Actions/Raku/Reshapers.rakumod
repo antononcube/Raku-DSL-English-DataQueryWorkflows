@@ -28,12 +28,11 @@
 #==============================================================================
 =end comment
 
-use v6;
+use v6.d;
+
 use DSL::English::DataQueryWorkflows::Grammar;
 use DSL::Shared::Actions::Raku::PredicateSpecification;
 use DSL::Shared::Actions::English::Raku::ListManagementCommand;
-
-unit module DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers;
 
 class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
         is DSL::Shared::Actions::Raku::PredicateSpecification
