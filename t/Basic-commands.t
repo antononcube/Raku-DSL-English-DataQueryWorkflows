@@ -3,7 +3,7 @@ use lib 'lib';
 use DSL::English::DataQueryWorkflows::Grammar;
 use Test;
 
-plan 19;
+plan 21;
 
 # Shortcut
 my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
@@ -68,5 +68,11 @@ ok $pCOMMAND.parse('mutate bmi = `mass/height^2`'),
 
 ok $pCOMMAND.parse('mutate bmi = `mass/height^2` and bmi2 = `masx/height^2`'),
         'mutate bmi = `mass/height^2` and bmi2 = `masx/height^2`';
+
+ok $pCOMMAND.parse('replace missing with NA'),
+        'replace missing with NA';
+
+ok $pCOMMAND.parse('replace missing'),
+        'replace missing';
 
 done-testing;
