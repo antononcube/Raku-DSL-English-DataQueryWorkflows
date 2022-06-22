@@ -77,7 +77,10 @@ class DSL::English::DataQueryWorkflows::Actions::English::Standard
 	# Missing treatment command
 	method missing-treatment-command($/) { make $/.values[0].made; }
 	method drop-incomplete-cases-command($/) { make 'drop incomplete cases'; }
-	method replace-missing-command($/) { make 'replace missing values with ' ~ $<replace-missing-rhs>.made; }
+	method replace-missing-command($/) {
+		my $na = $<replace-missing-rhs> ?? $<replace-missing-rhs>.made !! '"NA"';
+		make 'replace missing values with ' ~ $na;
+	}
     method replace-missing-rhs($/) { make $/.values[0].made; }
 
 	# Replace command

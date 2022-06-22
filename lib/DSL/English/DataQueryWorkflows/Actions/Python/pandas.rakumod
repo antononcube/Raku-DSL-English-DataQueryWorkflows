@@ -87,7 +87,10 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	# Missing treatment command
 	method missing-treatment-command($/) { make $/.values[0].made; }
 	method drop-incomplete-cases-command($/) { make 'obj = obj.dropna()'; }
-	method replace-missing-command($/) { make 'obj = obj.replace( numpy.nan,' ~ $<replace-missing-rhs>.made ~ ')'; }
+	method replace-missing-command($/) {
+		my $na = $<replace-missing-rhs> ?? $<replace-missing-rhs>.made !! '"NA"';
+		make 'obj = obj.replace( numpy.nan,' ~ $na ~ ')';
+	}
     method replace-missing-rhs($/) { make $/.values[0].made; }
 
 	# Replace command

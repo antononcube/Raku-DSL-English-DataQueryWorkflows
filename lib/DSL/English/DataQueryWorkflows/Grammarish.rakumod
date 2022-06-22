@@ -84,7 +84,7 @@ role DSL::English::DataQueryWorkflows::Grammarish {
         <keep-only-phrase> <complete-cases-phrase> |
         <omit-directive> <missing-values-phrase>? |
         <delete-directive> <missing-values-phrase> }
-    rule replace-missing-command { <.replace-verb> <.missing-values-phrase> <.with-preposition> <replace-missing-rhs> }
+    rule replace-missing-command { <.replace-verb> <.missing-values-phrase> [ <.with-preposition> <replace-missing-rhs> ]? }
     rule replace-missing-rhs { <number-value> | <mixed-quoted-variable-name> | <wl-expr> }
 
     rule replace-command { <.replace-verb> <lhs=.replace-missing-rhs> <.with-preposition> <rhs=.replace-missing-rhs>  }

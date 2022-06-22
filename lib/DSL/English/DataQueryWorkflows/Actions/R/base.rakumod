@@ -92,7 +92,10 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	# Missing treatment command
 	method missing-treatment-command($/) { make $/.values[0].made; }
 	method drop-incomplete-cases-command($/) { make 'obj <- na.omit(obj)'; }
-	method replace-missing-command($/) { make 'obj[ is.na(obj) ] <- ' ~ $<replace-missing-rhs>.made ; }
+	method replace-missing-command($/) {
+		my $na = $<replace-missing-rhs> ?? $<replace-missing-rhs>.made !! 'NA';
+		make 'obj[ is.na(obj) ] <- ' ~ $na;
+	}
     method replace-missing-rhs($/) { make $/.values[0].made; }
 
 	# Replace command

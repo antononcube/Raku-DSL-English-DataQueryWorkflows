@@ -74,7 +74,10 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     # Missing treatment command
 	method missing-treatment-command($/) { make $/.values[0].made; }
 	method drop-incomplete-cases-command($/) { make 'obj = DeleteMissing[obj, 1, 2]'; }
-	method replace-missing-command($/) { make 'obj = ReplaceAll[ obj, _Missing -> ' ~ $<replace-missing-rhs>.made ~ ' ]'; }
+	method replace-missing-command($/) {
+        my $na = $<replace-missing-rhs> ?? $<replace-missing-rhs>.made !! '"Missing"';
+        make 'obj = ReplaceAll[ obj, _Missing -> ' ~ $na ~ ' ]';
+    }
     method replace-missing-rhs($/) { make $/.values[0].made; }
 
     # Replace command

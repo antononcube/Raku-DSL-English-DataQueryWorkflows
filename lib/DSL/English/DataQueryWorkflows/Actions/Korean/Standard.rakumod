@@ -74,7 +74,10 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 	# Missing treatment command
 	method missing-treatment-command($/) { make $/.values[0].made; }
 	method drop-incomplete-cases-command($/) { make '불완전한 행 제거'; }
-	method replace-missing-command($/) { make '결 측값 제거 ' ~ $<replace-missing-rhs>.made; }
+	method replace-missing-command($/) {
+		my $na = $<replace-missing-rhs> ?? $<replace-missing-rhs>.made !! '"NA"';
+		make '결 측값 제거 ' ~ $na;
+	}
     method replace-missing-rhs($/) { make $/.values[0].made; }
 
 	# Replace command

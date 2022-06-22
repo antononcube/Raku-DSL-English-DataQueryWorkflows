@@ -74,7 +74,10 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
 	# Missing treatment command
 	method missing-treatment-command($/) { make $/.values[0].made; }
 	method drop-incomplete-cases-command($/) { make 'obj = obj[ completecases(obj), :]'; }
-	method replace-missing-command($/) { make 'obj = coalesce.( obj, ' ~ $<replace-missing-rhs>.made ~ ')'; }
+	method replace-missing-command($/) {
+		my $na = $<replace-missing-rhs> ?? $<replace-missing-rhs>.made !! '"NA"';
+		make 'obj = coalesce.( obj, ' ~ $na ~ ')';
+	}
     method replace-missing-rhs($/) { make $/.values[0].made; }
 
 	# Replace command

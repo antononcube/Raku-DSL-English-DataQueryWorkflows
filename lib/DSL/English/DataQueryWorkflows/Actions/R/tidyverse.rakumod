@@ -146,7 +146,8 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         make 'na.omit()';
     }
     method replace-missing-command($/) {
-        make 'tidyr::replace_na( ' ~ $<replace-missing-rhs>.made ~ ' )';
+        my $na = $<replace-missing-rhs> ?? $<replace-missing-rhs>.made !! 'NA';
+        make 'tidyr::replace_na( ' ~ $na ~ ' )';
     }
     method replace-missing-rhs($/) {
         make $/.values[0].made;

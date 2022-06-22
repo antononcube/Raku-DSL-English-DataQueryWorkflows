@@ -99,7 +99,10 @@ class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
 	# Missing treatment command
 	method missing-treatment-command($/) { make $/.values[0].made; }
 	method drop-incomplete-cases-command($/) { make 'na.omit()'; }
-	method replace-missing-command($/) { make '"Not implemented"'; }
+	method replace-missing-command($/) {
+		my $na = $<replace-missing-rhs> ?? $<replace-missing-rhs>.made !! '"NA"';
+		make '"Not implemented"';
+	}
 	method replace-missing-rhs($/) { make $/.values[0].made; }
 
 	# Replace command
