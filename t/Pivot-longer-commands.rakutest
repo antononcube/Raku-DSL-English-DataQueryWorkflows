@@ -1,9 +1,10 @@
-use v6;
+use v6.d;
+
 use lib 'lib';
 use DSL::English::DataQueryWorkflows::Grammar;
 use Test;
 
-plan 10;
+plan 12;
 
 # Shortcut
 my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
@@ -27,11 +28,17 @@ ok $pCOMMAND.parse('to long form'),
 ok $pCOMMAND.parse('pivot to long form'),
         'pivot to long form';
 
+ok $pCOMMAND.parse('pivot longer'),
+        'pivot longer';
+
 ok $pCOMMAND.parse('pivot to long form with variable columns V1 and V2'),
         'pivot to long form with variable columns V1 and V2';
 
 ok $pCOMMAND.parse('pivot to long form with columns V1, V2, and VAR5'),
         'pivot to long form with columns V1, V2, and VAR5';
+
+ok $pCOMMAND.parse('pivot longer with columns V1, V2, and VAR5'),
+        'pivot longer with columns V1, V2, and VAR5';
 
 ok $pCOMMAND.parse('pivot to long form with id columns ID1, ID2 with variable columns V1 and V2'),
         'pivot to long form with id columns ID1, ID2 with variable columns V1 and V2';
