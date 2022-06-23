@@ -188,7 +188,7 @@ role DSL::English::DataQueryWorkflows::Grammarish {
         :my Int $*IDCOLS = 0;
         :my Int $*VARTO = 0;
         :my Int $*VALTO = 0;
-        <.convert-verb>? <.to-long-form-phrase> [ <.filler-separator> <pivot-longer-arguments-list> ]? }
+        [ <.convert-verb>? <.to-long-form-phrase> | <.pivot-longer-phrase>] [ <.filler-separator> <pivot-longer-arguments-list> ]? }
 
     regex pivot-longer-arguments-list { <pivot-longer-argument>+ % [ [ <list-separator> | <ws> ] <filler-separator>? ] }
     regex pivot-longer-argument { <pivot-longer-id-columns-spec> | <pivot-longer-columns-spec> | <pivot-longer-variable-column-name-spec> | <pivot-longer-value-column-name-spec> }
@@ -204,7 +204,7 @@ role DSL::English::DataQueryWorkflows::Grammarish {
     rule pivot-longer-value-column-name-spec { <?{$*VALTO == 0}> <.the-determiner>? <.value-column-name-phrase> <column-spec> <?{$*VALTO = 1}> }
 
     # To wider form command
-    rule pivot-wider-command { <.convert-verb>? <.to-wide-form-phrase>  <.filler-separator> <pivot-wider-arguments-list> }
+    rule pivot-wider-command { [ <.convert-verb>? <.to-wide-form-phrase> | <.pivot-wider-phrase> ] <.filler-separator> <pivot-wider-arguments-list> }
     regex pivot-wider-arguments-list { <pivot-wider-argument>+ % [ [ <list-separator> | <ws> ] <filler-separator>? ] }
     regex pivot-wider-argument { <pivot-wider-id-columns-spec> | <pivot-wider-variable-column-spec> | <pivot-wider-value-column-spec> }
 
