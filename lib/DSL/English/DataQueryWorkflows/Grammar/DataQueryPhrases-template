@@ -33,6 +33,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token merge-verb { 'merge' }
     token mutate-verb { 'mutate' }
     token narrow-adjective { 'narrow' }
+    token narrower-adjective { 'narrow' }
     token omit-directive { 'omit' | 'exclude' }
     token only-adverb { 'only' }
     token order-verb { 'order' }
@@ -79,9 +80,10 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule longer-phrase { <longer-adjective> | <long-adjective> | <narrow-adjective> }
     rule pivot-columns-phrase    { [ <pivot-verb> | <variable-noun> ]? <the-determiner>? <columns> }
     rule pivot-id-columns-phrase { [ <pivot-verb> | <variable-noun> ]? <the-determiner>? <id-columns-phrase> }
+    rule pivot-longer-phrase { <pivot-verb> <longer-phrase> }
+    rule pivot-wider-phrase { <pivot-verb> <wider-phrase> }
     rule rename-directive { <rename-verb> }
     rule reverse-sort-phrase { <reverse-adjective> [ <sort-verb> | <order-verb> ] }
-
     rule safely-directive { <safe-adjective> | <safely-adverb> }
     rule select { <select-verb> | <take-verb> | <keep-only-phrase> }
     rule separator-phrase { <separator-noun> | <divider-noun> | <splitter-noun> | <splitting-noun> }
