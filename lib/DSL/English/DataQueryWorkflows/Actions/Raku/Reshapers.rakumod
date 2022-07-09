@@ -222,6 +222,8 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
         # This needs more coding
         self.data-summary-command($/)
     }
+    method column-names-command($/) { make '$obj.first.keys'; }
+    method row-names-command($/) { make '$obj.keys'; }
 
     # Summarize command
     method summarize-command($/) { make $/.values[0].made; }

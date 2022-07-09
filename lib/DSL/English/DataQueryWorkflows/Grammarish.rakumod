@@ -141,8 +141,18 @@ role DSL::English::DataQueryWorkflows::Grammarish {
     rule drop-columns-simple { <.delete-directive> <.the-determiner>? [ <.data-column-phrase> | <.data-columns-phrase> ]? <todrop=.column-specs-list> }
 
     # Statistics command
-    rule statistics-command { <data-dimensions-command> | <echo-count-command> | <count-command> | <glimpse-data> | <skim-data> | <data-summary-command> }
+    rule statistics-command {
+        <data-dimensions-command> |
+        <echo-count-command> |
+        <count-command> |
+        <glimpse-data> |
+        <skim-data> |
+        <data-summary-command> |
+        <column-names-command> |
+        <row-names-command> }
     rule data-dimensions-command { [ <.display-directive> <.the-determiner>? <.data-noun>? | <.data-noun> ] [ <dimensions-noun> | <shape-noun> ] }
+    rule column-names-command { <.display-directive> [ <column-noun> | <columns-noun> ] <names-noun> }
+    rule row-names-command { <.display-directive> [ <row-noun> | <rows-noun> ] <names-noun> }
     rule count-command { <compute-directive> <.the-determiner>? [ <count-verb> | <counts-noun> ] | <count-verb> | <counts-noun> }
     rule echo-count-command { <compute-and-display> <.the-determiner>? [ <count-verb> | <counts-noun> ] | <display-directive> [ <count-verb> | <counts-noun> ] }
     rule glimpse-data { <.display-directive>? <.a-determiner>? <.glimpse-verb> <.at-preposition>? <.the-determiner>? <.data-noun>? }

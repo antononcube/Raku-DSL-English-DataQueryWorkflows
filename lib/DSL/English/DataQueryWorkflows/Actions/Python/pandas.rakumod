@@ -215,6 +215,8 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
     }
 	method data-summary-command($/) { make 'print(obj.describe())'; }
 	method glimpse-data($/) { make 'print(obj.head())'; }
+	method column-names-command($/) { make 'print(obj.columns.values.tolist())'; }
+	method row-names-command($/) { make 'print(obj.index.tolist())'; }
 
 	# Summarize command
     method summarize-command($/) { make $/.values[0].made; }

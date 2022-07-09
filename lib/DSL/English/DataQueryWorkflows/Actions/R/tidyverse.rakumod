@@ -303,6 +303,12 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
     method skim-data($/) {
         make 'skimr::skim()';
     }
+    method column-names-command($/) {
+        make '(function(x) { print(colnames(x)); x})';
+    }
+    method row-names-command($/) {
+        make '(function(x) { print(rownames(x)); x})';
+    }
 
     # Summarize command
     method summarize-command($/) {

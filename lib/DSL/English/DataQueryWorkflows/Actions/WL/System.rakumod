@@ -213,6 +213,8 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method summarize-all-command($/) {
         make %.properties<IsGrouped>:exists ?? 'Echo[Mean /@ obj, "summarize-all:"]' !! 'Echo[Mean[obj], "summarize-all:"]';
     }
+    method column-names-command($/) { make '(Keys@Normal@First@obj)'; }
+    method row-names-command($/) { make '(Keys@Normal@obj)'; }
 
     # Summarize command
     method summarize-command($/) { make $/.values[0].made; }

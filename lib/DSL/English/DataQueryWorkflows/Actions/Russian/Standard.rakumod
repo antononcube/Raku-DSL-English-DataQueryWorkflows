@@ -139,6 +139,8 @@ class DSL::English::DataQueryWorkflows::Actions::Russian::Standard
 	method echo-count-command($/) { make 'показать число'; }
 	method data-summary-command($/) { make 'описать объект'; }
 	method glimpse-data($/) { make 'показать видение объекта'; }
+	method column-names-command($/) { make 'показать имена столбцов'; }
+	method row-names-command($/) { make 'показать имена строк'; }
 
 	# Summarize command
     method summarize-command($/) { make $/.values[0].made; }

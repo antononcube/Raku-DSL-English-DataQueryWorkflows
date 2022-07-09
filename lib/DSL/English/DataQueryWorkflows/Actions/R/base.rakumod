@@ -200,11 +200,11 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 	method statistics-command($/) { make $/.values[0].made; }
 	method data-dimensions-command($/) { make 'print(dim(obj))'; }
 	method count-command($/) { make 'obj = length(obj)'; }
-	method echo-count-command($/) {
-        make 'print(length(obj))';
-    }
+	method echo-count-command($/) { make 'print(length(obj))'; }
 	method data-summary-command($/) { make 'print(summary(obj))'; }
 	method glimpse-data($/) { make 'head(obj)'; }
+	method column-names-command($/) { make 'colnames(obj)'; }
+	method row-names-command($/) { make 'rownames(obj)'; }
 
 	# Summarize command
     method summarize-command($/) { make $/.values[0].made; }
