@@ -180,10 +180,10 @@ role DSL::English::DataQueryWorkflows::Grammarish {
 
     # Cross tabulate command
     rule cross-tabulate-command { <cross-tabulate-command> | <contingency-matrix-command> }
-    rule cross-tabulation-command { <.cross-tabulate-phrase> <cross-tabulation-formula> }
+    rule cross-tabulation-command { [ <.cross-tabulate-phrase> | <.cross-tabulation-phrase> <.of-preposition> ] <cross-tabulation-formula> }
     rule contingency-matrix-command { <.create-directive> [ <.the-determiner> | <.a-determiner>]? <.contingency-matrix-phrase> [ <.using-preposition> | <.with-formula-phrase> ] <cross-tabulation-formula> }
     rule cross-tabulation-formula { <cross-tabulation-double-formula> | <cross-tabulation-single-formula> }
-    rule cross-tabulation-double-formula { <.variable-noun>? <rows-variable-name> [ <.list-separator-symbol> | <.with-preposition> ] <.variable-noun>? <columns-variable-name> [ <.over-preposition> <values-variable-name> ]? }
+    rule cross-tabulation-double-formula { <.variable-noun>? <rows-variable-name> [ <.list-separator-symbol> | <.with-preposition> | <.versus-preposition> ] <.variable-noun>? <columns-variable-name> [ <.over-preposition> <values-variable-name> ]? }
     rule cross-tabulation-single-formula { <.variable-noun>? <rows-variable-name> [ <.over-preposition> <values-variable-name> ]? }
     rule rows-variable-name { <column-spec> }
     rule columns-variable-name { <column-spec> }

@@ -151,6 +151,9 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     proto token tabulate-verb {*}
     token tabulate-verb:sym<English> { :i 'tabulate' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'tabulate', 2) }> }
 
+    proto token tabulation-noun {*}
+    token tabulation-noun:sym<English> { :i 'tabulation' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'tabulation', 2) }> }
+
     proto token ungroup-verb {*}
     token ungroup-verb:sym<English> { :i 'ungroup' | ([\w]+) <?{ $0.Str ne 'group' and is-fuzzy-match($0.Str, 'ungroup', 2) }> }
 
@@ -170,6 +173,9 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
 
     proto rule cross-tabulate-phrase {*}
     rule cross-tabulate-phrase:sym<English> {  <cross-verb> <tabulate-verb>  }
+
+    proto rule cross-tabulation-phrase {*}
+    rule cross-tabulation-phrase:sym<English> {  <cross-verb> <tabulation-noun>  }
 
     proto rule keep-only-phrase {*}
     rule keep-only-phrase:sym<English> {  <keep-verb> <only-adverb>?  }

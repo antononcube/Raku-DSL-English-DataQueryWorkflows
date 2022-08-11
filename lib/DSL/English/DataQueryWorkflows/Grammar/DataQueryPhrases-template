@@ -52,6 +52,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token summarise-verb { 'summarise' }
     token summarize-verb { 'summarize' }
     token tabulate-verb { 'tabulate' }
+    token tabulation-noun { 'tabulation' }
     token ungroup-verb { 'ungroup' }
     token unique-adjective { 'unique' }
     token wide-adjective { 'wide' }
@@ -60,6 +61,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     # Rules
     rule contingency-matrix-phrase { <contingency-noun> [ <matrix-noun> | <table-noun> ] }
     rule cross-tabulate-phrase { <cross-verb> <tabulate-verb> }
+    rule cross-tabulation-phrase { <cross-verb> <tabulation-noun> }
     rule keep-only-phrase { <keep-verb> <only-adverb>? }
     rule with-formula-phrase { <with-preposition> <the-determiner>? <formula-noun> }
 
