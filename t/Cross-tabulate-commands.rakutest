@@ -1,0 +1,27 @@
+use v6;
+use lib 'lib';
+use DSL::English::DataQueryWorkflows::Grammar;
+use Test;
+
+plan 4;
+
+# Shortcut
+my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
+
+#-----------------------------------------------------------
+# Basic commands
+#-----------------------------------------------------------
+
+ok $pCOMMAND.parse('cross tabulate Specie vs World'),
+        'cross tabulate Specie vs World';
+
+ok $pCOMMAND.parse('cross tabulate Specie with World'),
+        'cross tabulate Specie with World';
+
+ok $pCOMMAND.parse('cross tabulate Specie'),
+        'cross tabulate Specie';
+
+ok $pCOMMAND.parse('cross tabulation of Specie over World'),
+        'cross tabulation of Specie over World';
+
+done-testing;
