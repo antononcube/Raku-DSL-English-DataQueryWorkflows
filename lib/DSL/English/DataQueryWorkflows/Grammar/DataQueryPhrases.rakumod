@@ -25,6 +25,9 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     proto token combine-verb {*}
     token combine-verb:sym<English> { :i 'combine' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'combine', 2) }> }
 
+    proto token cross-adjective {*}
+    token cross-adjective:sym<English> { <cross-verb> }
+
     proto token cross-verb {*}
     token cross-verb:sym<English> { :i 'cross' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'cross', 2) }> }
 
@@ -175,7 +178,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule cross-tabulate-phrase:sym<English> {  <cross-verb> <tabulate-verb>  }
 
     proto rule cross-tabulation-phrase {*}
-    rule cross-tabulation-phrase:sym<English> {  <cross-verb> <tabulation-noun>  }
+    rule cross-tabulation-phrase:sym<English> {  <cross-adjective> <tabulation-noun>  }
 
     proto rule keep-only-phrase {*}
     rule keep-only-phrase:sym<English> {  <keep-verb> <only-adverb>?  }

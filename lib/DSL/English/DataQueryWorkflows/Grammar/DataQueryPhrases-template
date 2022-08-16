@@ -10,6 +10,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token cast-verb { 'cast' }
     token character-noun { 'character' }
     token combine-verb { 'combine' }
+    token cross-adjective { <cross-verb> }
     token cross-verb { 'cross' }
     token descending-adjective { 'descending' }
     token distinct-adjective { 'distinct' }
@@ -61,7 +62,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     # Rules
     rule contingency-matrix-phrase { <contingency-noun> [ <matrix-noun> | <table-noun> ] }
     rule cross-tabulate-phrase { <cross-verb> <tabulate-verb> }
-    rule cross-tabulation-phrase { <cross-verb> <tabulation-noun> }
+    rule cross-tabulation-phrase { <cross-adjective> <tabulation-noun> }
     rule keep-only-phrase { <keep-verb> <only-adverb>? }
     rule with-formula-phrase { <with-preposition> <the-determiner>? <formula-noun> }
 
