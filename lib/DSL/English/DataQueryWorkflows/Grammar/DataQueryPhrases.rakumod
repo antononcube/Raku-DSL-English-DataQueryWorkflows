@@ -26,7 +26,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token combine-verb:sym<English> { :i 'combine' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'combine', 2) }> }
 
     proto token cross-adjective {*}
-    token cross-adjective:sym<English> { <cross-verb> }
+    token cross-adjective:sym<English> { :i <cross-verb> }
 
     proto token cross-verb {*}
     token cross-verb:sym<English> { :i 'cross' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'cross', 2) }> }
@@ -200,6 +200,9 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
 
     proto rule arrange-directive {*}
     rule arrange-directive:sym<English> { <arrange-verb> | <order-verb> | <sort-verb> }
+
+    proto rule column-values-of-phrase {*}
+    rule column-values-of-phrase:sym<English> {  <column-noun> [ <values-noun>? <of-preposition>? ]  }
 
     proto rule data-phrase {*}
     rule data-phrase:sym<English> {  <.the-determiner>? <data>  }

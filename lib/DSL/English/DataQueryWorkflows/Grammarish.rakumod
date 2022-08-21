@@ -59,7 +59,8 @@ role DSL::English::DataQueryWorkflows::Grammarish {
         <join-command> |
         <reshape-command> |
         <separate-column-command> |
-        <cross-tabulation-command> }
+        <cross-tabulation-command> |
+        <pull-column-command> }
 
     # Column specs
     rule column-specs-list { <column-spec>+ % <list-separator> }
@@ -238,4 +239,7 @@ role DSL::English::DataQueryWorkflows::Grammarish {
     rule make-dictionary-command { <.create-directive> <.dictionary-phrase> <.make-dictionary-filler>? <keycol=.column-spec> <.dictionary-relation-symbol> <valcol=.column-spec> }
     rule make-dictionary-filler { [ <for-preposition> | <using-preposition> | <mapping-noun> ] <the-determiner>? <columns>? | <mapping-noun> | <from-preposition> }
     rule dictionary-relation-symbol { <.to-preposition> | <.as-preposition> | <.key-to-symbol> | <.equal-symbol> }
+
+    # Pull column command
+    rule pull-column-command { <.pull-directive> <.the-determiner>? <.column-values-of-phrase>? <column-name-spec> }
 }

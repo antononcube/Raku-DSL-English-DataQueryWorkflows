@@ -346,6 +346,9 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	# Make dictionary command
     method make-dictionary-command($/) { make 'obj = dict(zip( obj[' ~ $<keycol>.made ~'], obj[' ~ $<valcol>.made ~ '] ))';}
 
+	# Pull column command
+	method pull-column-command($/) { make 'obj[' ~ $<column-name-spec>.made ~ '].values'; }
+
 	# Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
 	method assign-pairs-list($/) { make 'obj = obj.assign( ' ~ $<assign-pair>>>.made.join(', ') ~ ' )'; }

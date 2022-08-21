@@ -261,6 +261,9 @@ class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
 	# Make dictionary command
     method make-dictionary-command($/) { make $<keycol>.made ~ ' 열을 ' ~ $<valcol>.made ~ ' 열로 사전 매핑합니다';}
 
+	# Pull column command
+	method pull-column-command($/) { make $<column-name-spec>.made ~ ' 열의 값 가져오기'; }
+
 	# Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
 	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }

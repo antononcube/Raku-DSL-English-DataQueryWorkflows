@@ -509,6 +509,9 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         make 'dplyr::select( ' ~ $<keycol>.made ~ ', ' ~ $<valcol>.made ~ ' )';
     }
 
+    # Pull column command
+    method pull-column-command($/) { make 'dplyr::pull(' ~ $<column-name-spec>.made ~ ')'; }
+
     # Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
     method assign-pairs-list($/) {

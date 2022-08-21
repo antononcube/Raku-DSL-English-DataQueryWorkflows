@@ -271,7 +271,10 @@ class DSL::English::DataQueryWorkflows::Actions::Russian::Standard
 	# Make dictionary command
     method make-dictionary-command($/) { make 'сделать словарь из столбца  '  ~ $<keycol>.made ~ '  в столбец ' ~ $<valcol>.made;}
 
-    # Probably have to be in DSL::Shared::Actions .
+	# Pull column command
+	method pull-column-command($/) { make 'извлечь значения из столбца ' ~ $<column-name-spec>.made; }
+
+	# Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
 	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }
 	method as-pairs-list($/)     { make $<as-pair>>>.made.join(', '); }

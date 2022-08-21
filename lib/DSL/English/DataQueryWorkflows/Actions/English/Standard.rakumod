@@ -271,6 +271,9 @@ class DSL::English::DataQueryWorkflows::Actions::English::Standard
 	# Make dictionary command
     method make-dictionary-command($/) { make 'make dictionary from the column '  ~ $<keycol>.made ~' to the column ' ~ $<valcol>.made;}
 
+	# Pull column command
+	method pull-column-command($/) { make 'pull the values of the column ' ~ $<column-name-spec>.made; }
+
     # Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
 	method assign-pairs-list($/) { make $<assign-pair>>>.made.join(', '); }

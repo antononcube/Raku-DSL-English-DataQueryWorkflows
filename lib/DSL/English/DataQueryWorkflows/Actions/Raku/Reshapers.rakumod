@@ -365,6 +365,9 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
     # Make dictionary command
     method make-dictionary-command($/) { make '$obj = $obj.map({ $_{' ~ $<keycol>.made ~'} => $_{' ~ $<valcol>.made ~ '} }).Hash'; }
 
+    # Pull column command
+    method pull-column-command($/) { make '$obj.map(*{' ~ $<column-name-spec>.made ~ '}).List'; }
+
     # Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
 	method assign-pairs-list($/) { make $<assign-pair>>>.made; }

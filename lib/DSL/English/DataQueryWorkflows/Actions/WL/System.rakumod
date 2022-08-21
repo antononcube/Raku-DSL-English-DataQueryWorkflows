@@ -358,6 +358,9 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     # Make dictionary command
     method make-dictionary-command($/) { make 'obj = Association @ Normal @ Map[ #[' ~ $<keycol>.made ~'] -> #[' ~ $<valcol>.made ~ ']&, obj ]';}
 
+    # Pull column command
+    method pull-column-command($/) { make 'Normal[obj[All, ' ~ $<column-name-spec>.made ~ ']]'; }
+
     # Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
 	method assign-pairs-list($/) { make $<assign-pair>>>.made; }
