@@ -202,10 +202,10 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule arrange-directive:sym<English> { <arrange-verb> | <order-verb> | <sort-verb> }
 
     proto rule column-values-of-phrase {*}
-    rule column-values-of-phrase:sym<English> {  <column-noun> [ <values-noun>? <of-preposition>? ]  }
+    rule column-values-of-phrase:sym<English> {  <column-noun> <values-noun>? <of-preposition>? | <values-noun> <of-preposition> <the-determiner>? <column-noun>  }
 
     proto rule data-phrase {*}
-    rule data-phrase:sym<English> {  <.the-determiner>? <data>  }
+    rule data-phrase:sym<English> {  <the-determiner>? <data>  }
 
     proto rule dictionary-phrase {*}
     rule dictionary-phrase:sym<English> {  <.association-noun> | <.dictionary-noun> | <.mapping-noun>  }

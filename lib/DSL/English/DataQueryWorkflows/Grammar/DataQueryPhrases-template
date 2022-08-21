@@ -72,7 +72,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
 
     rule arrange-by-phrase { <arrange-directive> [ <by-preposition> | <using-preposition> | <with-preposition> ] }
     rule arrange-directive { <arrange-verb> | <order-verb> | <sort-verb> }
-    rule column-values-of-phrase { <column-noun> <values-noun>? <of-preposition>? }
+    rule column-values-of-phrase { <column-noun> <values-noun>? <of-preposition>? | <values-noun> <of-preposition> <the-determiner>? <column-noun> }
     rule data-phrase { <the-determiner>? <data> }
     rule dictionary-phrase { <.association-noun> | <.dictionary-noun> | <.mapping-noun> }
     rule filter-phrase { <filter-verb> | <select-verb> }
