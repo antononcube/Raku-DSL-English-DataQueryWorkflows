@@ -2,15 +2,16 @@
 
 ## Introduction
 
-This Raku (Perl 6) package has grammar and action classes for the parsing and interpretation of natural language
-commands that specify data queries in the style of Standard Query Language (SQL) or
+This Raku (Perl 6) package has grammar and action classes for the parsing and interpretation of natural
+Domain Specific Language (DSL) commands that specify data queries in the style of Standard Query Language (SQL) or
 [RStudio](https://rstudio.com)'s library [`tidyverse`](https://tidyverse.tidyverse.org).
 
-The interpreters (actions) have as targets different programming languages (and packages in them).
-The currently implemented language-and-package targets are:
+The interpreters (actions) have as targets different programming languages (and packages in them.)
+
+The currently implemented programming-language-and-package targets are:
 Julia::DataFrames, Mathematica, Python::pandas, R::base, R::tidyverse, Raku::Reshapers.
 
-There are also interpreters to natural languages: Bulgarian, Korean, Russian, Spanish.
+There are also interpreters to natural languages: Bulgarian, English, Korean, Russian, Spanish.
 
 ------
 
@@ -21,6 +22,48 @@ From GitHub:
 ```
 zef install https://github.com/antononcube/Raku-DSL-English-DataQueryWorkflows.git
 ```
+
+-------
+
+## Current state
+
+The following diagram:
+
+- Summarizes the data wrangling capabilities envisioned for this package 
+- Represents the Raku parsers and interpreters in this package with the hexagon
+- Indicates future plans with dashed lines
+
+
+![](https://raw.githubusercontent.com/antononcube/RakuForPrediction-book/main/Diagrams/DSLs-Interpreter-for-Data-Wrangling-April-2022-state.png)
+
+**Remark:** The grammar of this package is extended to parse Bulgarian DSL commands
+with the package 
+["DSL::Bulgarian"](https://github.com/antononcube/Raku-DSL-Bulgarian), 
+[AAp4].
+
+-------
+
+## Workflows considered
+
+The following flow-chart encompasses the data transformations workflows we consider:
+
+![](https://raw.githubusercontent.com/antononcube/ConversationalAgents/master/ConceptualDiagrams/Tabular-data-transformation-workflows.png)
+
+Here are some properties of the methodology / flow chart:
+
+- The flow chart is for tabular datasets, or for lists (arrays) or dictionaries (hashes) of tabular datasets
+- In the flow chart only the data loading and summary analysis are not optional
+- All other steps are optional
+- Transformations like inner-joins are represented by the block “Combine groups”
+- It is assumed that in real applications several iterations (loops) have to be run over the flow chart
+
+In the world of the programming language R the orange blocks represent the so called
+Split-Transform-Combine pattern;
+see the article "The Split-Apply-Combine Strategy for Data Analysis" by Hadley Wickham, [HW1].
+
+For more data query workflows design details see the article 
+["Introduction to data wrangling with Raku"](https://rakuforprediction.wordpress.com/2021/12/31/introduction-to-data-wrangling-with-raku/), 
+[AA1] or its translation (and upgrade) in Bulgarian, [AA2].
 
 ------
 
@@ -38,9 +81,9 @@ Here is a longer data wrangling command:
 
 ```perl6
 my $command = 'use starwars;
-select mass & height;
-mutate bmi = `mass/height^2`;
-arrange by the variable bmi descending';
+select species, mass & height;
+group by species;
+arrange by the variables species and mass descending';
 ```
 Here we translate that command into executable code for Julia, Mathematica, Python, R, and Raku:
 
@@ -115,6 +158,26 @@ A dedicated GitHub repository was made in order to make the installation with Ra
 
 ## References
 
+### Articles
+
+[AA1] Anton Antonov,
+["Introduction to data wrangling with Raku"](https://rakuforprediction.wordpress.com/2021/12/31/introduction-to-data-wrangling-with-raku/),
+(2021),
+[RakuForPrediction at WordPress](https://rakuforprediction.wordpress.com).
+
+[AA2] Anton Antonov,
+["Увод в обработката на данни с Raku"](https://rakuforprediction.wordpress.com/2022/05/24/увод-в-обработката-на-данни-с-raku/),
+(2022),
+[RakuForPrediction at WordPress](https://rakuforprediction.wordpress.com).
+
+[HW1] Hadley Wickham, 
+["The Split-Apply-Combine Strategy for Data Analysis"](https://www.jstatsoft.org/article/view/v040i01), 
+(2011), 
+[Journal of Statistical Software](https://www.jstatsoft.org/).
+
+
+### Packages
+
 [AAp1] Anton Antonov,
 [Data Query Workflows Raku Package](https://github.com/antononcube/ConversationalAgents/tree/master/Packages/Perl6/DataQueryWorkflows)
 ,
@@ -130,3 +193,20 @@ A dedicated GitHub repository was made in order to make the installation with Ra
 [Data Query Workflows Mathematica Unit Tests](https://github.com/antononcube/ConversationalAgents/blob/master/UnitTests/WL/DataQueryWorkflows-Unit-Tests.wlt),
 (2020),
 [ConversationalAgents at GitHub/antononcube](https://github.com/antononcube/ConversationalAgents).
+
+[AAp4] Anton Antonov,
+[DSL::Bulgarian Raku package](https://github.com/antononcube/Raku-DSL-Bulgarian),
+(2022),
+[GitHub/antononcube](https://github.com/antononcube).
+
+### Videos
+
+[AAv1] Anton Antonov, 
+["Raku for Prediction"](https://conf.raku.org/talk/157), 
+(2021), 
+[The Raku Conference 2021](https://conf.raku.org/).
+
+[AAv2] Anton Antonov, 
+["Multi-language Data-Wrangling Conversational Agent"], 
+(2020), 
+[Wolfram Technology Conference 2020, YouTube/Wolfram](https://www.youtube.com/channel/UCJekgf6k62CQHdENWf2NgAQ).
