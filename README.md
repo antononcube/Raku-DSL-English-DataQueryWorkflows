@@ -179,6 +179,34 @@ Additional examples can be found in this file:
 
 -------
 
+## Command line interface
+
+The package provides the Command Line Interface (CLI) program `ToDataQueryWorkflowCode`.
+Here is its usage message:
+
+```shell
+> ToDataQueryWorkflowCode --help
+Usage:
+  ToDataQueryWorkflowCode [--target=<Str>] [--language=<Str>] [--format=<Str>] <command> -- Translates natural language commands into data transformations programming code.
+  ToDataQueryWorkflowCode [--language=<Str>] [--format=<Str>] <target> <command>
+  
+    <command>           A string with one or many commands (separated by ';').
+    --target=<Str>      Target (programming language with optional library spec.) [default: 'R-tidyverse']
+    --language=<Str>    The natural language to translate from. [default: 'English']
+    --format=<Str>      The format of the output
+```
+
+Here is an example invocation:
+
+```shell
+> ToDataQueryWorkflowCode Python "use the dataset dfTitanic; group by passengerSex; show counts"
+obj = dfTitanic.copy()
+obj = obj.groupby(["passengerSex"])
+print(obj.size())
+```
+
+-------
+
 ## Testing
 
 There are three types of unit tests for:
