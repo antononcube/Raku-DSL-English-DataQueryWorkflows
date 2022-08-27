@@ -137,11 +137,7 @@ Here we translate that command into executable code for Julia, Mathematica, Pyth
 # $obj = $obj>>.sort({ ($_{"species"}, $_{"mass"}) })>>.reverse
 ```
 
-
-Additional examples can be found in this file:
-[DataQueryWorkflows-examples.raku](./examples/DataQueryWorkflows-examples.raku).
-
-### Translation to other human languages
+Here we translate to other human languages:
 
 ```perl6
 {say $_.key,  ":\n", $_.value, "\n"} for <Bulgarian English Korean Russian Spanish>.map({ $_ => ToDataQueryWorkflowCode($command, $_ ) });
@@ -178,15 +174,18 @@ Additional examples can be found in this file:
 # ordenar en orden descendente con columnas: "species", "mass"
 ```
 
+Additional examples can be found in this file:
+[DataQueryWorkflows-examples.raku](./examples/DataQueryWorkflows-examples.raku).
+
 -------
 
 ## Testing
 
 There are three types of unit tests for:
 
-1. Parsing abilities; see [example](./t/Basic-commands.t)
+1. Parsing abilities; see [example](./t/Basic-commands.rakutest)
 
-2. Interpretation into correct expected code; see [example](./t/Basic-commands-R-tidyverse.t)
+2. Interpretation into correct expected code; see [example](./t/Basic-commands-R-tidyverse.rakutest)
 
 3. Data transformation correctness;
    see [example](https://github.com/antononcube/R-packages/tree/master/DataQueryWorkflowsTests)
