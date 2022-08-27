@@ -6,7 +6,7 @@
   "authors": [
     "Anton Antonov"
   ],
-  "auth": "github:antononcube",
+  "auth": "zef:antononcube",
   "depends": [
     "DSL::Shared"
   ],
@@ -38,7 +38,7 @@
     "DSL::English::DataQueryWorkflows::Grammarish": "lib/DSL/English/DataQueryWorkflows/Grammarish.rakumod"
   },
   "resources": [],
-  "license": "GPL-3.0-or-later",
+  "license": "Artistic-2.0",
   "tags": [
     "data query",
     "data",
