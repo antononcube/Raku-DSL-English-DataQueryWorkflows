@@ -34,7 +34,7 @@ The following diagram:
 - Indicates future plans with dashed lines
 
 
-![](https://raw.githubusercontent.com/antononcube/RakuForPrediction-book/main/Diagrams/DSLs-Interpreter-for-Data-Wrangling-April-2022-state.png)
+![](https://raw.githubusercontent.com/antononcube/RakuForPrediction-book/main/Diagrams/DSLs-Interpreter-for-Data-Wrangling-August-2022-state.png)
 
 **Remark:** The grammar of this package is extended to parse Bulgarian DSL commands
 with the package 
