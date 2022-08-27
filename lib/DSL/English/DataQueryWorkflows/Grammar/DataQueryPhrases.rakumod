@@ -278,7 +278,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule value-column-phrase:sym<English> {  <value-noun> <column-noun>?  }
 
     proto rule variable-column-name-phrase {*}
-    rule variable-column-name-phrase:sym<English> {  <variable-column-phrase> <name-noun>  }
+    rule variable-column-name-phrase:sym<English> {  <variable-column-phrase> <name-noun>?  }
 
     proto rule variable-column-phrase {*}
     rule variable-column-phrase:sym<English> {  <variable-noun> <column-noun>?  }

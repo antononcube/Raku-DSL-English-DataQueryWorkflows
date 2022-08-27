@@ -96,7 +96,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule to-wide-form-phrase { <pivot-verb> [ <to-preposition> | <into-preposition> ]? <wider-phrase>  <format-phrase>? | [ <to-preposition> | <into-preposition> ] <wider-phrase>  <format-phrase> | <cast-verb>  }
     rule value-column-name-phrase { <value-column-phrase> <name-noun> }
     rule value-column-phrase { <value-noun> <column-noun>? }
-    rule variable-column-name-phrase { <variable-column-phrase> <name-noun> }
+    rule variable-column-name-phrase { <variable-column-phrase> <name-noun>? }
     rule variable-column-phrase { <variable-noun> <column-noun>? }
     rule wider-phrase  { <wider-adjective>  | <wide-adjective> | <broad-adjective> }
 }
