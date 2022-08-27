@@ -1,10 +1,13 @@
 use v6.d;
 
-use lib 'lib';
+use lib '.';
+use lib './lib';
+
 use DSL::English::DataQueryWorkflows::Grammar;
+
 use Test;
 
-plan 12;
+plan 13;
 
 # Shortcut
 my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
@@ -50,5 +53,7 @@ ok $pCOMMAND.parse('convert to long form using the id columns ID1, ID2 and with 
 ok $pCOMMAND.parse('pivot to long form with id columns ID1, ID2 and variable columns V1 and V2'),
         'pivot to long form with id columns ID1, ID2 and variable columns V1 and V2';
 
+ok $pCOMMAND.parse('convert to long form using the columns mass and height, with the variable column "Var1"'),
+        'convert to long form using the columns mass and height, with the variable column "Var1"';
 
 done-testing;
