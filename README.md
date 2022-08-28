@@ -250,13 +250,13 @@ A dedicated GitHub repository was made in order to make the installation with Ra
 
 ## TODO
 
-- [ ] Implement SQL actions.
+- [ ] TODO Implement SQL actions.
 
-- [ ] Implement [Swift::TabularData](https://developer.apple.com/documentation/tabulardata) actions.
+- [ ] TODO Implement [Swift::TabularData](https://developer.apple.com/documentation/tabulardata) actions.
   
-- [ ] Implement [Raku::Dan](https://github.com/p6steve/raku-Dan) actions.
+- [ ] TODO Implement [Raku::Dan](https://github.com/p6steve/raku-Dan) actions.
 
-- [ ] Make sure "round trip" translations work. 
+- [ ] TODO Make sure "round trip" translations work. 
 
 ------
 
@@ -305,12 +305,22 @@ A dedicated GitHub repository was made in order to make the installation with Ra
 
 ### Videos
 
-[AAv1] Anton Antonov, 
+[AAv1] Anton Antonov,
+["Multi-language Data-Wrangling Conversational Agent"](https://www.youtube.com/watch?v=pQk5jwoMSxs),
+(2020),
+[Wolfram Technology Conference 2020, YouTube/Wolfram](https://www.youtube.com/channel/UCJekgf6k62CQHdENWf2NgAQ).
+
+[AAv2] Anton Antonov, 
 ["Raku for Prediction"](https://conf.raku.org/talk/157), 
 (2021), 
 [The Raku Conference 2021](https://conf.raku.org/).
 
-[AAv2] Anton Antonov, 
-["Multi-language Data-Wrangling Conversational Agent"], 
-(2020), 
-[Wolfram Technology Conference 2020, YouTube/Wolfram](https://www.youtube.com/channel/UCJekgf6k62CQHdENWf2NgAQ).
+[AAv3] Anton Antonov,
+["Doing it like a Cro (Raku data wrangling Shortcuts demo)"](https://www.youtube.com/watch?v=wS1lqMDdeIY),
+(2021),
+[Anton Antonov's channel at YouTube](https://www.youtube.com/channel/UC5qMPIsJeztfARXWdIw3Xzw).
+
+[AAv4] Anton Antonov,
+["FOSDEM2022 Multi language Data Wrangling and Acquisition Conversational Agents (in Raku)](https://www.youtube.com/watch?v=pQk5jwoMSxs),
+(2022),
+[Anton Antonov's channel at YouTube](https://www.youtube.com/channel/UC5qMPIsJeztfARXWdIw3Xzw).
