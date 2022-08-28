@@ -334,6 +334,11 @@ A dedicated GitHub repository was made in order to make the installation with Ra
 [Anton Antonov's channel at YouTube](https://www.youtube.com/channel/UC5qMPIsJeztfARXWdIw3Xzw).
 
 [AAv4] Anton Antonov,
-["FOSDEM2022 Multi language Data Wrangling and Acquisition Conversational Agents (in Raku)](https://www.youtube.com/watch?v=pQk5jwoMSxs),
+["FOSDEM2022 Multi language Data Wrangling and Acquisition Conversational Agents (in Raku)"](https://www.youtube.com/watch?v=pQk5jwoMSxs),
 (2022),
 [Anton Antonov's channel at YouTube](https://www.youtube.com/channel/UC5qMPIsJeztfARXWdIw3Xzw).
+
+[AAv5] Anton Antonov,
+["Implementing Machine Learning algorithms in Raku" at TRC-2022](https://conf.raku.org/talk/170)
+(2022),
+[The Raku Conference 2022](https://conf.raku.org/).
