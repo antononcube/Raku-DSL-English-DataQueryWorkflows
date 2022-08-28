@@ -17,7 +17,13 @@ There are also interpreters to natural languages: Bulgarian, English, Korean, Ru
 
 ## Installation
 
-From GitHub:
+Zef ecosystem:
+
+```
+zef install DSL::English::DataQueryWorkflows
+```
+
+GitHub:
 
 ```
 zef install https://github.com/antononcube/Raku-DSL-English-DataQueryWorkflows.git
@@ -39,7 +45,7 @@ The following diagram:
 **Remark:** The grammar of this package is extended to parse Bulgarian DSL commands
 with the package 
 ["DSL::Bulgarian"](https://github.com/antononcube/Raku-DSL-Bulgarian), 
-[AAp4].
+[AAp5].
 
 -------
 
@@ -215,8 +221,10 @@ There are three types of unit tests for:
 
 2. Interpretation into correct expected code; see [example](./t/Basic-commands-R-tidyverse.rakutest)
 
-3. Data transformation correctness;
-   see [example](https://github.com/antononcube/R-packages/tree/master/DataQueryWorkflowsTests)
+3. Data transformation correctness; see tests in:
+   - [R](https://github.com/antononcube/R-packages/tree/master/DataQueryWorkflowsTests), [AAp2]
+   - [WL](https://github.com/antononcube/ConversationalAgents/blob/master/UnitTests/WL/DataQueryWorkflows-Unit-Tests.wlt), [AAp3]
+   - [Python](https://github.com/antononcube/ConversationalAgents/blob/master/UnitTests/Python/DataQueryWorkflows-Unit-Tests.py), [AAp4]
 
 The unit tests R-package [AAp2] can be used to test both R and Python translations and equivalence between them.
 
@@ -299,6 +307,11 @@ A dedicated GitHub repository was made in order to make the installation with Ra
 [ConversationalAgents at GitHub/antononcube](https://github.com/antononcube/ConversationalAgents).
 
 [AAp4] Anton Antonov,
+[Data Query Workflows Python Unit Tests](https://github.com/antononcube/ConversationalAgents/blob/master/UnitTests/Python/DataQueryWorkflows-Unit-Tests.py),
+(2020),
+[ConversationalAgents at GitHub/antononcube](https://github.com/antononcube/ConversationalAgents).
+
+[AAp5] Anton Antonov,
 [DSL::Bulgarian Raku package](https://github.com/antononcube/Raku-DSL-Bulgarian),
 (2022),
 [GitHub/antononcube](https://github.com/antononcube).
