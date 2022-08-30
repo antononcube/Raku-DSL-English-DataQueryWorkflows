@@ -1,4 +1,4 @@
-# Standard Data Wrangling commands
+# Standard Data Wrangling Commands
 
 ## Introduction
 
