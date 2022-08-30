@@ -38,29 +38,11 @@ use DSL::English::DataQueryWorkflows;
 
 See ["Anscombe's quartet"](https://en.wikipedia.org/wiki/Anscombe%27s_quartet).
 
-Direct assignment:
+We can retrieve the Anscombe dataset using `example-dataset` provided by "Data::ExampleDatasets":
 
 ```perl6
-my @dsAnsombe = [
-%('X1'=>10,'X2'=>10,'X3'=>10,'X4'=>8,'Y1'=>8.04,'Y2'=>9.14,'Y3'=>7.46,'Y4'=>6.58),
-%('X1'=>8,'X2'=>8,'X3'=>8,'X4'=>8,'Y1'=>6.95,'Y2'=>8.14,'Y3'=>6.77,'Y4'=>5.76),
-%('X1'=>13,'X2'=>13,'X3'=>13,'X4'=>8,'Y1'=>7.58,'Y2'=>8.74,'Y3'=>12.74,'Y4'=>7.71),
-%('X1'=>9,'X2'=>9,'X3'=>9,'X4'=>8,'Y1'=>8.81,'Y2'=>8.77,'Y3'=>7.11,'Y4'=>8.84),
-%('X1'=>11,'X2'=>11,'X3'=>11,'X4'=>8,'Y1'=>8.33,'Y2'=>9.26,'Y3'=>7.81,'Y4'=>8.47),
-%('X1'=>14,'X2'=>14,'X3'=>14,'X4'=>8,'Y1'=>9.96,'Y2'=>8.1,'Y3'=>8.84,'Y4'=>7.04),
-%('X1'=>6,'X2'=>6,'X3'=>6,'X4'=>8,'Y1'=>7.24,'Y2'=>6.13,'Y3'=>6.08,'Y4'=>5.25),
-%('X1'=>4,'X2'=>4,'X3'=>4,'X4'=>19,'Y1'=>4.26,'Y2'=>3.1,'Y3'=>5.39,'Y4'=>12.5),
-%('X1'=>12,'X2'=>12,'X3'=>12,'X4'=>8,'Y1'=>10.84,'Y2'=>9.13,'Y3'=>8.15,'Y4'=>5.56),
-%('X1'=>7,'X2'=>7,'X3'=>7,'X4'=>8,'Y1'=>4.82,'Y2'=>7.26,'Y3'=>6.42,'Y4'=>7.91),
-%('X1'=>5,'X2'=>5,'X3'=>5,'X4'=>8,'Y1'=>5.68,'Y2'=>4.74,'Y3'=>5.73,'Y4'=>6.89)];
-
-to-pretty-table(@dsAnsombe, field-names=><X1 X2 X3 X4 Y1 Y2 Y3 Y4>)
-```
-
-Alternatively, we can retrieve the dataset using `example-dataset` provided by "Data::ExampleDatasets":
-
-```perl6
-to-pretty-table(example-dataset('anscombe'), field-names=><X1 X2 X3 X4 Y1 Y2 Y3 Y4>>>.lc)
+my @dfAnscombe = |example-dataset('anscombe');
+dimensions(@dfAnscombe)
 ```
 
 ### Parameters
@@ -171,12 +153,12 @@ ToDataQueryWorkflowCode($command5, target => $examplesTarget)
 ### Complicated workflows
 
 ```perl6
-to-pretty-table(@dsAnsombe, field-names=><X1 X2 X3 X4 Y1 Y2 Y3 Y4>)
+to-pretty-table(@dfAnscombe)
 ```
 
 ```perl6
 my $command6 =
-        'use dsAnscombe;
+        'use dfAnscombe;
 convert to long form;
 separate the data column Variable into Variable and Set with separator pattern "";
 to wide form for id columns Set and AutomaticKey variable column Variable and value column Value';
