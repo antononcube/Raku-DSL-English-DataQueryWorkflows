@@ -3,9 +3,8 @@
 ## Introduction
 
 This document demonstrates and exemplifies the abilities of the package
-["DSL::English::DataQueryWorkflow"]()
+["DSL::English::DataQueryWorkflow"](https://raku.land/zef:antononcube/DSL::English::DataQueryWorkflows)
 to produce executable code that fits majority of the data wrangling use cases.
-
 
 ------
 
@@ -107,7 +106,7 @@ to-pretty-table(example-dataset('anscombe'), field-names=><X1 X2 X3 X4 Y1 Y2 Y3 
 ### Parameters
 
 ```perl6
-my $exampleTaget = 'Raku';
+my $examplesTarget = 'Raku';
 ```
 ```
 # Raku
@@ -188,7 +187,7 @@ replace 'NA' with 0;
 summarize the variables mass and height with Mean and Median
 ";
 
-ToDataQueryWorkflowCode($command1, target => $exampleTaget)
+ToDataQueryWorkflowCode($command1, target => $examplesTarget)
 ```
 ```
 # $obj = dfStarwars ;
@@ -211,7 +210,7 @@ sort by name, film desc;
 echo data summary;
 take pipeline value";
 
-ToDataQueryWorkflowCode($command2, target => $exampleTaget)
+ToDataQueryWorkflowCode($command2, target => $examplesTarget)
 ```
 ```
 # $obj = dfStarwarsFilms ;
@@ -232,7 +231,7 @@ my $command3 = "use dfTitanic;
 filter with passengerSex is 'male' and passengerSurvival equals 'died' or passengerSurvival is 'survived' ;
 cross tabulate passengerClass, passengerSurvival over passengerAge;";
 
-ToDataQueryWorkflowCode($command3, target => $exampleTaget);
+ToDataQueryWorkflowCode($command3, target => $examplesTarget);
 ```
 ```
 # $obj = dfTitanic ;
@@ -259,9 +258,11 @@ arrange by the variables mass & height descending";
 ToDataQueryWorkflowCode($command4, target => $examplesTarget);
 ```
 ```
-#ERROR: Variable '$examplesTarget' is not declared.  Did you mean any of these:
-#ERROR: '$exampleTaget', '&example-dataset'?
-# Nil
+# $obj = dfStarwars ;
+# $obj = select-columns($obj, ("name", "homeworld", "mass", "height") ) ;
+# note "mutate by pairs is not implemented" ;
+# $obj = $obj.grep({ $_{"bmi"} >= 30 and $_{"height"} < 200 }).Array ;
+# $obj = $obj.sort({($_{"mass"}, $_{"height"}) })>>.reverse
 ```
 
 ------
@@ -280,7 +281,7 @@ echo counts;
 group by homeworld; 
 counts";
 
-ToDataQueryWorkflowCode($command5, target => $exampleTaget)
+ToDataQueryWorkflowCode($command5, target => $examplesTarget)
 ```
 ```
 # $obj = dfStarwars ;
@@ -295,24 +296,24 @@ ToDataQueryWorkflowCode($command5, target => $exampleTaget)
 ### Complicated workflows
 
 ```perl6
-to-pretty-table(@dsAnsombe)
+to-pretty-table(@dsAnsombe, field-names=><X1 X2 X3 X4 Y1 Y2 Y3 Y4>)
 ```
 ```
-# +-----------+----------+----+----+----+-----------+----+-----------+
-# |     Y3    |    Y2    | X3 | X4 | X2 |     Y4    | X1 |     Y1    |
-# +-----------+----------+----+----+----+-----------+----+-----------+
-# |  7.460000 | 9.140000 | 10 | 8  | 10 |  6.580000 | 10 |  8.040000 |
-# |  6.770000 | 8.140000 | 8  | 8  | 8  |  5.760000 | 8  |  6.950000 |
-# | 12.740000 | 8.740000 | 13 | 8  | 13 |  7.710000 | 13 |  7.580000 |
-# |  7.110000 | 8.770000 | 9  | 8  | 9  |  8.840000 | 9  |  8.810000 |
-# |  7.810000 | 9.260000 | 11 | 8  | 11 |  8.470000 | 11 |  8.330000 |
-# |  8.840000 | 8.100000 | 14 | 8  | 14 |  7.040000 | 14 |  9.960000 |
-# |  6.080000 | 6.130000 | 6  | 8  | 6  |  5.250000 | 6  |  7.240000 |
-# |  5.390000 | 3.100000 | 4  | 19 | 4  | 12.500000 | 4  |  4.260000 |
-# |  8.150000 | 9.130000 | 12 | 8  | 12 |  5.560000 | 12 | 10.840000 |
-# |  6.420000 | 7.260000 | 7  | 8  | 7  |  7.910000 | 7  |  4.820000 |
-# |  5.730000 | 4.740000 | 5  | 8  | 5  |  6.890000 | 5  |  5.680000 |
-# +-----------+----------+----+----+----+-----------+----+-----------+
+# +----+----+----+----+-----------+----------+-----------+-----------+
+# | X1 | X2 | X3 | X4 |     Y1    |    Y2    |     Y3    |     Y4    |
+# +----+----+----+----+-----------+----------+-----------+-----------+
+# | 10 | 10 | 10 | 8  |  8.040000 | 9.140000 |  7.460000 |  6.580000 |
+# | 8  | 8  | 8  | 8  |  6.950000 | 8.140000 |  6.770000 |  5.760000 |
+# | 13 | 13 | 13 | 8  |  7.580000 | 8.740000 | 12.740000 |  7.710000 |
+# | 9  | 9  | 9  | 8  |  8.810000 | 8.770000 |  7.110000 |  8.840000 |
+# | 11 | 11 | 11 | 8  |  8.330000 | 9.260000 |  7.810000 |  8.470000 |
+# | 14 | 14 | 14 | 8  |  9.960000 | 8.100000 |  8.840000 |  7.040000 |
+# | 6  | 6  | 6  | 8  |  7.240000 | 6.130000 |  6.080000 |  5.250000 |
+# | 4  | 4  | 4  | 19 |  4.260000 | 3.100000 |  5.390000 | 12.500000 |
+# | 12 | 12 | 12 | 8  | 10.840000 | 9.130000 |  8.150000 |  5.560000 |
+# | 7  | 7  | 7  | 8  |  4.820000 | 7.260000 |  6.420000 |  7.910000 |
+# | 5  | 5  | 5  | 8  |  5.680000 | 4.740000 |  5.730000 |  6.890000 |
+# +----+----+----+----+-----------+----------+-----------+-----------+
 ```
 
 ```perl6
@@ -322,7 +323,7 @@ convert to long form;
 separate the data column Variable into Variable and Set with separator pattern "";
 to wide form for id columns Set and AutomaticKey variable column Variable and value column Value';
 
-ToDataQueryWorkflowCode($command6, target => $exampleTaget)
+ToDataQueryWorkflowCode($command6, target => $examplesTarget)
 ```
 ```
 # $obj = dsAnscombe ;

@@ -3,7 +3,7 @@
 ## Introduction
 
 This document demonstrates and exemplifies the abilities of the package
-["DSL::English::DataQueryWorkflow"]()
+["DSL::English::DataQueryWorkflow"](https://raku.land/zef:antononcube/DSL::English::DataQueryWorkflows)
 to produce executable code that fits majority of the data wrangling use cases.
 
 ------
@@ -66,7 +66,7 @@ to-pretty-table(example-dataset('anscombe'), field-names=><X1 X2 X3 X4 Y1 Y2 Y3 
 ### Parameters
 
 ```perl6
-my $exampleTaget = 'Raku';
+my $examplesTarget = 'Raku';
 ```
 
 ------
@@ -97,7 +97,7 @@ replace 'NA' with 0;
 summarize the variables mass and height with Mean and Median
 ";
 
-ToDataQueryWorkflowCode($command1, target => $exampleTaget)
+ToDataQueryWorkflowCode($command1, target => $examplesTarget)
 ```
 
 ------
@@ -111,7 +111,7 @@ sort by name, film desc;
 echo data summary;
 take pipeline value";
 
-ToDataQueryWorkflowCode($command2, target => $exampleTaget)
+ToDataQueryWorkflowCode($command2, target => $examplesTarget)
 ````
 
 ------
@@ -125,7 +125,7 @@ my $command3 = "use dfTitanic;
 filter with passengerSex is 'male' and passengerSurvival equals 'died' or passengerSurvival is 'survived' ;
 cross tabulate passengerClass, passengerSurvival over passengerAge;";
 
-ToDataQueryWorkflowCode($command3, target => $exampleTaget);
+ToDataQueryWorkflowCode($command3, target => $examplesTarget);
 ```
 
 
@@ -163,7 +163,7 @@ echo counts;
 group by homeworld; 
 counts";
 
-ToDataQueryWorkflowCode($command5, target => $exampleTaget)
+ToDataQueryWorkflowCode($command5, target => $examplesTarget)
 ```
 
 ------
@@ -181,7 +181,7 @@ convert to long form;
 separate the data column Variable into Variable and Set with separator pattern "";
 to wide form for id columns Set and AutomaticKey variable column Variable and value column Value';
 
-ToDataQueryWorkflowCode($command6, target => $exampleTaget)
+ToDataQueryWorkflowCode($command6, target => $examplesTarget)
 ```
 
 ------
