@@ -10,12 +10,19 @@ to produce executable code that fits majority of the data wrangling use cases.
 
 ## Setup
 
+### Parameters
+
+```perl6
+my $examplesTarget = 'Raku';
+```
+
 ### Load packages
 
 ```perl6
 use Data::ExampleDatasets;
 use Data::Reshapers;
 use Data::Summarizers;
+use Text::Plot;
 
 use DSL::English::DataQueryWorkflows;
 ```
@@ -24,44 +31,56 @@ use DSL::English::DataQueryWorkflows;
 
 *Actual data is not used at this point.*
 
+#### Titanic data
+
+We can obtain the Titanic dataset using the function `get-titanic-dataset` provided by "Data::Reshapers":
+
 ```perl6
-#my @dfTitanic = example-dataset("https://raw.githubusercontent.com/antononcube/MathematicaVsR/master/Data/MathematicaVsR-Data-Titanic.csv");
-#my @dfStarwars = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwars.csv");
-#my @dfStarwarsFilms = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsFilms.csv");
-#my @dfStarwarsStarships = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsStarships.csv");
-#my @dfStarwarsVehicles = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsVehicles.csv");
-#
-#(@dfTitanic, @dfStarwars, @dfStarwarsFilms, @dfStarwarsStarships, @dfStarwarsVehicles).map({ dimensions($_) })
+my @dfTitanic = get-titanic-dataset();
+dimensions(@dfTitanic)
 ```
 
 #### Anscombe quartet
 
 See ["Anscombe's quartet"](https://en.wikipedia.org/wiki/Anscombe%27s_quartet).
 
-We can retrieve the Anscombe dataset using `example-dataset` provided by "Data::ExampleDatasets":
+We can obtain the Anscombe dataset using the function `example-dataset` provided by "Data::ExampleDatasets":
 
 ```perl6
 my @dfAnscombe = |example-dataset('anscombe');
 dimensions(@dfAnscombe)
 ```
 
-### Parameters
+#### Star Wars films data
+
+We can obtain
+[Star Wars films](https://en.wikipedia.org/wiki/List_of_Star_Wars_films)
+datasets using (again) the function `example-dataset`:
 
 ```perl6
-my $examplesTarget = 'Raku';
+#my @dfStarwars = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwars.csv");
+#my @dfStarwarsFilms = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsFilms.csv");
+#my @dfStarwarsStarships = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsStarships.csv");
+#my @dfStarwarsVehicles = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsVehicles.csv");
+#
+#(@ @dfStarwars, @dfStarwarsFilms, @dfStarwarsStarships, @dfStarwarsVehicles).map({ dimensions($_) })
 ```
 
 ------
 
-## Multi-language
+## Multi-language translation
+
+### Programming languages
 
 ```perl6
 my $command0 = 'use dfStarwars; group by species; counts;';
-<Python Raku R R::tidyverse WL>.map({ say "\n{$_}:\n", ToDataQueryWorkflowCode($command0, target => $_) });
+<Python Raku R R::tidyverse WL>.map({ say "\n{ $_ }:\n", ToDataQueryWorkflowCode($command0, target => $_) });
 ```
 
+### Natural languages
+
 ```perl6
-<Bulgarian Korean Russian Spanish>.map({ say "\n{$_}:\n", ToDataQueryWorkflowCode($command0, target => $_) });
+<Bulgarian Korean Russian Spanish>.map({ say "\n{ $_ }:\n", ToDataQueryWorkflowCode($command0, target => $_) });
 ```
 
 ------
@@ -110,7 +129,6 @@ cross tabulate passengerClass, passengerSurvival over passengerAge;";
 ToDataQueryWorkflowCode($command3, target => $examplesTarget);
 ```
 
-
 ------
 
 ## Formulas with column references
@@ -133,8 +151,8 @@ ToDataQueryWorkflowCode($command4, target => $examplesTarget);
 
 ## Grouping awareness
 
-Since there is no expectation to have a dedicated data transformation monad -- in whatever programming language -- 
-we can try to make the command sequence parsing to be "aware" of the grouping operations.
+Since there is no expectation to have a dedicated data transformation monad -- in whatever programming language -- we
+can try to make the command sequence parsing to be "aware" of the grouping operations.
 
 Here are is an example:
 
@@ -156,6 +174,8 @@ ToDataQueryWorkflowCode($command5, target => $examplesTarget)
 to-pretty-table(@dfAnscombe)
 ```
 
+#### Code generation
+
 ```perl6
 my $command6 =
         'use dfAnscombe;
@@ -166,6 +186,53 @@ to wide form for id columns Set and AutomaticKey variable column Variable and va
 ToDataQueryWorkflowCode($command6, target => $examplesTarget)
 ```
 
+#### Execution steps (Raku)
+
+Get a copy of the dataset into a "pipeline object":
+
+```perl6
+my $obj = @dfAnscombe;
+```
+
+Very often values of certain parameters are conflated and put into dataset's column names.
+(As with Anscombe's dataset.)
+
+In those situations we:
+
+- Convert the dataset in long format, since that allows column names to be treated as data
+
+- Separate the values of a certain column into to two or more columns
+
+Convert to
+[long format](https://en.wikipedia.org/wiki/Wide_and_narrow_data):
+
+```perl6
+$obj = to-long-format($obj);
+to-pretty-table($obj.head(7))
+```
+
+Separate the data column "Variable" into the columns "Variable" and "Set":
+
+```perl6
+$obj = separate-column( $obj, "Variable", ("Variable", "Set"), sep => "" ) ;
+to-pretty-table($obj.head(7))
+```
+
+Convert to
+[wide format](https://en.wikipedia.org/wiki/Wide_and_narrow_data)
+using appropriate identifier-, variable-, and value column names:
+
+```perl6
+$obj = to-wide-format($obj, identifierColumns => <Set AutomaticKey>, variablesFrom => "Variable", valuesFrom => "Value");
+to-pretty-table($obj.head(7))
+```
+
+Plot the Anscombe's quartet sets:
+
+```perl6
+group-by($obj, 'Set').map({ say "\n", text-list-plot( $_.value.map({ +$_<x> }).List, $_.value.map({ +$_<y> }).List, title => 'Set : ' ~ $_.key) })
+```
+
 ------
 
 ## References
@@ -173,12 +240,14 @@ ToDataQueryWorkflowCode($command6, target => $examplesTarget)
 ### Articles
 
 [AA1] Anton Antonov,
-["Introduction to data wrangling with Raku"](https://rakuforprediction.wordpress.com/2021/12/31/introduction-to-data-wrangling-with-raku/),
-(2021),
+["Introduction to data wrangling with Raku"](https://rakuforprediction.wordpress.com/2021/12/31/introduction-to-data-wrangling-with-raku/)
+,
+(2021), 
 [RakuForPrediction at WordPress](https://rakuforprediction.wordpress.com).
 
 [AA2] Anton Antonov,
-["Увод в обработката на данни с Raku"](https://rakuforprediction.wordpress.com/2022/05/24/увод-в-обработката-на-данни-с-raku/),
+["Увод в обработката на данни с Raku"](https://rakuforprediction.wordpress.com/2022/05/24/увод-в-обработката-на-данни-с-raku/)
+,
 (2022),
 [RakuForPrediction at WordPress](https://rakuforprediction.wordpress.com).
 
@@ -198,7 +267,6 @@ ToDataQueryWorkflowCode($command6, target => $examplesTarget)
 [DSL::Bulgarian Raku package](https://github.com/antononcube/Raku-DSL-Bulgarian),
 (2022),
 [GitHub/antononcube](https://github.com/antononcube).
-
 
 ### Videos
 
