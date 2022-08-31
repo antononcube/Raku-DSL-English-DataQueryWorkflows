@@ -173,19 +173,47 @@ ToDataQueryWorkflowCode($command4, target => $examplesTarget);
 
 ## Grouping awareness
 
+### Code generation 
+
 Since there is no expectation to have a dedicated data transformation monad -- in whatever programming language -- we
 can try to make the command sequence parsing to be "aware" of the grouping operations.
 
 Here are is an example:
 
 ```perl6
-my $command5 = "use dfStarwars; 
-group by species; 
+my $command5 = "use dfTitanic; 
+group by passengerClass; 
 echo counts; 
-group by homeworld; 
+group by passengerSex; 
 counts";
 
 ToDataQueryWorkflowCode($command5, target => $examplesTarget)
+```
+
+### Execution steps (Raku)
+
+First grouping:
+
+```perl6
+my $obj = @dfTitanic ;
+$obj = group-by($obj, "passengerClass") ;
+say "counts: ", $obj>>.elems ;
+```
+
+Before doing the second grouping we flatten the groups of the first:
+
+```perl6
+$obj = group-by($obj.values.reduce( -> $x, $y { [|$x, |$y] } ), "passengerSex") ;
+$obj = $obj>>.elems
+```
+
+Instead of `reduce` we can use the function `flatten` (provided by "Data::Reshapers"):
+
+```perl6
+my $obj2 = group-by(@dfTitanic , "passengerClass") ;
+say "counts: ", $obj2>>.elems ;
+$obj2 = group-by(flatten($obj2.values, max-level => 1).Array, "passengerSex") ;
+say "counts: ", $obj2>>.elems;
 ```
 
 ------
