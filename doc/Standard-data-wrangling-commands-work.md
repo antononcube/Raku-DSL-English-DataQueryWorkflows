@@ -37,7 +37,7 @@ package
 ### Parameters
 
 ```perl6
-my $examplesTarget = 'Raku';
+my $examplesTarget = 'Raku::Reshapers';
 ```
 
 ### Load packages
@@ -183,9 +183,10 @@ ToDataQueryWorkflowCode($command3, target => $examplesTarget);
 
 ## Formulas with column references
 
-Special care has to be taken for when formulas the references to columns are used.
+Special care has to be taken when the formulas reference to columns are used.
 
-Here is an example:
+The code corresponding to the `transform ...` line in this example produces 
+*expected* result for the target "R::tidyverse":
 
 ```perl6
 my $command4 = "use data frame dfStarwars;
@@ -194,8 +195,21 @@ transform with bmi = `mass/height^2*10000`;
 filter rows by bmi >= 30 & height < 200;
 arrange by the variables mass & height descending";
 
-ToDataQueryWorkflowCode($command4, target => $examplesTarget);
+ToDataQueryWorkflowCode($command4, target => 'R::tidyverse');
 ```
+
+Specifically, for "Raku::Reshapers" the transform specification line has to refer to the context variable `$_`.
+Here is an example:
+
+```perl6
+my $command4r = 'use data frame dfStarwars;
+transform with bmi = `$_<mass>/$_<height>^2*10000` and homeworld = `$_<homeworld>.uc`;';
+
+ToDataQueryWorkflowCode($command4r, target => 'Raku::Reshapers');
+```
+
+**Remark:** Note that we have to use single quotes for the command assignment; 
+using double quotes will invoke Raku's string interpolation feature. 
 
 ------
 
