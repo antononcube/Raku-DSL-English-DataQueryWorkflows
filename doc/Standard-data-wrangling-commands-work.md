@@ -3,8 +3,11 @@
 ## Introduction
 
 This document demonstrates and exemplifies the abilities of the package
-["DSL::English::DataQueryWorkflow"](https://raku.land/zef:antononcube/DSL::English::DataQueryWorkflows)
+["DSL::English::DataQueryWorkflow"](https://raku.land/zef:antononcube/DSL::English::DataQueryWorkflows), [AAp1],
 to produce executable code that fits majority of the data wrangling use cases.
+
+The examples should give a good idea of the English-based Domain Specific Language (DSL)
+utilized by [AAp1].
 
 The data wrangling in Raku is done with the packages:
 ["Data::Generators"](https://raku.land/zef:antononcube/Data::Generators),
@@ -25,7 +28,7 @@ Some of the data is acquired with the package
 This is a "computable Markdown document" -- the Raku cells are (context-consecutively) evaluated with the
 ["literate programming"](https://en.wikipedia.org/wiki/Literate_programming)
 package
-["Text::CodeProcessing"](https://raku.land/cpan:ANTONOV/Text::CodeProcessing), [AA3, AAp5].
+["Text::CodeProcessing"](https://raku.land/cpan:ANTONOV/Text::CodeProcessing), [AA3, AAp7].
 
 ------
 
@@ -61,11 +64,18 @@ my @dfTitanic = get-titanic-dataset();
 dimensions(@dfTitanic)
 ```
 
-#### Anscombe quartet
+#### Anscombe's quartet
 
-See ["Anscombe's quartet"](https://en.wikipedia.org/wiki/Anscombe%27s_quartet).
+The dataset named
+["Anscombe's quartet"](https://en.wikipedia.org/wiki/Anscombe%27s_quartet)
+has four datasets that have nearly identical simple descriptive statistics, 
+yet have very different distributions and appear very different when graphed.
 
-We can obtain the Anscombe dataset using the function `example-dataset` provided by "Data::ExampleDatasets":
+Anscombe's quartet is (usually) given in a table with eight columns that is somewhat awkward to work with.
+Below we demonstrate data transformations that make plotting of the four datasets easier.
+The DSL specifications used make those data transformations are programming language independent.
+
+We can obtain the Anscombe's dataset using the function `example-dataset` provided by "Data::ExampleDatasets":
 
 ```perl6
 my @dfAnscombe = |example-dataset('anscombe');
@@ -103,6 +113,24 @@ my $command0 = 'use dfStarwars; group by species; counts;';
 
 ```perl6
 <Bulgarian Korean Russian Spanish>.map({ say "\n{ $_ }:\n", ToDataQueryWorkflowCode($command0, target => $_) });
+```
+
+------
+
+# Using DSL cells
+
+If the package "DSL::Shared::Utilities::ComprehensiveTranslations", [AAp3], is installed
+then DSL specifications can be directly written in the Markdown cells.
+
+Here is an example:
+
+```raku-dsl
+DSL TARGET Python::pandas;
+include setup code;
+use dfStarwars;
+join with dfStarwarsFilms by "homeworld"; 
+group by species; 
+counts;
 ```
 
 ------
@@ -323,7 +351,7 @@ group-by($obj, 'Set').map({ say "\n", text-list-plot( $_.value.map({ +$_<x> }).L
 ### Packages
 
 [AAp1] Anton Antonov,
-[DSL::English Raku package](https://github.com/antononcube/Raku-DSL-English-DataQueryWorkflows),
+[DSL::English::DataQueryWorkflows Raku package](https://github.com/antononcube/Raku-DSL-English-DataQueryWorkflows),
 (2020-2022),
 [GitHub/antononcube](https://github.com/antononcube).
 
@@ -332,27 +360,32 @@ group-by($obj, 'Set').map({ say "\n", text-list-plot( $_.value.map({ +$_<x> }).L
 (2022),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAp1] Anton Antonov,
+[AAp3] Anton Antonov,
+[DSL::Shared::Utilities::ComprehensiveTranslations Raku package](https://github.com/antononcube/Raku-Text-Plot),
+(2020-2022),
+[GitHub/antononcube](https://github.com/antononcube).
+
+[AAp4] Anton Antonov,
 [Data::Generators Raku package](https://github.com/antononcube/Raku-Data-Generators),
 (2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAp2] Anton Antonov,
+[AAp5] Anton Antonov,
 [Data::Reshapers Raku package](https://github.com/antononcube/Raku-Data-Reshapers),
 (2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAp3] Anton Antonov,
+[AAp6] Anton Antonov,
 [Data::Summarizers Raku package](https://github.com/antononcube/Raku-Data-Summarizers),
 (2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAp5] Anton Antonov,
+[AAp7] Anton Antonov,
 [Text::CodeProcessing Raku package](https://github.com/antononcube/Raku-Text-CodeProcessing),
 (2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAp6] Anton Antonov,
+[AAp8] Anton Antonov,
 [Text::Plot Raku package](https://github.com/antononcube/Raku-Text-Plot),
 (2022),
 [GitHub/antononcube](https://github.com/antononcube).

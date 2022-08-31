@@ -3,8 +3,11 @@
 ## Introduction
 
 This document demonstrates and exemplifies the abilities of the package
-["DSL::English::DataQueryWorkflow"](https://raku.land/zef:antononcube/DSL::English::DataQueryWorkflows)
+["DSL::English::DataQueryWorkflow"](https://raku.land/zef:antononcube/DSL::English::DataQueryWorkflows), [AAp1],
 to produce executable code that fits majority of the data wrangling use cases.
+
+The examples should give a good idea of the English-based Domain Specific Language (DSL)
+utilized by [AAp1].
 
 The data wrangling in Raku is done with the packages:
 ["Data::Generators"](https://raku.land/zef:antononcube/Data::Generators),
@@ -25,7 +28,7 @@ Some of the data is acquired with the package
 This is a "computable Markdown document" -- the Raku cells are (context-consecutively) evaluated with the
 ["literate programming"](https://en.wikipedia.org/wiki/Literate_programming)
 package
-["Text::CodeProcessing"](https://raku.land/cpan:ANTONOV/Text::CodeProcessing), [AA3, AAp5].
+["Text::CodeProcessing"](https://raku.land/cpan:ANTONOV/Text::CodeProcessing), [AA3, AAp7].
 
 ------
 
@@ -70,11 +73,18 @@ dimensions(@dfTitanic)
 # (1309 5)
 ```
 
-#### Anscombe quartet
+#### Anscombe's quartet
 
-See ["Anscombe's quartet"](https://en.wikipedia.org/wiki/Anscombe%27s_quartet).
+The dataset named
+["Anscombe's quartet"](https://en.wikipedia.org/wiki/Anscombe%27s_quartet)
+has four datasets that have nearly identical simple descriptive statistics, 
+yet have very different distributions and appear very different when graphed.
 
-We can obtain the Anscombe dataset using the function `example-dataset` provided by "Data::ExampleDatasets":
+Anscombe's quartet is (usually) given in a table with eight columns that is somewhat awkward to work with.
+Below we demonstrate data transformations that make plotting of the four datasets easier.
+The DSL specifications used make those data transformations are programming language independent.
+
+We can obtain the Anscombe's dataset using the function `example-dataset` provided by "Data::ExampleDatasets":
 
 ```perl6
 my @dfAnscombe = |example-dataset('anscombe');
@@ -165,6 +175,35 @@ my $command0 = 'use dfStarwars; group by species; counts;';
 # utilizar la tabla: dfStarwars
 # agrupar con columnas: "species"
 # encontrar recuentos
+```
+
+------
+
+# Using DSL cells
+
+If the package "DSL::Shared::Utilities::ComprehensiveTranslations", [AAp3], is installed
+then DSL specifications can be directly written in the Markdown cells.
+
+Here is an example:
+
+```raku-dsl
+DSL TARGET Python::pandas;
+include setup code;
+use dfStarwars;
+join with dfStarwarsFilms by "homeworld"; 
+group by species; 
+counts;
+```
+```
+# {
+#   "DSLFUNCTION": "proto sub ToDataQueryWorkflowCode (Str $command, |) {*}",
+#   "COMMAND": "DSL TARGET Python::pandas;\ninclude setup code;\nuse dfStarwars;\njoin with dfStarwarsFilms by \"homeworld\"; \ngroup by species; \ncounts;\n",
+#   "DSLTARGET": "Python::pandas",
+#   "DSL": "DSL::English::DataQueryWorkflows",
+#   "USERID": "",
+#   "CODE": "obj = dfStarwars.copy()\nobj = obj.merge( dfStarwarsFilms, on = [\"homeworld\"], how = \"inner\" )\nobj = obj.groupby([\"species\"])\nobj = obj.size()",
+#   "SETUPCODE": "import pandas\nfrom ExampleDatasets import *"
+# }
 ```
 
 ------
@@ -354,21 +393,21 @@ my $obj = @dfAnscombe;
 say to-pretty-table($obj);
 ```
 ```
-# +-----------+----------+-----------+----+----+----+-----------+----+
-# |     y3    |    y2    |     y1    | x1 | x2 | x4 |     y4    | x3 |
-# +-----------+----------+-----------+----+----+----+-----------+----+
-# |  7.460000 | 9.140000 |  8.040000 | 10 | 10 | 8  |  6.580000 | 10 |
-# |  6.770000 | 8.140000 |  6.950000 | 8  | 8  | 8  |  5.760000 | 8  |
-# | 12.740000 | 8.740000 |  7.580000 | 13 | 13 | 8  |  7.710000 | 13 |
-# |  7.110000 | 8.770000 |  8.810000 | 9  | 9  | 8  |  8.840000 | 9  |
-# |  7.810000 | 9.260000 |  8.330000 | 11 | 11 | 8  |  8.470000 | 11 |
-# |  8.840000 | 8.100000 |  9.960000 | 14 | 14 | 8  |  7.040000 | 14 |
-# |  6.080000 | 6.130000 |  7.240000 | 6  | 6  | 8  |  5.250000 | 6  |
-# |  5.390000 | 3.100000 |  4.260000 | 4  | 4  | 19 | 12.500000 | 4  |
-# |  8.150000 | 9.130000 | 10.840000 | 12 | 12 | 8  |  5.560000 | 12 |
-# |  6.420000 | 7.260000 |  4.820000 | 7  | 7  | 8  |  7.910000 | 7  |
-# |  5.730000 | 4.740000 |  5.680000 | 5  | 5  | 8  |  6.890000 | 5  |
-# +-----------+----------+-----------+----+----+----+-----------+----+
+# +----+----+----------+-----------+----+-----------+----+-----------+
+# | x1 | x3 |    y2    |     y3    | x4 |     y4    | x2 |     y1    |
+# +----+----+----------+-----------+----+-----------+----+-----------+
+# | 10 | 10 | 9.140000 |  7.460000 | 8  |  6.580000 | 10 |  8.040000 |
+# | 8  | 8  | 8.140000 |  6.770000 | 8  |  5.760000 | 8  |  6.950000 |
+# | 13 | 13 | 8.740000 | 12.740000 | 8  |  7.710000 | 13 |  7.580000 |
+# | 9  | 9  | 8.770000 |  7.110000 | 8  |  8.840000 | 9  |  8.810000 |
+# | 11 | 11 | 9.260000 |  7.810000 | 8  |  8.470000 | 11 |  8.330000 |
+# | 14 | 14 | 8.100000 |  8.840000 | 8  |  7.040000 | 14 |  9.960000 |
+# | 6  | 6  | 6.130000 |  6.080000 | 8  |  5.250000 | 6  |  7.240000 |
+# | 4  | 4  | 3.100000 |  5.390000 | 19 | 12.500000 | 4  |  4.260000 |
+# | 12 | 12 | 9.130000 |  8.150000 | 8  |  5.560000 | 12 | 10.840000 |
+# | 7  | 7  | 7.260000 |  6.420000 | 8  |  7.910000 | 7  |  4.820000 |
+# | 5  | 5  | 4.740000 |  5.730000 | 8  |  6.890000 | 5  |  5.680000 |
+# +----+----+----------+-----------+----+-----------+----+-----------+
 ```
 
 Summarize Anscombe's quartet (using "Data::Summarizers", [AAp3]):
@@ -377,16 +416,16 @@ Summarize Anscombe's quartet (using "Data::Summarizers", [AAp3]):
 records-summary($obj);
 ```
 ```
-# +--------------+--------------+--------------------+--------------------+--------------+--------------+-----------------+--------------------+
-# | x4           | x3           | y4                 | y2                 | x2           | x1           | y3              | y1                 |
-# +--------------+--------------+--------------------+--------------------+--------------+--------------+-----------------+--------------------+
-# | Min    => 8  | Min    => 4  | Min    => 5.25     | Min    => 3.1      | Min    => 4  | Min    => 4  | Min    => 5.39  | Min    => 4.26     |
-# | 1st-Qu => 8  | 1st-Qu => 6  | 1st-Qu => 5.76     | 1st-Qu => 6.13     | 1st-Qu => 6  | 1st-Qu => 6  | 1st-Qu => 6.08  | 1st-Qu => 5.68     |
-# | Mean   => 9  | Mean   => 9  | Mean   => 7.500909 | Mean   => 7.500909 | Mean   => 9  | Mean   => 9  | Mean   => 7.5   | Mean   => 7.500909 |
-# | Median => 8  | Median => 9  | Median => 7.04     | Median => 8.14     | Median => 9  | Median => 9  | Median => 7.11  | Median => 7.58     |
-# | 3rd-Qu => 8  | 3rd-Qu => 12 | 3rd-Qu => 8.47     | 3rd-Qu => 9.13     | 3rd-Qu => 12 | 3rd-Qu => 12 | 3rd-Qu => 8.15  | 3rd-Qu => 8.81     |
-# | Max    => 19 | Max    => 14 | Max    => 12.5     | Max    => 9.26     | Max    => 14 | Max    => 14 | Max    => 12.74 | Max    => 10.84    |
-# +--------------+--------------+--------------------+--------------------+--------------+--------------+-----------------+--------------------+
+# +--------------------+--------------+-----------------+--------------+--------------+--------------------+--------------------+--------------+
+# | y4                 | x2           | y3              | x4           | x3           | y2                 | y1                 | x1           |
+# +--------------------+--------------+-----------------+--------------+--------------+--------------------+--------------------+--------------+
+# | Min    => 5.25     | Min    => 4  | Min    => 5.39  | Min    => 8  | Min    => 4  | Min    => 3.1      | Min    => 4.26     | Min    => 4  |
+# | 1st-Qu => 5.76     | 1st-Qu => 6  | 1st-Qu => 6.08  | 1st-Qu => 8  | 1st-Qu => 6  | 1st-Qu => 6.13     | 1st-Qu => 5.68     | 1st-Qu => 6  |
+# | Mean   => 7.500909 | Mean   => 9  | Mean   => 7.5   | Mean   => 9  | Mean   => 9  | Mean   => 7.500909 | Mean   => 7.500909 | Mean   => 9  |
+# | Median => 7.04     | Median => 9  | Median => 7.11  | Median => 8  | Median => 9  | Median => 8.14     | Median => 7.58     | Median => 9  |
+# | 3rd-Qu => 8.47     | 3rd-Qu => 12 | 3rd-Qu => 8.15  | 3rd-Qu => 8  | 3rd-Qu => 12 | 3rd-Qu => 9.13     | 3rd-Qu => 8.81     | 3rd-Qu => 12 |
+# | Max    => 12.5     | Max    => 14 | Max    => 12.74 | Max    => 19 | Max    => 14 | Max    => 9.26     | Max    => 10.84    | Max    => 14 |
+# +--------------------+--------------+-----------------+--------------+--------------+--------------------+--------------------+--------------+
 ```
 
 **Remark:** Note that Anscombe's sets have same x- and y- mean values. (But the sets have very different shapes.)
@@ -412,17 +451,17 @@ $obj = to-long-format($obj);
 to-pretty-table($obj.head(7))
 ```
 ```
-# +----------+----------+--------------+
-# | Variable |  Value   | AutomaticKey |
-# +----------+----------+--------------+
-# |    y2    | 9.140000 |      0       |
-# |    x1    |    10    |      0       |
-# |    x3    |    10    |      0       |
-# |    x4    |    8     |      0       |
-# |    y4    | 6.580000 |      0       |
-# |    x2    |    10    |      0       |
-# |    y1    | 8.040000 |      0       |
-# +----------+----------+--------------+
+# +----------+--------------+----------+
+# |  Value   | AutomaticKey | Variable |
+# +----------+--------------+----------+
+# | 8.040000 |      0       |    y1    |
+# |    10    |      0       |    x2    |
+# |    10    |      0       |    x3    |
+# |    10    |      0       |    x1    |
+# | 7.460000 |      0       |    y3    |
+# | 6.580000 |      0       |    y4    |
+# |    8     |      0       |    x4    |
+# +----------+--------------+----------+
 ```
 
 Separate the data column "Variable" into the columns "Variable" and "Set":
@@ -435,13 +474,13 @@ to-pretty-table($obj.head(7))
 # +--------------+----------+----------+-----+
 # | AutomaticKey | Variable |  Value   | Set |
 # +--------------+----------+----------+-----+
-# |      0       |    y     | 9.140000 |  2  |
-# |      0       |    x     |    10    |  1  |
-# |      0       |    x     |    10    |  3  |
-# |      0       |    x     |    8     |  4  |
-# |      0       |    y     | 6.580000 |  4  |
-# |      0       |    x     |    10    |  2  |
 # |      0       |    y     | 8.040000 |  1  |
+# |      0       |    x     |    10    |  2  |
+# |      0       |    x     |    10    |  3  |
+# |      0       |    x     |    10    |  1  |
+# |      0       |    y     | 7.460000 |  3  |
+# |      0       |    y     | 6.580000 |  4  |
+# |      0       |    x     |    8     |  4  |
 # +--------------+----------+----------+-----+
 ```
 
@@ -454,17 +493,17 @@ $obj = to-wide-format( $obj, identifierColumns => ("Set", "AutomaticKey"), varia
 to-pretty-table($obj.head(7))
 ```
 ```
-# +----+------+-----+--------------+
-# | x  |  y   | Set | AutomaticKey |
-# +----+------+-----+--------------+
-# | 10 | 8.04 |  1  |      0       |
-# | 8  | 6.95 |  1  |      1       |
-# | 13 | 7.58 |  1  |      2       |
-# | 9  | 8.81 |  1  |      3       |
-# | 11 | 8.33 |  1  |      4       |
-# | 14 | 9.96 |  1  |      5       |
-# | 6  | 7.24 |  1  |      6       |
-# +----+------+-----+--------------+
+# +----+------+--------------+-----+
+# | x  |  y   | AutomaticKey | Set |
+# +----+------+--------------+-----+
+# | 10 | 8.04 |      0       |  1  |
+# | 8  | 6.95 |      1       |  1  |
+# | 13 | 7.58 |      2       |  1  |
+# | 9  | 8.81 |      3       |  1  |
+# | 11 | 8.33 |      4       |  1  |
+# | 14 | 9.96 |      5       |  1  |
+# | 6  | 7.24 |      6       |  1  |
+# +----+------+--------------+-----+
 ```
 
 Plot each dataset of Anscombe's quartet (using "Text::Plot", [AAp6]):
@@ -473,43 +512,7 @@ Plot each dataset of Anscombe's quartet (using "Text::Plot", [AAp6]):
 group-by($obj, 'Set').map({ say "\n", text-list-plot( $_.value.map({ +$_<x> }).List, $_.value.map({ +$_<y> }).List, title => 'Set : ' ~ $_.key) })
 ```
 ```
-# Set : 4                           
-# +---+--------+--------+---------+--------+---------+-------+       
-# |                                                          |       
-# +                                                      *   +  12.00
-# |                                                          |       
-# |                                                          |       
-# +                                                          +  10.00
-# |                                                          |       
-# |   *                                                      |       
-# +   *                                                      +   8.00
-# |   *                                                      |       
-# |   *                                                      |       
-# +                                                          +   6.00
-# |   *                                                      |       
-# |                                                          |       
-# +---+--------+--------+---------+--------+---------+-------+       
-#     8.00     10.00    12.00     14.00    16.00     18.00           
-# 
-#                           Set : 2                           
-# +---+---------+---------+----------+---------+---------+---+      
-# |                                                          |      
-# +                            *     *    *    *    *        +  9.00
-# |                                                          |      
-# +                       *                              *   +  8.00
-# |                  *                                       |      
-# +                                                          +  7.00
-# +             *                                            +  6.00
-# |                                                          |      
-# +                                                          +  5.00
-# |        *                                                 |      
-# +                                                          +  4.00
-# |   *                                                      |      
-# +                                                          +  3.00
-# +---+---------+---------+----------+---------+---------+---+      
-#     4.00      6.00      8.00       10.00     12.00     14.00      
-# 
-#                           Set : 3                           
+# Set : 3                           
 # +---+---------+---------+----------+---------+---------+---+       
 # |                                                          |       
 # |                                                 *        |       
@@ -543,6 +546,42 @@ group-by($obj, 'Set').map({ say "\n", text-list-plot( $_.value.map({ +$_<x> }).L
 # |   *              *                                       |       
 # +                                                          +   4.00
 # +---+---------+---------+----------+---------+---------+---+       
+#     4.00      6.00      8.00       10.00     12.00     14.00       
+# 
+#                           Set : 4                           
+# +---+--------+--------+---------+--------+---------+-------+       
+# |                                                          |       
+# +                                                      *   +  12.00
+# |                                                          |       
+# |                                                          |       
+# +                                                          +  10.00
+# |                                                          |       
+# |   *                                                      |       
+# +   *                                                      +   8.00
+# |   *                                                      |       
+# |   *                                                      |       
+# +                                                          +   6.00
+# |   *                                                      |       
+# |                                                          |       
+# +---+--------+--------+---------+--------+---------+-------+       
+#     8.00     10.00    12.00     14.00    16.00     18.00           
+# 
+#                           Set : 2                           
+# +---+---------+---------+----------+---------+---------+---+      
+# |                                                          |      
+# +                            *     *    *    *    *        +  9.00
+# |                                                          |      
+# +                       *                              *   +  8.00
+# |                  *                                       |      
+# +                                                          +  7.00
+# +             *                                            +  6.00
+# |                                                          |      
+# +                                                          +  5.00
+# |        *                                                 |      
+# +                                                          +  4.00
+# |   *                                                      |      
+# +                                                          +  3.00
+# +---+---------+---------+----------+---------+---------+---+      
 #     4.00      6.00      8.00       10.00     12.00     14.00
 ```
 
@@ -577,7 +616,7 @@ group-by($obj, 'Set').map({ say "\n", text-list-plot( $_.value.map({ +$_<x> }).L
 ### Packages
 
 [AAp1] Anton Antonov,
-[DSL::English Raku package](https://github.com/antononcube/Raku-DSL-English-DataQueryWorkflows),
+[DSL::English::DataQueryWorkflows Raku package](https://github.com/antononcube/Raku-DSL-English-DataQueryWorkflows),
 (2020-2022),
 [GitHub/antononcube](https://github.com/antononcube).
 
@@ -586,27 +625,32 @@ group-by($obj, 'Set').map({ say "\n", text-list-plot( $_.value.map({ +$_<x> }).L
 (2022),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAp1] Anton Antonov,
+[AAp3] Anton Antonov,
+[DSL::Shared::Utilities::ComprehensiveTranslations Raku package](https://github.com/antononcube/Raku-Text-Plot),
+(2020-2022),
+[GitHub/antononcube](https://github.com/antononcube).
+
+[AAp4] Anton Antonov,
 [Data::Generators Raku package](https://github.com/antononcube/Raku-Data-Generators),
 (2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAp2] Anton Antonov,
+[AAp5] Anton Antonov,
 [Data::Reshapers Raku package](https://github.com/antononcube/Raku-Data-Reshapers),
 (2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAp3] Anton Antonov,
+[AAp6] Anton Antonov,
 [Data::Summarizers Raku package](https://github.com/antononcube/Raku-Data-Summarizers),
 (2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAp5] Anton Antonov,
+[AAp7] Anton Antonov,
 [Text::CodeProcessing Raku package](https://github.com/antononcube/Raku-Text-CodeProcessing),
 (2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAp6] Anton Antonov,
+[AAp8] Anton Antonov,
 [Text::Plot Raku package](https://github.com/antononcube/Raku-Text-Plot),
 (2022),
 [GitHub/antononcube](https://github.com/antononcube).
