@@ -90,7 +90,7 @@ We can obtain
 datasets using (again) the function `example-dataset`:
 
 ```perl6
-#my @dfStarwars = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwars.csv");
+my @dfStarwars = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwars.csv");
 #my @dfStarwarsFilms = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsFilms.csv");
 #my @dfStarwarsStarships = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsStarships.csv");
 #my @dfStarwarsVehicles = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsVehicles.csv");
@@ -135,20 +135,67 @@ counts;
 
 ------
 
-## Filter, group, and summarize
+## Non-trivial workflow
+
+In this section we generate and demonstrates data wrangling steps that 
+clean, mutate, filter, group, and summarize a given dataset.
+
+### Code generation
 
 ```perl6
-my $command1 = "
+my $command1 = '
 use dfStarwars;
+replace missing with `<0>`;
+mutate with mass = `+$_<mass>` and height = `+$_<height>`;
+show dimensions;
+echo summary;
 filter by birth_year greater than 27;
 select homeworld, mass and height;
 group by homeworld;
-replace missing with 0;
-replace 'NA' with 0;
-summarize the variables mass and height with Mean and Median
-";
+show counts;
+summarize the variables mass and height with &mean and &median
+';
 
 ToDataQueryWorkflowCode($command1, target => $examplesTarget)
+```
+
+### Execution steps (Raku)
+
+Here is code that cleans the data of missing values, and shows dimensions and summary (corresponds to the first five lines above):
+
+```perl6
+my $obj = @dfStarwars ;
+$obj = $obj.deepmap({ ( ($_ eqv Any) or $_.isa(Nil) or $_.isa(Whatever) ) ?? <0> !! $_ }) ;
+$obj = $obj.map({ $_{"mass"} = +$_<mass>; $_{"height"} = +$_<height>; $_ }).Array ;
+say "dimensions: {dimensions($obj)}" ;
+records-summary($obj);
+```
+
+Here is the deduced type: 
+
+```perl6
+say deduce-type($obj);
+```
+
+Here is a sample of the dataset (wrangled so far):
+
+```perl6
+say to-pretty-table($obj.pick(7));
+```
+
+Here we group by "homeworld" and show counts for each group:
+
+```perl6
+$obj = group-by($obj, "homeworld") ;
+say "counts: ", $obj>>.elems ;
+```
+
+Here is summarization at specified columns with specified functions (from the "Stats"):
+
+```perl6
+use Stats;
+$obj = $obj.map({ $_.key => summarize-at($_.value, ("mass", "height"), (&mean, &median)) });
+say to-pretty-table($obj.pick(7));
 ```
 
 ------
@@ -169,7 +216,10 @@ ToDataQueryWorkflowCode($command2, target => $examplesTarget)
 
 ## Cross tabulation
 
-Cross tabulation is a fundamental data wrangling operation:
+[Cross tabulation](https://en.wikipedia.org/wiki/Contingency_table) 
+is a fundamental data wrangling operation:
+
+### Code generation
 
 ```perl6
 my $command3 = "use dfTitanic;
@@ -179,11 +229,35 @@ cross tabulate passengerClass, passengerSurvival over passengerAge;";
 ToDataQueryWorkflowCode($command3, target => $examplesTarget);
 ```
 
+### Execution steps (Raku)
+
+Copy the Titanic data into a "pipeline object" and show its dimensions and a sample of it:
+
+```perl6
+my $obj = @dfTitanic ;
+say "Titanic dimensions:", dimensions(@dfTitanic);
+say to-pretty-table($obj.pick(7));
+```
+
+Filter the data and show the number of rows in the result set:
+
+```perl6
+$obj = $obj.grep({ $_{"passengerSex"} eq "male" and $_{"passengerSurvival"} eq "died" or $_{"passengerSurvival"} eq "survived" }).Array ;
+say $obj.elems;
+```
+
+Cross tabulate and show the result:
+
+```perl6
+$obj = cross-tabulate( $obj, "passengerClass", "passengerSurvival", "passengerAge" );
+say to-pretty-table($obj);
+```
+
 ------
 
 ## Formulas with column references
 
-Special care has to be taken when the formulas reference to columns are used.
+Special care has to be taken when the specifying data mutations with formulas that reference to columns in the dataset.
 
 The code corresponding to the `transform ...` line in this example produces 
 *expected* result for the target "R::tidyverse":
@@ -220,7 +294,8 @@ using double quotes will invoke Raku's string interpolation feature.
 Since there is no expectation to have a dedicated data transformation monad -- in whatever programming language -- we
 can try to make the command sequence parsing to be "aware" of the grouping operations.
 
-Here are is an example:
+In the following example before applying the grouping operation in fourth line 
+we have to flatten the data (which is grouped in the second line):
 
 ```perl6
 my $command5 = "use dfTitanic; 

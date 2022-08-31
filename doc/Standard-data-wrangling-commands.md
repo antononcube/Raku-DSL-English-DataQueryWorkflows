@@ -102,7 +102,7 @@ We can obtain
 datasets using (again) the function `example-dataset`:
 
 ```perl6
-#my @dfStarwars = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwars.csv");
+my @dfStarwars = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwars.csv");
 #my @dfStarwarsFilms = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsFilms.csv");
 #my @dfStarwarsStarships = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsStarships.csv");
 #my @dfStarwarsVehicles = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsVehicles.csv");
@@ -110,7 +110,7 @@ datasets using (again) the function `example-dataset`:
 #(@ @dfStarwars, @dfStarwarsFilms, @dfStarwarsStarships, @dfStarwarsVehicles).map({ dimensions($_) })
 ```
 ```
-# ()
+# [{birth_year => 19, eye_color => blue, gender => masculine, hair_color => blond, height => 172, homeworld => Tatooine, mass => 77, name => Luke Skywalker, sex => male, skin_color => fair, species => Human} {birth_year => 112, eye_color => yellow, gender => masculine, hair_color => (Any), height => 167, homeworld => Tatooine, mass => 75, name => C-3PO, sex => none, skin_color => gold, species => Droid} {birth_year => 33, eye_color => red, gender => masculine, hair_color => (Any), height => 96, homeworld => Naboo, mass => 32, name => R2-D2, sex => none, skin_color => white, blue, species => Droid} {birth_year => 41.9, eye_color => yellow, gender => masculine, hair_color => none, height => 202, homeworld => Tatooine, mass => 136, name => Darth Vader, sex => male, skin_color => white, species => Human} {birth_year => 19, eye_color => brown, gender => feminine, hair_color => brown, height => 150, homeworld => Alderaan, mass => 49, name => Leia Organa, sex => female, skin_color => light, species => Human} {birth_year => 52, eye_color => blue, gender => masculine, hair_color => brown, grey, height => 178, homeworld => Tatooine, mass => 120, name => Owen Lars, sex => male, skin_color => light, species => Human} {birth_year => 47, eye_color => blue, gender => feminine, hair_color => brown, height => 165, homeworld => Tatooine, mass => 75, name => Beru Whitesun lars, sex => female, skin_color => light, species => Human} {birth_year => (Any), eye_color => red, gender => masculine, hair_color => (Any), height => 97, homeworld => Tatooine, mass => 32, name => R5-D4, sex => none, skin_color => white, red, species => Droid} {birth_year => 24, eye_color => brown, gender => masculine, hair_color => black, height => 183, homeworld => Tatooine, mass => 84, name => Biggs Darklighter, sex => male, skin_color => light, species => Human} {birth_year => 57, eye_color => blue-gray, gender => masculine, hair_color => auburn, white, height => 182, homeworld => Stewjon, mass => 77, name => Obi-Wan Kenobi, sex => male, skin_color => fair, species => Human} {birth_year => 41.9, eye_color => blue, gender => masculine, hair_color => blond, height => 188, homeworld => Tatooine, mass => 84, name => Anakin Skywalker, sex => male, skin_color => fair, species => Human} {birth_year => 64, eye_color => blue, gender => masculine, hair_color => auburn, grey, height => 180, homeworld => Eriadu, mass => (Any), name => Wilhuff Tarkin, sex => male, skin_color => fair, species => Human} {birth_year => 200, eye_color => blue, gender => masculine, hair_color => brown, height => 228, homeworld => Kashyyyk, mass => 112, name => Chewbacca, sex => male, skin_color => unknown, species => Wookiee} {birth_year => 29, eye_color => brown, gender => masculine, hair_color => brown, height => 180, homeworld => Corellia, mass => 80, name => Han Solo, sex => male, skin_color => fair, species => Human} {birth_year => 44, eye_color => black, gender => masculine, hair_color => (Any), height => 173, homeworld => Rodia, mass => 74, name => Greedo, sex => male, skin_color => green, species => Rodian} {birth_year => 600, eye_color => orange, gender => masculine, hair_color => (Any), height => 175, homeworld => Nal Hutta, mass => 1358, name => Jabba Desilijic Tiure, sex => hermaphroditic, skin_color => green-tan, brown, species => Hutt} {birth_year => 21, eye_color => hazel, gender => masculine, hair_color => brown, height => 170, homeworld => Corellia, mass => 77, name => Wedge Antilles, sex => male, skin_color => fair, species => Human} {birth_year => (Any), eye_color => blue, gender => masculine, hair_color => brown, height => 180, homeworld => Bestine IV, mass => 110, name => Jek Tono Porkins, sex => male, skin_color => fair, species => Human} {birth_year => 896, eye_color => brown, gender => masculine, hair_color => white, height => 66, homeworld => (Any), mass => 17, name => Yoda, sex => male, skin_color => green, species => Yoda's species} {birth_year => 82, eye_color => yellow, gender => masculine, hair_color => grey, height => 170, homeworld => Naboo, mass => 75, name => Palpatine, sex => male, skin_color => pale, species => Human} {birth_year => 31.5, eye_color => brown, gender => masculine, hair_color => black, height => 183, homeworld => Kamino, mass => 78.2, name => Boba Fett, sex => male, skin_color => fair, species => Human} {birth_year => 15, eye_color => red, gender => masculine, hair_color => none, height => 200, homeworld => (Any), mass => 140, name => IG-88, sex => none, skin_color => metal, species => Droid} {birth_year => 53, eye_color => red, gender => masculine, hair_color => none, height => 190, homeworld => Trandosha, mass => 113, name => Bossk, sex => male, skin_color => green, species => Trandoshan} {birth_year => 31, eye_color => brown, gender => masculine, hair_color => black, height => 177, homeworld => Socorro, mass => 79, name => Lando Calrissian, sex => male, skin_color => dark, species => Human} {birth_year => 37, eye_color => blue, gender => masculine, hair_color => none, height => 175, homeworld => Bespin, mass => 79, name => Lobot, sex => male, skin_color => light, species => Human} {birth_year => 41, eye_color => orange, gender => masculine, hair_color => none, height => 180, homeworld => Mon Cala, mass => 83, name => Ackbar, sex => male, skin_color => brown mottle, species => Mon Calamari} {birth_year => 48, eye_color => blue, gender => feminine, hair_color => auburn, height => 150, homeworld => Chandrila, mass => (Any), name => Mon Mothma, sex => female, skin_color => fair, species => Human} {birth_year => (Any), eye_color => brown, gender => masculine, hair_color => brown, height => (Any), homeworld => (Any), mass => (Any), name => Arvel Crynyd, sex => male, skin_color => fair, species => Human} {birth_year => 8, eye_color => brown, gender => masculine, hair_color => brown, height => 88, homeworld => Endor, mass => 20, name => Wicket Systri Warrick, sex => male, skin_color => brown, species => Ewok} {birth_year => (Any), eye_color => black, gender => masculine, hair_color => none, height => 160, homeworld => Sullust, mass => 68, name => Nien Nunb, sex => male, skin_color => grey, species => Sullustan} {birth_year => 92, eye_color => blue, gender => masculine, hair_color => brown, height => 193, homeworld => (Any), mass => 89, name => Qui-Gon Jinn, sex => male, skin_color => fair, species => Human} {birth_year => (Any), eye_color => red, gender => masculine, hair_color => none, height => 191, homeworld => Cato Neimoidia, mass => 90, name => Nute Gunray, sex => male, skin_color => mottled green, species => Neimodian} {birth_year => 91, eye_color => blue, gender => masculine, hair_color => blond, height => 170, homeworld => Coruscant, mass => (Any), name => Finis Valorum, sex => male, skin_color => fair, species => Human} {birth_year => 52, eye_color => orange, gender => masculine, hair_color => none, height => 196, homeworld => Naboo, mass => 66, name => Jar Jar Binks, sex => male, skin_color => orange, species => Gungan} {birth_year => (Any), eye_color => orange, gender => masculine, hair_color => none, height => 224, homeworld => Naboo, mass => 82, name => Roos Tarpals, sex => male, skin_color => grey, species => Gungan} {birth_year => (Any), eye_color => orange, gender => masculine, hair_color => none, height => 206, homeworld => Naboo, mass => (Any), name => Rugor Nass, sex => male, skin_color => green, species => Gungan} {birth_year => (Any), eye_color => blue, gender => (Any), hair_color => brown, height => 183, homeworld => Naboo, mass => (Any), name => Ric Olié, sex => (Any), skin_color => fair, species => (Any)} {birth_year => (Any), eye_color => yellow, gender => masculine, hair_color => black, height => 137, homeworld => Toydaria, mass => (Any), name => Watto, sex => male, skin_color => blue, grey, species => Toydarian} {birth_year => (Any), eye_color => orange, gender => masculine, hair_color => none, height => 112, homeworld => Malastare, mass => 40, name => Sebulba, sex => male, skin_color => grey, red, species => Dug} {birth_year => 62, eye_color => brown, gender => (Any), hair_color => black, height => 183, homeworld => Naboo, mass => (Any), name => Quarsh Panaka, sex => (Any), skin_color => dark, species => (Any)} {birth_year => 72, eye_color => brown, gender => feminine, hair_color => black, height => 163, homeworld => Tatooine, mass => (Any), name => Shmi Skywalker, sex => female, skin_color => fair, species => Human} {birth_year => 54, eye_color => yellow, gender => masculine, hair_color => none, height => 175, homeworld => Dathomir, mass => 80, name => Darth Maul, sex => male, skin_color => red, species => Zabrak} {birth_year => (Any), eye_color => pink, gender => masculine, hair_color => none, height => 180, homeworld => Ryloth, mass => (Any), name => Bib Fortuna, sex => male, skin_color => pale, species => Twi'lek} {birth_year => 48, eye_color => hazel, gender => feminine, hair_color => none, height => 178, homeworld => Ryloth, mass => 55, name => Ayla Secura, sex => female, skin_color => blue, species => Twi'lek} {birth_year => (Any), eye_color => yellow, gender => masculine, hair_color => none, height => 94, homeworld => Vulpter, mass => 45, name => Dud Bolt, sex => male, skin_color => blue, grey, species => Vulptereen} {birth_year => (Any), eye_color => black, gender => masculine, hair_color => none, height => 122, homeworld => Troiken, mass => (Any), name => Gasgano, sex => male, skin_color => white, blue, species => Xexto} {birth_year => (Any), eye_color => orange, gender => masculine, hair_color => none, height => 163, homeworld => Tund, mass => 65, name => Ben Quadinaros, sex => male, skin_color => grey, green, yellow, species => Toong} {birth_year => 72, eye_color => brown, gender => masculine, hair_color => none, height => 188, homeworld => Haruun Kal, mass => 84, name => Mace Windu, sex => male, skin_color => dark, species => Human} {birth_year => 92, eye_color => yellow, gender => masculine, hair_color => white, height => 198, homeworld => Cerea, mass => 82, name => Ki-Adi-Mundi, sex => male, skin_color => pale, species => Cerean} {birth_year => (Any), eye_color => black, gender => masculine, hair_color => none, height => 196, homeworld => Glee Anselm, mass => 87, name => Kit Fisto, sex => male, skin_color => green, species => Nautolan} {birth_year => (Any), eye_color => brown, gender => masculine, hair_color => black, height => 171, homeworld => Iridonia, mass => (Any), name => Eeth Koth, sex => male, skin_color => brown, species => Zabrak} {birth_year => (Any), eye_color => blue, gender => feminine, hair_color => none, height => 184, homeworld => Coruscant, mass => 50, name => Adi Gallia, sex => female, skin_color => dark, species => Tholothian} {birth_year => (Any), eye_color => orange, gender => masculine, hair_color => none, height => 188, homeworld => Iktotch, mass => (Any), name => Saesee Tiin, sex => male, skin_color => pale, species => Iktotchi} {birth_year => (Any), eye_color => yellow, gender => masculine, hair_color => none, height => 264, homeworld => Quermia, mass => (Any), name => Yarael Poof, sex => male, skin_color => white, species => Quermian} {birth_year => 22, eye_color => black, gender => masculine, hair_color => none, height => 188, homeworld => Dorin, mass => 80, name => Plo Koon, sex => male, skin_color => orange, species => Kel Dor} {birth_year => (Any), eye_color => blue, gender => masculine, hair_color => none, height => 196, homeworld => Champala, mass => (Any), name => Mas Amedda, sex => male, skin_color => blue, species => Chagrian} {birth_year => (Any), eye_color => brown, gender => masculine, hair_color => black, height => 185, homeworld => Naboo, mass => 85, name => Gregar Typho, sex => male, skin_color => dark, species => Human} {birth_year => (Any), eye_color => brown, gender => feminine, hair_color => brown, height => 157, homeworld => Naboo, mass => (Any), name => Cordé, sex => female, skin_color => light, species => Human} {birth_year => 82, eye_color => blue, gender => masculine, hair_color => brown, height => 183, homeworld => Tatooine, mass => (Any), name => Cliegg Lars, sex => male, skin_color => fair, species => Human} {birth_year => (Any), eye_color => yellow, gender => masculine, hair_color => none, height => 183, homeworld => Geonosis, mass => 80, name => Poggle the Lesser, sex => male, skin_color => green, species => Geonosian} {birth_year => 58, eye_color => blue, gender => feminine, hair_color => black, height => 170, homeworld => Mirial, mass => 56.2, name => Luminara Unduli, sex => female, skin_color => yellow, species => Mirialan} {birth_year => 40, eye_color => blue, gender => feminine, hair_color => black, height => 166, homeworld => Mirial, mass => 50, name => Barriss Offee, sex => female, skin_color => yellow, species => Mirialan} {birth_year => (Any), eye_color => brown, gender => feminine, hair_color => brown, height => 165, homeworld => Naboo, mass => (Any), name => Dormé, sex => female, skin_color => light, species => Human} {birth_year => 102, eye_color => brown, gender => masculine, hair_color => white, height => 193, homeworld => Serenno, mass => 80, name => Dooku, sex => male, skin_color => fair, species => Human} {birth_year => 67, eye_color => brown, gender => masculine, hair_color => black, height => 191, homeworld => Alderaan, mass => (Any), name => Bail Prestor Organa, sex => male, skin_color => tan, species => Human} {birth_year => 66, eye_color => brown, gender => masculine, hair_color => black, height => 183, homeworld => Concord Dawn, mass => 79, name => Jango Fett, sex => male, skin_color => tan, species => Human} {birth_year => (Any), eye_color => yellow, gender => feminine, hair_color => blonde, height => 168, homeworld => Zolan, mass => 55, name => Zam Wesell, sex => female, skin_color => fair, green, yellow, species => Clawdite} {birth_year => (Any), eye_color => yellow, gender => masculine, hair_color => none, height => 198, homeworld => Ojom, mass => 102, name => Dexter Jettster, sex => male, skin_color => brown, species => Besalisk} {birth_year => (Any), eye_color => black, gender => masculine, hair_color => none, height => 229, homeworld => Kamino, mass => 88, name => Lama Su, sex => male, skin_color => grey, species => Kaminoan} {birth_year => (Any), eye_color => black, gender => feminine, hair_color => none, height => 213, homeworld => Kamino, mass => (Any), name => Taun We, sex => female, skin_color => grey, species => Kaminoan} {birth_year => (Any), eye_color => blue, gender => feminine, hair_color => white, height => 167, homeworld => Coruscant, mass => (Any), name => Jocasta Nu, sex => female, skin_color => fair, species => Human} {birth_year => (Any), eye_color => unknown, gender => masculine, hair_color => none, height => 79, homeworld => Aleen Minor, mass => 15, name => Ratts Tyerell, sex => male, skin_color => grey, blue, species => Aleena} {birth_year => (Any), eye_color => red, blue, gender => feminine, hair_color => none, height => 96, homeworld => (Any), mass => (Any), name => R4-P17, sex => none, skin_color => silver, red, species => Droid} {birth_year => (Any), eye_color => unknown, gender => masculine, hair_color => none, height => 193, homeworld => Skako, mass => 48, name => Wat Tambor, sex => male, skin_color => green, grey, species => Skakoan} {birth_year => (Any), eye_color => gold, gender => masculine, hair_color => none, height => 191, homeworld => Muunilinst, mass => (Any), name => San Hill, sex => male, skin_color => grey, species => Muun} {birth_year => (Any), eye_color => black, gender => feminine, hair_color => none, height => 178, homeworld => Shili, mass => 57, name => Shaak Ti, sex => female, skin_color => red, blue, white, species => Togruta} {birth_year => (Any), eye_color => green, yellow, gender => masculine, hair_color => none, height => 216, homeworld => Kalee, mass => 159, name => Grievous, sex => male, skin_color => brown, white, species => Kaleesh} {birth_year => (Any), eye_color => blue, gender => masculine, hair_color => brown, height => 234, homeworld => Kashyyyk, mass => 136, name => Tarfful, sex => male, skin_color => brown, species => Wookiee} {birth_year => (Any), eye_color => brown, gender => masculine, hair_color => brown, height => 188, homeworld => Alderaan, mass => 79, name => Raymus Antilles, sex => male, skin_color => light, species => Human} {birth_year => (Any), eye_color => white, gender => (Any), hair_color => none, height => 178, homeworld => Umbara, mass => 48, name => Sly Moore, sex => (Any), skin_color => pale, species => (Any)} {birth_year => (Any), eye_color => black, gender => masculine, hair_color => none, height => 206, homeworld => Utapau, mass => 80, name => Tion Medon, sex => male, skin_color => grey, species => Pau'an} {birth_year => (Any), eye_color => dark, gender => masculine, hair_color => black, height => (Any), homeworld => (Any), mass => (Any), name => Finn, sex => male, skin_color => dark, species => Human} {birth_year => (Any), eye_color => hazel, gender => feminine, hair_color => brown, height => (Any), homeworld => (Any), mass => (Any), name => Rey, sex => female, skin_color => light, species => Human} {birth_year => (Any), eye_color => brown, gender => masculine, hair_color => brown, height => (Any), homeworld => (Any), mass => (Any), name => Poe Dameron, sex => male, skin_color => light, species => Human} {birth_year => (Any), eye_color => black, gender => masculine, hair_color => none, height => (Any), homeworld => (Any), mass => (Any), name => BB8, sex => none, skin_color => none, species => Droid} {birth_year => (Any), eye_color => unknown, gender => (Any), hair_color => unknown, height => (Any), homeworld => (Any), mass => (Any), name => Captain Phasma, sex => (Any), skin_color => unknown, species => (Any)} {birth_year => 46, eye_color => brown, gender => feminine, hair_color => brown, height => 165, homeworld => Naboo, mass => 45, name => Padmé Amidala, sex => female, skin_color => light, species => Human}]
 ```
 
 ------
@@ -196,41 +196,138 @@ counts;
 ```
 ```
 # {
+#   "DSLFUNCTION": "proto sub ToDataQueryWorkflowCode (Str $command, |) {*}",
+#   "DSL": "DSL::English::DataQueryWorkflows",
+#   "CODE": "obj = dfStarwars.copy()\nobj = obj.merge( dfStarwarsFilms, on = [\"name\"], how = \"inner\" )\nobj = obj.groupby([\"species\"])\nobj = obj.size()",
 #   "DSLTARGET": "Python::pandas",
 #   "COMMAND": "DSL TARGET Python::pandas;\ninclude setup code;\nuse dfStarwars;\njoin with dfStarwarsFilms by \"name\"; \ngroup by species; \ncounts;\n",
-#   "SETUPCODE": "import pandas\nfrom ExampleDatasets import *",
-#   "DSL": "DSL::English::DataQueryWorkflows",
 #   "USERID": "",
-#   "DSLFUNCTION": "proto sub ToDataQueryWorkflowCode (Str $command, |) {*}",
-#   "CODE": "obj = dfStarwars.copy()\nobj = obj.merge( dfStarwarsFilms, on = [\"name\"], how = \"inner\" )\nobj = obj.groupby([\"species\"])\nobj = obj.size()"
+#   "SETUPCODE": "import pandas\nfrom ExampleDatasets import *"
 # }
 ```
 
 ------
 
-## Filter, group, and summarize
+## Non-trivial workflow
+
+In this section we generate and demonstrates data wrangling steps that 
+clean, mutate, filter, group, and summarize a given dataset.
+
+### Code generation
 
 ```perl6
-my $command1 = "
+my $command1 = '
 use dfStarwars;
+replace missing with `<0>`;
+mutate with mass = `+$_<mass>` and height = `+$_<height>`;
+show dimensions;
+echo summary;
 filter by birth_year greater than 27;
 select homeworld, mass and height;
 group by homeworld;
-replace missing with 0;
-replace 'NA' with 0;
-summarize the variables mass and height with Mean and Median
-";
+show counts;
+summarize the variables mass and height with &mean and &median
+';
 
 ToDataQueryWorkflowCode($command1, target => $examplesTarget)
 ```
 ```
 # $obj = dfStarwars ;
+# $obj = $obj.deepmap({ ( ($_ eqv Any) or $_.isa(Nil) or $_.isa(Whatever) ) ?? <0> !! $_ }) ;
+# $obj = $obj.map({ $_{"mass"} = +$_<mass>; $_{"height"} = +$_<height>; $_ }) ;
+# say "dimensions: {dimensions($obj)}" ;
+# records-summary($obj) ;
 # $obj = $obj.grep({ $_{"birth_year"} > 27 }).Array ;
 # $obj = select-columns($obj, ("homeworld", "mass", "height") ) ;
 # $obj = group-by($obj, "homeworld") ;
-# $obj = $obj.deepmap({ ( ($_ eqv Any) or $_.isa(Nil) or $_.isa(Whatever) ) ?? 0 !! $_ }) ;
-# $obj = $obj.deepmap({ $_ ~~ "NA" ?? 0 !! $_ }) ;
-# $obj = $obj.map({ $_.key => summarize-at($_.value, ("mass", "height"), (Mean, Median)) })
+# say "counts: ", $obj>>.elems ;
+# $obj = $obj.map({ $_.key => summarize-at($_.value, ("mass", "height"), (&mean, &median)) })
+```
+
+### Execution steps (Raku)
+
+Here is code that cleans the data of missing values, and shows dimensions and summary (corresponds to the first five lines above):
+
+```perl6
+my $obj = @dfStarwars ;
+$obj = $obj.deepmap({ ( ($_ eqv Any) or $_.isa(Nil) or $_.isa(Whatever) ) ?? <0> !! $_ }) ;
+$obj = $obj.map({ $_{"mass"} = +$_<mass>; $_{"height"} = +$_<height>; $_ }).Array ;
+say "dimensions: {dimensions($obj)}" ;
+records-summary($obj);
+```
+```
+# dimensions: 87 11
+# +---------------------+----------------------+----------------------+---------------+----------------+-----------------+-----------------+---------------+----------------------+--------------------+---------------+
+# | mass                | height               | name                 | eye_color     | species        | gender          | homeworld       | skin_color    | sex                  | birth_year         | hair_color    |
+# +---------------------+----------------------+----------------------+---------------+----------------+-----------------+-----------------+---------------+----------------------+--------------------+---------------+
+# | Min    => 0         | Min    => 0          | Luke Skywalker => 1  | brown   => 21 | Human    => 35 | masculine => 66 | Naboo     => 11 | fair    => 17 | male           => 60 | Min    => 0        | none    => 37 |
+# | 1st-Qu => 0         | 1st-Qu => 163        | Mas Amedda     => 1  | blue    => 19 | Droid    => 6  | feminine  => 17 | Tatooine  => 10 | light   => 11 | female         => 16 | 1st-Qu => 0        | brown   => 18 |
+# | Mean   => 65.993103 | Mean   => 162.333333 | Mon Mothma     => 1  | yellow  => 11 | 0        => 4  | 0         => 4  | 0         => 10 | green   => 6  | none           => 6  | Mean   => 43.27931 | black   => 13 |
+# | Median => 56.2      | Median => 178        | Obi-Wan Kenobi => 1  | black   => 10 | Gungan   => 3  |                 | Kamino    => 3  | grey    => 6  | 0              => 4  | Median => 0        | 0       => 5  |
+# | 3rd-Qu => 80        | 3rd-Qu => 191        | Cliegg Lars    => 1  | orange  => 8  | Twi'lek  => 2  |                 | Alderaan  => 3  | dark    => 6  | hermaphroditic => 1  | 3rd-Qu => 52       | white   => 4  |
+# | Max    => 1358      | Max    => 264        | Sly Moore      => 1  | red     => 5  | Kaminoan => 2  |                 | Coruscant => 3  | pale    => 5  |                      | Max    => 896      | blond   => 3  |
+# |                     |                      | Rey            => 1  | unknown => 3  | Zabrak   => 2  |                 | Mirial    => 2  | brown   => 4  |                      |                    | unknown => 1  |
+# |                     |                      | (Other)        => 80 | (Other) => 10 | (Other)  => 33 |                 | (Other)   => 45 | (Other) => 32 |                      |                    | (Other) => 6  |
+# +---------------------+----------------------+----------------------+---------------+----------------+-----------------+-----------------+---------------+----------------------+--------------------+---------------+
+```
+
+Here is the deduced type: 
+
+```perl6
+say deduce-type($obj);
+```
+```
+# Vector((Any), 87)
+```
+
+Here is a sample of the dataset (wrangled so far):
+
+```perl6
+say to-pretty-table($obj.pick(7));
+```
+```
+# +--------+--------+------+------------+-----------+------------+----------------+------------+--------------+-----------+-----------+
+# | height |  sex   | mass | skin_color | eye_color |  species   |      name      | birth_year |  hair_color  | homeworld |   gender  |
+# +--------+--------+------+------------+-----------+------------+----------------+------------+--------------+-----------+-----------+
+# |  183   |   0    |  0   |    dark    |   brown   |     0      | Quarsh Panaka  |     62     |    black     |   Naboo   |     0     |
+# |  190   |  male  | 113  |   green    |    red    | Trandoshan |     Bossk      |     53     |     none     | Trandosha | masculine |
+# |  184   | female |  50  |    dark    |    blue   | Tholothian |   Adi Gallia   |     0      |     none     | Coruscant |  feminine |
+# |  206   |  male  |  80  |    grey    |   black   |   Pau'an   |   Tion Medon   |     0      |     none     |   Utapau  | masculine |
+# |   97   |  none  |  32  | white, red |    red    |   Droid    |     R5-D4      |     0      |      0       |  Tatooine | masculine |
+# |  196   |  male  |  0   |    blue    |    blue   |  Chagrian  |   Mas Amedda   |     0      |     none     |  Champala | masculine |
+# |  180   |  male  |  0   |    fair    |    blue   |   Human    | Wilhuff Tarkin |     64     | auburn, grey |   Eriadu  | masculine |
+# +--------+--------+------+------------+-----------+------------+----------------+------------+--------------+-----------+-----------+
+```
+
+Here we group by "homeworld" and show counts for each group:
+
+```perl6
+$obj = group-by($obj, "homeworld") ;
+say "counts: ", $obj>>.elems ;
+```
+```
+# counts: {0 => 10, Alderaan => 3, Aleen Minor => 1, Bespin => 1, Bestine IV => 1, Cato Neimoidia => 1, Cerea => 1, Champala => 1, Chandrila => 1, Concord Dawn => 1, Corellia => 2, Coruscant => 3, Dathomir => 1, Dorin => 1, Endor => 1, Eriadu => 1, Geonosis => 1, Glee Anselm => 1, Haruun Kal => 1, Iktotch => 1, Iridonia => 1, Kalee => 1, Kamino => 3, Kashyyyk => 2, Malastare => 1, Mirial => 2, Mon Cala => 1, Muunilinst => 1, Naboo => 11, Nal Hutta => 1, Ojom => 1, Quermia => 1, Rodia => 1, Ryloth => 2, Serenno => 1, Shili => 1, Skako => 1, Socorro => 1, Stewjon => 1, Sullust => 1, Tatooine => 10, Toydaria => 1, Trandosha => 1, Troiken => 1, Tund => 1, Umbara => 1, Utapau => 1, Vulpter => 1, Zolan => 1}
+```
+
+Here is summarization at specified columns with specified functions (from the "Stats"):
+
+```perl6
+use Stats;
+$obj = $obj.map({ $_.key => summarize-at($_.value, ("mass", "height"), (&mean, &median)) });
+say to-pretty-table($obj.pick(7));
+```
+```
+# +-----------+---------------+-----------+-------------+-------------+
+# |           | height.median | mass.mean | height.mean | mass.median |
+# +-----------+---------------+-----------+-------------+-------------+
+# | Bespin    |   175.000000  | 79.000000 |  175.000000 |  79.000000  |
+# | Coruscant |   170.000000  | 16.666667 |  173.666667 |   0.000000  |
+# | Endor     |   88.000000   | 20.000000 |  88.000000  |  20.000000  |
+# | Kamino    |   213.000000  | 55.400000 |  208.333333 |  78.200000  |
+# | Mon Cala  |   180.000000  | 83.000000 |  180.000000 |  83.000000  |
+# | Shili     |   178.000000  | 57.000000 |  178.000000 |  57.000000  |
+# | Utapau    |   206.000000  | 80.000000 |  206.000000 |  80.000000  |
+# +-----------+---------------+-----------+-------------+-------------+
 ```
 
 ------
@@ -258,7 +355,10 @@ ToDataQueryWorkflowCode($command2, target => $examplesTarget)
 
 ## Cross tabulation
 
-Cross tabulation is a fundamental data wrangling operation:
+[Cross tabulation](https://en.wikipedia.org/wiki/Contingency_table) 
+is a fundamental data wrangling operation:
+
+### Code generation
 
 ```perl6
 my $command3 = "use dfTitanic;
@@ -273,11 +373,61 @@ ToDataQueryWorkflowCode($command3, target => $examplesTarget);
 # $obj = cross-tabulate( $obj, "passengerClass", "passengerSurvival", "passengerAge" )
 ```
 
+### Execution steps (Raku)
+
+Copy the Titanic data into a "pipeline object" and show its dimensions and a sample of it:
+
+```perl6
+my $obj = @dfTitanic ;
+say "Titanic dimensions:", dimensions(@dfTitanic);
+say to-pretty-table($obj.pick(7));
+```
+```
+# Titanic dimensions:(1309 5)
+# +----------------+--------------+--------------+-------------------+------+
+# | passengerClass | passengerSex | passengerAge | passengerSurvival |  id  |
+# +----------------+--------------+--------------+-------------------+------+
+# |      3rd       |     male     |      20      |        died       | 788  |
+# |      1st       |     male     |      40      |        died       | 127  |
+# |      3rd       |     male     |      -1      |      survived     | 1004 |
+# |      3rd       |     male     |      30      |        died       | 1052 |
+# |      1st       |    female    |      -1      |      survived     | 109  |
+# |      3rd       |    female    |      -1      |      survived     | 1072 |
+# |      1st       |    female    |      50      |      survived     | 248  |
+# +----------------+--------------+--------------+-------------------+------+
+```
+
+Filter the data and show the number of rows in the result set:
+
+```perl6
+$obj = $obj.grep({ $_{"passengerSex"} eq "male" and $_{"passengerSurvival"} eq "died" or $_{"passengerSurvival"} eq "survived" }).Array ;
+say $obj.elems;
+```
+```
+# 1182
+```
+
+Cross tabulate and show the result:
+
+```perl6
+$obj = cross-tabulate( $obj, "passengerClass", "passengerSurvival", "passengerAge" );
+say to-pretty-table($obj);
+```
+```
+# +-----+----------+------+
+# |     | survived | died |
+# +-----+----------+------+
+# | 1st |   6671   | 4290 |
+# | 2nd |   2776   | 4419 |
+# | 3rd |   2720   | 7562 |
+# +-----+----------+------+
+```
+
 ------
 
 ## Formulas with column references
 
-Special care has to be taken when the formulas reference to columns are used.
+Special care has to be taken when the specifying data mutations with formulas that reference to columns in the dataset.
 
 The code corresponding to the `transform ...` line in this example produces 
 *expected* result for the target "R::tidyverse":
@@ -313,7 +463,7 @@ ToDataQueryWorkflowCode($command4r, target => 'Raku::Reshapers');
 # $obj = $obj.map({ $_{"bmi"} = $_<mass>/$_<height>^2*10000; $_{"homeworld"} = $_<homeworld>.uc; $_ })
 ```
 
-**Remark:** Note that we have to using single quotes for the command assignment; 
+**Remark:** Note that we have to use single quotes for the command assignment; 
 using double quotes will invoke Raku's string interpolation feature. 
 
 ------
@@ -325,7 +475,8 @@ using double quotes will invoke Raku's string interpolation feature.
 Since there is no expectation to have a dedicated data transformation monad -- in whatever programming language -- we
 can try to make the command sequence parsing to be "aware" of the grouping operations.
 
-Here are is an example:
+In the following example before applying the grouping operation in fourth line 
+we have to flatten the data (which is grouped in the second line):
 
 ```perl6
 my $command5 = "use dfTitanic; 
@@ -411,21 +562,21 @@ my $obj = @dfAnscombe;
 say to-pretty-table($obj);
 ```
 ```
-# +----+----+-----------+----------+----+-----------+----+-----------+
-# | x3 | x2 |     y4    |    y2    | x4 |     y1    | x1 |     y3    |
-# +----+----+-----------+----------+----+-----------+----+-----------+
-# | 10 | 10 |  6.580000 | 9.140000 | 8  |  8.040000 | 10 |  7.460000 |
-# | 8  | 8  |  5.760000 | 8.140000 | 8  |  6.950000 | 8  |  6.770000 |
-# | 13 | 13 |  7.710000 | 8.740000 | 8  |  7.580000 | 13 | 12.740000 |
-# | 9  | 9  |  8.840000 | 8.770000 | 8  |  8.810000 | 9  |  7.110000 |
-# | 11 | 11 |  8.470000 | 9.260000 | 8  |  8.330000 | 11 |  7.810000 |
-# | 14 | 14 |  7.040000 | 8.100000 | 8  |  9.960000 | 14 |  8.840000 |
-# | 6  | 6  |  5.250000 | 6.130000 | 8  |  7.240000 | 6  |  6.080000 |
-# | 4  | 4  | 12.500000 | 3.100000 | 19 |  4.260000 | 4  |  5.390000 |
-# | 12 | 12 |  5.560000 | 9.130000 | 8  | 10.840000 | 12 |  8.150000 |
-# | 7  | 7  |  7.910000 | 7.260000 | 8  |  4.820000 | 7  |  6.420000 |
-# | 5  | 5  |  6.890000 | 4.740000 | 8  |  5.680000 | 5  |  5.730000 |
-# +----+----+-----------+----------+----+-----------+----+-----------+
+# +----+-----------+----+-----------+----+----+-----------+----------+
+# | x3 |     y3    | x1 |     y1    | x4 | x2 |     y4    |    y2    |
+# +----+-----------+----+-----------+----+----+-----------+----------+
+# | 10 |  7.460000 | 10 |  8.040000 | 8  | 10 |  6.580000 | 9.140000 |
+# | 8  |  6.770000 | 8  |  6.950000 | 8  | 8  |  5.760000 | 8.140000 |
+# | 13 | 12.740000 | 13 |  7.580000 | 8  | 13 |  7.710000 | 8.740000 |
+# | 9  |  7.110000 | 9  |  8.810000 | 8  | 9  |  8.840000 | 8.770000 |
+# | 11 |  7.810000 | 11 |  8.330000 | 8  | 11 |  8.470000 | 9.260000 |
+# | 14 |  8.840000 | 14 |  9.960000 | 8  | 14 |  7.040000 | 8.100000 |
+# | 6  |  6.080000 | 6  |  7.240000 | 8  | 6  |  5.250000 | 6.130000 |
+# | 4  |  5.390000 | 4  |  4.260000 | 19 | 4  | 12.500000 | 3.100000 |
+# | 12 |  8.150000 | 12 | 10.840000 | 8  | 12 |  5.560000 | 9.130000 |
+# | 7  |  6.420000 | 7  |  4.820000 | 8  | 7  |  7.910000 | 7.260000 |
+# | 5  |  5.730000 | 5  |  5.680000 | 8  | 5  |  6.890000 | 4.740000 |
+# +----+-----------+----+-----------+----+----+-----------+----------+
 ```
 
 Summarize Anscombe's quartet (using "Data::Summarizers", [AAp3]):
@@ -434,16 +585,16 @@ Summarize Anscombe's quartet (using "Data::Summarizers", [AAp3]):
 records-summary($obj);
 ```
 ```
-# +--------------+--------------------+--------------+--------------------+--------------+-----------------+--------------+--------------------+
-# | x3           | y4                 | x1           | y1                 | x4           | y3              | x2           | y2                 |
-# +--------------+--------------------+--------------+--------------------+--------------+-----------------+--------------+--------------------+
-# | Min    => 4  | Min    => 5.25     | Min    => 4  | Min    => 4.26     | Min    => 8  | Min    => 5.39  | Min    => 4  | Min    => 3.1      |
-# | 1st-Qu => 6  | 1st-Qu => 5.76     | 1st-Qu => 6  | 1st-Qu => 5.68     | 1st-Qu => 8  | 1st-Qu => 6.08  | 1st-Qu => 6  | 1st-Qu => 6.13     |
-# | Mean   => 9  | Mean   => 7.500909 | Mean   => 9  | Mean   => 7.500909 | Mean   => 9  | Mean   => 7.5   | Mean   => 9  | Mean   => 7.500909 |
-# | Median => 9  | Median => 7.04     | Median => 9  | Median => 7.58     | Median => 8  | Median => 7.11  | Median => 9  | Median => 8.14     |
-# | 3rd-Qu => 12 | 3rd-Qu => 8.47     | 3rd-Qu => 12 | 3rd-Qu => 8.81     | 3rd-Qu => 8  | 3rd-Qu => 8.15  | 3rd-Qu => 12 | 3rd-Qu => 9.13     |
-# | Max    => 14 | Max    => 12.5     | Max    => 14 | Max    => 10.84    | Max    => 19 | Max    => 12.74 | Max    => 14 | Max    => 9.26     |
-# +--------------+--------------------+--------------+--------------------+--------------+-----------------+--------------+--------------------+
+# +--------------------+--------------+--------------+--------------------+--------------+-----------------+--------------------+--------------+
+# | y4                 | x3           | x2           | y2                 | x1           | y3              | y1                 | x4           |
+# +--------------------+--------------+--------------+--------------------+--------------+-----------------+--------------------+--------------+
+# | Min    => 5.25     | Min    => 4  | Min    => 4  | Min    => 3.1      | Min    => 4  | Min    => 5.39  | Min    => 4.26     | Min    => 8  |
+# | 1st-Qu => 5.76     | 1st-Qu => 6  | 1st-Qu => 6  | 1st-Qu => 6.13     | 1st-Qu => 6  | 1st-Qu => 6.08  | 1st-Qu => 5.68     | 1st-Qu => 8  |
+# | Mean   => 7.500909 | Mean   => 9  | Mean   => 9  | Mean   => 7.500909 | Mean   => 9  | Mean   => 7.5   | Mean   => 7.500909 | Mean   => 9  |
+# | Median => 7.04     | Median => 9  | Median => 9  | Median => 8.14     | Median => 9  | Median => 7.11  | Median => 7.58     | Median => 8  |
+# | 3rd-Qu => 8.47     | 3rd-Qu => 12 | 3rd-Qu => 12 | 3rd-Qu => 9.13     | 3rd-Qu => 12 | 3rd-Qu => 8.15  | 3rd-Qu => 8.81     | 3rd-Qu => 8  |
+# | Max    => 12.5     | Max    => 14 | Max    => 14 | Max    => 9.26     | Max    => 14 | Max    => 12.74 | Max    => 10.84    | Max    => 19 |
+# +--------------------+--------------+--------------+--------------------+--------------+-----------------+--------------------+--------------+
 ```
 
 **Remark:** Note that Anscombe's sets have same x- and y- mean values. (But the sets have very different shapes.)
@@ -469,17 +620,17 @@ $obj = to-long-format($obj);
 to-pretty-table($obj.head(7))
 ```
 ```
-# +--------------+----------+----------+
-# | AutomaticKey | Variable |  Value   |
-# +--------------+----------+----------+
-# |      0       |    x1    |    10    |
-# |      0       |    y2    | 9.140000 |
-# |      0       |    y1    | 8.040000 |
-# |      0       |    x4    |    8     |
-# |      0       |    x3    |    10    |
-# |      0       |    y3    | 7.460000 |
-# |      0       |    x2    |    10    |
-# +--------------+----------+----------+
+# +----------+----------+--------------+
+# | Variable |  Value   | AutomaticKey |
+# +----------+----------+--------------+
+# |    x1    |    10    |      0       |
+# |    x2    |    10    |      0       |
+# |    x4    |    8     |      0       |
+# |    y4    | 6.580000 |      0       |
+# |    y1    | 8.040000 |      0       |
+# |    y3    | 7.460000 |      0       |
+# |    x3    |    10    |      0       |
+# +----------+----------+--------------+
 ```
 
 Separate the data column "Variable" into the columns "Variable" and "Set":
@@ -489,17 +640,17 @@ $obj = separate-column( $obj, "Variable", ("Variable", "Set"), sep => "" ) ;
 to-pretty-table($obj.head(7))
 ```
 ```
-# +----------+----------+--------------+-----+
-# | Variable |  Value   | AutomaticKey | Set |
-# +----------+----------+--------------+-----+
-# |    x     |    10    |      0       |  1  |
-# |    y     | 9.140000 |      0       |  2  |
-# |    y     | 8.040000 |      0       |  1  |
-# |    x     |    8     |      0       |  4  |
-# |    x     |    10    |      0       |  3  |
-# |    y     | 7.460000 |      0       |  3  |
-# |    x     |    10    |      0       |  2  |
-# +----------+----------+--------------+-----+
+# +----------+----------+-----+--------------+
+# | Variable |  Value   | Set | AutomaticKey |
+# +----------+----------+-----+--------------+
+# |    x     |    10    |  1  |      0       |
+# |    x     |    10    |  2  |      0       |
+# |    x     |    8     |  4  |      0       |
+# |    y     | 6.580000 |  4  |      0       |
+# |    y     | 8.040000 |  1  |      0       |
+# |    y     | 7.460000 |  3  |      0       |
+# |    x     |    10    |  3  |      0       |
+# +----------+----------+-----+--------------+
 ```
 
 Reshape the "pipeline object" into
@@ -511,17 +662,17 @@ $obj = to-wide-format( $obj, identifierColumns => ("Set", "AutomaticKey"), varia
 to-pretty-table($obj.head(7))
 ```
 ```
-# +----+-----+--------------+------+
-# | x  | Set | AutomaticKey |  y   |
-# +----+-----+--------------+------+
-# | 10 |  1  |      0       | 8.04 |
-# | 8  |  1  |      1       | 6.95 |
-# | 13 |  1  |      2       | 7.58 |
-# | 9  |  1  |      3       | 8.81 |
-# | 11 |  1  |      4       | 8.33 |
-# | 14 |  1  |      5       | 9.96 |
-# | 6  |  1  |      6       | 7.24 |
-# +----+-----+--------------+------+
+# +------+----+-----+--------------+
+# |  y   | x  | Set | AutomaticKey |
+# +------+----+-----+--------------+
+# | 8.04 | 10 |  1  |      0       |
+# | 6.95 | 8  |  1  |      1       |
+# | 7.58 | 13 |  1  |      2       |
+# | 8.81 | 9  |  1  |      3       |
+# | 8.33 | 11 |  1  |      4       |
+# | 9.96 | 14 |  1  |      5       |
+# | 7.24 | 6  |  1  |      6       |
+# +------+----+-----+--------------+
 ```
 
 Plot each dataset of Anscombe's quartet (using "Text::Plot", [AAp6]):
@@ -530,7 +681,43 @@ Plot each dataset of Anscombe's quartet (using "Text::Plot", [AAp6]):
 group-by($obj, 'Set').map({ say "\n", text-list-plot( $_.value.map({ +$_<x> }).List, $_.value.map({ +$_<y> }).List, title => 'Set : ' ~ $_.key) })
 ```
 ```
-# Set : 1                           
+# Set : 2                           
+# +---+---------+---------+----------+---------+---------+---+      
+# |                                                          |      
+# +                            *     *    *    *    *        +  9.00
+# |                                                          |      
+# +                       *                              *   +  8.00
+# |                  *                                       |      
+# +                                                          +  7.00
+# +             *                                            +  6.00
+# |                                                          |      
+# +                                                          +  5.00
+# |        *                                                 |      
+# +                                                          +  4.00
+# |   *                                                      |      
+# +                                                          +  3.00
+# +---+---------+---------+----------+---------+---------+---+      
+#     4.00      6.00      8.00       10.00     12.00     14.00      
+# 
+#                           Set : 3                           
+# +---+---------+---------+----------+---------+---------+---+       
+# |                                                          |       
+# |                                                 *        |       
+# +                                                          +  12.00
+# |                                                          |       
+# |                                                          |       
+# +                                                          +  10.00
+# |                                                      *   |       
+# |                                            *             |       
+# +                                  *    *                  +   8.00
+# |                       *    *                             |       
+# |             *    *                                       |       
+# +   *    *                                                 +   6.00
+# |                                                          |       
+# +---+---------+---------+----------+---------+---------+---+       
+#     4.00      6.00      8.00       10.00     12.00     14.00       
+# 
+#                           Set : 1                           
 # +---+---------+---------+----------+---------+---------+---+       
 # |                                                          |       
 # |                                            *             |       
@@ -564,43 +751,7 @@ group-by($obj, 'Set').map({ say "\n", text-list-plot( $_.value.map({ +$_<x> }).L
 # |   *                                                      |       
 # |                                                          |       
 # +---+--------+--------+---------+--------+---------+-------+       
-#     8.00     10.00    12.00     14.00    16.00     18.00           
-# 
-#                           Set : 3                           
-# +---+---------+---------+----------+---------+---------+---+       
-# |                                                          |       
-# |                                                 *        |       
-# +                                                          +  12.00
-# |                                                          |       
-# |                                                          |       
-# +                                                          +  10.00
-# |                                                      *   |       
-# |                                            *             |       
-# +                                  *    *                  +   8.00
-# |                       *    *                             |       
-# |             *    *                                       |       
-# +   *    *                                                 +   6.00
-# |                                                          |       
-# +---+---------+---------+----------+---------+---------+---+       
-#     4.00      6.00      8.00       10.00     12.00     14.00       
-# 
-#                           Set : 2                           
-# +---+---------+---------+----------+---------+---------+---+      
-# |                                                          |      
-# +                            *     *    *    *    *        +  9.00
-# |                                                          |      
-# +                       *                              *   +  8.00
-# |                  *                                       |      
-# +                                                          +  7.00
-# +             *                                            +  6.00
-# |                                                          |      
-# +                                                          +  5.00
-# |        *                                                 |      
-# +                                                          +  4.00
-# |   *                                                      |      
-# +                                                          +  3.00
-# +---+---------+---------+----------+---------+---------+---+      
-#     4.00      6.00      8.00       10.00     12.00     14.00
+#     8.00     10.00    12.00     14.00    16.00     18.00
 ```
 
 ------
