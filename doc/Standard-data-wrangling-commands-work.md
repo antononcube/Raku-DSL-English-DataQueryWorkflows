@@ -6,6 +6,27 @@ This document demonstrates and exemplifies the abilities of the package
 ["DSL::English::DataQueryWorkflow"](https://raku.land/zef:antononcube/DSL::English::DataQueryWorkflows)
 to produce executable code that fits majority of the data wrangling use cases.
 
+The data wrangling in Raku is done with the packages:
+["Data::Generators"](https://raku.land/zef:antononcube/Data::Generators),
+["Data::Reshapers"](https://raku.land/zef:antononcube/Data::Reshapers), and
+["Data::Summarizers"](https://raku.land/zef:antononcube/Data::Summarizers).
+
+For detailed introduction into data wrangling (with- and in Raku) see the article
+["Introduction to data wrangling with Raku"](https://rakuforprediction.wordpress.com/2021/12/31/introduction-to-data-wrangling-with-raku/),
+[AA1]. (And its Bulgarian version [AA2].)
+
+The videos in the references provide introduction to data wrangling from a more general, multi-language perspective. 
+
+Some of the data is acquired with the package
+["Data::ExampleDatasets"](https://raku.land/zef:antononcube/Data::ExampleDatasets).
+
+### Document execution
+
+This is a "computable Markdown document" -- the Raku cells are (context-consecutively) evaluated with the
+["literate programming"](https://en.wikipedia.org/wiki/Literate_programming)
+package
+["Text::CodeProcessing"](https://raku.land/cpan:ANTONOV/Text::CodeProcessing), [AA3, AAp5].
+
 ------
 
 ## Setup
@@ -48,6 +69,7 @@ We can obtain the Anscombe dataset using the function `example-dataset` provided
 
 ```perl6
 my @dfAnscombe = |example-dataset('anscombe');
+@dfAnscombe = |@dfAnscombe.map({ %( $_.keys Z=> $_.values>>.Numeric) });
 dimensions(@dfAnscombe)
 ```
 
@@ -170,10 +192,6 @@ ToDataQueryWorkflowCode($command5, target => $examplesTarget)
 
 ### Complicated workflows
 
-```perl6
-to-pretty-table(@dfAnscombe)
-```
-
 #### Code generation
 
 ```perl6
@@ -192,18 +210,31 @@ Get a copy of the dataset into a "pipeline object":
 
 ```perl6
 my $obj = @dfAnscombe;
+say to-pretty-table($obj);
 ```
 
-Very often values of certain parameters are conflated and put into dataset's column names.
-(As with Anscombe's dataset.)
+Summarize Anscombe's quartet (using "Data::Summarizers", [AAp3]):
+
+```perl6
+records-summary($obj);
+```
+
+**Remark:** Note that Anscombe's sets have same x- and y- mean values. (But the sets have very different shapes.)
+
+**Remark:** From the table above it is not clear how exactly we have to access the data in order 
+to plot each of Anscombe's sets. The data wrangling steps below show a way to separate the sets
+and make them amenable for set-wise manipulations.
+
+Very often values of certain data parameters are conflated and put into dataset's column names.
+(As in Anscombe's dataset.)
 
 In those situations we:
 
-- Convert the dataset in long format, since that allows column names to be treated as data
+- Convert the dataset into long format, since that allows column names to be treated as data
 
 - Separate the values of a certain column into to two or more columns
 
-Convert to
+Reshape the "pipeline object" into
 [long format](https://en.wikipedia.org/wiki/Wide_and_narrow_data):
 
 ```perl6
@@ -218,16 +249,16 @@ $obj = separate-column( $obj, "Variable", ("Variable", "Set"), sep => "" ) ;
 to-pretty-table($obj.head(7))
 ```
 
-Convert to
+Reshape the "pipeline object" into
 [wide format](https://en.wikipedia.org/wiki/Wide_and_narrow_data)
 using appropriate identifier-, variable-, and value column names:
 
 ```perl6
-$obj = to-wide-format($obj, identifierColumns => <Set AutomaticKey>, variablesFrom => "Variable", valuesFrom => "Value");
+$obj = to-wide-format( $obj, identifierColumns => ("Set", "AutomaticKey"), variablesFrom => "Variable", valuesFrom => "Value" );
 to-pretty-table($obj.head(7))
 ```
 
-Plot the Anscombe's quartet sets:
+Plot each dataset of Anscombe's quartet (using "Text::Plot", [AAp6]):
 
 ```perl6
 group-by($obj, 'Set').map({ say "\n", text-list-plot( $_.value.map({ +$_<x> }).List, $_.value.map({ +$_<y> }).List, title => 'Set : ' ~ $_.key) })
@@ -251,6 +282,11 @@ group-by($obj, 'Set').map({ say "\n", text-list-plot( $_.value.map({ +$_<x> }).L
 (2022),
 [RakuForPrediction at WordPress](https://rakuforprediction.wordpress.com).
 
+[AA3] Anton Antonov,
+["Raku Text::CodeProcessing"](https://rakuforprediction.wordpress.com/2021/07/13/raku-textcodeprocessing/),
+(2021),
+[RakuForPrediction at WordPress](https://rakuforprediction.wordpress.com).
+
 [HW1] Hadley Wickham,
 ["The Split-Apply-Combine Strategy for Data Analysis"](https://www.jstatsoft.org/article/view/v040i01),
 (2011),
@@ -267,6 +303,32 @@ group-by($obj, 'Set').map({ say "\n", text-list-plot( $_.value.map({ +$_<x> }).L
 [DSL::Bulgarian Raku package](https://github.com/antononcube/Raku-DSL-Bulgarian),
 (2022),
 [GitHub/antononcube](https://github.com/antononcube).
+
+[AAp1] Anton Antonov,
+[Data::Generators Raku package](https://github.com/antononcube/Raku-Data-Generators),
+(2021),
+[GitHub/antononcube](https://github.com/antononcube).
+
+[AAp2] Anton Antonov,
+[Data::Reshapers Raku package](https://github.com/antononcube/Raku-Data-Reshapers),
+(2021),
+[GitHub/antononcube](https://github.com/antononcube).
+
+[AAp3] Anton Antonov,
+[Data::Summarizers Raku package](https://github.com/antononcube/Raku-Data-Summarizers),
+(2021),
+[GitHub/antononcube](https://github.com/antononcube).
+
+[AAp5] Anton Antonov,
+[Text::CodeProcessing Raku package](https://github.com/antononcube/Raku-Text-CodeProcessing),
+(2021),
+[GitHub/antononcube](https://github.com/antononcube).
+
+[AAp6] Anton Antonov,
+[Text::Plot Raku package](https://github.com/antononcube/Raku-Text-Plot),
+(2022),
+[GitHub/antononcube](https://github.com/antononcube).
+
 
 ### Videos
 

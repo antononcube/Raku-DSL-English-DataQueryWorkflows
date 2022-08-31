@@ -6,6 +6,27 @@ This document demonstrates and exemplifies the abilities of the package
 ["DSL::English::DataQueryWorkflow"](https://raku.land/zef:antononcube/DSL::English::DataQueryWorkflows)
 to produce executable code that fits majority of the data wrangling use cases.
 
+The data wrangling in Raku is done with the packages:
+["Data::Generators"](https://raku.land/zef:antononcube/Data::Generators),
+["Data::Reshapers"](https://raku.land/zef:antononcube/Data::Reshapers), and
+["Data::Summarizers"](https://raku.land/zef:antononcube/Data::Summarizers).
+
+For detailed introduction into data wrangling (with- and in Raku) see the article
+["Introduction to data wrangling with Raku"](https://rakuforprediction.wordpress.com/2021/12/31/introduction-to-data-wrangling-with-raku/),
+[AA1]. (And its Bulgarian version [AA2].)
+
+The videos in the references provide introduction to data wrangling from a more general, multi-language perspective. 
+
+Some of the data is acquired with the package
+["Data::ExampleDatasets"](https://raku.land/zef:antononcube/Data::ExampleDatasets).
+
+### Document execution
+
+This is a "computable Markdown document" -- the Raku cells are (context-consecutively) evaluated with the
+["literate programming"](https://en.wikipedia.org/wiki/Literate_programming)
+package
+["Text::CodeProcessing"](https://raku.land/cpan:ANTONOV/Text::CodeProcessing), [AA3, AAp5].
+
 ------
 
 ## Setup
@@ -57,6 +78,7 @@ We can obtain the Anscombe dataset using the function `example-dataset` provided
 
 ```perl6
 my @dfAnscombe = |example-dataset('anscombe');
+@dfAnscombe = |@dfAnscombe.map({ %( $_.keys Z=> $_.values>>.Numeric) });
 dimensions(@dfAnscombe)
 ```
 ```
@@ -267,27 +289,6 @@ ToDataQueryWorkflowCode($command5, target => $examplesTarget)
 
 ### Complicated workflows
 
-```perl6
-to-pretty-table(@dfAnscombe)
-```
-```
-# +-----------+----+----+-----------+----+----+----------+-----------+
-# |     y3    | x4 | x1 |     y1    | x2 | x3 |    y2    |     y4    |
-# +-----------+----+----+-----------+----+----+----------+-----------+
-# |  7.460000 | 8  | 10 |  8.040000 | 10 | 10 | 9.140000 |  6.580000 |
-# |  6.770000 | 8  | 8  |  6.950000 | 8  | 8  | 8.140000 |  5.760000 |
-# | 12.740000 | 8  | 13 |  7.580000 | 13 | 13 | 8.740000 |  7.710000 |
-# |  7.110000 | 8  | 9  |  8.810000 | 9  | 9  | 8.770000 |  8.840000 |
-# |  7.810000 | 8  | 11 |  8.330000 | 11 | 11 | 9.260000 |  8.470000 |
-# |  8.840000 | 8  | 14 |  9.960000 | 14 | 14 | 8.100000 |  7.040000 |
-# |  6.080000 | 8  | 6  |  7.240000 | 6  | 6  | 6.130000 |  5.250000 |
-# |  5.390000 | 19 | 4  |  4.260000 | 4  | 4  | 3.100000 | 12.500000 |
-# |  8.150000 | 8  | 12 | 10.840000 | 12 | 12 | 9.130000 |  5.560000 |
-# |  6.420000 | 8  | 7  |  4.820000 | 7  | 7  | 7.260000 |  7.910000 |
-# |  5.730000 | 8  | 5  |  5.680000 | 5  | 5  | 4.740000 |  6.890000 |
-# +-----------+----+----+-----------+----+----+----------+-----------+
-```
-
 #### Code generation
 
 ```perl6
@@ -303,7 +304,7 @@ ToDataQueryWorkflowCode($command6, target => $examplesTarget)
 # $obj = dfAnscombe ;
 # $obj = to-long-format( $obj ) ;
 # $obj = separate-column( $obj, "Variable", ("Variable", "Set"), sep => "" ) ;
-# $obj = to-wide-format( $obj, identifierColumn => "Set", "AutomaticKey", variablesFrom => "Variable", valuesFrom => "Value" )
+# $obj = to-wide-format( $obj, identifierColumns => ("Set", "AutomaticKey"), variablesFrom => "Variable", valuesFrom => "Value" )
 ```
 
 #### Execution steps (Raku)
@@ -312,21 +313,60 @@ Get a copy of the dataset into a "pipeline object":
 
 ```perl6
 my $obj = @dfAnscombe;
+say to-pretty-table($obj);
 ```
 ```
-# [{x1 => 10, x2 => 10, x3 => 10, x4 => 8, y1 => 8.04, y2 => 9.14, y3 => 7.46, y4 => 6.58} {x1 => 8, x2 => 8, x3 => 8, x4 => 8, y1 => 6.95, y2 => 8.14, y3 => 6.77, y4 => 5.76} {x1 => 13, x2 => 13, x3 => 13, x4 => 8, y1 => 7.58, y2 => 8.74, y3 => 12.74, y4 => 7.71} {x1 => 9, x2 => 9, x3 => 9, x4 => 8, y1 => 8.81, y2 => 8.77, y3 => 7.11, y4 => 8.84} {x1 => 11, x2 => 11, x3 => 11, x4 => 8, y1 => 8.33, y2 => 9.26, y3 => 7.81, y4 => 8.47} {x1 => 14, x2 => 14, x3 => 14, x4 => 8, y1 => 9.96, y2 => 8.1, y3 => 8.84, y4 => 7.04} {x1 => 6, x2 => 6, x3 => 6, x4 => 8, y1 => 7.24, y2 => 6.13, y3 => 6.08, y4 => 5.25} {x1 => 4, x2 => 4, x3 => 4, x4 => 19, y1 => 4.26, y2 => 3.1, y3 => 5.39, y4 => 12.5} {x1 => 12, x2 => 12, x3 => 12, x4 => 8, y1 => 10.84, y2 => 9.13, y3 => 8.15, y4 => 5.56} {x1 => 7, x2 => 7, x3 => 7, x4 => 8, y1 => 4.82, y2 => 7.26, y3 => 6.42, y4 => 7.91} {x1 => 5, x2 => 5, x3 => 5, x4 => 8, y1 => 5.68, y2 => 4.74, y3 => 5.73, y4 => 6.89}]
+# +----------+----+----+-----------+-----------+----+----+-----------+
+# |    y2    | x4 | x3 |     y4    |     y3    | x2 | x1 |     y1    |
+# +----------+----+----+-----------+-----------+----+----+-----------+
+# | 9.140000 | 8  | 10 |  6.580000 |  7.460000 | 10 | 10 |  8.040000 |
+# | 8.140000 | 8  | 8  |  5.760000 |  6.770000 | 8  | 8  |  6.950000 |
+# | 8.740000 | 8  | 13 |  7.710000 | 12.740000 | 13 | 13 |  7.580000 |
+# | 8.770000 | 8  | 9  |  8.840000 |  7.110000 | 9  | 9  |  8.810000 |
+# | 9.260000 | 8  | 11 |  8.470000 |  7.810000 | 11 | 11 |  8.330000 |
+# | 8.100000 | 8  | 14 |  7.040000 |  8.840000 | 14 | 14 |  9.960000 |
+# | 6.130000 | 8  | 6  |  5.250000 |  6.080000 | 6  | 6  |  7.240000 |
+# | 3.100000 | 19 | 4  | 12.500000 |  5.390000 | 4  | 4  |  4.260000 |
+# | 9.130000 | 8  | 12 |  5.560000 |  8.150000 | 12 | 12 | 10.840000 |
+# | 7.260000 | 8  | 7  |  7.910000 |  6.420000 | 7  | 7  |  4.820000 |
+# | 4.740000 | 8  | 5  |  6.890000 |  5.730000 | 5  | 5  |  5.680000 |
+# +----------+----+----+-----------+-----------+----+----+-----------+
 ```
 
-Very often values of certain parameters are conflated and put into dataset's column names.
-(As with Anscombe's dataset.)
+Summarize Anscombe's quartet (using "Data::Summarizers", [AAp3]):
+
+```perl6
+records-summary($obj);
+```
+```
+# +--------------+--------------------+--------------+--------------------+--------------+--------------------+--------------+-----------------+
+# | x1           | y1                 | x2           | y2                 | x3           | y4                 | x4           | y3              |
+# +--------------+--------------------+--------------+--------------------+--------------+--------------------+--------------+-----------------+
+# | Min    => 4  | Min    => 4.26     | Min    => 4  | Min    => 3.1      | Min    => 4  | Min    => 5.25     | Min    => 8  | Min    => 5.39  |
+# | 1st-Qu => 6  | 1st-Qu => 5.68     | 1st-Qu => 6  | 1st-Qu => 6.13     | 1st-Qu => 6  | 1st-Qu => 5.76     | 1st-Qu => 8  | 1st-Qu => 6.08  |
+# | Mean   => 9  | Mean   => 7.500909 | Mean   => 9  | Mean   => 7.500909 | Mean   => 9  | Mean   => 7.500909 | Mean   => 9  | Mean   => 7.5   |
+# | Median => 9  | Median => 7.58     | Median => 9  | Median => 8.14     | Median => 9  | Median => 7.04     | Median => 8  | Median => 7.11  |
+# | 3rd-Qu => 12 | 3rd-Qu => 8.81     | 3rd-Qu => 12 | 3rd-Qu => 9.13     | 3rd-Qu => 12 | 3rd-Qu => 8.47     | 3rd-Qu => 8  | 3rd-Qu => 8.15  |
+# | Max    => 14 | Max    => 10.84    | Max    => 14 | Max    => 9.26     | Max    => 14 | Max    => 12.5     | Max    => 19 | Max    => 12.74 |
+# +--------------+--------------------+--------------+--------------------+--------------+--------------------+--------------+-----------------+
+```
+
+**Remark:** Note that Anscombe's sets have same x- and y- mean values. (But the sets have very different shapes.)
+
+**Remark:** From the table above it is not clear how exactly we have to access the data in order 
+to plot each of Anscombe's sets. The data wrangling steps below show a way to separate the sets
+and make them amenable for set-wise manipulations.
+
+Very often values of certain data parameters are conflated and put into dataset's column names.
+(As in Anscombe's dataset.)
 
 In those situations we:
 
-- Convert the dataset in long format, since that allows column names to be treated as data
+- Convert the dataset into long format, since that allows column names to be treated as data
 
 - Separate the values of a certain column into to two or more columns
 
-Convert to
+Reshape the "pipeline object" into
 [long format](https://en.wikipedia.org/wiki/Wide_and_narrow_data):
 
 ```perl6
@@ -335,15 +375,15 @@ to-pretty-table($obj.head(7))
 ```
 ```
 # +----------+--------------+----------+
-# |  Value   | AutomaticKey | Variable |
+# | Variable | AutomaticKey |  Value   |
 # +----------+--------------+----------+
-# | 6.580000 |      0       |    y4    |
-# | 7.460000 |      0       |    y3    |
-# | 9.140000 |      0       |    y2    |
-# |    10    |      0       |    x1    |
-# |    10    |      0       |    x2    |
-# | 8.040000 |      0       |    y1    |
-# |    10    |      0       |    x3    |
+# |    y1    |      0       | 8.040000 |
+# |    x3    |      0       |    10    |
+# |    x2    |      0       |    10    |
+# |    x1    |      0       |    10    |
+# |    y4    |      0       | 6.580000 |
+# |    y2    |      0       | 9.140000 |
+# |    y3    |      0       | 7.460000 |
 # +----------+--------------+----------+
 ```
 
@@ -354,66 +394,48 @@ $obj = separate-column( $obj, "Variable", ("Variable", "Set"), sep => "" ) ;
 to-pretty-table($obj.head(7))
 ```
 ```
-# +--------------+-----+----------+----------+
-# | AutomaticKey | Set | Variable |  Value   |
-# +--------------+-----+----------+----------+
-# |      0       |  4  |    y     | 6.580000 |
-# |      0       |  3  |    y     | 7.460000 |
-# |      0       |  2  |    y     | 9.140000 |
-# |      0       |  1  |    x     |    10    |
-# |      0       |  2  |    x     |    10    |
-# |      0       |  1  |    y     | 8.040000 |
-# |      0       |  3  |    x     |    10    |
-# +--------------+-----+----------+----------+
+# +----------+-----+--------------+----------+
+# |  Value   | Set | AutomaticKey | Variable |
+# +----------+-----+--------------+----------+
+# | 8.040000 |  1  |      0       |    y     |
+# |    10    |  3  |      0       |    x     |
+# |    10    |  2  |      0       |    x     |
+# |    10    |  1  |      0       |    x     |
+# | 6.580000 |  4  |      0       |    y     |
+# | 9.140000 |  2  |      0       |    y     |
+# | 7.460000 |  3  |      0       |    y     |
+# +----------+-----+--------------+----------+
 ```
 
-Convert to
+Reshape the "pipeline object" into
 [wide format](https://en.wikipedia.org/wiki/Wide_and_narrow_data)
 using appropriate identifier-, variable-, and value column names:
 
 ```perl6
-$obj = to-wide-format($obj, identifierColumns => <Set AutomaticKey>, variablesFrom => "Variable", valuesFrom => "Value");
+$obj = to-wide-format( $obj, identifierColumns => ("Set", "AutomaticKey"), variablesFrom => "Variable", valuesFrom => "Value" );
 to-pretty-table($obj.head(7))
 ```
 ```
-# +--------------+-----+----+------+
-# | AutomaticKey | Set | x  |  y   |
-# +--------------+-----+----+------+
-# |      0       |  1  | 10 | 8.04 |
-# |      1       |  1  | 8  | 6.95 |
-# |      2       |  1  | 13 | 7.58 |
-# |      3       |  1  | 9  | 8.81 |
-# |      4       |  1  | 11 | 8.33 |
-# |      5       |  1  | 14 | 9.96 |
-# |      6       |  1  | 6  | 7.24 |
-# +--------------+-----+----+------+
+# +----+-----+------+--------------+
+# | x  | Set |  y   | AutomaticKey |
+# +----+-----+------+--------------+
+# | 10 |  1  | 8.04 |      0       |
+# | 8  |  1  | 6.95 |      1       |
+# | 13 |  1  | 7.58 |      2       |
+# | 9  |  1  | 8.81 |      3       |
+# | 11 |  1  | 8.33 |      4       |
+# | 14 |  1  | 9.96 |      5       |
+# | 6  |  1  | 7.24 |      6       |
+# +----+-----+------+--------------+
 ```
 
-Plot the Anscombe's quartet sets:
+Plot each dataset of Anscombe's quartet (using "Text::Plot", [AAp6]):
 
 ```perl6
 group-by($obj, 'Set').map({ say "\n", text-list-plot( $_.value.map({ +$_<x> }).List, $_.value.map({ +$_<y> }).List, title => 'Set : ' ~ $_.key) })
 ```
 ```
-# Set : 1                           
-# +---+---------+---------+----------+---------+---------+---+       
-# |                                                          |       
-# |                                            *             |       
-# +                                                      *   +  10.00
-# |                                                          |       
-# |                            *                             |       
-# +                                  *    *                  +   8.00
-# |                                                 *        |       
-# |             *         *                                  |       
-# |                                                          |       
-# +        *                                                 +   6.00
-# |                                                          |       
-# |   *              *                                       |       
-# +                                                          +   4.00
-# +---+---------+---------+----------+---------+---------+---+       
-#     4.00      6.00      8.00       10.00     12.00     14.00       
-# 
-#                           Set : 4                           
+# Set : 4                           
 # +---+--------+--------+---------+--------+---------+-------+       
 # |                                                          |       
 # +                                                      *   +  12.00
@@ -430,6 +452,24 @@ group-by($obj, 'Set').map({ say "\n", text-list-plot( $_.value.map({ +$_<x> }).L
 # |                                                          |       
 # +---+--------+--------+---------+--------+---------+-------+       
 #     8.00     10.00    12.00     14.00    16.00     18.00           
+# 
+#                           Set : 1                           
+# +---+---------+---------+----------+---------+---------+---+       
+# |                                                          |       
+# |                                            *             |       
+# +                                                      *   +  10.00
+# |                                                          |       
+# |                            *                             |       
+# +                                  *    *                  +   8.00
+# |                                                 *        |       
+# |             *         *                                  |       
+# |                                                          |       
+# +        *                                                 +   6.00
+# |                                                          |       
+# |   *              *                                       |       
+# +                                                          +   4.00
+# +---+---------+---------+----------+---------+---------+---+       
+#     4.00      6.00      8.00       10.00     12.00     14.00       
 # 
 #                           Set : 3                           
 # +---+---------+---------+----------+---------+---------+---+       
@@ -486,6 +526,11 @@ group-by($obj, 'Set').map({ say "\n", text-list-plot( $_.value.map({ +$_<x> }).L
 (2022),
 [RakuForPrediction at WordPress](https://rakuforprediction.wordpress.com).
 
+[AA3] Anton Antonov,
+["Raku Text::CodeProcessing"](https://rakuforprediction.wordpress.com/2021/07/13/raku-textcodeprocessing/),
+(2021),
+[RakuForPrediction at WordPress](https://rakuforprediction.wordpress.com).
+
 [HW1] Hadley Wickham,
 ["The Split-Apply-Combine Strategy for Data Analysis"](https://www.jstatsoft.org/article/view/v040i01),
 (2011),
@@ -502,6 +547,32 @@ group-by($obj, 'Set').map({ say "\n", text-list-plot( $_.value.map({ +$_<x> }).L
 [DSL::Bulgarian Raku package](https://github.com/antononcube/Raku-DSL-Bulgarian),
 (2022),
 [GitHub/antononcube](https://github.com/antononcube).
+
+[AAp1] Anton Antonov,
+[Data::Generators Raku package](https://github.com/antononcube/Raku-Data-Generators),
+(2021),
+[GitHub/antononcube](https://github.com/antononcube).
+
+[AAp2] Anton Antonov,
+[Data::Reshapers Raku package](https://github.com/antononcube/Raku-Data-Reshapers),
+(2021),
+[GitHub/antononcube](https://github.com/antononcube).
+
+[AAp3] Anton Antonov,
+[Data::Summarizers Raku package](https://github.com/antononcube/Raku-Data-Summarizers),
+(2021),
+[GitHub/antononcube](https://github.com/antononcube).
+
+[AAp5] Anton Antonov,
+[Text::CodeProcessing Raku package](https://github.com/antononcube/Raku-Text-CodeProcessing),
+(2021),
+[GitHub/antononcube](https://github.com/antononcube).
+
+[AAp6] Anton Antonov,
+[Text::Plot Raku package](https://github.com/antononcube/Raku-Text-Plot),
+(2022),
+[GitHub/antononcube](https://github.com/antononcube).
+
 
 ### Videos
 
