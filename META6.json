@@ -1,7 +1,7 @@
 {
   "name": "DSL::English::DataQueryWorkflows",
   "description": "Data query workflows building by natural language commands.",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "perl": "6.d",
   "authors": [
     "Anton Antonov"
