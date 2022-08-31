@@ -129,8 +129,8 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
     }
     method mutate-by-pairs($/) {
         my @pairs = $/.values[0].made;
-		my $res = do for @pairs -> ( $lhs, $rhsName, $rhs ) { $lhs ~ ' => ' ~ $rhs };
-		make 'note "mutate by pairs is not implemented"';
+		my $res = do for @pairs -> ( $lhs, $rhsName, $rhs ) { '$_{' ~ $lhs ~ '} = ' ~ $rhs };
+		make '$obj = $obj.map({ ' ~ $res.join('; ') ~'; $_ })';
     }
 
     # Group command
