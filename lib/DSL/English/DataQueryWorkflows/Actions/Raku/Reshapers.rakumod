@@ -345,7 +345,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
     method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
     method pivot-wider-argument($/) { make $/.values[0].made; }
 
-    method pivot-wider-id-columns-spec($/) { make 'identifierColumn => ' ~ $/.values[0].made; }
+    method pivot-wider-id-columns-spec($/) { make 'identifierColumns => (' ~ $/.values[0].made ~ ')'; }
 
     method pivot-wider-variable-column-spec($/) { make 'variablesFrom => ' ~ $/.values[0].made; }
 
