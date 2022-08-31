@@ -143,7 +143,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
         # my $vars = @vars.elems == 1 ?? @vars.join(', ') !! '(' ~ @vars.join(', ') ~ ')';
         my $vars = $/.values[0].made;
         $vars = $vars.contains(',') ?? '(' ~ $vars.join(', ') ~ ')' !! $vars;
-        make '$obj = group-by( $obj, ' ~ $vars.join('.') ~ ')';
+        make '$obj = group-by(' ~ $obj ~ ', ' ~ $vars.join('.') ~ ')';
     }
     method group-map-command($/) { make '$obj = $obj.map({ $_.key => ' ~ $/.values[0].made ~ '($_.value) })'; }
 
