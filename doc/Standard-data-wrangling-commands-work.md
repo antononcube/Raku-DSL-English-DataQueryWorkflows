@@ -128,7 +128,7 @@ Here is an example:
 DSL TARGET Python::pandas;
 include setup code;
 use dfStarwars;
-join with dfStarwarsFilms by "homeworld"; 
+join with dfStarwarsFilms by "name"; 
 group by species; 
 counts;
 ```
@@ -246,9 +246,9 @@ say "counts: ", $obj2>>.elems;
 
 ------
 
-### Complicated workflows
+## Complicated workflows
 
-#### Code generation
+### Code generation
 
 ```perl6
 my $command6 =
@@ -260,7 +260,7 @@ to wide form for id columns Set and AutomaticKey variable column Variable and va
 ToDataQueryWorkflowCode($command6, target => $examplesTarget)
 ```
 
-#### Execution steps (Raku)
+### Execution steps (Raku)
 
 Get a copy of the dataset into a "pipeline object":
 
