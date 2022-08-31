@@ -23,6 +23,8 @@ The videos in the references provide introduction to data wrangling from a more 
 Some of the data is acquired with the package
 ["Data::ExampleDatasets"](https://raku.land/zef:antononcube/Data::ExampleDatasets).
 
+The data wrangling sections have two parts: a code generation part, and a execution steps part. 
+
 ### Document execution
 
 This is a "computable Markdown document" -- the Raku cells are (context-consecutively) evaluated with the
@@ -43,6 +45,7 @@ my $examplesTarget = 'Raku::Reshapers';
 ### Load packages
 
 ```perl6
+use Stats;
 use Data::ExampleDatasets;
 use Data::Reshapers;
 use Data::Summarizers;
@@ -105,7 +108,7 @@ my @dfStarwarsVehicles = example-dataset("https://raw.githubusercontent.com/anto
 ### Programming languages
 
 ```perl6
-my $command0 = 'use dfStarwars; group by species; counts;';
+my $command0 = 'use dfTitanic; group by passengerClass; counts;';
 <Python Raku R R::tidyverse WL>.map({ say "\n{ $_ }:\n", ToDataQueryWorkflowCode($command0, target => $_) });
 ```
 
@@ -135,89 +138,51 @@ counts;
 
 ------
 
-## Non-trivial workflow
-
-In this section we generate and demonstrates data wrangling steps that 
-clean, mutate, filter, group, and summarize a given dataset.
+## Trivial workflow
 
 ### Code generation
 
-```perl6
-my $command1 = '
-use dfStarwars;
-replace missing with `<0>`;
-mutate with mass = `+$_<mass>` and height = `+$_<height>`;
-show dimensions;
-echo summary;
-filter by birth_year greater than 27;
-select homeworld, mass and height;
-group by homeworld;
-show counts;
-summarize the variables mass and height with &mean and &median
-';
+For the simple specification:
 
-ToDataQueryWorkflowCode($command1, target => $examplesTarget)
+```perl6
+say $command0;
+```
+
+We generate target code with `ToDataQueryWorkflowCode`:
+
+```perl6
+ToDataQueryWorkflowCode($command0, target => $examplesTarget)
 ```
 
 ### Execution steps (Raku)
 
-Here is code that cleans the data of missing values, and shows dimensions and summary (corresponds to the first five lines above):
+Get the dataset into a "pipeline object":
 
 ```perl6
-my $obj = @dfStarwars ;
-$obj = $obj.deepmap({ ( ($_ eqv Any) or $_.isa(Nil) or $_.isa(Whatever) ) ?? <0> !! $_ }) ;
-$obj = $obj.map({ $_{"mass"} = +$_<mass>; $_{"height"} = +$_<height>; $_ }).Array ;
-say "dimensions: {dimensions($obj)}" ;
-records-summary($obj);
+my $obj = @dfTitanic;
+dimensions($obj)
 ```
 
-Here is the deduced type: 
+Group by column:
 
 ```perl6
-say deduce-type($obj);
+$obj = group-by($obj, "passengerClass") ;
+$obj.elems
 ```
 
-Here is a sample of the dataset (wrangled so far):
+Assign group sizes to the "pipeline object":
 
 ```perl6
-say to-pretty-table($obj.pick(7));
+$obj = $obj>>.elems
 ```
-
-Here we group by "homeworld" and show counts for each group:
-
-```perl6
-$obj = group-by($obj, "homeworld") ;
-say "counts: ", $obj>>.elems ;
-```
-
-Here is summarization at specified columns with specified functions (from the "Stats"):
-
-```perl6
-use Stats;
-$obj = $obj.map({ $_.key => summarize-at($_.value, ("mass", "height"), (&mean, &median)) });
-say to-pretty-table($obj.pick(7));
-```
-
-------
-
-## Joins
-
-```perl6
-my $command2 = "use dfStarwarsFilms;
-left join with dfStarwars by 'name';
-sort by name, film desc;
-echo data summary;
-take pipeline value";
-
-ToDataQueryWorkflowCode($command2, target => $examplesTarget)
-````
 
 ------
 
 ## Cross tabulation
 
 [Cross tabulation](https://en.wikipedia.org/wiki/Contingency_table) 
-is a fundamental data wrangling operation:
+is a fundamental data wrangling operation. For the related transformations to long- and wide-format
+see the see the section "Complicated and neat workflow".
 
 ### Code generation
 
@@ -333,9 +298,100 @@ $obj2 = group-by(flatten($obj2.values, max-level => 1).Array, "passengerSex") ;
 say "counts: ", $obj2>>.elems;
 ```
 
+
 ------
 
-## Complicated workflows
+## Non-trivial workflow
+
+In this section we generate and demonstrates data wrangling steps that
+clean, mutate, filter, group, and summarize a given dataset.
+
+### Code generation
+
+```perl6
+my $command1 = '
+use dfStarwars;
+replace missing with `<0>`;
+mutate with mass = `+$_<mass>` and height = `+$_<height>`;
+show dimensions;
+echo summary;
+filter by birth_year greater than 27;
+select homeworld, mass and height;
+group by homeworld;
+show counts;
+summarize the variables mass and height with &mean and &median
+';
+
+ToDataQueryWorkflowCode($command1, target => $examplesTarget)
+```
+
+### Execution steps (Raku)
+
+Here is code that cleans the data of missing values, and shows dimensions and summary (corresponds to the first five lines above):
+
+```perl6
+my $obj = @dfStarwars ;
+$obj = $obj.deepmap({ ( ($_ eqv Any) or $_.isa(Nil) or $_.isa(Whatever) ) ?? <0> !! $_ }) ;
+$obj = $obj.map({ $_{"mass"} = +$_<mass>; $_{"height"} = +$_<height>; $_ }).Array ;
+say "dimensions: {dimensions($obj)}" ;
+records-summary($obj);
+```
+
+Here is the deduced type:
+
+```perl6
+say deduce-type($obj);
+```
+
+Here is a sample of the dataset (wrangled so far):
+
+```perl6
+say to-pretty-table($obj.pick(7));
+```
+
+Here we group by "homeworld" and show counts for each group:
+
+```perl6
+$obj = group-by($obj, "homeworld") ;
+say "counts: ", $obj>>.elems ;
+```
+
+Here is summarization at specified columns with specified functions (from the "Stats"):
+
+```perl6
+$obj = $obj.map({ $_.key => summarize-at($_.value, ("mass", "height"), (&mean, &median)) });
+say to-pretty-table($obj.pick(7));
+```
+
+------
+
+## Joins
+
+### Code generation
+
+```perl6
+my $command2 = "use dfStarwarsFilms;
+left join with dfStarwars by 'name';
+replace missing with `<0>`;
+sort by name, film desc;
+take pipeline value";
+
+ToDataQueryWorkflowCode($command2, target => $examplesTarget)
+````
+
+### Execution steps (Raku)
+
+```perl6
+$obj = @dfStarwarsFilms ;
+$obj = join-across( $obj, select-columns( @dfStarwars, <name species>), ("name"), join-spec=>"Left") ;
+$obj = $obj.deepmap({ ( ($_ eqv Any) or $_.isa(Nil) or $_.isa(Whatever) ) ?? <0> !! $_ }) ;
+$obj = $obj.sort({($_{"name"}, $_{"film"}) }).reverse ;
+to-pretty-table($obj.head(12))
+```
+
+------
+
+## Complicated and neat workflow
 
 ### Code generation
 
