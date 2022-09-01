@@ -311,7 +311,7 @@ clean, mutate, filter, group, and summarize a given dataset.
 ```perl6
 my $command1 = '
 use dfStarwars;
-replace missing with `<0>`;
+replace missing with `<NaN>`;
 mutate with mass = `+$_<mass>` and height = `+$_<height>`;
 show dimensions;
 echo summary;
@@ -331,7 +331,7 @@ Here is code that cleans the data of missing values, and shows dimensions and su
 
 ```perl6
 my $obj = @dfStarwars ;
-$obj = $obj.deepmap({ ( ($_ eqv Any) or $_.isa(Nil) or $_.isa(Whatever) ) ?? <0> !! $_ }) ;
+$obj = $obj.deepmap({ ( ($_ eqv Any) or $_.isa(Nil) or $_.isa(Whatever) ) ?? <NaN> !! $_ }) ;
 $obj = $obj.map({ $_{"mass"} = +$_<mass>; $_{"height"} = +$_<height>; $_ }).Array ;
 say "dimensions: {dimensions($obj)}" ;
 records-summary($obj);
@@ -372,7 +372,7 @@ say to-pretty-table($obj.pick(7));
 ```perl6
 my $command2 = "use dfStarwarsFilms;
 left join with dfStarwars by 'name';
-replace missing with `<0>`;
+replace missing with `<NaN>`;
 sort by name, film desc;
 take pipeline value";
 
@@ -384,7 +384,7 @@ ToDataQueryWorkflowCode($command2, target => $examplesTarget)
 ```perl6
 $obj = @dfStarwarsFilms ;
 $obj = join-across( $obj, select-columns( @dfStarwars, <name species>), ("name"), join-spec=>"Left") ;
-$obj = $obj.deepmap({ ( ($_ eqv Any) or $_.isa(Nil) or $_.isa(Whatever) ) ?? <0> !! $_ }) ;
+$obj = $obj.deepmap({ ( ($_ eqv Any) or $_.isa(Nil) or $_.isa(Whatever) ) ?? <NaN> !! $_ }) ;
 $obj = $obj.sort({($_{"name"}, $_{"film"}) }).reverse ;
 to-pretty-table($obj.head(12))
 ```
