@@ -171,7 +171,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
         if %.properties<IsGrouped>:exists {
             make '$obj = $obj>>.sort({ ' ~ $<arrange-by-spec>.made ~ ' })>>.reverse';
         } else {
-            make '$obj = $obj.sort({' ~ $<arrange-by-spec>.made ~ ' })>>.reverse';
+            make '$obj = $obj.sort({' ~ $<arrange-by-spec>.made ~ ' }).reverse';
         }
     }
 
