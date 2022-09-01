@@ -75,7 +75,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
 	method missing-treatment-command($/) { make $/.values[0].made; }
 	method drop-incomplete-cases-command($/) { make '$obj = DeleteMissing[$obj, 1, 2]'; }
 	method replace-missing-command($/) {
-        my $na = $<replace-missing-rhs> ?? $<replace-missing-rhs>.made !! '"NA"';
+        my $na = $<replace-missing-rhs> ?? $<replace-missing-rhs>.made !! '<NaN>';
         make '$obj = $obj.deepmap({ ( ($_ eqv Any) or $_.isa(Nil) or $_.isa(Whatever) ) ?? ' ~ $na ~ ' !! $_ })'
     }
     method replace-missing-rhs($/) { make $/.values[0].made; }
