@@ -116,13 +116,16 @@ Here is its usage message:
 ```shell
 > ToDataQueryWorkflowCode --help
 Usage:
-  ToDataQueryWorkflowCode [--target=<Str>] [--language=<Str>] [--format=<Str>] <command> -- Translates natural language commands into data transformations programming code.
-  ToDataQueryWorkflowCode [--language=<Str>] [--format=<Str>] <target> <command>
+  ToDataQueryWorkflowCode [-l|--language=<Str>] [-f|--format=<Str>] [--cmd|--clipboard-command=<Str>] [-c|--copy-to-clipboard] <target> <command> -- Easier target specification.
+  ToDataQueryWorkflowCode [-t|--target=<Str>] [-l|--language=<Str>] [-f|--format=<Str>] [-c|--copy-to-clipboard] [--cmd|--clipboard-command=<Str>] <command> -- Translates natural language commands into data transformations programming code. If --clipboard-command is an empty string then the environment variables CLIPBOARDCOMMAND and CLIPBOARD_COMMAND are attempted. If those variables are not defined then 'pbcopy' is used on macOS, 'clip.exe' on Windows, and 'xclip -selection clipboard' on Linux.
   
-    <command>           A string with one or many commands (separated by ';').
-    --target=<Str>      Target (programming language with optional library spec.) [default: 'R-tidyverse']
-    --language=<Str>    The natural language to translate from. [default: 'English']
-    --format=<Str>      The format of the output
+    <target>                           Programming language.
+    <command>                          A string with one or many commands (separated by ';').
+    -l|--language=<Str>                The natural language to translate from. [default: 'English']
+    -f|--format=<Str>                  The format of the output, one of 'automatic', 'code', 'hash', or 'raku'. [default: 'automatic']
+    --cmd|--clipboard-command=<Str>    Clipboard command to use (if --copy-to-clipboard.) [default: '']
+    -c|--copy-to-clipboard             Should the result be copied to the clipboard or not? [default: True]
+    -t|--target=<Str>                  Target (programming language with optional library spec.) [default: 'R-tidyverse']
 ```
 
 Here is an example invocation:
@@ -133,6 +136,12 @@ obj = dfTitanic.copy()
 obj = obj.groupby(["passengerSex"])
 print(obj.size())
 ```
+
+**Remark:** Note that by default an attempt is made to copy the result to the clipboard.
+If "--clipboard-command" is an empty string then the environment variables 
+`CLIPBOARD_COPY_COMMAND` and `CB_CP_CMD` are attempted. 
+If those environment variables are not defined then `pbcopy` is used on macOS, 
+`clip.exe` on Windows, and `xclip -selection clipboard` on Linux.
 
 -------
 
