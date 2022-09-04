@@ -343,8 +343,10 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	# See https://pandas.pydata.org/docs/reference/api/pandas.Series.str.split.html
 	method separate-column-command($/) {
 		my $intocols = $<into>.made.join(', ');
-		if $<sep> {
-			make 'obj[[' ~ $intocols ~ ']] = obj[' ~ $<col>.made ~ '].str.split(pat = ' ~ $<sep>.made ~ ', n = ' ~ $<into>.made.elems.Str ~ ', expand = True)';
+		if $<sep> && $<sep>.Str ∈ <'' ""> {
+			make 'obj[[' ~ $intocols ~ ']] = obj[' ~ $<col>.made ~ '].str.extract(pat = r"' ~ ('(.)') x $<into>.made.elems ~ '", expand = True)';
+		} elsif $<sep> {
+			make 'obj[[' ~ $intocols ~ ']] = obj[' ~ $<col>.made ~ '].str.split(pat = ' ~ $<sep>.Str ~ ', n = ' ~ $<into>.made.elems.Str ~ ', expand = True)';
 		} else {
 			make 'obj[[' ~ $intocols ~ ']] = obj[' ~ $<col>.made ~ '].str.split(pat = None, n = ' ~ $<into>.made.elems.Str ~ ', expand = True)';
 		}
