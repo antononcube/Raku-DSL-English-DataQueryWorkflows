@@ -340,8 +340,15 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
     method pivot-wider-value-column-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
 
 	# Separate string column command
-	method separate-column-commands($/) { make 'Not implemented'; }
-	method separator-spec($/) { make $/.values[0].made; }
+	# Separate string column command
+	method separate-column-command($/) {
+		my $intocols = $<into>.made.join(', ');
+		if $<sep> {
+			make 'obj[[' ~  $intocols  ~ ']] = obj[' ~ $<col>.made ~ '].str.split(' ~ $<sep>.made ~ ', 1, expand = True )';
+		} else {
+			make 'obj[[' ~  $intocols  ~ ']] = obj[' ~ $<col>.made ~ '].str.split( \'' ~ ' \', 1, expand = True )';
+		}
+	}
 
 	# Make dictionary command
     method make-dictionary-command($/) { make 'obj = dict(zip( obj[' ~ $<keycol>.made ~'], obj[' ~ $<valcol>.made ~ '] ))';}
