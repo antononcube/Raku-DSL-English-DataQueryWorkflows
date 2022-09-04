@@ -340,13 +340,13 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
     method pivot-wider-value-column-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
 
 	# Separate string column command
-	# Separate string column command
+	# See https://pandas.pydata.org/docs/reference/api/pandas.Series.str.split.html
 	method separate-column-command($/) {
 		my $intocols = $<into>.made.join(', ');
 		if $<sep> {
-			make 'obj[[' ~  $intocols  ~ ']] = obj[' ~ $<col>.made ~ '].str.split(' ~ $<sep>.made ~ ', 1, expand = True )';
+			make 'obj[[' ~  $intocols  ~ ']] = obj[' ~ $<col>.made ~ '].str.split(' ~ $<sep>.made ~ ', n = ' ~ $<into>.made.elems.Str ~ ', expand = True )';
 		} else {
-			make 'obj[[' ~  $intocols  ~ ']] = obj[' ~ $<col>.made ~ '].str.split( \'' ~ ' \', 1, expand = True )';
+			make 'obj[[' ~  $intocols  ~ ']] = obj[' ~ $<col>.made ~ '].str.split( \'' ~ ' \', n = ' ~ $<into>.made.elems.Str ~', expand = True )';
 		}
 	}
 
