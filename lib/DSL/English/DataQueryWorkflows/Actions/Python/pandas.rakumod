@@ -333,7 +333,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
     method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
     method pivot-wider-argument($/) { make $/.values[0].made; }
 
-    method pivot-wider-id-columns-spec($/) { make 'idvar = c( ' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ' )'; }
+    method pivot-wider-id-columns-spec($/) { make 'idvar = ( ' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ' )'; }
 
     method pivot-wider-variable-column-spec($/) { make 'timevar = ' ~ $<quoted-variable-name>.made; }
 
@@ -344,9 +344,9 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	method separate-column-command($/) {
 		my $intocols = $<into>.made.join(', ');
 		if $<sep> {
-			make 'obj[[' ~  $intocols  ~ ']] = obj[' ~ $<col>.made ~ '].str.split(' ~ $<sep>.made ~ ', n = ' ~ $<into>.made.elems.Str ~ ', expand = True )';
+			make 'obj[[' ~ $intocols ~ ']] = obj[' ~ $<col>.made ~ '].str.split(pat = ' ~ $<sep>.made ~ ', n = ' ~ $<into>.made.elems.Str ~ ', expand = True)';
 		} else {
-			make 'obj[[' ~  $intocols  ~ ']] = obj[' ~ $<col>.made ~ '].str.split( \'' ~ ' \', n = ' ~ $<into>.made.elems.Str ~', expand = True )';
+			make 'obj[[' ~ $intocols ~ ']] = obj[' ~ $<col>.made ~ '].str.split(pat = None, n = ' ~ $<into>.made.elems.Str ~ ', expand = True)';
 		}
 	}
 
