@@ -363,11 +363,13 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 
     # Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
-	method assign-pairs-list($/) { make $<assign-pair>>>.made; }
-	method as-pairs-list($/)     { make $<as-pair>>>.made; }
-	method assign-pair($/) { make ( $<assign-pair-lhs>.made, |$<assign-pair-rhs>.made ); }
-	method as-pair($/)     { make ( $<assign-pair-lhs>.made, |$<assign-pair-rhs>.made ); }
-    method assign-pair-lhs($/) { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
+	method assign-pairs-list($/)      { make $<assign-pair>>>.made; }
+	method as-pairs-list($/)          { make $<as-pair>>>.made; }
+	method association-pairs-list($/) { make $<association-pair>>>.made; }
+	method assign-pair($/)            { make ( $<assign-pair-lhs>.made, |$<assign-pair-rhs>.made ); }
+	method as-pair($/)                { make ( $<assign-pair-lhs>.made, |$<assign-pair-rhs>.made ); }
+	method association-pair($/)       { make ( $<assign-pair-lhs>.made, |$<assign-pair-rhs>.made ); }
+    method assign-pair-lhs($/)        { make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"'; }
     method assign-pair-rhs($/) {
         if $<mixed-quoted-variable-name> {
             my $v = '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"';
