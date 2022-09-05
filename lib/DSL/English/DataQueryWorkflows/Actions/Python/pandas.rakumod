@@ -226,18 +226,42 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 	method row-names-command($/) { make 'print(obj.index.tolist())'; }
 
 	# Summarize command
-    method summarize-command($/) { make $/.values[0].made; }
-	method summarize-by-pairs($/) { make 'Not implemented'; }
-	method summarize-all-command($/) {
-		if $<summarize-funcs-spec> {
-			note 'Summarize-all with functions is not implemented for Python-pandas.';
-			make 'print(obj.describe())';
-		} else {
-			make 'print(obj.describe())';
-		}
+    method summarize-command($/) {
+		make $/.values[0].made;
 	}
-	method summarize-at-command($/) { make 'Not implemented.'; }
-	method summarize-funcs-spec($/) { make '[' ~ $<variable-name-or-wl-expr-list>.made.join(', ') ~ ']'; }
+	method summarize-by-pairs($/) {
+		make 'obj = obj.agg(' ~ $/.values[0].made ~ ')';
+	}
+	method summarize-all-command($/) {
+		make 'print("<summarize-all-command> is not implemented for Python::pandas.")'
+	}
+	method summarize-at-command($/) {
+        # Functions
+        my @funcs = <min max mean median std sum>;
+        with $<summarize-funcs-spec> {
+            @funcs = $<summarize-funcs-spec>.made
+        }
+        my $spec = self.agg-spec-dict($<cols>.made, @funcs);
+        make 'obj = obj.agg(' ~ $spec ~ ')';
+	}
+	method summarize-funcs-spec($/) {
+		make $<variable-name-or-wl-expr-list>.made;
+	}
+    method agg-spec-pairs(@cols, @funcs) {
+        # .agg specification that consists of pairs
+        my @spec;
+        for @cols -> $c {
+            for @funcs -> $f {
+                @spec.append( $c ~ '_' ~ $f ~ ' = ("' ~ $c ~ '", "' ~ $f ~ '")' )
+            }
+        }
+        return @spec.join(', ');
+    }
+    method agg-spec-dict(@cols, @funcs) {
+        # .agg specification is a dictionary
+        my $farr = '[' ~ @funcs.map({ '"' ~ $_ ~ '"' }).join(', ') ~ ']';
+        return '{' ~ @cols.map({ '"' ~ $_ ~ '" : ' ~ $farr }).join(', ') ~ '}';
+    }
 
     # Join command
 	method join-command($/) { make $/.values[0].made; }
@@ -367,11 +391,13 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 
 	# Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
-	method assign-pairs-list($/) { make 'obj = obj.assign( ' ~ $<assign-pair>>>.made.join(', ') ~ ' )'; }
-	method as-pairs-list($/)     { make 'obj = obj.assign( ' ~ $<as-pair>>>.made.join(', ') ~ ' )'; }
-	method assign-pair($/) { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
-	method as-pair($/)     { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
-	method assign-pair-lhs($/) { make $/.values[0].made.subst(:g, '"', ''); }
+	method assign-pairs-list($/)      { make 'obj = obj.assign( ' ~ $<assign-pair>>>.made.join(', ') ~ ' )'; }
+	method as-pairs-list($/)          { make 'obj = obj.assign( ' ~ $<as-pair>>>.made.join(', ') ~ ' )'; }
+	method association-pairs-list($/) { make '{' ~ $<association-pair>>>.made.join(', ') ~ '}'; }
+	method assign-pair($/)            { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+	method as-pair($/)                { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+	method association-pair($/)       { make $<assign-pair-lhs>.made ~ ' : ' ~ $<assign-pair-rhs>.made; }
+	method assign-pair-lhs($/)        { make $/.values[0].made.subst(:g, '"', ''); }
 	method assign-pair-rhs($/) {
         if $<mixed-quoted-variable-name> {
             make 'obj["' ~ $/.values[0].made.subst(:g, '"', '') ~ '"]';
