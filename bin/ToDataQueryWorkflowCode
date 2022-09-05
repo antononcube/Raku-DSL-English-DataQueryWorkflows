@@ -4,28 +4,27 @@ use DSL::English::DataQueryWorkflows;
 
 multi sub MAIN
 #= Easier target specification.
-(Str $target,                         #= Programming language.
- Str $command,                        #= A string with one or many commands (separated by ';').
- Str :l(:$language) = 'English',      #= The natural language to translate from.
- Str :f(:$format) = 'automatic',      #= The format of the output, one of 'automatic', 'code', 'hash', or 'raku'.
- Str :cmd(:$clipboard-command) = '',  #= Clipboard command to use (if --copy-to-clipboard.)
- Bool :c(:$copy-to-clipboard) = True  #= Should the result be copied to the clipboard or not?
+(Str $target,                                #= Programming language.
+ Str $command,                               #= A string with one or many commands (separated by ';').
+ Str :l(:$language) = 'English',             #= The natural language to translate from.
+ Str :f(:$format) = 'automatic',             #= The format of the output, one of 'automatic', 'code', 'hash', or 'raku'.
+ Str :c(:$clipboard-command) = 'Whatever'    #= Clipboard command to use (if --copy-to-clipboard.)
  ) {
-    MAIN($command, :$target, :$language, :$format, :$clipboard-command, :$copy-to-clipboard);
+    MAIN($command, :$target, :$language, :$format, :$clipboard-command);
 }
 
 
 multi sub MAIN
 #= Translates natural language commands into data transformations programming code.
-#= If --clipboard-command is an empty string then the environment variables CLIPBOARDCOMMAND and CLIPBOARD_COMMAND are attempted.
-#= If those variables are not defined then 'pbcopy' is used on macOS, 'clip.exe' on Windows,
+#= If --clipboard-command is 'Whatever' then the environment variable CLIPBOARD_COPY_COMMAND is attempted.
+#= If CLIPBOARD_COPY_COMMAND is defined an empty string then no copying to clipboard is done.
+#= If the variable CLIPBOARD_COPY_COMMAND is not defined then 'pbcopy' is used on macOS, 'clip.exe' on Windows,
 #= and 'xclip -selection clipboard' on Linux.
-(Str $command,                               #= A string with one or many commands (separated by ';').
- Str :t(:$target) = 'R-tidyverse',           #= Target (programming language with optional library spec.)
- Str :l(:$language) = 'English',             #= The natural language to translate from.
- Str :f(:$format) = 'automatic',             #= The format of the output, one of 'automatic', 'code', 'hash', or 'raku'.
- Bool :c(:$copy-to-clipboard) = True,        #= Should the result be copied to the clipboard or not?
- Str :cmd(:$clipboard-command) is copy = ''  #= Clipboard command to use (if --copy-to-clipboard.)
+(Str $command,                                       #= A string with one or many commands (separated by ';').
+ Str :t(:$target) = 'R-tidyverse',                   #= Target (programming language with optional library spec.)
+ Str :l(:$language) = 'English',                     #= The natural language to translate from.
+ Str :f(:$format) = 'automatic',                     #= The format of the output, one of 'automatic', 'code', 'hash', or 'raku'.
+ Str :c(:$clipboard-command) is copy = 'Whatever'    #= Clipboard command to use.
  ) {
 
     my Str $formatSpec = $format.lc (elem) <auto automatic whatever> ?? 'code' !! $format.lc;
@@ -34,11 +33,9 @@ multi sub MAIN
 
     say $res;
 
-    if $copy-to-clipboard {
-        if !$clipboard-command && %*ENV<CLIPBOARD_COPY_COMMAND> {
-            $clipboard-command = %*ENV<CLIPBOARD_COPY_COMMAND>
-        } elsif !$clipboard-command && %*ENV<CB_CP_CMD> {
-            $clipboard-command = %*ENV<CB_CP_CMD>
+    if $clipboard-command eqv 'Whatever' {
+        if %*ENV{'CLIPBOARD_COPY_COMMAND', :exists} {
+            $clipboard-command = %*ENV<CLIPBOARD_COPY_COMMAND>;
         } else {
             $clipboard-command =
                     do given $*DISTRO {
@@ -50,7 +47,9 @@ multi sub MAIN
                         }
                     }
         }
+    }
 
-        shell "echo '$res' | $clipboard-command"
+    if $clipboard-command.chars > 0 {
+        shell "echo '$res' | $clipboard-command";
     }
 }
