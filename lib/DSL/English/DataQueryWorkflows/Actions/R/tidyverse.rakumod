@@ -514,21 +514,13 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
 
     # Probably have to be in DSL::Shared::Actions .
     # Assign-pairs and as-pairs
-    method assign-pairs-list($/) {
-        make $<assign-pair>>>.made.join(', ');
-    }
-    method as-pairs-list($/) {
-        make $<as-pair>>>.made.join(', ');
-    }
-    method assign-pair($/) {
-        make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made;
-    }
-    method as-pair($/) {
-        make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made;
-    }
-    method assign-pair-lhs($/) {
-        make $/.values[0].made.subst(:g, '"', '');
-    }
+    method assign-pairs-list($/)      { make $<assign-pair>>>.made.join(', '); }
+    method as-pairs-list($/)          { make $<as-pair>>>.made.join(', '); }
+    method association-pairs-list($/) { make $<association-pair>>>.made.join(', '); }
+    method assign-pair($/)            { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+    method as-pair($/)                { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+    method association-pair($/)       { make $<assign-pair-lhs>.made ~ ' = ' ~ $<assign-pair-rhs>.made; }
+    method assign-pair-lhs($/)        { make $/.values[0].made.subst(:g, '"', ''); }
     method assign-pair-rhs($/) {
         if $<mixed-quoted-variable-name> {
             make $/.values[0].made.subst(:g, '"', '');
