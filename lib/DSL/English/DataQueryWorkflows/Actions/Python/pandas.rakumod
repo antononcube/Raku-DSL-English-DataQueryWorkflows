@@ -152,14 +152,21 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
     # Group command
     method group-command($/) { make $/.values[0].made; }
 	method group-by-command($/) {
+		my $pre = (%.properties<IsGrouped> // False) ?? self.ungroup-simple-command($/) ~ "\n" !! '';
 		%.properties<IsGrouped> = True;
-		make 'obj = obj.groupby([' ~ $/.values[0].made ~ '])';
+		make $pre ~ 'obj = obj.groupby([' ~ $/.values[0].made ~ '])';
 	}
 	method group-map-command($/) { make 'obj = obj.transform(' ~ $/.values[0].made ~ ')'; }
 
     # Ungroup command
 	method ungroup-command($/) { make $/.values[0].made; }
-	method ungroup-simple-command($/) { make 'print("Ungrouping is not implemented; there is no ungroup operation in Python-pandas.")'; }
+	method ungroup-simple-command($/) {
+		%.properties<IsGrouped>:delete;
+		# Python::pandas does not ungroup method, but the following code
+		# is considered idiomatic, see:
+		#   https://github.com/pandas-dev/pandas/issues/43902#issuecomment-936934157
+		make 'obj = pandas.concat([g for k, g in obj])';
+	}
 
     # Arrange command
 	method arrange-command($/) { make $/.values[0].made; }
