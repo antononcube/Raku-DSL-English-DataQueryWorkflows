@@ -220,7 +220,11 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
     method glimpse-data($/) { make 'say "glimpse (head): {$obj.head}"'; }
     method summarize-all-command($/) {
         # This needs more coding
-        self.data-summary-command($/)
+        my @funcs = <min max mean median std sum>;
+        with $<summarize-funcs-spec> {
+            @funcs = $<summarize-funcs-spec>.made
+        }
+        make '$obj = summarize-at($obj, Whatever, ' ~ @funcs.join(', ') ~ ')';
     }
     method column-names-command($/) { make '$obj.first.keys'; }
     method row-names-command($/) { make '$obj.keys'; }
