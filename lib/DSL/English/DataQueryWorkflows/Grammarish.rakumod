@@ -164,7 +164,7 @@ role DSL::English::DataQueryWorkflows::Grammarish {
 
     # Summarize command
     rule summarize-command { <summarize-by-pairs> | <summarize-all-command> | <summarize-at-command> }
-    rule summarize-by-pairs { [ <.summarize-verb> | <.summarise-verb> ] [ <.by-preposition> | <.using-preposition> ] [ <as-pairs-list> | <assign-pairs-list> ] }
+    rule summarize-by-pairs { [ <.summarize-verb> | <.summarise-verb> ] [ <.by-preposition> | <.using-preposition> ] <association-pairs-list> }
     rule summarize-all-command { [ <.summarize-verb> | <.summarise-verb> ] <.all-data-phrase>? [ <.with-preposition> <.functions>? <summarize-funcs-spec> ] }
     rule summarize-at-command { [ <.summarize-verb> | <.summarise-verb> ] [ <.the-determiner>? [ <.data-columns-phrase> | <.data-column-phrase> ] | <.at-preposition> ]? <cols=.mixed-quoted-variable-names-list> [ <.with-preposition> <.the-determiner>? <.functions>? <summarize-funcs-spec> ]? }
     rule summarize-funcs-spec { <variable-name-or-wl-expr-list> }
@@ -231,7 +231,7 @@ role DSL::English::DataQueryWorkflows::Grammarish {
     # Separate string column command
     rule separate-column-command {
         [ <.split-verb> | <.separate-verb> ] <.the-determiner>? [ <.string-column-phrase> | <.data-column-phrase> ]? <col=.column-spec>
-        <.into-preposition> <.the-determiner>? [ <.columns> | <.column-noun> ] ? <into=.mixed-quoted-variable-names-list>
+        [ <.into-preposition> | <.to-preposition> ] <.the-determiner>? [ <.columns> | <.column-noun> ] ? <into=.mixed-quoted-variable-names-list>
         [ <.using-preposition> <.the-determiner>? [ [ <.string-noun>? <.separator-phrase> ]? <.pattern-noun> | <.string-noun>? <.separator-phrase> ] <sep=.separator-spec> ]? }
     rule separator-spec { <regex-pattern-spec> | <regex-pattern> }
 
