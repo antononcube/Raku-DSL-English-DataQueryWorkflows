@@ -360,15 +360,15 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
     method pivot-longer-value-column-name-spec($/) { make 'value_name ' ~ $/.values[0].made; }
 
     # Pivot wide command
-    method pivot-wider-command($/) { make 'obj = reshape( data = obj, ' ~ $<pivot-wider-arguments-list>.made ~ ' , direction = "wide" )'; }
+    method pivot-wider-command($/) { make 'obj = obj.pivot(' ~ $<pivot-wider-arguments-list>.made ~ ')'; }
     method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
     method pivot-wider-argument($/) { make $/.values[0].made; }
 
-    method pivot-wider-id-columns-spec($/) { make 'idvar = ( ' ~ $<mixed-quoted-variable-names-list>.made.join(', ') ~ ' )'; }
+    method pivot-wider-id-columns-spec($/) { make 'index = ( ' ~ $/.values[0].made ~ ' )'; }
 
-    method pivot-wider-variable-column-spec($/) { make 'timevar = ' ~ $<quoted-variable-name>.made; }
+    method pivot-wider-variable-column-spec($/) { make 'columns = ' ~ $/.values[0].made; }
 
-    method pivot-wider-value-column-spec($/) { make 'v.names = ' ~ $<quoted-variable-name>.made; }
+    method pivot-wider-value-column-spec($/) { make 'values = ' ~ $/.values[0].made; }
 
 	# Separate string column command
 	# See https://pandas.pydata.org/docs/reference/api/pandas.Series.str.split.html
