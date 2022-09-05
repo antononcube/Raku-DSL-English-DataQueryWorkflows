@@ -56,8 +56,6 @@ use DSL::English::DataQueryWorkflows;
 
 ### Load data
 
-*Actual data is not used at this point.*
-
 #### Titanic data
 
 We can obtain the Titanic dataset using the function `get-titanic-dataset` provided by "Data::Reshapers":
@@ -182,16 +180,16 @@ $obj = $obj>>.elems
 
 [Cross tabulation](https://en.wikipedia.org/wiki/Contingency_table) 
 is a fundamental data wrangling operation. For the related transformations to long- and wide-format
-see the see the section "Complicated and neat workflow".
+see the section "Complicated and neat workflow".
 
 ### Code generation
 
 ```perl6
-my $command3 = "use dfTitanic;
+my $command1 = "use dfTitanic;
 filter with passengerSex is 'male' and passengerSurvival equals 'died' or passengerSurvival is 'survived' ;
 cross tabulate passengerClass, passengerSurvival over passengerAge;";
 
-ToDataQueryWorkflowCode($command3, target => $examplesTarget);
+ToDataQueryWorkflowCode($command1, target => $examplesTarget);
 ```
 
 ### Execution steps (Raku)
@@ -228,23 +226,23 @@ The code corresponding to the `transform ...` line in this example produces
 *expected* result for the target "R::tidyverse":
 
 ```perl6
-my $command4 = "use data frame dfStarwars;
+my $command2 = "use data frame dfStarwars;
 keep the columns name, homeworld, mass & height;
 transform with bmi = `mass/height^2*10000`;
 filter rows by bmi >= 30 & height < 200;
 arrange by the variables mass & height descending";
 
-ToDataQueryWorkflowCode($command4, target => 'R::tidyverse');
+ToDataQueryWorkflowCode($command2, target => 'R::tidyverse');
 ```
 
 Specifically, for "Raku::Reshapers" the transform specification line has to refer to the context variable `$_`.
 Here is an example:
 
 ```perl6
-my $command4r = 'use data frame dfStarwars;
+my $command2r = 'use data frame dfStarwars;
 transform with bmi = `$_<mass>/$_<height>^2*10000` and homeworld = `$_<homeworld>.uc`;';
 
-ToDataQueryWorkflowCode($command4r, target => 'Raku::Reshapers');
+ToDataQueryWorkflowCode($command2r, target => 'Raku::Reshapers');
 ```
 
 **Remark:** Note that we have to use single quotes for the command assignment; 
@@ -263,13 +261,13 @@ In the following example before applying the grouping operation in fourth line
 we have to flatten the data (which is grouped in the second line):
 
 ```perl6
-my $command5 = "use dfTitanic; 
+my $command3 = "use dfTitanic; 
 group by passengerClass; 
 echo counts; 
 group by passengerSex; 
 counts";
 
-ToDataQueryWorkflowCode($command5, target => $examplesTarget)
+ToDataQueryWorkflowCode($command3, target => $examplesTarget)
 ```
 
 ### Execution steps (Raku)
@@ -309,7 +307,7 @@ clean, mutate, filter, group, and summarize a given dataset.
 ### Code generation
 
 ```perl6
-my $command1 = '
+my $command4 = '
 use dfStarwars;
 replace missing with `<NaN>`;
 mutate with mass = `+$_<mass>` and height = `+$_<height>`;
@@ -322,7 +320,7 @@ show counts;
 summarize the variables mass and height with &mean and &median
 ';
 
-ToDataQueryWorkflowCode($command1, target => $examplesTarget)
+ToDataQueryWorkflowCode($command4, target => $examplesTarget)
 ```
 
 ### Execution steps (Raku)
@@ -370,13 +368,13 @@ say to-pretty-table($obj.pick(7));
 ### Code generation
 
 ```perl6
-my $command2 = "use dfStarwarsFilms;
+my $command5 = "use dfStarwarsFilms;
 left join with dfStarwars by 'name';
 replace missing with `<NaN>`;
 sort by name, film desc;
 take pipeline value";
 
-ToDataQueryWorkflowCode($command2, target => $examplesTarget)
+ToDataQueryWorkflowCode($command5, target => $examplesTarget)
 ````
 
 ### Execution steps (Raku)
