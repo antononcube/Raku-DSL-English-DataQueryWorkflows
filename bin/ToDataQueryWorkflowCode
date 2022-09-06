@@ -16,10 +16,6 @@ multi sub MAIN
 
 multi sub MAIN
 #= Translates natural language commands into data transformations programming code.
-#= If --clipboard-command is 'Whatever' then the environment variable CLIPBOARD_COPY_COMMAND is attempted.
-#= If CLIPBOARD_COPY_COMMAND is defined an empty string then no copying to clipboard is done.
-#= If the variable CLIPBOARD_COPY_COMMAND is not defined then 'pbcopy' is used on macOS, 'clip.exe' on Windows,
-#= and 'xclip -selection clipboard' on Linux.
 (Str $command,                                       #= A string with one or many commands (separated by ';').
  Str :t(:$target) = 'R-tidyverse',                   #= Target (programming language with optional library spec.)
  Str :l(:$language) = 'English',                     #= The natural language to translate from.
@@ -52,4 +48,20 @@ multi sub MAIN
     if $clipboard-command.chars > 0 {
         shell "echo '$res' | $clipboard-command";
     }
+}
+
+sub USAGE() {
+    say $*USAGE;
+    say "\n";
+    say Q:c:to/EOH/;
+    Details:
+        If --clipboard-command is the empty string then no copying to the clipboard is done.
+        If --clipboard-command is 'Whatever' then:
+            1. It is attempted to use the environment variable CLIPBOARD_COPY_COMMAND.
+                If CLIPBOARD_COPY_COMMAND is defined and it is the empty string then no copying to the clipboard is done.
+            2. If the variable CLIPBOARD_COPY_COMMAND is not defined then:
+                - 'pbcopy' is used on macOS
+                - 'clip.exe' on Windows
+                - 'xclip -selection clipboard' on Linux.
+    EOH
 }
