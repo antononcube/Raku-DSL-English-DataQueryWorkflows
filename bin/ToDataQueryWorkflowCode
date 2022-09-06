@@ -34,7 +34,7 @@ multi sub MAIN
     say $res;
 
     if $clipboard-command eqv 'Whatever' {
-        if %*ENV{'CLIPBOARD_COPY_COMMAND', :exists} {
+        if %*ENV<CLIPBOARD_COPY_COMMAND>:exists {
             $clipboard-command = %*ENV<CLIPBOARD_COPY_COMMAND>;
         } else {
             $clipboard-command =
