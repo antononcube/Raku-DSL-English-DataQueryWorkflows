@@ -3,41 +3,23 @@
 use DSL::English::DataQueryWorkflows;
 
 multi sub MAIN
-#= Easier target specification.
-(Str $target,                                #= Programming language.
- Str $command,                               #= A string with one or many commands (separated by ';').
- Str :l(:$language) = 'English',             #= The natural language to translate from.
- Str :f(:$format) = 'automatic',             #= The format of the output, one of 'automatic', 'code', 'hash', or 'raku'.
- Str :c(:$clipboard-command) = 'Whatever'    #= Clipboard command to use (if --copy-to-clipboard.)
- ) {
-    MAIN($command, :$target, :$language, :$format, :$clipboard-command);
-}
-
-multi sub MAIN
-#= Translates natural language commands into data transformations programming code.
-(*@words,                                            #= Words of a data query.
- Str :t(:$target) = 'R-tidyverse',                   #= Target (programming language with optional library spec.)
- Str :l(:$language) = 'English',                     #= The natural language to translate from.
- Str :f(:$format) = 'automatic',                     #= The format of the output, one of 'automatic', 'code', 'hash', or 'raku'.
- Str :c(:$clipboard-command) is copy = 'Whatever'    #= Clipboard command to use.
- ) {
-    if @words.elems == 0 {
-        USAGE()
-    } else {
-        MAIN(@words.join(' '), :$target, :$language, :$format, :$clipboard-command);
-    }
-}
-
-multi sub MAIN
-#= Translates natural language commands into data transformations programming code.
+#= Main CLI signature.
 (Str $command,                                       #= A string with one or many commands (separated by ';').
- Str :t(:$target) = 'R-tidyverse',                   #= Target (programming language with optional library spec.)
+ Str :t(:$target) is copy = 'Whatever',              #= Target (programming language with optional library spec.)
  Str :l(:$language) = 'English',                     #= The natural language to translate from.
- Str :f(:$format) = 'automatic',                     #= The format of the output, one of 'automatic', 'code', 'hash', or 'raku'.
+ Str :f(:$format) = 'Whatever',                      #= The format of the output, one of 'Whatever', 'code', 'hash', or 'raku'.
  Str :c(:$clipboard-command) is copy = 'Whatever'    #= Clipboard command to use.
  ) {
 
     my Str $formatSpec = $format.lc (elem) <auto automatic whatever> ?? 'code' !! $format.lc;
+
+    if $target eqv 'Whatever' {
+        if %*ENV<RAKU_DSL_DATAQUERYWORKFLOWS_TARGET>:exists {
+            $target = %*ENV<RAKU_DSL_DATAQUERYWORKFLOWS_TARGET>;
+        } else {
+            $target = 'R::tidyverse'
+        }
+    }
 
     my $res = ToDataQueryWorkflowCode($command, $target, :$language, format => $formatSpec);
 
@@ -64,11 +46,41 @@ multi sub MAIN
     }
 }
 
+multi sub MAIN
+#= Easier target specification.
+(Str $target,                                #= Programming language.
+ Str $command,                               #= A string with one or many commands (separated by ';').
+ Str :l(:$language) = 'English',             #= The natural language to translate from.
+ Str :f(:$format) = 'Whatever',              #= The format of the output, one of 'Whatever', 'code', 'hash', or 'raku'.
+ Str :c(:$clipboard-command) = 'Whatever'    #= Clipboard command to use (if --copy-to-clipboard.)
+ ) {
+    MAIN($command, :$target, :$language, :$format, :$clipboard-command);
+}
+
+multi sub MAIN
+#= Command given as a sequence of words.
+(*@words,                                            #= Words of a data query.
+ Str :t(:$target) = 'Whatever',                      #= Target (programming language with optional library spec.)
+ Str :l(:$language) = 'English',                     #= The natural language to translate from.
+ Str :f(:$format) = 'automatic',                     #= The format of the output, one of 'automatic', 'code', 'hash', or 'raku'.
+ Str :c(:$clipboard-command) is copy = 'Whatever'    #= Clipboard command to use.
+ ) {
+    if @words.elems == 0 {
+        USAGE()
+    } else {
+        MAIN(@words.join(' '), :$target, :$language, :$format, :$clipboard-command);
+    }
+}
+
 sub USAGE() {
+    say "Translates natural language commands into data transformations programming code.";
     say $*USAGE;
     say "\n";
     say Q:c:to/EOH/;
     Details:
+        If --target is 'Whatever' then:
+            1. It is attempted to use the environmental variable RAKU_DSL_DATAQUERYWORKFLOWS_TARGET
+            2. If RAKU_DSL_DATAQUERYWORKFLOWS_TARGET is not defined then 'R::tidyverse' is used.
         If --clipboard-command is the empty string then no copying to the clipboard is done.
         If --clipboard-command is 'Whatever' then:
             1. It is attempted to use the environment variable CLIPBOARD_COPY_COMMAND.
