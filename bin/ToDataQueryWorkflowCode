@@ -21,8 +21,12 @@ multi sub MAIN
  Str :f(:$format) = 'automatic',                     #= The format of the output, one of 'automatic', 'code', 'hash', or 'raku'.
  Str :c(:$clipboard-command) is copy = 'Whatever'    #= Clipboard command to use.
  ) {
-    MAIN(@words.join(' '), :$target, :$language, :$format, :$clipboard-command);
- }
+    if @words.elems == 0 {
+        USAGE()
+    } else {
+        MAIN(@words.join(' '), :$target, :$language, :$format, :$clipboard-command);
+    }
+}
 
 multi sub MAIN
 #= Translates natural language commands into data transformations programming code.
