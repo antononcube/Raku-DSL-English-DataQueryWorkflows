@@ -115,17 +115,33 @@ Here is its usage message:
 
 ```shell
 > ToDataQueryWorkflowCode --help
+Translates natural language commands into data transformations programming code.
 Usage:
-  ToDataQueryWorkflowCode [-l|--language=<Str>] [-f|--format=<Str>] [--cmd|--clipboard-command=<Str>] [-c|--copy-to-clipboard] <target> <command> -- Easier target specification.
-  ToDataQueryWorkflowCode [-t|--target=<Str>] [-l|--language=<Str>] [-f|--format=<Str>] [-c|--copy-to-clipboard] [--cmd|--clipboard-command=<Str>] <command> -- Translates natural language commands into data transformations programming code. If --clipboard-command is an empty string then the environment variables CLIPBOARDCOMMAND and CLIPBOARD_COMMAND are attempted. If those variables are not defined then 'pbcopy' is used on macOS, 'clip.exe' on Windows, and 'xclip -selection clipboard' on Linux.
+  ToDataQueryWorkflowCode [-t|--target=<Str>] [-l|--language=<Str>] [-f|--format=<Str>] [-c|--clipboard-command=<Str>] <command> -- Main CLI signature.
+  ToDataQueryWorkflowCode [-l|--language=<Str>] [-f|--format=<Str>] [-c|--clipboard-command=<Str>] <target> <command> -- Easier target specification.
+  ToDataQueryWorkflowCode [-t|--target=<Str>] [-l|--language=<Str>] [-f|--format=<Str>] [-c|--clipboard-command=<Str>] [<words> ...] -- Command given as a sequence of words.
   
-    <target>                           Programming language.
-    <command>                          A string with one or many commands (separated by ';').
-    -l|--language=<Str>                The natural language to translate from. [default: 'English']
-    -f|--format=<Str>                  The format of the output, one of 'automatic', 'code', 'hash', or 'raku'. [default: 'automatic']
-    --cmd|--clipboard-command=<Str>    Clipboard command to use (if --copy-to-clipboard.) [default: '']
-    -c|--copy-to-clipboard             Should the result be copied to the clipboard or not? [default: True]
-    -t|--target=<Str>                  Target (programming language with optional library spec.) [default: 'R-tidyverse']
+    <command>                       A string with one or many commands (separated by ';').
+    -t|--target=<Str>               Target (programming language with optional library spec.) [default: 'Whatever']
+    -l|--language=<Str>             The natural language to translate from. [default: 'English']
+    -f|--format=<Str>               The format of the output, one of 'Whatever', 'code', 'hash', or 'raku'. [default: 'Whatever']
+    -c|--clipboard-command=<Str>    Clipboard command to use. [default: 'Whatever']
+    <target>                        Programming language.
+    [<words> ...]                   Words of a data query.
+
+
+Details:
+    If --target is 'Whatever' then:
+        1. It is attempted to use the environmental variable RAKU_DSL_DATAQUERYWORKFLOWS_TARGET
+        2. If RAKU_DSL_DATAQUERYWORKFLOWS_TARGET is not defined then 'R::tidyverse' is used.
+    If --clipboard-command is the empty string then no copying to the clipboard is done.
+    If --clipboard-command is 'Whatever' then:
+        1. It is attempted to use the environment variable CLIPBOARD_COPY_COMMAND.
+            If CLIPBOARD_COPY_COMMAND is defined and it is the empty string then no copying to the clipboard is done.
+        2. If the variable CLIPBOARD_COPY_COMMAND is not defined then:
+            - 'pbcopy' is used on macOS
+            - 'clip.exe' on Windows
+            - 'xclip -selection clipboard' on Linux.
 ```
 
 Here is an example invocation:
@@ -136,12 +152,6 @@ obj = dfTitanic.copy()
 obj = obj.groupby(["passengerSex"])
 print(obj.size())
 ```
-
-**Remark:** Note that by default an attempt is made to copy the result to the clipboard.
-If "--clipboard-command" is an empty string then the environment variables 
-`CLIPBOARD_COPY_COMMAND` and `CB_CP_CMD` are attempted. 
-If those environment variables are not defined then `pbcopy` is used on macOS, 
-`clip.exe` on Windows, and `xclip -selection clipboard` on Linux.
 
 -------
 
