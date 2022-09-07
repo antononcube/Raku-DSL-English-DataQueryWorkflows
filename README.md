@@ -306,6 +306,19 @@ A dedicated GitHub repository was made in order to make the installation with Ra
 (2011), 
 [Journal of Statistical Software](https://www.jstatsoft.org/).
 
+### Notebooks
+
+[AAn1] Anton Antonov,
+["Standard Data Wrangling Commands (in Raku)"](./doc/Standard-data-wrangling-commands.md), 
+(2022),
+[Raku-DSL-English-DataQueryWorkflows at GitHub](https://github.com/antononcube/Raku-DSL-English-DataQueryWorkflows).   
+(Markdown notebook.)
+
+[AAn2] Anton Antonov,
+["Standard Data Wrangling Commands (in Python)"](https://github.com/antononcube/RakuForPrediction-book/blob/main/Notebooks/Jupyter/Standard-data-wrangling-commands-Python.ipynb),
+(2022),
+[RakuForPrediction-book at GitHub](https://github.com/antononcube/RakuForPrediction-book).   
+(Jypyter notebook.)
 
 ### Packages
 
