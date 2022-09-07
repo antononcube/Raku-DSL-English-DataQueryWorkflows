@@ -1,5 +1,7 @@
 # Standard Data Wrangling Commands
 
+#### *Raku, version 0.7*
+
 ## Introduction
 
 This document demonstrates and exemplifies the abilities of the package
@@ -14,11 +16,13 @@ The data wrangling in Raku is done with the packages:
 ["Data::Reshapers"](https://raku.land/zef:antononcube/Data::Reshapers), and
 ["Data::Summarizers"](https://raku.land/zef:antononcube/Data::Summarizers).
 
+This document has examples that were used in the presentation “Multi-language Data-Wrangling Conversational Agent”, [AAv1]. 
+That presentation is an introduction to data wrangling from a more general, multi-language perspective.
+It is assumed that the readers of this document are familiar with the general data processing workflow discussed in the presentation [AAv1].
+
 For detailed introduction into data wrangling (with- and in Raku) see the article
 ["Introduction to data wrangling with Raku"](https://rakuforprediction.wordpress.com/2021/12/31/introduction-to-data-wrangling-with-raku/),
 [AA1]. (And its Bulgarian version [AA2].)
-
-The videos in the references provide introduction to data wrangling from a more general, multi-language perspective. 
 
 Some of the data is acquired with the package
 ["Data::ExampleDatasets"](https://raku.land/zef:antononcube/Data::ExampleDatasets).
@@ -103,6 +107,9 @@ my @dfStarwarsVehicles = example-dataset("https://raw.githubusercontent.com/anto
 
 ## Multi-language translation
 
+In this section show that the Raku package “DSL::English::DataQueryWorkflows” generates code for multiple programming languages. 
+Also, it translates the English DSL into DSLs of other natural languages.
+
 ### Programming languages
 
 ```perl6
@@ -137,6 +144,8 @@ counts;
 ------
 
 ## Trivial workflow
+
+In this section we demonstrate code generation and execution results for very simple (and very frequently used) sequence of data wrangling operations.
 
 ### Code generation
 
@@ -184,6 +193,8 @@ see the section "Complicated and neat workflow".
 
 ### Code generation
 
+Here we define a command that filters the Titanic dataset and then makes cross-tabulates:
+
 ```perl6
 my $command1 = "use dfTitanic;
 filter with passengerSex is 'male' and passengerSurvival equals 'died' or passengerSurvival is 'survived' ;
@@ -220,6 +231,8 @@ say to-pretty-table($obj);
 
 ## Formulas with column references
 
+In this section we discuss formula utilization to mutate data.
+
 Special care has to be taken when the specifying data mutations with formulas that reference to columns in the dataset.
 
 The code corresponding to the `transform ...` line in this example produces 
@@ -251,6 +264,8 @@ using double quotes will invoke Raku's string interpolation feature.
 ------
 
 ## Grouping awareness
+
+In this section we discuss the treatment of multiple "group by" invocations within the same DSL specification.
 
 ### Code generation 
 
@@ -301,8 +316,7 @@ say "counts: ", $obj2>>.elems;
 
 ## Non-trivial workflow
 
-In this section we generate and demonstrates data wrangling steps that
-clean, mutate, filter, group, and summarize a given dataset.
+In this section we generate and demonstrate data wrangling steps that clean, mutate, filter, group, and summarize a given dataset.
 
 ### Code generation
 
@@ -365,6 +379,8 @@ say to-pretty-table($obj.pick(7));
 
 ## Joins
 
+In this section we demonstrate the fundamental operation of joining two datasets.
+
 ### Code generation
 
 ```perl6
@@ -390,6 +406,10 @@ to-pretty-table($obj.head(12))
 ------
 
 ## Complicated and neat workflow
+
+In this section we demonstrate a fairly complicated data wrangling sequence of operations that transforms [Anscombe's quartet](https://en.wikipedia.org/wiki/Anscombe's_quartet) into a form that is easier to plot.
+
+**Remark:** Anscombe's quartet has four sets of points that have nearly the same x- and y- mean values. (But the sets have very different shapes.)
 
 ### Code generation
 
@@ -417,8 +437,6 @@ Summarize Anscombe's quartet (using "Data::Summarizers", [AAp3]):
 ```perl6
 records-summary($obj);
 ```
-
-**Remark:** Note that Anscombe's sets have same x- and y- mean values. (But the sets have very different shapes.)
 
 **Remark:** From the table above it is not clear how exactly we have to access the data in order 
 to plot each of Anscombe's sets. The data wrangling steps below show a way to separate the sets
