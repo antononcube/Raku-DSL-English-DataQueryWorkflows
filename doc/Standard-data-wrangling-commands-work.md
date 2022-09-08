@@ -229,9 +229,9 @@ say to-pretty-table($obj);
 
 ------
 
-## Formulas with column references
+## Mutation with formulas
 
-In this section we discuss formula utilization to mutate data.
+In this section we discuss formula utilization to mutate data. We show how to use column references.
 
 Special care has to be taken when the specifying data mutations with formulas that reference to columns in the dataset.
 
