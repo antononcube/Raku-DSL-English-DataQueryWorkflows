@@ -333,9 +333,14 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
 			make 'obj = pandas.crosstab( index = ' ~ $<rows-variable-name>.made ~ ' )';
 		}
 	}
-    method rows-variable-name($/)    { make 'obj.' ~ $/.values[0].made.subst(:g, '"', ''); }
-    method columns-variable-name($/) { make 'obj.' ~ $/.values[0].made.subst(:g, '"', ''); }
-    method values-variable-name($/)  { make 'obj.' ~ $/.values[0].made.subst(:g, '"', ''); }
+	# Using these definitions brings ambiguity some times. For example:
+	# for Titanic data with obj.class is not the same as obj["class"].
+    #   method rows-variable-name($/)    { make 'obj.' ~ $/.values[0].made.subst(:g, '"', ''); }
+	#   method columns-variable-name($/) { make 'obj.' ~ $/.values[0].made.subst(:g, '"', ''); }
+	#   method values-variable-name($/)  { make 'obj.' ~ $/.values[0].made.subst(:g, '"', ''); }
+	method rows-variable-name($/)    { make 'obj[' ~ $/.values[0].made ~ ']'; }
+	method columns-variable-name($/) { make 'obj[' ~ $/.values[0].made ~ ']'; }
+	method values-variable-name($/)  { make 'obj[' ~ $/.values[0].made ~ ']'; }
 
     # Reshape command
     method reshape-command($/) { make $/.values[0].made; }
