@@ -96,7 +96,7 @@ role DSL::English::DataQueryWorkflows::Grammarish {
                                  <current=.column-specs-list>
                                  [ <.to-preposition> | <.into-preposition> | <.as-preposition> ]
                                  <new=.column-specs-list> }
-    rule rename-columns-by-pairs { <.rename-directive> <.the-determiner>? [ <.data-columns-phrase> | <.data-column-phrase> ]? [ <as-pairs-list> | <assign-pairs-list> ] }
+    rule rename-columns-by-pairs { <.rename-directive> <.the-determiner>? [ <.data-columns-phrase> | <.data-column-phrase> ]? [ <as-pairs-list> | <assign-pairs-list> | <association-pairs-list> ] }
 
     # Select command
     rule select-command { <select-columns-by-pairs> | <select-columns-by-two-lists> | <select-columns-simple> }
