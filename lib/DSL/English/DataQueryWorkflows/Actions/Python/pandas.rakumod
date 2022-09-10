@@ -30,10 +30,12 @@
 
 use v6.d;
 
+use DSL::English::DataQueryWorkflows::Actions::General;
 use DSL::Shared::Actions::Python::PredicateSpecification;
 use DSL::English::DataQueryWorkflows::Actions::Python::ListManagementCommand-pandas;
 
 class DSL::English::DataQueryWorkflows::Actions::Python::pandas
+		does DSL::English::DataQueryWorkflows::Actions::General
         is DSL::Shared::Actions::Python::PredicateSpecification
 		is DSL::English::DataQueryWorkflows::Actions::Python::ListManagementCommand-pandas {
 

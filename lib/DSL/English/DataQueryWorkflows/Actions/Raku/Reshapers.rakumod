@@ -30,11 +30,12 @@
 
 use v6.d;
 
-use DSL::English::DataQueryWorkflows::Grammar;
+use DSL::English::DataQueryWorkflows::Actions::General;
 use DSL::Shared::Actions::Raku::PredicateSpecification;
 use DSL::Shared::Actions::English::Raku::ListManagementCommand;
 
 class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
+        does DSL::English::DataQueryWorkflows::Actions::General
         is DSL::Shared::Actions::Raku::PredicateSpecification
         is DSL::Shared::Actions::English::Raku::ListManagementCommand {
 

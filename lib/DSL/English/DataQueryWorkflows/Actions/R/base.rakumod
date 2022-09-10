@@ -30,11 +30,12 @@
 
 use v6.d;
 
-use DSL::English::DataQueryWorkflows::Grammar;
+use DSL::English::DataQueryWorkflows::Actions::General;
 use DSL::Shared::Actions::R::PredicateSpecification;
 use DSL::Shared::Actions::English::R::PipelineCommand;
 
 class DSL::English::DataQueryWorkflows::Actions::R::base
+		does DSL::English::DataQueryWorkflows::Actions::General
         is DSL::Shared::Actions::R::PredicateSpecification
 		is DSL::Shared::Actions::English::R::PipelineCommand {
 
