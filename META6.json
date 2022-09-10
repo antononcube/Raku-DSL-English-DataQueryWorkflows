@@ -18,6 +18,7 @@
     "DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard": "lib/DSL/English/DataQueryWorkflows/Actions/Bulgarian/Standard.rakumod",
     "DSL::English::DataQueryWorkflows::Actions::English::Predicate": "lib/DSL/English/DataQueryWorkflows/Actions/English/Predicate.rakumod",
     "DSL::English::DataQueryWorkflows::Actions::English::Standard": "lib/DSL/English/DataQueryWorkflows/Actions/English/Standard.rakumod",
+    "DSL::English::DataQueryWorkflows::Actions::General": "lib/DSL/English/DataQueryWorkflows/Actions/General.rakumod",
     "DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames": "lib/DSL/English/DataQueryWorkflows/Actions/Julia/DataFrames.rakumod",
     "DSL::English::DataQueryWorkflows::Actions::Korean::Predicate": "lib/DSL/English/DataQueryWorkflows/Actions/Korean/Predicate.rakumod",
     "DSL::English::DataQueryWorkflows::Actions::Korean::Standard": "lib/DSL/English/DataQueryWorkflows/Actions/Korean/Standard.rakumod",
