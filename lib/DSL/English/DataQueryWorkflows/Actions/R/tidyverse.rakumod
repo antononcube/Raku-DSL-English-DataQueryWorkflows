@@ -456,7 +456,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
             make 'tidyr::pivot_longer( ' ~ $<pivot-longer-arguments-list>.made ~ ' )';
         } else {
             make 'dplyr::mutate_all(.funs = as.character) %>% ' ~ "\n" ~
-                    'tidyr::pivot_longer( cols = dplyr::everything(), names_to = "Variable", values_to = "Value")';
+                    'tidyr::pivot_longer(cols = dplyr::everything(), names_to = "Variable", values_to = "Value")';
         }
     }
     method pivot-longer-arguments-list($/) {
@@ -474,17 +474,26 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
     method pivot-longer-columns-spec($/) {
         my $res = $/.values[0].made;
         if $<column-specs-list> {
-            $res = ' c( ' ~ $res ~ ' )';
+            $res = $res.split(', ').map({ self.in-double-quotes($_) }).join(', ');
+            $res = ' c(' ~ $res ~ ')';
         }
         make 'cols = ' ~ $res;
     }
 
     method pivot-longer-variable-column-name-spec($/) {
-        make 'names_to = ' ~ $/.values[0].made;
+        my $res = $/.values[0].made;
+        if $<column-spec><column-name-spec> {
+            $res = self.in-double-quotes($res);
+        }
+        make 'names_to = ' ~ $res;
     }
 
     method pivot-longer-value-column-name-spec($/) {
-        make 'values_to = ' ~ $/.values[0].made;
+        my $res = $/.values[0].made;
+        if $<column-spec><column-name-spec> {
+            $res = self.in-double-quotes($res);
+        }
+        make 'values_to = ' ~ $res;
     }
 
     # Pivot wider command
@@ -499,29 +508,32 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
     }
 
     method pivot-wider-id-columns-spec($/) {
-        make 'id_cols = c( ' ~ $/.values[0].made ~ ' )';
+        my $res = $/.values[0].made;
+        $res = $res.split(', ').map({ self.in-double-quotes($_) }).join(', ');
+        make 'id_cols = c( ' ~ $res ~ ' )';
     }
 
     method pivot-wider-variable-column-spec($/) {
-        make 'names_from = ' ~ $/.values[0].made;
+        make 'names_from = ' ~ self.in-double-quotes($/.values[0].made);
     }
 
     method pivot-wider-value-column-spec($/) {
-        make 'values_from = ' ~ $/.values[0].made;
+        make 'values_from = ' ~ self.in-double-quotes($/.values[0].made);
     }
 
     # Separate string column command
     # https://tidyr.tidyverse.org/reference/separate.html
     # https://tidyr.tidyverse.org/reference/extract.html
     method separate-column-command($/) {
-        my $intocols = map({ '"' ~ $_.subst(:g, '"', '') ~ '"' }, $<into>.made.split(', ')).join(', ');
+        my $intocols = $<into>.made.split(', ').map({ self.in-double-quotes($_) }).join(', ');
+        my $col = self.in-double-quotes($<col>.made);
         if $<sep> && $<sep>.Str.trim ∈ <'' ""> {
             my $ncols = $<into>.made.split(', ').elems;
-            make 'tidyr::extract(col = ' ~ $<col>.made ~ ', into = c(' ~ $intocols ~ '), regex = "' ~ ('(.)') x $ncols ~ '")';
+            make 'tidyr::extract(col = ' ~ $col ~ ', into = c(' ~ $intocols ~ '), regex = "' ~ ('(.)') x $ncols ~ '")';
         } elsif $<sep> {
-            make 'tidyr::separate(col = ' ~ $<col>.made ~ ', into = c(' ~ $intocols ~ '), sep = ' ~ $<sep>.made ~ ')';
+            make 'tidyr::separate(col = ' ~ $col ~ ', into = c(' ~ $intocols ~ '), sep = ' ~ $<sep>.made ~ ')';
         } else {
-            make 'tidyr::separate(col = ' ~ $<col>.made ~ ', into = c(' ~ $intocols ~ ') )';
+            make 'tidyr::separate(col = ' ~ $col ~ ', into = c(' ~ $intocols ~ ') )';
         }
     }
     method separator-spec($/) {
@@ -561,10 +573,10 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         make $<key-pair-lhs>.made ~ ' = ' ~ $<key-pair-rhs>.made;
     }
     method key-pair-lhs($/) {
-        make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"';
+        make self.in-double-quotes($/.values[0].made);
     }
     method key-pair-rhs($/) {
-        make '"' ~ $/.values[0].made.subst(:g, '"', '') ~ '"';
+        make self.in-double-quotes($/.values[0].made);
     }
 
     # Pipeline command
@@ -610,9 +622,12 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         library(tidyverse)
         library(skimr)
         SETUPEND
+    }
 
-
-
-
+    #========================================================
+    # Modifier methods
+    #========================================================
+    method in-double-quotes($arg) {
+        return '"' ~ $arg.subst(:g, '"', '') ~ '"';
     }
 }
