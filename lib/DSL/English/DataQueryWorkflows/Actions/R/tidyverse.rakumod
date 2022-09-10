@@ -245,7 +245,10 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         make 'dplyr::arrange(' ~ $<arrange-by-spec>.made ~ ')';
     }
     method arrange-by-command-descending($/) {
-        make 'dplyr::arrange(desc(' ~ $<arrange-by-spec>.made ~ '))';
+        # dplyr's function desc takes only one argument.
+        # This is somewhat a hacking solution, but works for now:
+        my @cols = |$<arrange-by-spec>.made.split(',')>>.trim;
+        make 'dplyr::arrange(' ~ @cols.map({'desc(' ~  $_  ~ ')' }).join(', ') ~ ')';
     }
 
     # Rename columns command
