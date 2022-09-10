@@ -223,7 +223,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule group-map-phrase:sym<English> {  <group-verb> [ <mapping-noun> | <map-verb> ] | <apply-verb> <per-preposition> <group-verb>  }
 
     proto rule id-columns-phrase {*}
-    rule id-columns-phrase:sym<English> {  [ <id-noun> | <identifier-noun> | <identifier-adjective> ] <columns>  }
+    rule id-columns-phrase:sym<English> {  [ <id-noun> | <identifier-noun> | <identifier-adjective> ] [ <columns-noun> | <column-noun> ]  }
 
     proto rule join-phrase {*}
     rule join-phrase:sym<English> { <join-noun> | <merge-verb> | <merge-noun> }
