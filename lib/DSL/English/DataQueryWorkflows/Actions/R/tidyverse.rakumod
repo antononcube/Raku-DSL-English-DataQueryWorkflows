@@ -152,7 +152,7 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         my $na = $<replace-missing-rhs> ?? $<replace-missing-rhs>.made !! 'NA';
         my @cols = $<column-specs-list><column-spec>>>.made;
         my $rspec = (@cols X~ ( ' = ' ~ $na )).join(', ');
-        make 'dplyr::mutate(list(' ~ $rspec ~ '))';
+        make 'tidyr::replace_na(list(' ~ $rspec ~ '))';
     }
     method replace-missing-command($/) {
         my $na = $<replace-missing-rhs> ?? $<replace-missing-rhs>.made !! 'NA';
