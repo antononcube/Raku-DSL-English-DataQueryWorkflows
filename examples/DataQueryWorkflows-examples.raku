@@ -65,8 +65,16 @@ my $commands8 = 'use dfTitanic; select passengerSex as sex and "passengerClass" 
 
 my $commands9 = 'use dfTitanic; select "passengerSex", passengerClass, passengerAge as sex, class, age';
 
+my $commands10 = '
+use data frame dfStarwars;
+keep the columns name, homeworld, mass & height;
+replace missing in mass and height with 0;
+replace missing with 0;
+transform with bmi = `mass/height^2*10000`;
+filter rows by bmi >= 30 & height < 200;
+arrange by the variables mass & height descending';
 
-my @testCommands = ($commands1, $commands2, $commands3, $commands4, $commands5, $commands6, $commands7, $commands8, $commands9);
+my @testCommands = ($commands1, $commands2, $commands3, $commands4, $commands5, $commands6, $commands7, $commands8, $commands9, $commands10);
 
 #----------------------------------------------------------
 
