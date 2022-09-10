@@ -209,7 +209,7 @@ role DSL::English::DataQueryWorkflows::Grammarish {
 
     rule pivot-longer-id-columns-spec { <?{$*IDCOLS == 0}> <.the-determiner>? <.pivot-id-columns-phrase> <column-specs-list> {$*IDCOLS = 1} }
 
-    rule pivot-longer-columns-spec { <?{$*COLS == 0}> <.the-determiner>? <.pivot-columns-phrase> <column-specs-list> {$*COLS = 1} }
+    rule pivot-longer-columns-spec { <?{$*COLS == 0}> <.the-determiner>? <.pivot-columns-phrase> [ <wl-expr> | <column-specs-list> ] {$*COLS = 1} }
 
     rule pivot-longer-variable-column-name-spec { <?{$*VARTO == 0}> <.the-determiner>? <.variable-column-name-phrase> <column-spec> {$*VARTO = 1} }
 

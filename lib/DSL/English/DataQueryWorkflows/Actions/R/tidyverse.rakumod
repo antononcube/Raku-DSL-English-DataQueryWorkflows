@@ -472,7 +472,11 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
     }
 
     method pivot-longer-columns-spec($/) {
-        make 'cols = c( ' ~ $/.values[0].made ~ ' )';
+        my $res = $/.values[0].made;
+        if $<column-specs-list> {
+            $res = ' c( ' ~ $res ~ ' )';
+        }
+        make 'cols = ' ~ $res;
     }
 
     method pivot-longer-variable-column-name-spec($/) {
