@@ -506,12 +506,17 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
     }
 
     # Separate string column command
+    # https://tidyr.tidyverse.org/reference/separate.html
+    # https://tidyr.tidyverse.org/reference/extract.html
     method separate-column-command($/) {
         my $intocols = map({ '"' ~ $_.subst(:g, '"', '') ~ '"' }, $<into>.made.split(', ')).join(', ');
-        if $<sep> {
-            make 'tidyr::separate( col = ' ~ $<col>.made ~ ', into = c(' ~ $intocols ~ '), sep = ' ~ $<sep>.made ~ ' )';
+        if $<sep> && $<sep>.Str.trim ∈ <'' ""> {
+            my $ncols = $<into>.made.split(', ').elems;
+            make 'tidyr::extract(col = ' ~ $<col>.made ~ ', into = c(' ~ $intocols ~ '), regex = "' ~ ('(.)') x $ncols ~ '")';
+        } elsif $<sep> {
+            make 'tidyr::separate(col = ' ~ $<col>.made ~ ', into = c(' ~ $intocols ~ '), sep = ' ~ $<sep>.made ~ ')';
         } else {
-            make 'tidyr::separate( col = ' ~ $<col>.made ~ ', into = c(' ~ $intocols ~ ') )';
+            make 'tidyr::separate(col = ' ~ $<col>.made ~ ', into = c(' ~ $intocols ~ ') )';
         }
     }
     method separator-spec($/) {
