@@ -38,6 +38,8 @@
 #==============================================================================
 =end comment
 
+use v6.d;
+
 use DSL::English::DataQueryWorkflows::Actions::General;
 use DSL::Shared::Actions::R::PredicateSpecification;
 use DSL::English::DataQueryWorkflows::Actions::R::ListManagementCommand-tidyverse;
