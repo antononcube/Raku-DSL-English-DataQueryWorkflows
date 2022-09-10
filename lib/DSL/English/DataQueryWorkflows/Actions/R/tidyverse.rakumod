@@ -455,7 +455,8 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         if $<pivot-longer-arguments-list> {
             make 'tidyr::pivot_longer( ' ~ $<pivot-longer-arguments-list>.made ~ ' )';
         } else {
-            make 'dplyr::mutate_all(.funs = as.character) %>% tidyr::pivot_longer( cols = dplyr::everything(), names_to = "Variable", values_to = "Value")';
+            make 'dplyr::mutate_all(.funs = as.character) %>% ' ~ "\n" ~
+                    'tidyr::pivot_longer( cols = dplyr::everything(), names_to = "Variable", values_to = "Value")';
         }
     }
     method pivot-longer-arguments-list($/) {
