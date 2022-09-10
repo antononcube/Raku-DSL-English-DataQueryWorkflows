@@ -38,11 +38,12 @@
 #==============================================================================
 =end comment
 
-use DSL::English::DataQueryWorkflows::Grammar;
+use DSL::English::DataQueryWorkflows::Actions::General;
 use DSL::Shared::Actions::R::PredicateSpecification;
 use DSL::English::DataQueryWorkflows::Actions::R::ListManagementCommand-tidyverse;
 
 class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
+        does DSL::English::DataQueryWorkflows::Actions::General
         is DSL::Shared::Actions::R::PredicateSpecification
         is DSL::English::DataQueryWorkflows::Actions::R::ListManagementCommand-tidyverse {
 
@@ -145,9 +146,17 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
     method drop-incomplete-cases-command($/) {
         make 'na.omit()';
     }
+    method replace-missing-in-command($/) {
+        my $na = $<replace-missing-rhs> ?? $<replace-missing-rhs>.made !! 'NA';
+        my @cols = $<column-specs-list><column-spec>>>.made;
+        my $rspec = (@cols X~ ( ' = ' ~ $na )).join(', ');
+        make 'dplyr::mutate(list(' ~ $rspec ~ '))';
+    }
     method replace-missing-command($/) {
         my $na = $<replace-missing-rhs> ?? $<replace-missing-rhs>.made !! 'NA';
-        make 'tidyr::replace_na( ' ~ $na ~ ' )';
+        # Unfortunately this does not work with tidyr:
+        # make 'tidyr::replace_na( ' ~ $na ~ ' )';
+        make 'dplyr::mutate(dplyr::across(dplyr::everything(), ~tidyr::replace_na(.x, ' ~ $na ~ ' )))';
     }
     method replace-missing-rhs($/) {
         make $/.values[0].made;
