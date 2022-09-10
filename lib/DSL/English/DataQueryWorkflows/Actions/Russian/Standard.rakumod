@@ -28,14 +28,16 @@
 #==============================================================================
 =end comment
 
-use v6;
-use DSL::English::DataQueryWorkflows::Grammar;
+use v6.d;
+
+use DSL::English::DataQueryWorkflows::Actions::General;
 use DSL::English::DataQueryWorkflows::Actions::Russian::Predicate;
 use DSL::Shared::Actions::English::PipelineCommand;
 use DSL::Shared::Actions::Russian::Standard::ListManagementCommand;
 use DSL::Shared::Actions::Russian::Standard::PipelineCommand;
 
 class DSL::English::DataQueryWorkflows::Actions::Russian::Standard
+		does DSL::English::DataQueryWorkflows::Actions::General
 		does DSL::Shared::Actions::Russian::Standard::ListManagementCommand
 		does DSL::Shared::Actions::Russian::Standard::PipelineCommand
 		is DSL::Shared::Actions::English::PipelineCommand

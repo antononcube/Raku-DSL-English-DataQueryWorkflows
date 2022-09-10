@@ -30,12 +30,14 @@
 
 use v6.d;
 
+use DSL::English::DataQueryWorkflows::Actions::General;
 use DSL::English::DataQueryWorkflows::Actions::English::Predicate;
 use DSL::Shared::Actions::English::PipelineCommand;
 use DSL::Shared::Actions::English::Standard::ListManagementCommand;
 use DSL::Shared::Actions::English::Standard::PipelineCommand;
 
 class DSL::English::DataQueryWorkflows::Actions::English::Standard
+		does DSL::English::DataQueryWorkflows::Actions::General
 		does DSL::Shared::Actions::English::Standard::ListManagementCommand
 		does DSL::Shared::Actions::English::Standard::PipelineCommand
 		is DSL::Shared::Actions::English::PipelineCommand

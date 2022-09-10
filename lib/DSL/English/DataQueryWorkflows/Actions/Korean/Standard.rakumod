@@ -30,11 +30,12 @@
 
 use v6.d;
 
-use DSL::English::DataQueryWorkflows::Grammar;
+use DSL::English::DataQueryWorkflows::Actions::General;
 use DSL::English::DataQueryWorkflows::Actions::Korean::Predicate;
 use DSL::Shared::Actions::English::PipelineCommand;
 
 class DSL::English::DataQueryWorkflows::Actions::Korean::Standard
+		does DSL::English::DataQueryWorkflows::Actions::General
 		is DSL::Shared::Actions::English::PipelineCommand
         is DSL::English::DataQueryWorkflows::Actions::Korean::Predicate {
 
