@@ -80,12 +80,13 @@ role DSL::English::DataQueryWorkflows::Grammarish {
         <delete-directive> [ <duplicate-adjective> | <duplicates-noun> ] [ <values-noun> | <records-phrase> ]? }
 
     # Missing treatment command
-    rule missing-treatment-command { <drop-incomplete-cases-command> | <replace-missing-command> }
+    rule missing-treatment-command { <drop-incomplete-cases-command> | <replace-missing-in-command> | <replace-missing-command> }
     rule drop-incomplete-cases-command {
         <keep-only-phrase> <complete-cases-phrase> |
         <omit-directive> <missing-values-phrase>? |
         <delete-directive> <missing-values-phrase> }
     rule replace-missing-command { <.replace-verb> <.missing-values-phrase> [ <.with-preposition> <replace-missing-rhs> ]? }
+    rule replace-missing-in-command { <.replace-verb> <.missing-values-phrase> [ <.in-preposition> | <.of-preposition> ] <column-specs-list> [ <.with-preposition> <replace-missing-rhs> ]? }
     rule replace-missing-rhs { <number-value> | <mixed-quoted-variable-name> | <wl-expr> }
 
     rule replace-command { <.replace-verb> <lhs=.replace-missing-rhs> <.with-preposition> <rhs=.replace-missing-rhs>  }
