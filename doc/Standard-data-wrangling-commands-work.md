@@ -1,6 +1,6 @@
 # Standard Data Wrangling Commands
 
-#### *Raku, version 0.7*
+#### *Raku::Reshapers, version 0.7*
 
 ## Introduction
 
@@ -161,7 +161,7 @@ We generate target code with `ToDataQueryWorkflowCode`:
 ToDataQueryWorkflowCode($command0, target => $examplesTarget)
 ```
 
-### Execution steps (Raku)
+### Execution steps
 
 Get the dataset into a "pipeline object":
 
@@ -203,7 +203,7 @@ cross tabulate passengerClass, passengerSurvival over passengerAge;";
 ToDataQueryWorkflowCode($command1, target => $examplesTarget);
 ```
 
-### Execution steps (Raku)
+### Execution steps
 
 Copy the Titanic data into a "pipeline object" and show its dimensions and a sample of it:
 
@@ -285,7 +285,7 @@ counts";
 ToDataQueryWorkflowCode($command3, target => $examplesTarget)
 ```
 
-### Execution steps (Raku)
+### Execution steps
 
 First grouping:
 
@@ -337,7 +337,7 @@ summarize the variables mass and height with &mean and &median
 ToDataQueryWorkflowCode($command4, target => $examplesTarget)
 ```
 
-### Execution steps (Raku)
+### Execution steps
 
 Here is code that cleans the data of missing values, and shows dimensions and summary (corresponds to the first five lines above):
 
@@ -393,7 +393,7 @@ take pipeline value";
 ToDataQueryWorkflowCode($command5, target => $examplesTarget)
 ````
 
-### Execution steps (Raku)
+### Execution steps
 
 ```perl6
 $obj = @dfStarwarsFilms ;
@@ -423,7 +423,7 @@ to wide form for id columns Set and AutomaticKey variable column Variable and va
 ToDataQueryWorkflowCode($command6, target => $examplesTarget)
 ```
 
-### Execution steps (Raku)
+### Execution steps
 
 Get a copy of the dataset into a "pipeline object":
 

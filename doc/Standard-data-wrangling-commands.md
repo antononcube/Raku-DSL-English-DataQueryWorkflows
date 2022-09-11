@@ -1,6 +1,6 @@
 # Standard Data Wrangling Commands
 
-#### *Raku, version 0.7*
+#### *Raku::Reshapers, version 0.7*
 
 ## Introduction
 
@@ -207,12 +207,12 @@ counts;
 ```
 ```
 # {
-#   "DSL": "DSL::English::DataQueryWorkflows",
-#   "DSLFUNCTION": "proto sub ToDataQueryWorkflowCode (Str $command, |) {*}",
-#   "DSLTARGET": "Python::pandas",
-#   "COMMAND": "DSL TARGET Python::pandas;\ninclude setup code;\nuse dfStarwars;\njoin with dfStarwarsFilms by \"name\"; \ngroup by species; \ncounts;\n",
 #   "CODE": "obj = dfStarwars.copy()\nobj = obj.merge( dfStarwarsFilms, on = [\"name\"], how = \"inner\" )\nobj = obj.groupby([\"species\"])\nobj = obj.size()",
+#   "COMMAND": "DSL TARGET Python::pandas;\ninclude setup code;\nuse dfStarwars;\njoin with dfStarwarsFilms by \"name\"; \ngroup by species; \ncounts;\n",
+#   "DSLFUNCTION": "proto sub ToDataQueryWorkflowCode (Str $command, |) {*}",
 #   "USERID": "",
+#   "DSL": "DSL::English::DataQueryWorkflows",
+#   "DSLTARGET": "Python::pandas",
 #   "SETUPCODE": "import pandas\nfrom ExampleDatasets import *"
 # }
 ```
@@ -245,7 +245,7 @@ ToDataQueryWorkflowCode($command0, target => $examplesTarget)
 # $obj = $obj>>.elems
 ```
 
-### Execution steps (Raku)
+### Execution steps
 
 Get the dataset into a "pipeline object":
 
@@ -301,7 +301,7 @@ ToDataQueryWorkflowCode($command1, target => $examplesTarget);
 # $obj = cross-tabulate( $obj, "passengerClass", "passengerSurvival", "passengerAge" )
 ```
 
-### Execution steps (Raku)
+### Execution steps
 
 Copy the Titanic data into a "pipeline object" and show its dimensions and a sample of it:
 
@@ -312,17 +312,17 @@ say to-pretty-table($obj.pick(7));
 ```
 ```
 # Titanic dimensions:(1309 5)
-# +------+--------------+--------------+----------------+-------------------+
-# |  id  | passengerAge | passengerSex | passengerClass | passengerSurvival |
-# +------+--------------+--------------+----------------+-------------------+
-# | 1032 |      30      |     male     |      3rd       |        died       |
-# |  58  |      40      |    female    |      1st       |      survived     |
-# | 423  |      20      |     male     |      2nd       |        died       |
-# | 471  |      40      |     male     |      2nd       |        died       |
-# | 1036 |      -1      |     male     |      3rd       |      survived     |
-# | 729  |      40      |     male     |      3rd       |        died       |
-# |  57  |      40      |     male     |      1st       |      survived     |
-# +------+--------------+--------------+----------------+-------------------+
+# +--------------+----------------+-----+-------------------+--------------+
+# | passengerAge | passengerClass |  id | passengerSurvival | passengerSex |
+# +--------------+----------------+-----+-------------------+--------------+
+# |      30      |      1st       |  30 |      survived     |     male     |
+# |      40      |      2nd       | 565 |      survived     |    female    |
+# |      40      |      3rd       | 825 |        died       |     male     |
+# |      50      |      1st       | 189 |      survived     |    female    |
+# |      20      |      1st       | 256 |      survived     |    female    |
+# |      0       |      2nd       | 549 |      survived     |     male     |
+# |      30      |      3rd       | 934 |        died       |     male     |
+# +--------------+----------------+-----+-------------------+--------------+
 ```
 
 Filter the data and show the number of rows in the result set:
@@ -376,7 +376,7 @@ ToDataQueryWorkflowCode($command2, target => 'R::tidyverse');
 # dplyr::select(name, homeworld, mass, height) %>%
 # dplyr::mutate(bmi = mass/height^2*10000) %>%
 # dplyr::filter(bmi >= 30 & height < 200) %>%
-# dplyr::arrange(desc(mass, height))
+# dplyr::arrange(desc(mass), desc(height))
 ```
 
 Specifically, for "Raku::Reshapers" the transform specification line has to refer to the context variable `$_`.
@@ -427,7 +427,7 @@ ToDataQueryWorkflowCode($command3, target => $examplesTarget)
 # $obj = $obj>>.elems
 ```
 
-### Execution steps (Raku)
+### Execution steps
 
 First grouping:
 
@@ -501,7 +501,7 @@ ToDataQueryWorkflowCode($command4, target => $examplesTarget)
 # $obj = $obj.map({ $_.key => summarize-at($_.value, ("mass", "height"), (&mean, &median)) })
 ```
 
-### Execution steps (Raku)
+### Execution steps
 
 Here is code that cleans the data of missing values, and shows dimensions and summary (corresponds to the first five lines above):
 
@@ -514,18 +514,18 @@ records-summary($obj);
 ```
 ```
 # dimensions: 87 11
-# +----------------------------------------+---------------+-----------------------------------------+----------------------+---------------+-----------------+-----------------------------+----------------------------------------+-----------------+----------------+---------------+
-# | birth_year                             | eye_color     | height                                  | sex                  | hair_color    | homeworld       | name                        | mass                                   | gender          | species        | skin_color    |
-# +----------------------------------------+---------------+-----------------------------------------+----------------------+---------------+-----------------+-----------------------------+----------------------------------------+-----------------+----------------+---------------+
-# | Min                       => 8         | brown   => 21 | Min                       => 66         | male           => 60 | none    => 37 | Naboo     => 11 | Rugor Nass            => 1  | Min                       => 15        | masculine => 66 | Human    => 35 | fair    => 17 |
-# | 1st-Qu                    => 33        | blue    => 19 | 1st-Qu                    => 166.5      | female         => 16 | brown   => 18 | NaN       => 10 | Palpatine             => 1  | 1st-Qu                    => 55        | feminine  => 17 | Droid    => 6  | light   => 11 |
-# | Mean                      => 87.565116 | yellow  => 11 | Mean                      => 174.358025 | none           => 6  | black   => 13 | Tatooine  => 10 | Dexter Jettster       => 1  | Mean                      => 97.311864 | NaN       => 4  | NaN      => 4  | grey    => 6  |
-# | Median                    => 52        | black   => 10 | Median                    => 180        | NaN            => 4  | NaN     => 5  | Coruscant => 3  | Qui-Gon Jinn          => 1  | Median                    => 79        |                 | Gungan   => 3  | green   => 6  |
-# | 3rd-Qu                    => 72        | orange  => 8  | 3rd-Qu                    => 191        | hermaphroditic => 1  | white   => 4  | Kamino    => 3  | Luminara Unduli       => 1  | 3rd-Qu                    => 85        |                 | Kaminoan => 2  | dark    => 6  |
-# | Max                       => 896       | red     => 5  | Max                       => 264        |                      | blond   => 3  | Alderaan  => 3  | Jabba Desilijic Tiure => 1  | Max                       => 1358      |                 | Twi'lek  => 2  | pale    => 5  |
-# | (Any-Nan-Nil-or-Whatever) => 44        | unknown => 3  | (Any-Nan-Nil-or-Whatever) => 6          |                      | grey    => 1  | Mirial    => 2  | Roos Tarpals          => 1  | (Any-Nan-Nil-or-Whatever) => 28        |                 | Wookiee  => 2  | brown   => 4  |
-# |                                        | (Other) => 10 |                                         |                      | (Other) => 6  | (Other)   => 45 | (Other)               => 80 |                                        |                 | (Other)  => 33 | (Other) => 32 |
-# +----------------------------------------+---------------+-----------------------------------------+----------------------+---------------+-----------------+-----------------------------+----------------------------------------+-----------------+----------------+---------------+
+# +-----------------+---------------+-----------------------------------------+-----------------------+-----------------+----------------------------------------+----------------------------------------+---------------+----------------+----------------------+---------------+
+# | gender          | eye_color     | height                                  | name                  | homeworld       | birth_year                             | mass                                   | hair_color    | species        | sex                  | skin_color    |
+# +-----------------+---------------+-----------------------------------------+-----------------------+-----------------+----------------------------------------+----------------------------------------+---------------+----------------+----------------------+---------------+
+# | masculine => 66 | brown   => 21 | Min                       => 66         | Sly Moore       => 1  | Naboo     => 11 | Min                       => 8         | Min                       => 15        | none    => 37 | Human    => 35 | male           => 60 | fair    => 17 |
+# | feminine  => 17 | blue    => 19 | 1st-Qu                    => 166.5      | Bossk           => 1  | Tatooine  => 10 | 1st-Qu                    => 33        | 1st-Qu                    => 55        | brown   => 18 | Droid    => 6  | female         => 16 | light   => 11 |
+# | NaN       => 4  | yellow  => 11 | Mean                      => 174.358025 | Dexter Jettster => 1  | NaN       => 10 | Mean                      => 87.565116 | Mean                      => 97.311864 | black   => 13 | NaN      => 4  | none           => 6  | dark    => 6  |
+# |                 | black   => 10 | Median                    => 180        | Adi Gallia      => 1  | Alderaan  => 3  | Median                    => 52        | Median                    => 79        | NaN     => 5  | Gungan   => 3  | NaN            => 4  | green   => 6  |
+# |                 | orange  => 8  | 3rd-Qu                    => 191        | Quarsh Panaka   => 1  | Kamino    => 3  | 3rd-Qu                    => 72        | 3rd-Qu                    => 85        | white   => 4  | Mirialan => 2  | hermaphroditic => 1  | grey    => 6  |
+# |                 | red     => 5  | Max                       => 264        | Ben Quadinaros  => 1  | Coruscant => 3  | Max                       => 896       | Max                       => 1358      | blond   => 3  | Kaminoan => 2  |                      | pale    => 5  |
+# |                 | unknown => 3  | (Any-Nan-Nil-or-Whatever) => 6          | Taun We         => 1  | Corellia  => 2  | (Any-Nan-Nil-or-Whatever) => 44        | (Any-Nan-Nil-or-Whatever) => 28        | grey    => 1  | Zabrak   => 2  |                      | brown   => 4  |
+# |                 | (Other) => 10 |                                         | (Other)         => 80 | (Other)   => 45 |                                        |                                        | (Other) => 6  | (Other)  => 33 |                      | (Other) => 32 |
+# +-----------------+---------------+-----------------------------------------+-----------------------+-----------------+----------------------------------------+----------------------------------------+---------------+----------------+----------------------+---------------+
 ```
 
 Here is the deduced type:
@@ -543,17 +543,17 @@ Here is a sample of the dataset (wrangled so far):
 say to-pretty-table($obj.pick(7));
 ```
 ```
-# +--------------------+-----------+--------+------------+-----------+------------+---------+------------+--------+-----------+------+
-# |        name        | homeworld | height | birth_year |   gender  | hair_color | species | skin_color |  sex   | eye_color | mass |
-# +--------------------+-----------+--------+------------+-----------+------------+---------+------------+--------+-----------+------+
-# |    Gregar Typho    |   Naboo   |  185   |    NaN     | masculine |   black    |  Human  |    dark    |  male  |   brown   |  85  |
-# |    Arvel Crynyd    |    NaN    |  NaN   |    NaN     | masculine |   brown    |  Human  |    fair    |  male  |   brown   | NaN  |
-# |    Darth Vader     |  Tatooine |  202   | 41.900000  | masculine |    none    |  Human  |   white    |  male  |   yellow  | 136  |
-# | Beru Whitesun lars |  Tatooine |  165   |     47     |  feminine |   brown    |  Human  |   light    | female |    blue   |  75  |
-# |  Lando Calrissian  |  Socorro  |  177   |     31     | masculine |   black    |  Human  |    dark    |  male  |   brown   |  79  |
-# |     Rugor Nass     |   Naboo   |  206   |    NaN     | masculine |    none    |  Gungan |   green    |  male  |   orange  | NaN  |
-# |   Wedge Antilles   |  Corellia |  170   |     21     | masculine |   brown    |  Human  |    fair    |  male  |   hazel   |  77  |
-# +--------------------+-----------+--------+------------+-----------+------------+---------+------------+--------+-----------+------+
+# +------+-----------+-----------+-----------+---------------------+------------+--------+--------------+-----------+------------+--------------+
+# | sex  |    mass   | eye_color |   gender  |         name        | birth_year | height |   species    | homeworld | hair_color |  skin_color  |
+# +------+-----------+-----------+-----------+---------------------+------------+--------+--------------+-----------+------------+--------------+
+# | male |     75    |   yellow  | masculine |      Palpatine      |     82     |  170   |    Human     |   Naboo   |    grey    |     pale     |
+# | male |     83    |   orange  | masculine |        Ackbar       |     41     |  180   | Mon Calamari |  Mon Cala |    none    | brown mottle |
+# | male |     82    |   yellow  | masculine |     Ki-Adi-Mundi    |     92     |  198   |    Cerean    |   Cerea   |   white    |     pale     |
+# | male |    102    |   yellow  | masculine |   Dexter Jettster   |    NaN     |  198   |   Besalisk   |    Ojom   |    none    |    brown     |
+# | male | 78.200000 |   brown   | masculine |      Boba Fett      | 31.500000  |  183   |    Human     |   Kamino  |   black    |     fair     |
+# | male |    NaN    |   brown   | masculine | Bail Prestor Organa |     67     |  191   |    Human     |  Alderaan |   black    |     tan      |
+# | male |     80    |   brown   | masculine |       Han Solo      |     29     |  180   |    Human     |  Corellia |   brown    |     fair     |
+# +------+-----------+-----------+-----------+---------------------+------------+--------+--------------+-----------+------------+--------------+
 ```
 
 Here we group by "homeworld" and show counts for each group:
@@ -573,17 +573,17 @@ $obj = $obj.map({ $_.key => summarize-at($_.value, ("mass", "height"), (&mean, &
 say to-pretty-table($obj.pick(7));
 ```
 ```
-# +--------------+-------------+---------------+-------------+-----------+
-# |              | mass.median | height.median | height.mean | mass.mean |
-# +--------------+-------------+---------------+-------------+-----------+
-# | Cerea        |  82.000000  |   198.000000  |  198.000000 | 82.000000 |
-# | Concord Dawn |  79.000000  |   183.000000  |  183.000000 | 79.000000 |
-# | Eriadu       |     NaN     |   180.000000  |  180.000000 |    NaN    |
-# | Kamino       |  88.000000  |   213.000000  |  208.333333 |    NaN    |
-# | Mon Cala     |  83.000000  |   180.000000  |  180.000000 | 83.000000 |
-# | Muunilinst   |     NaN     |   191.000000  |  191.000000 |    NaN    |
-# | Sullust      |  68.000000  |   160.000000  |  160.000000 | 68.000000 |
-# +--------------+-------------+---------------+-------------+-----------+
+# +-----------+-------------+---------------+------------+-------------+
+# |           | height.mean | height.median | mass.mean  | mass.median |
+# +-----------+-------------+---------------+------------+-------------+
+# | Corellia  |  175.000000 |   175.000000  | 78.500000  |  78.500000  |
+# | Coruscant |  173.666667 |   170.000000  |    NaN     |     NaN     |
+# | Geonosis  |  183.000000 |   183.000000  | 80.000000  |  80.000000  |
+# | Iridonia  |  171.000000 |   171.000000  |    NaN     |     NaN     |
+# | Kashyyyk  |  231.000000 |   231.000000  | 124.000000 |  124.000000 |
+# | Socorro   |  177.000000 |   177.000000  | 79.000000  |  79.000000  |
+# | Trandosha |  190.000000 |   190.000000  | 113.000000 |  113.000000 |
+# +-----------+-------------+---------------+------------+-------------+
 ```
 
 ------
@@ -607,11 +607,11 @@ ToDataQueryWorkflowCode($command5, target => $examplesTarget)
 # $obj = dfStarwarsFilms ;
 # $obj = join-across( $obj, dfStarwars, ("name"), join-spec=>"Left") ;
 # $obj = $obj.deepmap({ ( ($_ eqv Any) or $_.isa(Nil) or $_.isa(Whatever) ) ?? <NaN> !! $_ }) ;
-# $obj = $obj.sort({($_{"name"}, $_{"film"}) }).reverse ;
+# $obj = $obj.sort({($_{"name"}, $_{"film"}) }).reverse.Array ;
 # $obj
 ````
 
-### Execution steps (Raku)
+### Execution steps
 
 ```perl6
 $obj = @dfStarwarsFilms ;
@@ -621,22 +621,22 @@ $obj = $obj.sort({($_{"name"}, $_{"film"}) }).reverse ;
 to-pretty-table($obj.head(12))
 ```
 ```
-# +----------------+-----------------------+----------------------+
-# |    species     |          name         |         film         |
-# +----------------+-----------------------+----------------------+
-# |    Clawdite    |       Zam Wesell      | Attack of the Clones |
-# | Yoda's species |          Yoda         |  Return of the Jedi  |
-# |    Quermian    |      Yarael Poof      |  The Phantom Menace  |
-# |     Human      |     Wilhuff Tarkin    |      A New Hope      |
-# |      Ewok      | Wicket Systri Warrick |  Return of the Jedi  |
-# |     Human      |     Wedge Antilles    |      A New Hope      |
-# |   Toydarian    |         Watto         |  The Phantom Menace  |
-# |    Skakoan     |       Wat Tambor      | Attack of the Clones |
-# |     Pau'an     |       Tion Medon      | Revenge of the Sith  |
-# |    Kaminoan    |        Taun We        | Attack of the Clones |
-# |    Wookiee     |        Tarfful        | Revenge of the Sith  |
-# |      NaN       |       Sly Moore       | Revenge of the Sith  |
-# +----------------+-----------------------+----------------------+
+# +-----------------------+----------------+----------------------+
+# |          name         |    species     |         film         |
+# +-----------------------+----------------+----------------------+
+# |       Zam Wesell      |    Clawdite    | Attack of the Clones |
+# |          Yoda         | Yoda's species |  Return of the Jedi  |
+# |      Yarael Poof      |    Quermian    |  The Phantom Menace  |
+# |     Wilhuff Tarkin    |     Human      |      A New Hope      |
+# | Wicket Systri Warrick |      Ewok      |  Return of the Jedi  |
+# |     Wedge Antilles    |     Human      |      A New Hope      |
+# |         Watto         |   Toydarian    |  The Phantom Menace  |
+# |       Wat Tambor      |    Skakoan     | Attack of the Clones |
+# |       Tion Medon      |     Pau'an     | Revenge of the Sith  |
+# |        Taun We        |    Kaminoan    | Attack of the Clones |
+# |        Tarfful        |    Wookiee     | Revenge of the Sith  |
+# |       Sly Moore       |      NaN       | Revenge of the Sith  |
+# +-----------------------+----------------+----------------------+
 ```
 
 ------
@@ -665,7 +665,7 @@ ToDataQueryWorkflowCode($command6, target => $examplesTarget)
 # $obj = to-wide-format( $obj, identifierColumns => ("Set", "AutomaticKey"), variablesFrom => "Variable", valuesFrom => "Value" )
 ```
 
-### Execution steps (Raku)
+### Execution steps
 
 Get a copy of the dataset into a "pipeline object":
 
@@ -674,21 +674,21 @@ my $obj = @dfAnscombe;
 say to-pretty-table($obj);
 ```
 ```
-# +----+----+----------+-----------+----+-----------+----+-----------+
-# | x4 | x2 |    y2    |     y4    | x1 |     y3    | x3 |     y1    |
-# +----+----+----------+-----------+----+-----------+----+-----------+
-# | 8  | 10 | 9.140000 |  6.580000 | 10 |  7.460000 | 10 |  8.040000 |
-# | 8  | 8  | 8.140000 |  5.760000 | 8  |  6.770000 | 8  |  6.950000 |
-# | 8  | 13 | 8.740000 |  7.710000 | 13 | 12.740000 | 13 |  7.580000 |
-# | 8  | 9  | 8.770000 |  8.840000 | 9  |  7.110000 | 9  |  8.810000 |
-# | 8  | 11 | 9.260000 |  8.470000 | 11 |  7.810000 | 11 |  8.330000 |
-# | 8  | 14 | 8.100000 |  7.040000 | 14 |  8.840000 | 14 |  9.960000 |
-# | 8  | 6  | 6.130000 |  5.250000 | 6  |  6.080000 | 6  |  7.240000 |
-# | 19 | 4  | 3.100000 | 12.500000 | 4  |  5.390000 | 4  |  4.260000 |
-# | 8  | 12 | 9.130000 |  5.560000 | 12 |  8.150000 | 12 | 10.840000 |
-# | 8  | 7  | 7.260000 |  7.910000 | 7  |  6.420000 | 7  |  4.820000 |
-# | 8  | 5  | 4.740000 |  6.890000 | 5  |  5.730000 | 5  |  5.680000 |
-# +----+----+----------+-----------+----+-----------+----+-----------+
+# +----+-----------+-----------+----+----------+----+-----------+----+
+# | x2 |     y3    |     y1    | x3 |    y2    | x4 |     y4    | x1 |
+# +----+-----------+-----------+----+----------+----+-----------+----+
+# | 10 |  7.460000 |  8.040000 | 10 | 9.140000 | 8  |  6.580000 | 10 |
+# | 8  |  6.770000 |  6.950000 | 8  | 8.140000 | 8  |  5.760000 | 8  |
+# | 13 | 12.740000 |  7.580000 | 13 | 8.740000 | 8  |  7.710000 | 13 |
+# | 9  |  7.110000 |  8.810000 | 9  | 8.770000 | 8  |  8.840000 | 9  |
+# | 11 |  7.810000 |  8.330000 | 11 | 9.260000 | 8  |  8.470000 | 11 |
+# | 14 |  8.840000 |  9.960000 | 14 | 8.100000 | 8  |  7.040000 | 14 |
+# | 6  |  6.080000 |  7.240000 | 6  | 6.130000 | 8  |  5.250000 | 6  |
+# | 4  |  5.390000 |  4.260000 | 4  | 3.100000 | 19 | 12.500000 | 4  |
+# | 12 |  8.150000 | 10.840000 | 12 | 9.130000 | 8  |  5.560000 | 12 |
+# | 7  |  6.420000 |  4.820000 | 7  | 7.260000 | 8  |  7.910000 | 7  |
+# | 5  |  5.730000 |  5.680000 | 5  | 4.740000 | 8  |  6.890000 | 5  |
+# +----+-----------+-----------+----+----------+----+-----------+----+
 ```
 
 Summarize Anscombe's quartet (using "Data::Summarizers", [AAp3]):
@@ -697,16 +697,16 @@ Summarize Anscombe's quartet (using "Data::Summarizers", [AAp3]):
 records-summary($obj);
 ```
 ```
-# +--------------+--------------+--------------+--------------+-----------------+--------------------+--------------------+--------------------+
-# | x1           | x3           | x4           | x2           | y3              | y4                 | y2                 | y1                 |
-# +--------------+--------------+--------------+--------------+-----------------+--------------------+--------------------+--------------------+
-# | Min    => 4  | Min    => 4  | Min    => 8  | Min    => 4  | Min    => 5.39  | Min    => 5.25     | Min    => 3.1      | Min    => 4.26     |
-# | 1st-Qu => 6  | 1st-Qu => 6  | 1st-Qu => 8  | 1st-Qu => 6  | 1st-Qu => 6.08  | 1st-Qu => 5.76     | 1st-Qu => 6.13     | 1st-Qu => 5.68     |
-# | Mean   => 9  | Mean   => 9  | Mean   => 9  | Mean   => 9  | Mean   => 7.5   | Mean   => 7.500909 | Mean   => 7.500909 | Mean   => 7.500909 |
-# | Median => 9  | Median => 9  | Median => 8  | Median => 9  | Median => 7.11  | Median => 7.04     | Median => 8.14     | Median => 7.58     |
-# | 3rd-Qu => 12 | 3rd-Qu => 12 | 3rd-Qu => 8  | 3rd-Qu => 12 | 3rd-Qu => 8.15  | 3rd-Qu => 8.47     | 3rd-Qu => 9.13     | 3rd-Qu => 8.81     |
-# | Max    => 14 | Max    => 14 | Max    => 19 | Max    => 14 | Max    => 12.74 | Max    => 12.5     | Max    => 9.26     | Max    => 10.84    |
-# +--------------+--------------+--------------+--------------+-----------------+--------------------+--------------------+--------------------+
+# +--------------+--------------------+--------------------+--------------------+-----------------+--------------+--------------+--------------+
+# | x1           | y1                 | y4                 | y2                 | y3              | x2           | x4           | x3           |
+# +--------------+--------------------+--------------------+--------------------+-----------------+--------------+--------------+--------------+
+# | Min    => 4  | Min    => 4.26     | Min    => 5.25     | Min    => 3.1      | Min    => 5.39  | Min    => 4  | Min    => 8  | Min    => 4  |
+# | 1st-Qu => 6  | 1st-Qu => 5.68     | 1st-Qu => 5.76     | 1st-Qu => 6.13     | 1st-Qu => 6.08  | 1st-Qu => 6  | 1st-Qu => 8  | 1st-Qu => 6  |
+# | Mean   => 9  | Mean   => 7.500909 | Mean   => 7.500909 | Mean   => 7.500909 | Mean   => 7.5   | Mean   => 9  | Mean   => 9  | Mean   => 9  |
+# | Median => 9  | Median => 7.58     | Median => 7.04     | Median => 8.14     | Median => 7.11  | Median => 9  | Median => 8  | Median => 9  |
+# | 3rd-Qu => 12 | 3rd-Qu => 8.81     | 3rd-Qu => 8.47     | 3rd-Qu => 9.13     | 3rd-Qu => 8.15  | 3rd-Qu => 12 | 3rd-Qu => 8  | 3rd-Qu => 12 |
+# | Max    => 14 | Max    => 10.84    | Max    => 12.5     | Max    => 9.26     | Max    => 12.74 | Max    => 14 | Max    => 19 | Max    => 14 |
+# +--------------+--------------------+--------------------+--------------------+-----------------+--------------+--------------+--------------+
 ```
 
 **Remark:** From the table above it is not clear how exactly we have to access the data in order 
@@ -731,15 +731,15 @@ to-pretty-table($obj.head(7))
 ```
 ```
 # +--------------+----------+----------+
-# | AutomaticKey |  Value   | Variable |
+# | AutomaticKey | Variable |  Value   |
 # +--------------+----------+----------+
-# |      0       | 7.460000 |    y3    |
-# |      0       |    10    |    x2    |
-# |      0       | 9.140000 |    y2    |
-# |      0       |    8     |    x4    |
-# |      0       | 6.580000 |    y4    |
-# |      0       | 8.040000 |    y1    |
-# |      0       |    10    |    x1    |
+# |      0       |    y3    | 7.460000 |
+# |      0       |    y2    | 9.140000 |
+# |      0       |    y1    | 8.040000 |
+# |      0       |    y4    | 6.580000 |
+# |      0       |    x4    |    8     |
+# |      0       |    x1    |    10    |
+# |      0       |    x3    |    10    |
 # +--------------+----------+----------+
 ```
 
@@ -750,17 +750,17 @@ $obj = separate-column( $obj, "Variable", ("Variable", "Set"), sep => "" ) ;
 to-pretty-table($obj.head(7))
 ```
 ```
-# +----------+----------+--------------+-----+
-# |  Value   | Variable | AutomaticKey | Set |
-# +----------+----------+--------------+-----+
-# | 7.460000 |    y     |      0       |  3  |
-# |    10    |    x     |      0       |  2  |
-# | 9.140000 |    y     |      0       |  2  |
-# |    8     |    x     |      0       |  4  |
-# | 6.580000 |    y     |      0       |  4  |
-# | 8.040000 |    y     |      0       |  1  |
-# |    10    |    x     |      0       |  1  |
-# +----------+----------+--------------+-----+
+# +-----+----------+----------+--------------+
+# | Set |  Value   | Variable | AutomaticKey |
+# +-----+----------+----------+--------------+
+# |  3  | 7.460000 |    y     |      0       |
+# |  2  | 9.140000 |    y     |      0       |
+# |  1  | 8.040000 |    y     |      0       |
+# |  4  | 6.580000 |    y     |      0       |
+# |  4  |    8     |    x     |      0       |
+# |  1  |    10    |    x     |      0       |
+# |  3  |    10    |    x     |      0       |
+# +-----+----------+----------+--------------+
 ```
 
 Reshape the "pipeline object" into
@@ -772,17 +772,17 @@ $obj = to-wide-format( $obj, identifierColumns => ("Set", "AutomaticKey"), varia
 to-pretty-table($obj.head(7))
 ```
 ```
-# +----+-----+--------------+------+
-# | x  | Set | AutomaticKey |  y   |
-# +----+-----+--------------+------+
-# | 10 |  1  |      0       | 8.04 |
-# | 8  |  1  |      1       | 6.95 |
-# | 13 |  1  |      2       | 7.58 |
-# | 9  |  1  |      3       | 8.81 |
-# | 11 |  1  |      4       | 8.33 |
-# | 14 |  1  |      5       | 9.96 |
-# | 6  |  1  |      6       | 7.24 |
-# +----+-----+--------------+------+
+# +-----+--------------+----+------+
+# | Set | AutomaticKey | x  |  y   |
+# +-----+--------------+----+------+
+# |  1  |      0       | 10 | 8.04 |
+# |  1  |      1       | 8  | 6.95 |
+# |  1  |      2       | 13 | 7.58 |
+# |  1  |      3       | 9  | 8.81 |
+# |  1  |      4       | 11 | 8.33 |
+# |  1  |      5       | 14 | 9.96 |
+# |  1  |      6       | 6  | 7.24 |
+# +-----+--------------+----+------+
 ```
 
 Plot each dataset of Anscombe's quartet (using "Text::Plot", [AAp6]):
@@ -791,25 +791,7 @@ Plot each dataset of Anscombe's quartet (using "Text::Plot", [AAp6]):
 group-by($obj, 'Set').map({ say "\n", text-list-plot( $_.value.map({ +$_<x> }).List, $_.value.map({ +$_<y> }).List, title => 'Set : ' ~ $_.key) })
 ```
 ```
-# Set : 3                           
-# +---+---------+---------+----------+---------+---------+---+       
-# |                                                          |       
-# |                                                 *        |       
-# +                                                          +  12.00
-# |                                                          |       
-# |                                                          |       
-# +                                                          +  10.00
-# |                                                      *   |       
-# |                                            *             |       
-# +                                  *    *                  +   8.00
-# |                       *    *                             |       
-# |             *    *                                       |       
-# +   *    *                                                 +   6.00
-# |                                                          |       
-# +---+---------+---------+----------+---------+---------+---+       
-#     4.00      6.00      8.00       10.00     12.00     14.00       
-# 
-#                           Set : 4                           
+# Set : 4                           
 # +---+--------+--------+---------+--------+---------+-------+       
 # |                                                          |       
 # +                                                      *   +  12.00
@@ -842,6 +824,24 @@ group-by($obj, 'Set').map({ say "\n", text-list-plot( $_.value.map({ +$_<x> }).L
 # |                                                          |       
 # |   *              *                                       |       
 # +                                                          +   4.00
+# +---+---------+---------+----------+---------+---------+---+       
+#     4.00      6.00      8.00       10.00     12.00     14.00       
+# 
+#                           Set : 3                           
+# +---+---------+---------+----------+---------+---------+---+       
+# |                                                          |       
+# |                                                 *        |       
+# +                                                          +  12.00
+# |                                                          |       
+# |                                                          |       
+# +                                                          +  10.00
+# |                                                      *   |       
+# |                                            *             |       
+# +                                  *    *                  +   8.00
+# |                       *    *                             |       
+# |             *    *                                       |       
+# +   *    *                                                 +   6.00
+# |                                                          |       
 # +---+---------+---------+----------+---------+---------+---+       
 #     4.00      6.00      8.00       10.00     12.00     14.00       
 # 
