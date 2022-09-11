@@ -1,0 +1,141 @@
+use v6.d;
+
+use Data::Reshapers;
+use Data::Summarizers;
+use Data::ExampleDatasets;
+use DSL::English::DataQueryWorkflows;
+
+# From Data::Reshapers
+my @dfTitanic = get-titanic-dataset();
+
+# From MathematicaVsR at GitHub using Data::ExampleDatasets;
+my @dfStarwars = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwars.csv");
+my @dfStarwarsFilms = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsFilms.csv");
+my @dfStarwarsStarships = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsStarships.csv");
+my @dfStarwarsVehicles = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsVehicles.csv");
+
+
+use MONKEY-SEE-NO-EVAL;
+use Test;
+
+plan 8;
+
+##===========================================================
+## 1 Trivial workflow
+##===========================================================
+my $command1 = "use @dfTitanic; group by passengerSex; counts; take value";
+
+ok ToDataQueryWorkflowCode( $command1, target => 'Raku::Reshapers');
+
+my $code1 = ToDataQueryWorkflowCode( $command1, target => 'Raku::Reshapers');
+
+# We have declare $obj, because the ToDataQueryWorkflowCode does define it.
+my $obj;
+
+# Evaluate the generated code.
+my $res1 = EVAL($code1);
+
+my $res1Expected;
+{
+    my $obj = @dfTitanic.clone;
+    $obj = group-by($obj, 'passengerSex');
+    $obj = $obj>>.elems;
+    $res1Expected = $obj;
+}
+
+is-deeply $res1, $res1Expected, 'trivial workflow';
+
+##===========================================================
+## 2 Cross tabulation
+##===========================================================
+
+my $command2 = "
+use @dfTitanic;
+filter with passengerSex is 'male' and passengerSurvival equals 'died' or passengerSurvival is 'survived' ;
+cross tabulate passengerClass, passengerSurvival over passengerAge;
+take value";
+
+ok ToDataQueryWorkflowCode( $command2, target => 'Raku::Reshapers');
+
+my $code2 = ToDataQueryWorkflowCode( $command2, target => 'Raku::Reshapers');
+
+# Evaluate the generated code.
+my $res2 = EVAL($code2);
+
+my $res2Expected;
+{
+    my $obj = @dfTitanic ;
+    $obj = $obj.grep({ $_{"passengerSex"} eq "male" and $_{"passengerSurvival"} eq "died" or $_{"passengerSurvival"} eq "survived" }).Array ;
+    $obj = cross-tabulate( $obj, "passengerClass", "passengerSurvival", "passengerAge" ) ;
+    $res2Expected = $obj;
+}
+
+is-deeply $res2, $res2Expected, 'cross tabulation';
+
+
+#===========================================================
+## 3 Mutation with formulas
+##===========================================================
+
+my $command3 = '
+use data frame @dfStarwars;
+keep the columns name, homeworld, mass & height;
+replace missing with `<0>`;
+transform with bmi = `$_<mass>/$_<height>**2*10000` and homeworld = `$_<homeworld>.uc`;
+filter rows by bmi >= 30 & height < 200;
+arrange by the variables mass & height descending';
+
+ok ToDataQueryWorkflowCode( $command3, target => 'Raku::Reshapers');
+
+my $code3 = ToDataQueryWorkflowCode( $command3, target => 'Raku::Reshapers');
+
+# Evaluate the generated code.
+my $res3 = EVAL($code3);
+
+my $res3Expected;
+{
+    $obj = @dfStarwars ;
+    $obj = select-columns($obj, ("name", "homeworld", "mass", "height") ) ;
+    $obj = $obj.deepmap({ ( ($_ eqv Any) or $_.isa(Nil) or $_.isa(Whatever) ) ?? <0> !! $_ }) ;
+    $obj = $obj.map({ $_{"bmi"} = $_<mass>/$_<height>**2*10000; $_{"homeworld"} = $_<homeworld>.uc; $_ }) ;
+    $obj = $obj.grep({ $_{"bmi"} >= 30 and $_{"height"} < 200 }).Array ;
+    $obj = $obj.sort({($_{"mass"}, $_{"height"}) }).reverse.Array;
+    $res3Expected = $obj;
+}
+
+#.say for |$res3;
+#say '-' x 120;
+#.say for |$res3Expected;
+
+is-deeply $res3, $res3Expected, 'mutation with formulas';
+
+##===========================================================
+## 4 Grouping awareness
+##===========================================================
+
+my $command4 = "use @dfTitanic;
+group by passengerClass;
+group by passengerSex;
+counts;
+take value";
+
+ok ToDataQueryWorkflowCode( $command4, target => 'Raku::Reshapers');
+
+my $code4 = ToDataQueryWorkflowCode( $command4, target => 'Raku::Reshapers');
+
+# Evaluate the generated code.
+my $res4 = EVAL($code4);
+
+my $res4Expected;
+{
+    $obj = @dfTitanic ;
+    $obj = group-by($obj, "passengerClass") ;
+    $obj = group-by($obj.values.reduce( -> $x, $y { [|$x, |$y] } ), "passengerSex") ;
+    $obj = $obj>>.elems;
+    $res4Expected = $obj;
+}
+
+is-deeply $res4, $res4Expected, 'grouping awareness';
+
+
+done-testing;
