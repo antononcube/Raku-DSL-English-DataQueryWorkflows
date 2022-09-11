@@ -170,9 +170,9 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
     }
     method arrange-by-command-descending($/) {
         if %.properties<IsGrouped>:exists {
-            make '$obj = $obj>>.sort({ ' ~ $<arrange-by-spec>.made ~ ' })>>.reverse';
+            make '$obj = $obj>>.sort({ ' ~ $<arrange-by-spec>.made ~ ' })>>.reverse.Array';
         } else {
-            make '$obj = $obj.sort({' ~ $<arrange-by-spec>.made ~ ' }).reverse';
+            make '$obj = $obj.sort({' ~ $<arrange-by-spec>.made ~ ' }).reverse.Array';
         }
     }
 
