@@ -25,7 +25,7 @@ my @dfStarwarsFilms = example-dataset("https://raw.githubusercontent.com/antonon
 #my @dfStarwarsVehicles = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsVehicles.csv");
 
 # Main use case for Data::ExampleDatasets
-my @dfAnscombe = example-dataset('anscombe');
+my @dfAnscombe = |example-dataset('anscombe');
 
 use MONKEY-SEE-NO-EVAL;
 use Test;
@@ -230,15 +230,12 @@ ok ToDataQueryWorkflowCode( $command7, target => 'Raku::Reshapers');
 
 my $code7 = ToDataQueryWorkflowCode( $command7, target => 'Raku::Reshapers');
 
-# This is a hack -- to-long-format has to be improved.
-$code7 .= subst('@dfAnscombe', '|@dfAnscombe');
-
 # Evaluate the generated code.
 my $res7 = EVAL($code7);
 
 my $res7Expected;
 {
-    $obj = |@dfAnscombe ;
+    $obj = @dfAnscombe ;
     $obj = to-long-format( $obj ) ;
     $obj = separate-column( $obj, "Variable", ("Variable", "Set"), sep => "" ) ;
     $obj = to-wide-format( $obj, identifierColumns => ("Set", "AutomaticKey"), variablesFrom => "Variable", valuesFrom => "Value" );
