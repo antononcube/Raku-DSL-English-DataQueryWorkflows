@@ -1,5 +1,15 @@
 use v6.d;
 
+# The DSL specs of tests correspond to the examples in the document:
+# ../doc/Standard-data-wrangling-commands.md
+#
+# The code Raku code for the $rex?Expected variables was generated using
+# the CLI script ToDataQueryWorkflowCode (provided by this package.)
+#
+# In some cases the expected code can be made to be "just" with core Raku functions.
+# (I.e. without functions from Data::Reshapers.)
+
+use Stats;
 use Data::Reshapers;
 use Data::Summarizers;
 use Data::ExampleDatasets;
@@ -8,17 +18,19 @@ use DSL::English::DataQueryWorkflows;
 # From Data::Reshapers
 my @dfTitanic = get-titanic-dataset();
 
-# From MathematicaVsR at GitHub using Data::ExampleDatasets;
+# From MathematicaVsR at GitHub using Data::ExampleDatasets
 my @dfStarwars = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwars.csv");
 my @dfStarwarsFilms = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsFilms.csv");
-my @dfStarwarsStarships = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsStarships.csv");
-my @dfStarwarsVehicles = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsVehicles.csv");
+#my @dfStarwarsStarships = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsStarships.csv");
+#my @dfStarwarsVehicles = example-dataset("https://raw.githubusercontent.com/antononcube/R-packages/master/DataQueryWorkflowsTests/inst/extdata/dfStarwarsVehicles.csv");
 
+# Main use case for Data::ExampleDatasets
+my @dfAnscombe = example-dataset('anscombe');
 
 use MONKEY-SEE-NO-EVAL;
 use Test;
 
-plan 8;
+plan 14;
 
 ##===========================================================
 ## 1 Trivial workflow
@@ -136,6 +148,104 @@ my $res4Expected;
 }
 
 is-deeply $res4, $res4Expected, 'grouping awareness';
+
+
+##===========================================================
+## 5 Non-trivial workflow
+##===========================================================
+
+my $command5 = '
+use @dfStarwars;
+replace missing with `<NaN>`;
+mutate with mass = `+$_<mass>` and height = `+$_<height>`;
+filter by birth_year greater than 27;
+select homeworld, mass and height;
+group by homeworld;
+summarize the variables mass and height with &mean and &median
+';
+
+ok ToDataQueryWorkflowCode( $command5, target => 'Raku::Reshapers');
+
+my $code5 = ToDataQueryWorkflowCode( $command5, target => 'Raku::Reshapers');
+
+# Evaluate the generated code.
+my $res5 = EVAL($code5);
+
+my $res5Expected;
+{
+    $obj = @dfStarwars ;
+    $obj = $obj.deepmap({ ( ($_ eqv Any) or $_.isa(Nil) or $_.isa(Whatever) ) ?? <NaN> !! $_ }) ;
+    $obj = $obj.map({ $_{"mass"} = +$_<mass>; $_{"height"} = +$_<height>; $_ }) ;
+    $obj = $obj.grep({ $_{"birth_year"} > 27 }).Array ;
+    $obj = select-columns($obj, ("homeworld", "mass", "height") ) ;
+    $obj = group-by($obj, "homeworld") ;
+    $obj = $obj.map({ $_.key => summarize-at($_.value, ("mass", "height"), (&mean, &median)) });
+
+    $res5Expected = $obj;
+}
+
+is-deeply $res5.Hash, $res5Expected.Hash, 'non-trivial workflow';
+
+
+##===========================================================
+## 6 Joins
+##===========================================================
+
+my $command6 =  "use @dfStarwarsFilms;
+left join with @dfStarwars by 'name';
+replace missing with `<NaN>`;
+sort by name, film desc;
+take pipeline value";
+
+ok ToDataQueryWorkflowCode( $command6, target => 'Raku::Reshapers');
+
+my $code6 = ToDataQueryWorkflowCode( $command6, target => 'Raku::Reshapers');
+
+# Evaluate the generated code.
+my $res6 = EVAL($code6);
+
+my $res6Expected;
+{
+    $obj = @dfStarwarsFilms ;
+    $obj = join-across( $obj, @dfStarwars, ("name"), join-spec=>"Left") ;
+    $obj = $obj.deepmap({ ( ($_ eqv Any) or $_.isa(Nil) or $_.isa(Whatever) ) ?? <NaN> !! $_ }) ;
+    $obj = $obj.sort({($_{"name"}, $_{"film"}) }).reverse.Array ;
+    $res6Expected = $obj;
+}
+
+is-deeply $res6, $res6Expected, 'joins';
+
+
+##===========================================================
+## 7 Complicated and neat workflow
+##===========================================================
+
+my $command7 =  '
+use @dfAnscombe;
+convert to long form;
+separate the data column Variable into Variable and Set with separator pattern "";
+to wide form for id columns Set and AutomaticKey variable column Variable and value column Value';
+
+ok ToDataQueryWorkflowCode( $command7, target => 'Raku::Reshapers');
+
+my $code7 = ToDataQueryWorkflowCode( $command7, target => 'Raku::Reshapers');
+
+# This is a hack -- to-long-format has to be improved.
+$code7 .= subst('@dfAnscombe', '|@dfAnscombe');
+
+# Evaluate the generated code.
+my $res7 = EVAL($code7);
+
+my $res7Expected;
+{
+    $obj = |@dfAnscombe ;
+    $obj = to-long-format( $obj ) ;
+    $obj = separate-column( $obj, "Variable", ("Variable", "Set"), sep => "" ) ;
+    $obj = to-wide-format( $obj, identifierColumns => ("Set", "AutomaticKey"), variablesFrom => "Variable", valuesFrom => "Value" );
+    $res7Expected = $obj;
+}
+
+is-deeply $res7, $res7Expected, 'joins';
 
 
 done-testing;
