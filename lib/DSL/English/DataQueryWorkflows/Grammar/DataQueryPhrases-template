@@ -77,7 +77,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule dictionary-phrase { <.association-noun> | <.dictionary-noun> | <.mapping-noun> }
     rule filter-phrase { <filter-verb> | <select-verb> }
     rule format-phrase { <form-noun> | <format-noun> }
-    rule group-by-phrase { <group-verb> [ <by-preposition> <using-preposition>? | <using-preposition> | <over-preposition> ] }
+    rule group-by-phrase { <group-verb> [ <by-preposition> <using-preposition>? | <using-preposition> | <over-preposition> | <adhere-verb> <to-preposition>? ] }
     rule group-map-phrase { <group-verb> [ <mapping-noun> | <map-verb> ] | <apply-verb> <per-preposition> <group-verb> }
     rule id-columns-phrase { [ <id-noun> | <identifier-noun> | <identifier-adjective> ] [ <columns-noun> | <column-noun> ]}
     rule join-phrase { <join-noun> | <merge-verb> | <merge-noun> }
