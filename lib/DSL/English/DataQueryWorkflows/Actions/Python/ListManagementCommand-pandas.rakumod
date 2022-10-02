@@ -15,7 +15,7 @@ class DSL::English::DataQueryWorkflows::Actions::Python::ListManagementCommand-p
         } elsif $<list-management-position-query> {
             $<list-management-position-query>.made;
         } else {
-            'obj.iloc[' ~ $/.values[0].made ~ '-1]';
+            'obj = obj.iloc[' ~ $/.values[0].made ~ '-1]';
         }
     }
 
@@ -32,24 +32,24 @@ class DSL::English::DataQueryWorkflows::Actions::Python::ListManagementCommand-p
 
     method list-management-range($/) { make $/.values[0].made; }
     method list-management-top-range($/) {
-        make 'obj.head(' ~ $/.values[0].made ~ ')';
+        make 'obj = obj.head(' ~ $/.values[0].made ~ ')';
     }
     method list-management-bottom-range($/) {
-        make 'obj.tail(' ~ $/.values[0].made ~ ')';
+        make 'obj = obj.tail(' ~ $/.values[0].made ~ ')';
     }
     method range-spec($/) {
         if $<range-spec-step> {
-            make 'obj.iloc[' ~ $<range-spec-from>.made ~ '-1:' ~ $<range-spec-to>.made ~ ':' ~ $<range-spec-step>.made ~ ']'
+            make 'obj = obj.iloc[' ~ $<range-spec-from>.made ~ '-1:' ~ $<range-spec-to>.made ~ ':' ~ $<range-spec-step>.made ~ ']'
         } else {
-            make 'obj.iloc[' ~ $<range-spec-from>.made ~ '-1:' ~ $<range-spec-to>.made ~ ']'
+            make 'obj = obj.iloc[' ~ $<range-spec-from>.made ~ '-1:' ~ $<range-spec-to>.made ~ ']'
         }
     }
 
-    method list-management-drop($/) { make 'obj.drop(labels=[' ~ $/.values[0].made ~ '])'; }
+    method list-management-drop($/) { make 'obj = obj.drop(labels=[' ~ $/.values[0].made ~ '])'; }
 
     method list-management-replace-part($/) {
         my $valPart = $<pos2> ?? $<pos2>.made !! $<value-spec>.made;
-        make 'obj.iloc[' ~ $<pos1>.made ~ '] = ' ~ $valPart;
+        make 'obj = obj.iloc[' ~ $<pos1>.made ~ '] = ' ~ $valPart;
     }
 
     method list-management-clear($/) { make 'obj = pandas.DataFrame()'; }
