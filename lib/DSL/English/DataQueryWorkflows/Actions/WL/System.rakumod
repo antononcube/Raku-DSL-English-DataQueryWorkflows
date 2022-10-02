@@ -32,12 +32,12 @@ use v6.d;
 
 use DSL::English::DataQueryWorkflows::Actions::General;
 use DSL::Shared::Actions::WL::PredicateSpecification;
-use DSL::Shared::Actions::English::WL::PipelineCommand;
+use DSL::Shared::Actions::English::WL::ListManagementCommand;
 
 class DSL::English::DataQueryWorkflows::Actions::WL::System
         does DSL::English::DataQueryWorkflows::Actions::General
         is DSL::Shared::Actions::WL::PredicateSpecification
-        is DSL::Shared::Actions::English::WL::PipelineCommand {
+        is DSL::Shared::Actions::English::WL::ListManagementCommand {
 
     has Str $.name = 'DSL-English-DataQueryWorkflows-WL-System';
 
