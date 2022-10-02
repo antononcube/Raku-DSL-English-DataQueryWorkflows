@@ -201,8 +201,9 @@ class DSL::English::DataQueryWorkflows::Actions::Python::pandas
     # Drop columns command
     method drop-columns-command($/) { make $/.values[0].made; }
     method drop-columns-simple($/) {
+		# See https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop.html
         my @todrop = $<todrop>.made.split(', ');
-        make 'obj = obj.drop( [' ~ $<todrop>.made.join(', ') ~ '] )';
+        make 'obj = obj.drop( columns = [' ~ $<todrop>.made.join(', ') ~ '] )';
     }
 
     # Statistics command
