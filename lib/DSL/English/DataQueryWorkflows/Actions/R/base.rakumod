@@ -152,7 +152,11 @@ class DSL::English::DataQueryWorkflows::Actions::R::base
 
     # Group command
     method group-command($/) { make $/.values[0].made; }
-	method group-by-command($/) { make 'obj <- split( x = obj, f = ' ~ $/.values[0].made ~ ' )'; }
+	method group-by-command($/) {
+		my $res = $/.values[0].made;
+		$res = $<column-specs-list>.values.elems> 1 ?? 'obj[, c(' ~ $res ~ ')]' !! 'obj[[' ~ $res ~ ']]';
+		make 'obj <- split( x = obj, f = ' ~ $res ~ ' )';
+	}
 	method group-map-command($/) { make 'obj <- lapply( X = obj, FUN = ' ~ $/.values[0].made ~ ' )'; }
 
     # Ungroup command
