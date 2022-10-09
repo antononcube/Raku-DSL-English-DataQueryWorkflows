@@ -3,6 +3,10 @@
 use DSL::English::DataQueryWorkflows;
 use DSL::Shared::Utilities::CopyToClipboard;
 
+my %*SUB-MAIN-OPTS =
+        :named-anywhere,    # allow named variables at any location
+        ;
+
 multi sub MAIN
 #= Main CLI signature.
 (Str $command,                                       #= A string with one or many commands (separated by ';').
