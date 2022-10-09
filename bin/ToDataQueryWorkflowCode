@@ -1,6 +1,7 @@
 #!/usr/bin/env perl6
 
 use DSL::English::DataQueryWorkflows;
+use DSL::Shared::Utilities::CopyToClipboard;
 
 multi sub MAIN
 #= Main CLI signature.
@@ -25,25 +26,7 @@ multi sub MAIN
 
     say $res;
 
-    if $clipboard-command eqv 'Whatever' {
-        if %*ENV<CLIPBOARD_COPY_COMMAND>:exists {
-            $clipboard-command = %*ENV<CLIPBOARD_COPY_COMMAND>;
-        } else {
-            $clipboard-command =
-                    do given $*DISTRO {
-                        when $_.is-win { "clip.exe" }
-                        when $_ ~~ 'macos' { "pbcopy" }
-                        default {
-                            # Assuming it is Linux and it has xclip
-                            "xclip -selection clipboard"
-                        }
-                    }
-        }
-    }
-
-    if $clipboard-command.chars > 0 {
-        shell "echo '$res' | $clipboard-command";
-    }
+    copy-to-clipboard($res, :$clipboard-command);
 }
 
 multi sub MAIN
@@ -76,18 +59,12 @@ sub USAGE() {
     say "Translates natural language commands into data transformations programming code.";
     say $*USAGE;
     say "\n";
-    say Q:c:to/EOH/;
+    my $usage = Q:c:to/EOH/;
     Details:
         If --target is 'Whatever' then:
             1. It is attempted to use the environmental variable RAKU_DSL_DATAQUERYWORKFLOWS_TARGET
             2. If RAKU_DSL_DATAQUERYWORKFLOWS_TARGET is not defined then 'R::tidyverse' is used.
-        If --clipboard-command is the empty string then no copying to the clipboard is done.
-        If --clipboard-command is 'Whatever' then:
-            1. It is attempted to use the environment variable CLIPBOARD_COPY_COMMAND.
-                If CLIPBOARD_COPY_COMMAND is defined and it is the empty string then no copying to the clipboard is done.
-            2. If the variable CLIPBOARD_COPY_COMMAND is not defined then:
-                - 'pbcopy' is used on macOS
-                - 'clip.exe' on Windows
-                - 'xclip -selection clipboard' on Linux.
     EOH
+
+    say $usage ~ copy-to-clipboard(:usage-message);
 }
