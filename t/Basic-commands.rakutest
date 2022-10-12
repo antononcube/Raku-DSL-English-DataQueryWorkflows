@@ -3,7 +3,7 @@ use lib 'lib';
 use DSL::English::DataQueryWorkflows::Grammar;
 use Test;
 
-plan 21;
+plan 23;
 
 # Shortcut
 my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
@@ -74,5 +74,11 @@ ok $pCOMMAND.parse('replace missing with NA'),
 
 ok $pCOMMAND.parse('replace missing'),
         'replace missing';
+
+ok $pCOMMAND.parse('show counts'),
+        'show counts';
+
+ok $pCOMMAND.parse('show the counts'),
+        'show the counts';
 
 done-testing;
