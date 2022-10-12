@@ -156,7 +156,7 @@ role DSL::English::DataQueryWorkflows::Grammarish {
     rule column-names-command { <.display-directive> [ <column-noun> | <columns-noun> ] <names-noun> }
     rule row-names-command { <.display-directive> [ <row-noun> | <rows-noun> ] <names-noun> }
     rule count-command { <compute-directive> <.the-determiner>? [ <count-verb> | <counts-noun> ] | <count-verb> | <counts-noun> }
-    rule echo-count-command { <compute-and-display> <.the-determiner>? [ <count-verb> | <counts-noun> ] | <display-directive> [ <count-verb> | <counts-noun> ] }
+    rule echo-count-command { <compute-and-display> <.the-determiner>? [ <count-verb> | <counts-noun> ] | <display-directive> <.the-determiner>? [ <count-verb> | <counts-noun> ] }
     rule glimpse-data { <.display-directive>? <.a-determiner>? <.glimpse-verb> <.at-preposition>? <.the-determiner>? <.data-noun>? }
     rule skim-data    { [ <.display-directive>? <.a-determiner>? <.skimming-noun> <.of-preposition>? | <.skim-verb> ] <.the-determiner>? <.data-noun>? }
     rule data-summary-command {
