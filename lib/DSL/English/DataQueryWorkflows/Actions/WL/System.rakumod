@@ -229,6 +229,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
         my $funcs = $<summarize-funcs-spec> ?? $<summarize-funcs-spec>.made !! '{Length, Min, Max, Mean, Median, Total}';
   
         if %.properties<IsGrouped>:exists {
+            %.properties<IsGrouped>:delete;
             make 'obj = Dataset[obj][All, Association @ Flatten @ Outer[ToString[#1] <> "_" <> ToString[#2] -> Query[#2, #1] &,' ~ $cols ~ ', '  ~ $funcs ~ ']]';
         } else {
             make 'obj = Association @ Flatten @ Outer[ToString[#1] <> "_" <> ToString[#2] -> obj[Query[#2, #1]] &,' ~ $cols ~ ', '  ~ $funcs ~ ']';

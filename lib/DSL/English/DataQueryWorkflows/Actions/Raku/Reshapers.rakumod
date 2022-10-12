@@ -242,7 +242,8 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
         my $funcs = $<summarize-funcs-spec> ?? $<summarize-funcs-spec>.made !! '(&elems, &min, &max)';
   
         if %.properties<IsGrouped>:exists {
-            make '$obj = $obj.map({ $_.key => summarize-at($_.value, ' ~ $cols ~ ', ' ~ $funcs ~ ') })'
+            %.properties<IsGrouped>:delete;
+            make '$obj = $obj.map({ $_.key => summarize-at($_.value, ' ~ $cols ~ ', ' ~ $funcs ~ ') })';
         } else {
             make '$obj = summarize-at( $obj, ' ~ $cols ~ ', ' ~ $funcs ~ ' )'
         }
