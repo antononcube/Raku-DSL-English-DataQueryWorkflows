@@ -304,6 +304,11 @@ class DSL::English::DataQueryWorkflows::Actions::Julia::DataFrames
     method key-pair-rhs($/) { make $/.values[0].made.subst(:g, '"', ''); }
 
     # Pipeline command
+	## Object
+	method assign-pipeline-object-to($/) { make $/.values[0].made ~ ' = obj'; }
+
+	## Value
+	method assign-pipeline-value-to($/) { make self.assign-pipeline-object-to($/); }
     method pipeline-command($/) { make $/.values[0].made; }
     method take-pipeline-value($/) { make 'obj'; }
     method echo-pipeline-value($/) { make 'println(obj)'; }
