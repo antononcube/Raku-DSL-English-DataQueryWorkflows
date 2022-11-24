@@ -62,7 +62,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     # Rules
     rule contingency-matrix-phrase { <contingency-noun> [ <matrix-noun> | <table-noun> ] }
     rule cross-tabulate-phrase { <cross-verb> <tabulate-verb> }
-    rule cross-tabulation-phrase { <cross-adjective> <tabulation-noun> }
+    rule cross-tabulation-phrase { <cross-adjective> <tabulation-noun> | <tabulation-noun> <cross-adjective> }
     rule keep-only-phrase { <keep-verb> <only-adverb>? }
     rule with-formula-phrase { <with-preposition> <the-determiner>? <formula-noun> }
 

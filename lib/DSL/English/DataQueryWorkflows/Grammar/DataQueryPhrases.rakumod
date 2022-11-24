@@ -178,7 +178,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule cross-tabulate-phrase:sym<English> {  <cross-verb> <tabulate-verb>  }
 
     proto rule cross-tabulation-phrase {*}
-    rule cross-tabulation-phrase:sym<English> {  <cross-adjective> <tabulation-noun>  }
+    rule cross-tabulation-phrase:sym<English> {  <cross-adjective> <tabulation-noun> | <tabulation-noun> <cross-adjective>  }
 
     proto rule keep-only-phrase {*}
     rule keep-only-phrase:sym<English> {  <keep-verb> <only-adverb>?  }
