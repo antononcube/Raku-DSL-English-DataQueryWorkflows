@@ -162,7 +162,7 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 
 	method join-by-spec($/) { make '(' ~ $/.values[0].made ~ ')'; }
 
-	method semi-join-spec($/)  {
+	method anti-join-spec($/)  {
 		if $<join-by-spec> {
 			make 'анти-съединение с ' ~ $<dataset-name>.made ~ ' според ' ~ $<join-by-spec>.made;
 		} else {
