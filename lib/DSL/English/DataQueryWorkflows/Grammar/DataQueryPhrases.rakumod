@@ -4,6 +4,12 @@ use DSL::Shared::Utilities::FuzzyMatching;
 role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     # Tokens
 
+    proto token anti-adjective {*}
+    token anti-adjective:sym<English> { :i 'anti' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'anti', 2) }> }
+
+    proto token anti-join-verb {*}
+    token anti-join-verb:sym<English> { :i 'anti-join' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'anti-join', 2) }> }
+
     proto token arrange-verb {*}
     token arrange-verb:sym<English> { :i 'arrange' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'arrange', 2) }> }
 
@@ -207,17 +213,20 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token descending-phrase:sym<English> { :i  <descending-adjective> | 'desc'  }
 
 
+    proto token anti-join-phrase {*}
+    token anti-join-phrase:sym<English> { :i  <anti-adjective> \h+ <join-phrase> | <anti-join-verb>  }
+
     proto token left-join-phrase {*}
-    token left-join-phrase:sym<English> { :i  <.left-adjective> \h+ <.join-phrase> | <.left-join-verb>  }
+    token left-join-phrase:sym<English> { :i  <left-adjective> \h+ <join-phrase> | <left-join-verb>  }
 
     proto token inner-join-phrase {*}
-    token inner-join-phrase:sym<English> { :i  <.inner-adjective> \h+ <.join-phrase> | <.inner-join-verb>  }
+    token inner-join-phrase:sym<English> { :i  <inner-adjective> \h+ <join-phrase> | <inner-join-verb>  }
 
     proto token right-join-phrase {*}
-    token right-join-phrase:sym<English> { :i  <.right-adjective> \h+ <.join-phrase> | <.right-join-verb>  }
+    token right-join-phrase:sym<English> { :i  <right-adjective> \h+ <join-phrase> | <right-join-verb>  }
 
     proto token semi-join-phrase {*}
-    token semi-join-phrase:sym<English> { :i  <.semi-adjective> \h+ <.join-phrase> | <.semi-join-verb>  }
+    token semi-join-phrase:sym<English> { :i  <semi-adjective> \h+ <join-phrase> | <semi-join-verb>  }
 
 
     proto rule arrange-by-phrase {*}

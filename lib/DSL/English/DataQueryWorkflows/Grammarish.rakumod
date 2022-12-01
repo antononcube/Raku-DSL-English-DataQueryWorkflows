@@ -172,8 +172,9 @@ role DSL::English::DataQueryWorkflows::Grammarish {
     rule all-data-phrase { <them-pronoun>? <all-determiner> | <all-determiner>? <data> <columns-noun>? | <all-determiner> <of-preposition> <them-pronoun> }
 
     # Join command
-    rule join-command { <inner-join-spec> | <left-join-spec> | <right-join-spec> | <semi-join-spec> | <full-join-spec> }
+    rule join-command { <inner-join-spec> | <left-join-spec> | <right-join-spec> | <semi-join-spec> | <full-join-spec> | <anti-join-spec> }
     rule join-by-spec { <key-pairs-list> | <mixed-quoted-variable-names-list> | <wl-expr> }
+    rule anti-join-spec  { <.anti-join-phrase> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
     rule full-join-spec  { <.full-adjective>   <.join-phrase> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
     rule inner-join-spec { <.inner-adjective>? <.join-phrase> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
     rule left-join-spec  { <.left-join-phrase> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
