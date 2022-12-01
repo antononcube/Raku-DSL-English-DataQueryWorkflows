@@ -24,7 +24,9 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token glimpse-verb { 'glimpse' }
     token group-verb { 'group' }
     token inner-adjective { 'inner' }
+    token inner-join-verb { 'inner-join' }
     token keep-verb { 'keep' }
+    token left-join-verb { 'left-join' }
     token long-adjective { 'long' }
     token longer-adjective { 'longer' }
     token map-verb { 'map' }
@@ -40,10 +42,12 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token order-verb { 'order' }
     token pivot-verb { 'pivot' }
     token rename-verb { 'rename' }
+    token right-join-verb { 'right-join' }
     token safe-adjective { 'safe' }
     token safely-adverb { 'safely' }
     token select-verb { 'select' }
     token semi-adjective { 'semi' }
+    token semi-join-verb { 'semi-join' }
     token separator-noun { 'separator' }
     token skim-verb { 'skim' }
     token skimming-noun { 'skimming' }
@@ -69,6 +73,11 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     # True dplyr/tidyverse commands
     token ascending-phrase { <ascending-adjective> | 'asc' }
     token descending-phrase { <descending-adjective> | 'desc' }
+
+    token left-join-phrase { <.left-adjective> \h+ <.join-phrase> | <.left-join-verb> }
+    token inner-join-phrase { <.inner-adjective> \h+ <.join-phrase> | <.inner-join-verb> }
+    token right-join-phrase { <.right-adjective> \h+ <.join-phrase> | <.right-join-verb> }
+    token semi-join-phrase { <.semi-adjective> \h+ <.join-phrase> | <.semi-join-verb> }
 
     rule arrange-by-phrase { <arrange-directive> [ <by-preposition> | <using-preposition> | <with-preposition> ] }
     rule arrange-directive { <arrange-verb> | <order-verb> | <sort-verb> }

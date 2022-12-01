@@ -174,11 +174,11 @@ role DSL::English::DataQueryWorkflows::Grammarish {
     # Join command
     rule join-command { <inner-join-spec> | <left-join-spec> | <right-join-spec> | <semi-join-spec> | <full-join-spec> }
     rule join-by-spec { <key-pairs-list> | <mixed-quoted-variable-names-list> | <wl-expr> }
-    rule full-join-spec  { <.full-adjective>  <.join-phrase>  <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
+    rule full-join-spec  { <.full-adjective>   <.join-phrase> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
     rule inner-join-spec { <.inner-adjective>? <.join-phrase> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
-    rule left-join-spec  { <.left-adjective>  <.join-phrase>  <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
-    rule right-join-spec { <.right-adjective> <.join-phrase>  <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
-    rule semi-join-spec  { <.semi-adjective>  <.join-phrase>  <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
+    rule left-join-spec  { <.left-join-phrase> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
+    rule right-join-spec { <.right-join-phrase> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
+    rule semi-join-spec  { <.semi-join-phrase> <.with-preposition>? <dataset-name> [ [ <.by-preposition> | <.using-preposition> | <.on-preposition> ] <join-by-spec> ]? }
 
     # Cross tabulate command
     rule cross-tabulate-command { <cross-tabulate-command> | <contingency-matrix-command> }

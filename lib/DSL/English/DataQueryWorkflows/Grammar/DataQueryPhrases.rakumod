@@ -67,8 +67,14 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     proto token inner-adjective {*}
     token inner-adjective:sym<English> { :i 'inner' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'inner', 2) }> }
 
+    proto token inner-join-verb {*}
+    token inner-join-verb:sym<English> { :i 'inner-join' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'inner-join', 2) }> }
+
     proto token keep-verb {*}
     token keep-verb:sym<English> { :i 'keep' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'keep', 2) }> }
+
+    proto token left-join-verb {*}
+    token left-join-verb:sym<English> { :i 'left-join' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'left-join', 2) }> }
 
     proto token long-adjective {*}
     token long-adjective:sym<English> { :i 'long' | ([\w]+) <?{ $0.Str ne 'longer' and is-fuzzy-match($0.Str, 'long', 2) }> }
@@ -101,7 +107,7 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token narrower-adjective:sym<English> { :i 'narrow' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'narrow', 2) }> }
 
     proto token omit-directive {*}
-    token omit-directive:sym<English> { :i 'omit' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'omit', 2) }> | 'exclude' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'exclude', 2) }> }
+    token omit-directive:sym<English> { :i  'omit' | 'exclude'  }
 
     proto token only-adverb {*}
     token only-adverb:sym<English> { :i 'only' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'only', 2) }> }
@@ -115,6 +121,9 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     proto token rename-verb {*}
     token rename-verb:sym<English> { :i 'rename' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'rename', 2) }> }
 
+    proto token right-join-verb {*}
+    token right-join-verb:sym<English> { :i 'right-join' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'right-join', 2) }> }
+
     proto token safe-adjective {*}
     token safe-adjective:sym<English> { :i 'safe' | ([\w]+) <?{ $0.Str ne 'safely' and is-fuzzy-match($0.Str, 'safe', 2) }> }
 
@@ -126,6 +135,9 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
 
     proto token semi-adjective {*}
     token semi-adjective:sym<English> { :i 'semi' | ([\w]+) <?{ $0.Str ne 'skim' and is-fuzzy-match($0.Str, 'semi', 2) }> }
+
+    proto token semi-join-verb {*}
+    token semi-join-verb:sym<English> { :i 'semi-join' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'semi-join', 2) }> }
 
     proto token separator-noun {*}
     token separator-noun:sym<English> { :i 'separator' | ([\w]+) <?{ is-fuzzy-match($0.Str, 'separator', 2) }> }
@@ -195,11 +207,24 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     token descending-phrase:sym<English> { :i  <descending-adjective> | 'desc'  }
 
 
+    proto token left-join-phrase {*}
+    token left-join-phrase:sym<English> { :i  <.left-adjective> \h+ <.join-phrase> | <.left-join-verb>  }
+
+    proto token inner-join-phrase {*}
+    token inner-join-phrase:sym<English> { :i  <.inner-adjective> \h+ <.join-phrase> | <.inner-join-verb>  }
+
+    proto token right-join-phrase {*}
+    token right-join-phrase:sym<English> { :i  <.right-adjective> \h+ <.join-phrase> | <.right-join-verb>  }
+
+    proto token semi-join-phrase {*}
+    token semi-join-phrase:sym<English> { :i  <.semi-adjective> \h+ <.join-phrase> | <.semi-join-verb>  }
+
+
     proto rule arrange-by-phrase {*}
     rule arrange-by-phrase:sym<English> {  <arrange-directive> [ <by-preposition> | <using-preposition> | <with-preposition> ]  }
 
     proto rule arrange-directive {*}
-    rule arrange-directive:sym<English> { <arrange-verb> | <order-verb> | <sort-verb> }
+    rule arrange-directive:sym<English> {  <arrange-verb> | <order-verb> | <sort-verb>  }
 
     proto rule column-values-of-phrase {*}
     rule column-values-of-phrase:sym<English> {  <column-noun> <values-noun>? <of-preposition>? | <values-noun> <of-preposition> <the-determiner>? <column-noun>  }
@@ -211,25 +236,25 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule dictionary-phrase:sym<English> {  <.association-noun> | <.dictionary-noun> | <.mapping-noun>  }
 
     proto rule filter-phrase {*}
-    rule filter-phrase:sym<English> { <filter-verb> | <select-verb> }
+    rule filter-phrase:sym<English> {  <filter-verb> | <select-verb>  }
 
     proto rule format-phrase {*}
-    rule format-phrase:sym<English> { <form-noun> | <format-noun> }
+    rule format-phrase:sym<English> {  <form-noun> | <format-noun>  }
 
     proto rule group-by-phrase {*}
-    rule group-by-phrase:sym<English> {  <group-verb> [ <by-preposition> <using-preposition>? | <using-preposition> | <over-preposition> | <adhere-verb> <to-preposition>? ] }
+    rule group-by-phrase:sym<English> {  <group-verb> [ <by-preposition> <using-preposition>? | <using-preposition> | <over-preposition> | <adhere-verb> <to-preposition>? ]  }
 
     proto rule group-map-phrase {*}
     rule group-map-phrase:sym<English> {  <group-verb> [ <mapping-noun> | <map-verb> ] | <apply-verb> <per-preposition> <group-verb>  }
 
     proto rule id-columns-phrase {*}
-    rule id-columns-phrase:sym<English> {  [ <id-noun> | <identifier-noun> | <identifier-adjective> ] [ <columns-noun> | <column-noun> ]  }
+    rule id-columns-phrase:sym<English> {  [ <id-noun> | <identifier-noun> | <identifier-adjective> ] [ <columns-noun> | <column-noun> ] }
 
     proto rule join-phrase {*}
-    rule join-phrase:sym<English> { <join-noun> | <merge-verb> | <merge-noun> }
+    rule join-phrase:sym<English> {  <join-noun> | <merge-verb> | <merge-noun>  }
 
     proto rule longer-phrase {*}
-    rule longer-phrase:sym<English> { <longer-adjective> | <long-adjective> | <narrow-adjective> }
+    rule longer-phrase:sym<English> {  <longer-adjective> | <long-adjective> | <narrow-adjective>  }
 
     proto rule pivot-columns-phrase {*}
     rule pivot-columns-phrase:sym<English> {  [ <pivot-verb> | <variable-noun> ]? <the-determiner>? <columns>  }
@@ -250,17 +275,13 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule reverse-sort-phrase:sym<English> {  <reverse-adjective> [ <sort-verb> | <order-verb> ]  }
 
     proto rule safely-directive {*}
-    rule safely-directive:sym<English> { <safe-adjective> | <safely-adverb> }
+    rule safely-directive:sym<English> {  <safe-adjective> | <safely-adverb>  }
 
     proto rule select {*}
-    rule select:sym<English> { <select-verb> | <take-verb> | <keep-only-phrase> }
+    rule select:sym<English> {  <select-verb> | <take-verb> | <keep-only-phrase>  }
 
     proto rule separator-phrase {*}
-    rule separator-phrase:sym<English> { 
-        <separator-noun> |
-        <divider-noun> |
-        <splitter-noun> |
-        <splitting-noun> }
+    rule separator-phrase:sym<English> {  <separator-noun> | <divider-noun> | <splitter-noun> | <splitting-noun>  }
 
     proto rule string-column-phrase {*}
     rule string-column-phrase:sym<English> {  [ <string-noun> | <character-noun> | <text-noun> ] <column-noun>  }
@@ -284,6 +305,6 @@ role DSL::English::DataQueryWorkflows::Grammar::DataQueryPhrases {
     rule variable-column-phrase:sym<English> {  <variable-noun> <column-noun>?  }
 
     proto rule wider-phrase {*}
-    rule wider-phrase:sym<English> { <wider-adjective> | <wide-adjective> | <broad-adjective> }
+    rule wider-phrase:sym<English> {  <wider-adjective>  | <wide-adjective> | <broad-adjective>  }
 }
 
