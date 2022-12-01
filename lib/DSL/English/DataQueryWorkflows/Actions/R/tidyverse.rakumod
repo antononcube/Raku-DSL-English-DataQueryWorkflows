@@ -363,6 +363,14 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         }
     }
 
+    method anti-join-spec($/) {
+        if $<join-by-spec> {
+            make 'dplyr::anti_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
+        } else {
+            make 'dplyr::anti_join(' ~ $<dataset-name>.made ~ ')';
+        }
+    }
+
     method full-join-spec($/) {
         if $<join-by-spec> {
             make 'dplyr::full_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';

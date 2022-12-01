@@ -162,6 +162,14 @@ class DSL::English::DataQueryWorkflows::Actions::Spanish::Standard
 
 	method join-by-spec($/) { make '(' ~ $/.values[0].made ~ ')'; }
 
+	method anti-join-spec($/)  {
+		if $<join-by-spec> {
+			make 'anti-compuesto con ' ~ $<dataset-name>.made ~ ' de acuerdo a ' ~ $<join-by-spec>.made;
+		} else {
+			make 'anti-compuesto con ' ~ $<dataset-name>.made;
+		}
+	}
+
 	method full-join-spec($/)  {
 		if $<join-by-spec> {
 			make 'externamente compuesto con ' ~ $<dataset-name>.made ~ ' de acuerdo a ' ~ $<join-by-spec>.made;

@@ -261,6 +261,14 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
 		}
 	}
 
+    method anti-join-spec($/)  {
+        if $<join-by-spec> {
+            make '$obj = join-across( $obj, ' ~ $<dataset-name>.made ~ ', ' ~ $<join-by-spec>.made ~ ', join-spec=>"Anti")';
+        } else {
+            make '$obj = join-across( $obj, ' ~ $<dataset-name>.made ~ ', ($obj[0].keys (&) ' ~ $<dataset-name>.made  ~ '), join-spec=>"Anti")';
+        }
+    }
+
     method full-join-spec($/)  {
         if $<join-by-spec> {
             make '$obj = join-across( $obj, ' ~ $<dataset-name>.made ~ ', ' ~ $<join-by-spec>.made ~ ', join-spec=>"Outer")';
@@ -295,9 +303,9 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
 
     method semi-join-spec($/)  {
         if $<join-by-spec> {
-            make '$obj = join-across( $obj, ' ~ $<dataset-name>.made ~ ', ' ~ $<join-by-spec>.made ~ ', join-spec=>"Right")';
+            make '$obj = join-across( $obj, ' ~ $<dataset-name>.made ~ ', ' ~ $<join-by-spec>.made ~ ', join-spec=>"Semi")';
         } else {
-            make '$obj = join-across( $obj, ' ~ $<dataset-name>.made ~ ', ($obj[0].keys (&) ' ~ $<dataset-name>.made  ~ '), join-spec=>"Right")';
+            make '$obj = join-across( $obj, ' ~ $<dataset-name>.made ~ ', ($obj[0].keys (&) ' ~ $<dataset-name>.made  ~ '), join-spec=>"Semi")';
         }
     }
 

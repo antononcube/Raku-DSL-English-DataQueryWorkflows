@@ -162,6 +162,14 @@ class DSL::English::DataQueryWorkflows::Actions::Bulgarian::Standard
 
 	method join-by-spec($/) { make '(' ~ $/.values[0].made ~ ')'; }
 
+	method semi-join-spec($/)  {
+		if $<join-by-spec> {
+			make 'анти-съединение с ' ~ $<dataset-name>.made ~ ' според ' ~ $<join-by-spec>.made;
+		} else {
+			make 'анти-съединение с ' ~ $<dataset-name>.made;
+		}
+	}
+
 	method full-join-spec($/)  {
 		if $<join-by-spec> {
 			make 'външно съединение с ' ~ $<dataset-name>.made ~ ' според ' ~ $<join-by-spec>.made;
