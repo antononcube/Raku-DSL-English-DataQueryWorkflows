@@ -124,7 +124,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
             note 'Same number of current and new column names are expected for mutation with two lists.';
             make '$obj';
         } else {
-            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $n ~ ' -> #[' ~ $c ~ ']' };
+            my $pairs = do for @currentNames Z @newNames -> ($c, $n) { $n ~ ' => $_{' ~ $c ~ '}' };
             make '$obj = $obj.map({ $_ , %(' ~ $pairs.join(', ') ~ ') })' ;
         }
     }
