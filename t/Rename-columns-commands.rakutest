@@ -3,7 +3,7 @@ use lib 'lib';
 use DSL::English::DataQueryWorkflows::Grammar;
 use Test;
 
-plan 4;
+plan 6;
 
 # Shortcut
 my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
@@ -25,6 +25,14 @@ ok $pCOMMAND.parse('rename the columns creation_date, ID, title to StartDate, Pr
         'rename the columns creation_date, ID, title to StartDate, Project, Group';
 
 ## 4
+ok $pCOMMAND.parse('rename the columns creation_date, ID, title into StartDate, Project, Group'),
+        'rename the columns creation_date, ID, title to StartDate, Project, Group';
+
+## 5
+ok $pCOMMAND.parse('rename the columns creation_date, ID, title with StartDate, Project, Group'),
+        'rename the columns creation_date, ID, title to StartDate, Project, Group';
+
+## 6
 ok $pCOMMAND.parse('rename the columns StartDate = creation_date, Project = ID, and Group = title'),
         'rename the columns StartDate = creation_date, Project = ID, and Group = title';
 

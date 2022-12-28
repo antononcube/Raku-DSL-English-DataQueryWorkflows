@@ -95,7 +95,7 @@ role DSL::English::DataQueryWorkflows::Grammarish {
     rule rename-columns-command { <rename-columns-by-pairs> | <rename-columns-by-two-lists> }
     rule rename-columns-by-two-lists { <.rename-directive> <.the-determiner>? [ <.data-columns-phrase> | <.data-column-phrase> ]?
                                  <current=.column-specs-list>
-                                 [ <.to-preposition> | <.into-preposition> | <.as-preposition> ]
+                                 [ <.to-preposition> | <.into-preposition> | <.as-preposition> | <.with-preposition> ]
                                  <new=.column-specs-list> }
     rule rename-columns-by-pairs { <.rename-directive> <.the-determiner>? [ <.data-columns-phrase> | <.data-column-phrase> ]? [ <as-pairs-list> | <assign-pairs-list> | <association-pairs-list> ] }
 
