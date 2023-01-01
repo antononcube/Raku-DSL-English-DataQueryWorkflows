@@ -282,7 +282,8 @@ class DSL::English::DataQueryWorkflows::Actions::R::tidyverse
         }
     }
     method rename-columns-by-pairs($/) {
-        make 'dplyr::rename(' ~ $<as-pairs-list>.made ~ ')';
+        my @pairs = $/.values[0].made;
+        make 'dplyr::rename(' ~ @pairs.join(', ') ~ ')';
     }
 
     # Drop columns command

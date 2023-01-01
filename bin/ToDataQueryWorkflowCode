@@ -30,7 +30,9 @@ multi sub MAIN
 
     say $res;
 
-    copy-to-clipboard($res, :$clipboard-command);
+    if $clipboard-command.lc ne 'none' {
+        copy-to-clipboard($res, :$clipboard-command);
+    }
 }
 
 multi sub MAIN
