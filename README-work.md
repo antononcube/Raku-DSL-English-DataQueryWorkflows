@@ -1,5 +1,7 @@
 # Data Query Workflows
 
+[![SparrowCI](https://ci.sparrowhub.io/project/gh-antononcube-Raku-DSL-English-DataQueryWorkflows/badge)](https://ci.sparrowhub.io)
+
 ## Introduction
 
 This Raku (Perl 6) package has grammar and action classes for the parsing and interpretation of natural
