@@ -56,26 +56,14 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::SQL::Builder
     }
 
     # General
-    method variable-names-list($/) {
-        make $<variable-name>>>.made.join(', ');
-    }
-    method quoted-variable-names-list($/) {
-        make $<quoted-variable-name>>>.made.join(', ');
-    }
-    method mixed-quoted-variable-names-list($/) {
-        make $<mixed-quoted-variable-name>>>.made.join(', ');
-    }
+    method variable-names-list($/) { make $<variable-name>>>.made; }
+    method quoted-variable-names-list($/) { make $<quoted-variable-name>>>.made.join(', '); }
+    method mixed-quoted-variable-names-list($/) { make $<mixed-quoted-variable-name>>>.made.join(', '); }
 
     # Column specs
-    method column-specs-list($/) {
-        make $<column-spec>>>.made.join(' ');
-    }
-    method column-spec($/) {
-        make $/.values[0].made;
-    }
-    method column-name-spec($/) {
-        make $<mixed-quoted-variable-name>.made.subst(:g, '"', '');
-    }
+    method column-specs-list($/) { make $<column-spec>>>.made.join(', '); }
+    method column-spec($/) {  make $/.values[0].made; }
+    method column-name-spec($/) { make '"' ~ $<mixed-quoted-variable-name>.made.subst(:g, '"', '') ~ '"'; }
 
     # Load data
     method data-load-command($/) {
@@ -132,7 +120,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::SQL::Builder
         make $/.values[0].made;
     }
     method select-columns-simple($/) {
-        make 'select(<' ~ $/.values[0].made ~ '>)';
+        make 'select([' ~ $/.values[0].made ~ '])';
     }
     method select-columns-by-two-lists($/) {
         # I am not very comfortable with splitting the made string here, but it works.
