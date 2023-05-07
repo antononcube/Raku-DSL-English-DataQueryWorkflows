@@ -21,7 +21,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::SQL::Builder
 
     # workflow-command-list
     method workflow-commands-list($/) {
-        make '$sql.' ~ $/.values>>.made.join('.');
+        make $/.values>>.made.join('.');
     }
 
     # workflow-command
@@ -67,7 +67,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::SQL::Builder
 
     # Load data
     method data-load-command($/) {
-        make 'from(' ~ $/.values[0].made ~ ')';
+        make '$sql.from(' ~ $/.values[0].made ~ ')';
     }
     method load-data-table($/) {
         make $/.values[0].made;
@@ -304,7 +304,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::SQL::Builder
 
     method join-by-spec($/) {
         if $<mixed-quoted-variable-names-list> {
-            make 'c(' ~ map({ '"' ~ $_ ~ '"' }, $/.values[0].made.subst(:g, '"', '').split(', ')).join(', ') ~ ')';
+            make '[' ~ map({ '"' ~ $_ ~ '"' }, $/.values[0].made.subst(:g, '"', '').split(', ')).join(', ') ~ ']';
         } else {
             make $/.values[0].made;
         }
@@ -430,7 +430,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::SQL::Builder
         my $res = $/.values[0].made;
         if $<column-specs-list> {
             $res = $res.split(', ').map({ self.in-double-quotes($_) }).join(', ');
-            $res = ' c(' ~ $res ~ ')';
+            $res = ' [' ~ $res ~ ']';
         }
         make 'cols = ' ~ $res;
     }
@@ -465,7 +465,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::SQL::Builder
     method pivot-wider-id-columns-spec($/) {
         my $res = $/.values[0].made;
         $res = $res.split(', ').map({ self.in-double-quotes($_) }).join(', ');
-        make 'id_cols = c( ' ~ $res ~ ' )';
+        make 'id_cols = [ ' ~ $res ~ ' ]';
     }
 
     method pivot-wider-variable-column-spec($/) {
