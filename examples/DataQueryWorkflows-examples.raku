@@ -19,7 +19,7 @@ sub dq-interpret(Str:D $command,
 
 my $commands1 = '
 use dfTitanic;
-filter by passengerSex == "male";
+filter by passengerSex == "male" and passengerClass in ${"1st", "2nd"};
 echo text grouping by variables;
 group by passengerClass, passengerSurvival;count;
 ungroup;';
