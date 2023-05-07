@@ -25,6 +25,7 @@ use DSL::English::DataQueryWorkflows::Actions::Python::pandas;
 use DSL::English::DataQueryWorkflows::Actions::R::base;
 use DSL::English::DataQueryWorkflows::Actions::R::tidyverse;
 use DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers;
+use DSL::English::DataQueryWorkflows::Actions::Raku::SQL::Builder;
 use DSL::English::DataQueryWorkflows::Actions::SQL::Standard;
 use DSL::English::DataQueryWorkflows::Actions::WL::System;
 
@@ -50,6 +51,9 @@ my %targetToAction{Str} =
     "R-tidyverse"       => DSL::English::DataQueryWorkflows::Actions::R::tidyverse,
     "Raku"              => DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers,
     "Raku-Reshapers"    => DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers,
+    "Raku-SQL"          => DSL::English::DataQueryWorkflows::Actions::Raku::SQL::Builder,
+    "Raku-SQLBuilder"   => DSL::English::DataQueryWorkflows::Actions::Raku::SQL::Builder,
+    "Raku-SQL-Builder"  => DSL::English::DataQueryWorkflows::Actions::Raku::SQL::Builder,
     "Russian"           => DSL::English::DataQueryWorkflows::Actions::Russian::Standard,
     "SQL"               => DSL::English::DataQueryWorkflows::Actions::SQL::Standard,
     "Spanish"           => DSL::English::DataQueryWorkflows::Actions::Spanish::Standard,
@@ -58,7 +62,7 @@ my %targetToAction{Str} =
     "pandas"            => DSL::English::DataQueryWorkflows::Actions::Python::pandas,
     "tidyverse"         => DSL::English::DataQueryWorkflows::Actions::R::tidyverse;
 
-my %targetToAction2{Str} = %targetToAction.grep({ $_.key.contains('-') }).map({ $_.key.subst('-', '::') => $_.value }).Hash;
+my %targetToAction2{Str} = %targetToAction.grep({ $_.key.contains('-') }).map({ $_.key.subst('-', '::', :g) => $_.value }).Hash;
 %targetToAction = |%targetToAction , |%targetToAction2;
 
 
@@ -76,15 +80,18 @@ my Str %targetToSeparator{Str} =
     "R-tidyverse"       => " %>%\n",
     "Raku"              => " ;\n",
     "Raku-Reshapers"    => " ;\n",
+    "Raku-SQL"          => '.',
+    "Raku-SQLBuilder"   => ".",
+    "Raku-SQL-Builder"  => '.',
     "Russian"           => "\n",
     "SQL"               => ";\n",
     "Spanish"           => "\n",
     "WL"                => ";\n",
     "WL-System"         => ";\n",
-    "pandas"            => ".\n",
+    "pandas"            => "\n.",
     "tidyverse"         => " %>%\n";
 
-my Str %targetToSeparator2{Str} = %targetToSeparator.grep({ $_.key.contains('-') }).map({ $_.key.subst('-', '::') => $_.value }).Hash;
+my Str %targetToSeparator2{Str} = %targetToSeparator.grep({ $_.key.contains('-') }).map({ $_.key.subst('-', '::', :g) => $_.value }).Hash;
 %targetToSeparator = |%targetToSeparator , |%targetToSeparator2;
 
 
