@@ -426,6 +426,8 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
         use Data::Reshapers;
         use Data::Summarizers;
         use Data::ExampleDatasets;
+
+        my $obj;
         SETUPEND
   }
 }
