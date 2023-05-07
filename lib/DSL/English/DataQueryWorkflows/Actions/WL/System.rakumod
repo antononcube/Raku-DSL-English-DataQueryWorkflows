@@ -208,7 +208,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
         make %.properties<IsGrouped>:exists ?? 'Echo[Map[ Length, obj], "counts:"]' !! 'Echo[Length[obj], "counts"]';
     }
     method data-summary-command($/) {
-        make %.properties<IsGrouped>:exists ?? 'Echo[ResourceFunction["RecordsSummary"] /@ obj]' !! 'Echo[ResourceFunction["RecordsSummary"][obj], "summary:"]';
+        make %.properties<IsGrouped>:exists ?? 'Echo[RecordsSummary /@ obj]' !! 'Echo[RecordsSummary[obj], "summary:"]';
     }
     method glimpse-data($/) { make 'Echo[RandomSample[obj,UpTo[6]], "glimpse:"]'; }
     method summarize-all-command($/) {
@@ -296,10 +296,10 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
 	method cross-tabulation-double-formula($/) {
         if $<values-variable-name> {
             #make 'obj = GroupBy[ obj, { #[' ~ $<rows-variable-name>.made ~ '], #[' ~ $<columns-variable-name>.made ~  '] }&, Total[ #[' ~ $<values-variable-name>.made ~ '] & /@ # ]& ]';
-            make 'obj = ResourceFunction["CrossTabulate"][ { #[' ~ $<rows-variable-name>.made ~ '], #[' ~ $<columns-variable-name>.made ~  '], #[' ~ $<values-variable-name>.made ~ '] }& /@ obj ]';
+            make 'obj = CrossTabulate[ { #[' ~ $<rows-variable-name>.made ~ '], #[' ~ $<columns-variable-name>.made ~  '], #[' ~ $<values-variable-name>.made ~ '] }& /@ obj ]';
         } else {
             #make 'obj = GroupBy[ obj, { #[' ~ $<rows-variable-name>.made ~ '], #[' ~ $<columns-variable-name>.made ~  '] }&, Length ]';
-            make 'obj = ResourceFunction["CrossTabulate"][ { #[' ~ $<rows-variable-name>.made ~ '], #[' ~ $<columns-variable-name>.made ~  '] }& /@ obj ]';
+            make 'obj = CrossTabulate[ { #[' ~ $<rows-variable-name>.made ~ '], #[' ~ $<columns-variable-name>.made ~  '] }& /@ obj ]';
         }
     }
     method cross-tabulation-single-formula($/) {
@@ -319,9 +319,9 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     # Pivot longer command
     method pivot-longer-command($/) {
         if $<pivot-longer-arguments-list> {
-            make 'obj = ToLongForm[ obj, ' ~ $<pivot-longer-arguments-list>.made ~ ' ]';
+            make 'obj = LongFormDataset[ obj, ' ~ $<pivot-longer-arguments-list>.made ~ ' ]';
         } else {
-            make 'obj = ToLongForm[ obj ]';
+            make 'obj = LongFormDataset[ obj ]';
         }
     }
     method pivot-longer-arguments-list($/) { make $<pivot-longer-argument>>>.made.join(', '); }
@@ -336,7 +336,7 @@ class DSL::English::DataQueryWorkflows::Actions::WL::System
     method pivot-longer-value-column-name-spec($/) { make '"ValuesTo" -> ' ~ $/.values[0].made; }
 
     # Pivot wider command
-    method pivot-wider-command($/) { make 'obj = ToWideForm[ obj, ' ~ $<pivot-wider-arguments-list>.made ~ ' ]'; }
+    method pivot-wider-command($/) { make 'obj = WideFormDataset[ obj, ' ~ $<pivot-wider-arguments-list>.made ~ ' ]'; }
     method pivot-wider-arguments-list($/) { make $<pivot-wider-argument>>>.made.join(', '); }
     method pivot-wider-argument($/) { make $/.values[0].made; }
 
