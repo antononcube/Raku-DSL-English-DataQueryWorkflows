@@ -62,7 +62,7 @@ class DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers
 
     # Load data
     method data-load-command($/) { make $/.values[0].made; }
-    method load-data-table($/) { make 'my $obj = example-dataset(' ~ $<data-location-spec>.made ~ ')'; }
+    method load-data-table($/) { make '$obj = example-dataset(' ~ $<data-location-spec>.made ~ ')'; }
     method data-location-spec($/) {
         make $<regex-pattern-spec> ?? $<regex-pattern-spec>.made !! '\'' ~ self.unquote($/.Str) ~ '\'';
     }
