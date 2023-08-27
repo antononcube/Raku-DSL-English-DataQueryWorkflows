@@ -2,6 +2,7 @@
 
 use DSL::English::DataQueryWorkflows;
 use DSL::Shared::Utilities::CopyToClipboard;
+use Clipboard;
 
 my %*SUB-MAIN-OPTS =
         :named-anywhere,    # allow named variables at any location
