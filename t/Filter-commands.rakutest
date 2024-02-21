@@ -29,7 +29,11 @@ ok $pCOMMAND.parse('filter by bmi1 is greater than 25'),
         'filter by bmi1 is greater than 25';
 
 ## 5
-ok $pCOMMAND.parse('filter by bmi1 ≥ 25'),
-        'filter by bmi1 ≥ 25';
+ok $pCOMMAND.parse('filter by bmi1 ≥ 25.268'),
+        'filter by bmi1 ≥ 25.268';
+
+## 6
+ok $pCOMMAND.parse('filter by bmi1 is -25.342'),
+        'filter by bmi1 == -25.342';
 
 done-testing;

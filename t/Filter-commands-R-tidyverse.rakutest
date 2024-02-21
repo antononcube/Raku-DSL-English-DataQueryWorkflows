@@ -3,7 +3,7 @@ use lib 'lib';
 use DSL::English::DataQueryWorkflows;
 use Test;
 
-plan 5;
+plan *;
 
 #-----------------------------------------------------------
 # Filter commands
@@ -32,8 +32,13 @@ is ToDataQueryWorkflowCode('filter by bmi1 is greater than 25', $target),
         'filter by bmi1 is greater than 25';
 
 ## 5
-is ToDataQueryWorkflowCode('filter by bmi1 ≥ 25', $target),
-        'dplyr::filter(bmi1 >= 25)',
-        'filter by bmi1 ≥ 25';
+is ToDataQueryWorkflowCode('filter by bmi1 ≥ 25.268', $target),
+        'dplyr::filter(bmi1 >= 25.268)',
+        'filter by bmi1 ≥ 25.268';
+
+## 6
+is ToDataQueryWorkflowCode('filter by bmi1 is -25.342', $target),
+        'dplyr::filter(bmi1 == -25.342)',
+        'filter by bmi1 is -25.342';
 
 done-testing;
