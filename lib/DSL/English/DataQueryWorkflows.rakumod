@@ -101,6 +101,10 @@ sub has-semicolon (Str $word) {
 }
 
 #-----------------------------------------------------------
+#| Translates natural language commands into data query DSL code.
+#| * C<$command> is a string with one or many commands (separated by ';').
+#| * C<$target> is a programming-language-and-package name, like <R-tidyverse Raku::Reshapers Python::pandas>; or a natural language one of <Bulgarian English Korean Russian Spanish>.
+#| * C<:$format> is the format of the output, one of <code hash raku>.
 proto ToDataQueryWorkflowCode(Str $command, | ) is export {*}
 
 multi ToDataQueryWorkflowCode( Str $command, :$target = 'R-tidyverse', *%args ) {
