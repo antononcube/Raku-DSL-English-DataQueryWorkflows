@@ -194,6 +194,8 @@ multi to_DataQuery_WL ( Str $command ) {
 }
 
 #-----------------------------------------------------------
+
+#| Shortcut for ToDataQueryWorkflowCode($cmd, "Raku::Reshapers")
 proto to-data-query-raku-code($) is export {*}
 
 multi to-data-query-raku-code ( Str $command ) {
