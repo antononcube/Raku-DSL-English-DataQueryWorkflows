@@ -1,0 +1,35 @@
+use v6;
+use lib 'lib';
+use DSL::English::DataQueryWorkflows::Grammar;
+use Test;
+
+plan 5;
+
+# Shortcut
+my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
+
+#-----------------------------------------------------------
+# Basic commands
+#-----------------------------------------------------------
+
+## 1
+ok $pCOMMAND.parse('filter by bmi1 = mass1 and bmi2 = mass2'),
+        'filter bmi1 = mass1 and bmi2 = mass2';
+
+## 2
+ok $pCOMMAND.parse('filter by bmi1 is "mass1", bmi2 is "mass2"'),
+        'filter by bmi1 is "mass1", bmi2 is "mass2"';
+
+## 3
+ok $pCOMMAND.parse('filter by bmi = `mass/height^2`'),
+        'filter by bmi = `mass/height^2`';
+
+## 4
+ok $pCOMMAND.parse('filter by bmi1 is greater than 25'),
+        'filter by bmi1 is greater than 25';
+
+## 5
+ok $pCOMMAND.parse('filter by bmi1 ≥ 25'),
+        'filter by bmi1 ≥ 25';
+
+done-testing;

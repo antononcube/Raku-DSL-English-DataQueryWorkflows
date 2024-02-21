@@ -1,0 +1,39 @@
+use v6;
+use lib 'lib';
+use DSL::English::DataQueryWorkflows;
+use Test;
+
+plan 5;
+
+#-----------------------------------------------------------
+# Filter commands
+#-----------------------------------------------------------
+
+my $target = "R-tidyverse";
+
+## 1
+is ToDataQueryWorkflowCode('filter by bmi1 = mass1 and bmi2 = mass2', $target),
+        'dplyr::filter(bmi1 == mass1 & bmi2 == mass2)',
+        'filter bmi1 = mass1 and bmi2 = mass2';
+
+## 2
+is ToDataQueryWorkflowCode('filter by bmi1 is "mass1" and bmi2 is "mass2"', $target),
+        'dplyr::filter(bmi1 == "mass1" & bmi2 == "mass2")',
+        'filter by bmi1 is "mass1", bmi2 is "mass2"';
+
+## 3
+is ToDataQueryWorkflowCode('filter by bmi = `mass/height^2`', $target),
+        'dplyr::filter(bmi == mass/height^2)',
+        'filter by bmi = `mass/height^2`';
+
+## 4
+is ToDataQueryWorkflowCode('filter by bmi1 is greater than 25', $target),
+        'dplyr::filter(bmi1 > 25)',
+        'filter by bmi1 is greater than 25';
+
+## 5
+is ToDataQueryWorkflowCode('filter by bmi1 ≥ 25', $target),
+        'dplyr::filter(bmi1 >= 25)',
+        'filter by bmi1 ≥ 25';
+
+done-testing;
