@@ -3,7 +3,7 @@ use lib 'lib';
 use DSL::English::DataQueryWorkflows::Grammar;
 use Test;
 
-plan 5;
+plan 6;
 
 # Shortcut
 my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
