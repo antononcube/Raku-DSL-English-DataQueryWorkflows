@@ -41,20 +41,44 @@
 use v6.d;
 
 use DSL::English::DataQueryWorkflows::Grammar;
-use DSL::Shared::Actions::Raku::PredicateSpecification;
-use DSL::Shared::Actions::English::Raku::PipelineCommand;
+use DSL::Shared::Actions::SQL::PredicateSpecification;
+use DSL::Shared::Actions::English::SQL::PipelineCommand;
 
 class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
-		is DSL::Shared::Actions::Raku::PredicateSpecification
-		is DSL::Shared::Actions::English::Raku::PipelineCommand {
+		is DSL::Shared::Actions::SQL::PredicateSpecification
+		is DSL::Shared::Actions::English::SQL::PipelineCommand {
 
 	has Str $.name = 'DSL-English-DataQueryWorkflows-SQL-Standard';
+
+	sub to-unquoted(Str $ss is copy) {
+		if $ss ~~ / ^ '\'' (.*) '\'' $ / { return ~$0; }
+		if $ss ~~ / ^ '"' (.*) '"' $ / { return ~$0; }
+		return $ss;
+	}
 
 	# Top
 	method TOP($/) { make $/.values[0].made; }
 
 	# workflow-command-list
-	method workflow-commands-list($/) { make $/.values>>.made.join(" \n"); }
+	method workflow-commands-list($/) {
+		my @parts = $/.values>>.made;
+
+		for @parts -> $p {
+			if $p !~~ Pair { die "Parsing result is not a pair: ⎡$p⎦" }
+		}
+
+		# At this point we know @parts is a list of pairs
+
+		my @res;
+
+		@res.push( @parts.Hash<select> // 'SELECT *' );
+		@res.push( @parts.Hash<data-load> // 'FROM #tbl' );
+		if @parts.Hash<join> { @res.push( @parts.Hash<join> ); }
+		if @parts.Hash<where> { @res.push( @parts.Hash<where> ); }
+		if @parts.Hash<order-by> { @res.push( @parts.Hash<order-by> ); }
+
+		make @res.join("\n");
+	}
 
 	# workflow-command
 	method workflow-command($/) { make $/.values[0].made; }
@@ -84,13 +108,17 @@ class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
 	# Column specs
 	method column-specs-list($/) { make $<column-spec>>>.made.join(', '); }
 	method column-spec($/) {  make $/.values[0].made; }
-	method column-name-spec($/) { make $<mixed-quoted-variable-name>.made.subst(:g, '"', ''); }
+	method column-name-spec($/) { make $<mixed-quoted-variable-name>.made.&to-unquoted; }
 
 	# Load data
 	method data-load-command($/) { make 'data-load' => $/.values[0].made; }
-	method load-data-table($/) { make '{ data(' ~ $<data-location-spec>.made ~ '); ' ~ $<data-location-spec>.made ~ ' }'; }
-	method data-location-spec($/) { make '\'' ~ $/.Str ~ '\''; }
-	method use-data-table($/) { make 'SELECT * INTO #Tbl FROM ' ~ $<variable-name>.made; }
+	method load-data-table($/) { make 'FROM ' ~ $<data-location-spec>.made.&to-unquoted }
+	method data-location-spec($/) { make $/.Str; }
+	method use-data-table($/) {
+		# In case we want to copy the table
+		#  make 'SELECT * INTO #tbl FROM ' ~ $<mixed-quoted-variable-name>.made;
+		make 'FROM ' ~ $<mixed-quoted-variable-name>.made.&to-unquoted;
+	}
 
 	# Distinct command
 	method distinct-command($/) { make $/.values[0].made; }
@@ -195,8 +223,8 @@ class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
 
 	# Statistics command
 	method statistics-command($/) { make $/.values[0].made; }
-	method data-dimensions-command($/) { make '( function(x) { print(dim(x)); x } )'; }
-	method count-command($/) { make 'dplyr::count()'; }
+	method data-dimensions-command($/) { make 'SELECT COUNT(*)'; }
+	method count-command($/) { make 'SELECT COUNT(*)'; }
 	method echo-count-command($/) {
 		make '( function(x) { print(x %>% dplyr::count()); x } )';
 	}
@@ -231,7 +259,7 @@ class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
 
 	method join-by-spec($/) {
 		if $<mixed-quoted-variable-names-list> {
-			make '(' ~ map( { '"' ~ $_ ~ '"'}, $/.values[0].made.subst(:g, '"', '').split(', ') ).join(', ') ~ ')';
+			make $/.values[0].made.&to-unquoted.split(', ').join(', ');
 		} else {
 			make $/.values[0].made;
 		}
@@ -270,10 +298,12 @@ class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
 	}
 
 	method semi-join-spec($/)  {
+		my $sql = 'tbl WHERE EXISTS (SELECT 1 FROM $OTHER WHERE tbl.$ON = $OTHER.$ON)';
+
 		make 'join' => do if $<join-by-spec> {
-			'dplyr::semi_join(' ~ $<dataset-name>.made ~ ', by = ' ~ $<join-by-spec>.made ~ ')';
+			$sql.substs('$OTHER', $<dataset-name>.made, :g).subtst('$ON', $<join-by-spec>.made, :g);
 		} else {
-			'dplyr::semi_join(' ~ $<dataset-name>.made ~ ')';
+			$sql.substs('$OTHER', $<dataset-name>.made, :g).subtst('$ON', 'id', :g);
 		}
 	}
 
