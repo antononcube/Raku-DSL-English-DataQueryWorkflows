@@ -1,0 +1,30 @@
+
+use lib <. lib>;
+use DSL::English::DataQueryWorkflows;
+use Test;
+
+plan *;
+
+#-----------------------------------------------------------
+# Filter commands
+#-----------------------------------------------------------
+
+my $target = "SQL::Standard";
+
+## 1
+is ToDataQueryWorkflowCode('load data dfTBL;', $target).subst("\n", ' '),
+        'SELECT COUNT(*) FROM dfData',
+        'load dfData';
+
+## 2
+is ToDataQueryWorkflowCode('show counts', $target).subst("\n", ' '),
+        'SELECT COUNT(*) FROM obj',
+        'show counts';
+
+## 3
+is ToDataQueryWorkflowCode('load data dfTT; show counts', $target).subst("\n", ' '),
+        'SELECT COUNT(*) FROM dfTT',
+        'load data show counts';
+
+
+done-testing;
