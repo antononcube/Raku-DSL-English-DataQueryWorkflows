@@ -38,7 +38,7 @@ class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
 		# At this point we know @parts is a list of pairs
 		my @res;
 
-		@res.push( @parts.Hash<select> // 'SELECT *' );
+		@res.push( @parts.Hash<stats> // @parts.Hash<select> // 'SELECT *' );
 		@res.push( @parts.Hash<data-load> // 'FROM tbl' );
 		if @parts.Hash<join> { @res.push( @parts.Hash<join> ); }
 		if @parts.Hash<where> { @res.push( @parts.Hash<where> ); }
