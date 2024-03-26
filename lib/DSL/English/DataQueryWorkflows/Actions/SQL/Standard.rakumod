@@ -22,10 +22,13 @@ class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
 	# workflow-command-list
 	method workflow-commands-list($/) {
 		my @parts = $/.values>>.made;
+		my @res = self.combine-sql-parts(@parts);
+		make @res.join("\n");
+	}
 
+	method combine-sql-parts(@parts) {
 		if @parts.elems == 1 {
-			make @parts.head ~~ Pair ?? @parts.head.key !! @parts.head;
-			return;
+			return @parts.head ~~ Pair ?? @parts.head.value !! @parts.head;
 		}
 
 		for @parts -> $p {
@@ -33,18 +36,16 @@ class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
 		}
 
 		# At this point we know @parts is a list of pairs
-
 		my @res;
 
 		@res.push( @parts.Hash<select> // 'SELECT *' );
-		@res.push( @parts.Hash<data-load> // 'FROM #tbl' );
+		@res.push( @parts.Hash<data-load> // 'FROM tbl' );
 		if @parts.Hash<join> { @res.push( @parts.Hash<join> ); }
 		if @parts.Hash<where> { @res.push( @parts.Hash<where> ); }
 		if @parts.Hash<order-by> { @res.push( @parts.Hash<order-by> ); }
 
-		make @res.join("\n");
+		return @res;
 	}
-
 	# workflow-command
 	method workflow-command($/) { make $/.values[0].made; }
 
@@ -81,7 +82,7 @@ class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
 	method data-location-spec($/) { make $/.Str; }
 	method use-data-table($/) {
 		# In case we want to copy the table
-		#  make 'SELECT * INTO #tbl FROM ' ~ $<mixed-quoted-variable-name>.made;
+		#  make 'SELECT * INTO tbl FROM ' ~ $<mixed-quoted-variable-name>.made;
 		make 'FROM ' ~ $<mixed-quoted-variable-name>.made.&to-unquoted;
 	}
 
@@ -187,11 +188,11 @@ class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
 	}
 
 	# Statistics command
-	method statistics-command($/) { make $/.values[0].made; }
+	method statistics-command($/) { make 'stats' => $/.values[0].made; }
 	method data-dimensions-command($/) { make 'SELECT COUNT(*)'; }
 	method count-command($/) { make 'SELECT COUNT(*)'; }
 	method echo-count-command($/) {
-		make '( function(x) { print(x %>% dplyr::count()); x } )';
+		make 'SELECT COUNT(*)';
 	}
 	method data-summary-command($/) { make '( function(x) { print(summary(x)); x } )'; }
 	method glimpse-data($/) { make 'dplyr::glimpse()'; }
