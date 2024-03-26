@@ -85,8 +85,8 @@ my Str %targetToSeparator{Str} =
     "Raku-SQLBuilder"   => ".",
     "Raku-SQL-Builder"  => '.',
     "Russian"           => "\n",
-    "SQL"               => ";\n",
-    "SQL-Standard"      => ";\n",
+    "SQL"               => "\n",
+    "SQL-Standard"      => "\n",
     "Spanish"           => "\n",
     "WL"                => ";\n",
     "WL-System"         => ";\n",
@@ -137,7 +137,9 @@ multi ToDataQueryWorkflowCode( Str $command, Str $target = 'R-tidyverse', *%args
 }
 
 
-multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str $target where $_ eq 'SQL', *%args ) {
+multi ToDataQueryWorkflowCode ( Str $command,
+                                Str $target where $_ ∈ <SQL SQL::Standard SQL-Standard>,
+                                *%args ) {
 
     my $specTarget = get-dsl-spec( $command, 'target');
 
@@ -147,24 +149,27 @@ multi ToDataQueryWorkflowCode ( Str $command where has-semicolon($command), Str 
 
     # Note that this is global, class variable.
     # It is put to {} here in order to able track group-by statements in WL-System and R-base.
-    my $actionsObj =  %targetToAction{$target}.new;
+    my $actionsObj = %targetToAction{$target}.new;
     $actionsObj.properties = {};
 
     my @commandLines = $command.trim.split(/ ';' \s* /);
 
     @commandLines = grep { $_.Str.chars > 0 }, @commandLines;
 
-    #my @cmdLines = map { ToDataQueryWorkflowCode($_, $specTarget) }, @commandLines;
-    my @cmdLines = map { ToWorkflowCode($_, grammar => DSL::English::DataQueryWorkflows::Grammar, actions => $actionsObj, separator => %targetToSeparator{$specTarget}, format => 'hash') }, @commandLines;
-    @cmdLines = @cmdLines.map({ $_.first({ $_.key !eq 'CODE' }) });
+    #my @sqlLines = map { ToDataQueryWorkflowCode($_, $specTarget) }, @commandLines;
+    my @sqlLines = @commandLines.map({
+        ToWorkflowCode($_,
+                grammar => DSL::English::DataQueryWorkflows::Grammar,
+                actions => $actionsObj,
+                separator => %targetToSeparator{$specTarget},
+                format => 'hash')
+    });
 
-    #@cmdLines = grep { $_.^name eq 'Str' }, @cmdLines;
+    my @sqlParts = @sqlLines.map({ $_.first({ $_.key !eq 'CODE' }) });
 
-    say @cmdLines.raku;
+    @sqlParts = DSL::English::DataQueryWorkflows::Actions::SQL::Standard.combine-sql-parts(@sqlParts);
 
-    my %sqlLines = @cmdLines;
-
-    return @cmdLines.join( %targetToSeparator{$target} ).trim;
+    return @sqlParts.join( %targetToSeparator{$target} ).trim;
 }
 
 #-----------------------------------------------------------
