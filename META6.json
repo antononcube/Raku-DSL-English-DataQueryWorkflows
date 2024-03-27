@@ -32,6 +32,7 @@
     "DSL::English::DataQueryWorkflows::Actions::Raku::SQL::Builder": "lib/DSL/English/DataQueryWorkflows/Actions/Raku/SQL/Builder.rakumod",
     "DSL::English::DataQueryWorkflows::Actions::Russian::Predicate": "lib/DSL/English/DataQueryWorkflows/Actions/Russian/Predicate.rakumod",
     "DSL::English::DataQueryWorkflows::Actions::Russian::Standard": "lib/DSL/English/DataQueryWorkflows/Actions/Russian/Standard.rakumod",
+    "DSL::English::DataQueryWorkflows::Actions::SQL::SQLite": "lib/DSL/English/DataQueryWorkflows/Actions/SQL/SQLite.rakumod",
     "DSL::English::DataQueryWorkflows::Actions::SQL::Standard": "lib/DSL/English/DataQueryWorkflows/Actions/SQL/Standard.rakumod",
     "DSL::English::DataQueryWorkflows::Actions::Spanish::Predicate": "lib/DSL/English/DataQueryWorkflows/Actions/Spanish/Predicate.rakumod",
     "DSL::English::DataQueryWorkflows::Actions::Spanish::Standard": "lib/DSL/English/DataQueryWorkflows/Actions/Spanish/Standard.rakumod",
