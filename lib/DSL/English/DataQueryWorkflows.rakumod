@@ -26,6 +26,7 @@ use DSL::English::DataQueryWorkflows::Actions::R::base;
 use DSL::English::DataQueryWorkflows::Actions::R::tidyverse;
 use DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers;
 use DSL::English::DataQueryWorkflows::Actions::Raku::SQL::Builder;
+use DSL::English::DataQueryWorkflows::Actions::SQL::SQLite;
 use DSL::English::DataQueryWorkflows::Actions::SQL::Standard;
 use DSL::English::DataQueryWorkflows::Actions::WL::System;
 
@@ -57,6 +58,8 @@ my %targetToAction{Str} =
     "Russian"           => DSL::English::DataQueryWorkflows::Actions::Russian::Standard,
     "SQL"               => DSL::English::DataQueryWorkflows::Actions::SQL::Standard,
     "SQL-Standard"      => DSL::English::DataQueryWorkflows::Actions::SQL::Standard,
+    "SQLite"            => DSL::English::DataQueryWorkflows::Actions::SQL::SQLite,
+    "SQL-SQLite"        => DSL::English::DataQueryWorkflows::Actions::SQL::SQLite,
     "Spanish"           => DSL::English::DataQueryWorkflows::Actions::Spanish::Standard,
     "WL"                => DSL::English::DataQueryWorkflows::Actions::WL::System,
     "WL-System"         => DSL::English::DataQueryWorkflows::Actions::WL::System,
@@ -138,7 +141,7 @@ multi ToDataQueryWorkflowCode( Str $command, Str $target = 'R-tidyverse', *%args
 
 
 multi ToDataQueryWorkflowCode ( Str $command,
-                                Str $target where $_ ∈ <SQL SQL::Standard SQL-Standard>,
+                                Str $target where $_ ∈ <SQL SQL::Standard SQL-Standard SQLite SQL-SQLite SQL::SQLite>,
                                 *%args ) {
 
     my $specTarget = get-dsl-spec( $command, 'target');
