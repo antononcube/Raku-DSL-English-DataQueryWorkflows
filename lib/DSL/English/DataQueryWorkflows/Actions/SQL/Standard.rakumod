@@ -1,12 +1,14 @@
 use v6.d;
 
-use DSL::English::DataQueryWorkflows::Grammar;
-use DSL::Shared::Actions::SQL::PredicateSpecification;
+use DSL::English::DataQueryWorkflows::Actions::General;
+use DSL::Shared::Actions::English::SQL::ListManagementCommand;
 use DSL::Shared::Actions::English::SQL::PipelineCommand;
+use DSL::Shared::Actions::SQL::PredicateSpecification;
 
 class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
+		does DSL::English::DataQueryWorkflows::Actions::General
 		is DSL::Shared::Actions::SQL::PredicateSpecification
-		is DSL::Shared::Actions::English::SQL::PipelineCommand {
+		is DSL::Shared::Actions::English::SQL::ListManagementCommand {
 
 	has Str $.name = 'DSL-English-DataQueryWorkflows-SQL-Standard';
 
@@ -21,6 +23,7 @@ class DSL::English::DataQueryWorkflows::Actions::SQL::Standard
 
 	# workflow-command-list
 	method workflow-commands-list($/) {
+		note '$/.raku : ', $/.raku;
 		my @parts = $/.values>>.made;
 		my @res = self.combine-sql-parts(@parts);
 		make @res.join("\n");
