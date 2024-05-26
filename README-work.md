@@ -4,7 +4,6 @@
 [![Linux](https://github.com/antononcube/Raku-DSL-English-DataQueryWorkflows/actions/workflows/linux.yml/badge.svg)](https://github.com/antononcube/Raku-DSL-English-DataQueryWorkflows/actions/workflows/linux.yml)
 [![Win64](https://github.com/antononcube/Raku-DSL-English-DataQueryWorkflows/actions/workflows/windows.yml/badge.svg)](https://github.com/antononcube/Raku-DSL-English-DataQueryWorkflows/actions/workflows/windows.yml)
 
-[![SparrowCI](https://ci.sparrowhub.io/project/gh-antononcube-Raku-DSL-English-DataQueryWorkflows/badge)](https://ci.sparrowhub.io)
 [![https://raku.land/zef:antononcube/DSL::English::DataQueryWorkflows](https://raku.land/zef:antononcube/DSL::English::DataQueryWorkflows/badges/version)](https://raku.land/zef:antononcube/DSL::English::DataQueryWorkflows)
 
 ## Introduction
@@ -207,7 +206,7 @@ A dedicated GitHub repository was made in order to make the installation with Ra
 
 ## TODO
 
-- [ ] TODO Implement SQL actions.
+- [X] DONE Implement SQL actions.
 
 - [ ] TODO Implement [Swift::TabularData](https://developer.apple.com/documentation/tabulardata) actions.
   
