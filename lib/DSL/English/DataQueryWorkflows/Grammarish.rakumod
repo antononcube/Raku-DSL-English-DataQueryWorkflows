@@ -167,7 +167,7 @@ role DSL::English::DataQueryWorkflows::Grammarish {
     rule summarize-command { <summarize-by-pairs> | <summarize-all-command> | <summarize-at-command> }
     rule summarize-by-pairs { [ <.summarize-verb> | <.summarise-verb> ] [ <.by-preposition> | <.using-preposition> ] <association-pairs-list> }
     rule summarize-all-command { [ <.summarize-verb> | <.summarise-verb> ] <.all-data-phrase>? [ <.with-preposition> <.the-determiner>? <.functions>? <summarize-funcs-spec> ] }
-    rule summarize-at-command { [ <.summarize-verb> | <.summarise-verb> ] [ <.the-determiner>? [ <.data-columns-phrase> | <.data-column-phrase> ] | <.at-preposition> ]? <cols=.mixed-quoted-variable-names-list> [ <.with-preposition> <.the-determiner>? <.functions>? <summarize-funcs-spec> ]? }
+    rule summarize-at-command { [ <.summarize-verb> | <.summarise-verb> ] [ <.the-determiner>? [ <.data-columns-phrase> | <.data-column-phrase> ] | <.at-preposition> | <.over-preposition> ]? <cols=.mixed-quoted-variable-names-list> [ <.with-preposition> <.the-determiner>? <.functions>? <summarize-funcs-spec> ]? }
     rule summarize-funcs-spec { <variable-name-or-wl-expr-list> }
     rule all-data-phrase { <them-pronoun>? <all-determiner> | <all-determiner>? <data> <columns-noun>? | <all-determiner> <of-preposition> <them-pronoun> }
 
