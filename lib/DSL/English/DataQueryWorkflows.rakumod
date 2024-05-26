@@ -170,9 +170,15 @@ multi ToDataQueryWorkflowCode ( Str $command,
 
     my @sqlParts = @sqlLines.map({ $_.first({ $_.key !eq 'CODE' }) });
 
-    @sqlParts = DSL::English::DataQueryWorkflows::Actions::SQL::Standard.combine-sql-parts(@sqlParts);
-
-    return @sqlParts.join( %targetToSeparator{$target} ).trim;
+    if @sqlParts.all ~~ Pair:D {
+        @sqlParts = DSL::English::DataQueryWorkflows::Actions::SQL::Standard.combine-sql-parts(@sqlParts);
+        return @sqlParts.join(%targetToSeparator{$target}).trim;
+    } elsif !( @sqlLines.elems == 1 && (@sqlLines.head<CODE>:exists) && @sqlLines.head<CODE>.trim) {
+        note "Cannot parse ⎡$command⎦.";
+        return Nil;
+    } else {
+        return @sqlLines.map({ $_<CODE> // Empty }).join("\n");
+    }
 }
 
 #-----------------------------------------------------------
