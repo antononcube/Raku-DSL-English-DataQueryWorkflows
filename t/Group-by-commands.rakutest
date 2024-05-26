@@ -3,7 +3,7 @@ use lib 'lib';
 use DSL::English::DataQueryWorkflows::Grammar;
 use Test;
 
-plan 6;
+plan 7;
 
 # Shortcut
 my $pCOMMAND = DSL::English::DataQueryWorkflows::Grammar;
@@ -30,5 +30,7 @@ ok $pCOMMAND.parse('group by using the column Species'),
 ok $pCOMMAND.parse('group with the column Species'),
         'group with the column Species';
 
+ok $pCOMMAND.parse('group by Rows'),
+        'group by Rows';
 
 done-testing;
