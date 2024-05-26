@@ -1,7 +1,7 @@
 {
   "name": "DSL::English::DataQueryWorkflows",
   "description": "Data query workflows building by natural language commands.",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "perl": "6.d",
   "authors": [
     "Anton Antonov"
@@ -9,7 +9,7 @@
   "auth": "zef:antononcube",
   "depends": [
     "Clipboard:ver<0.1.1+>",
-    "DSL::Shared:ver<0.1.1+>"
+    "DSL::Shared:ver<0.2.6+>"
   ],
   "build-depends": [],
   "test-depends": [],
