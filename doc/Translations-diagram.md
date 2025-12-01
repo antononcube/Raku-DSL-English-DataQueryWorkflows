@@ -27,8 +27,8 @@ flowchart LR
     df([DataFrames])
     pandas([pandas])
     r_base([base])
-    r_tidyverse([tidyverse])
     r_datatable([data.table])
+    r_tidyverse([tidyverse])
     wl_system([System])
     mysql([MySQL])
     postgres([PostgreSQL])
@@ -44,7 +44,7 @@ flowchart LR
         rus_in
     end
 
-    %% Sources
+    %% Sources TODO
     subgraph sources-todo["Input TODO"]
         raku_dsl
         r_tidy
@@ -98,6 +98,7 @@ flowchart LR
         wl
         sql
         raku_out
+
         subgraph packages["Packages"]
             df
             pandas
@@ -112,4 +113,13 @@ flowchart LR
             dan
         end
     end
+
+    %% ---- Styling ----
+
+    %% Light gray background for packages
+    style packages fill:silver,stroke:#cccccc,color:#000
+
+    %% Dashed borders for Dan and Red
+    style dan stroke:blue, fill:dimgray
+    style red stroke:blue, fill:dimgray
 ```
